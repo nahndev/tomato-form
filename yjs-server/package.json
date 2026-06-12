@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
+    "_dev": "node server.js",
     "start": "node server.js"
   },
   "dependencies": {
-    "ws": "^8.17.0",
-    "y-websocket": "^3.0.0",
-    "yjs": "^13.6.0"
-  }
+    "@hocuspocus/server": "^4.2.0",
+    "dotenv": "^17.4.2"
+  },
+  "type": "module"
 }

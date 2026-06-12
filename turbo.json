@@ -22,6 +22,11 @@
     },
     "clean": {
       "cache": false
+    },
+    "dev-yjs-server": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["server:dev"]
     }
   }
 }

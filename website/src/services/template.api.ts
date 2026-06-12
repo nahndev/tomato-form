@@ -1,12 +1,12 @@
-import axios from "axios";
 import type {
-  Template,
   CreateTemplateInput,
+  Template,
   UpdateTemplateInput,
 } from "@/types/template";
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3022/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3029/api",
 });
 
 interface ApiResponse<T> {
