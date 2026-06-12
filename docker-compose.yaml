@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: tomato_form
+
+  yjs-server:
+    build:
+      context: ./yjs-server
+    restart: unless-stopped
+    ports:
+      - "3028:3028"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3028"
+      BACKEND_URL: http://server:3022
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+    restart: unless-stopped
+    ports:
+      - "3022:3022"
+    environment:
+      NODE_ENV: production
+      PORT: "3022"
+      MONGODB_URI: mongodb://mongodb:27017/tomato_form
+      CORS_ORIGIN: http://localhost:3021
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:

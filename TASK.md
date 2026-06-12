@@ -1,23 +1,49 @@
-# Build project structure and implement basic functionality.
+# Handle form feature
 
 ## Tasks
 
-- [x] Create project directory structure base on README.md
-- [x] Create frontend
-- [x] Create backend
-- [x] Create health api and swagger doc
-- [x] Create welcome page with shadcn ui
-- [x] Custom orange theme for UI design
+- [x] Implement form UI components
+- [x] Include create, edit, and view modes for forms
+- [x] Include add widget, remove widget, and reorder widget functionalities
 
-## Criterial rules
+## Template schemas
 
-- [ ] Don't shared code between frontend and backend, each part should be independent and have its own codebase.
-- [ ] Use TypeScript for both frontend and backend development to ensure type safety and consistency.
-- [ ] Using port 3021 for frontend and 3022 for backend as specified in README.md.
-- [ ] Code should be clean and well-documented.
-- [ ] Follow readme.md
-- [ ] Don't implement features that are not mentioned in readme.md
-- [ ] Ensure the project structure is organized and scalable.
-- [ ] Structure base-on module both frontend and backend
-- [ ] Use shadcn with custom orange theme for UI design
-- [ ] Don't update components of shadcn ui, just use it as it is
+```ts
+{
+  "id": "string",
+  "name": "string",
+  "widgets": Map<string, Widget>,
+  "layouts": Map<string, Layout>,
+  "properties": Map<string, WidgetProperties>
+}
+
+
+// Widget
+{
+  "id": "string",
+  "type": "string"
+}
+
+// Layout
+{
+  "width": number,
+  "height": number,
+  "x": number,
+  "y": number
+}
+
+// WidgetProperties
+{
+  "label": "string"
+}
+
+```
+
+## Implement with Yjs
+
+- [x] Use Yjs to manage form state and enable real-time collaboration
+- [x] Integrate Yjs with React components for seamless updates
+- [x] Handle conflict resolution and synchronization across clients
+- [x] Create docker-compose.yaml to run Yjs server and backend together
+- [x] When the document in yjs, sync with the backend to persist form data and ensure data consistency across sessions
+- [x] Create Template schema to saving `template` in Yjs document as json string in mongoDB.
