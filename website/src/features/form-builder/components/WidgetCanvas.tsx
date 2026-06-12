@@ -1,23 +1,18 @@
 "use client";
 
+import type { Layout, Widget, WidgetProperties } from "@/types/template";
 import {
   DndContext,
-  closestCenter,
-  KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  arrayMove,
-} from "@dnd-kit/sortable";
 import { LayoutTemplate } from "lucide-react";
 import { WidgetItem } from "./WidgetItem";
-import type { Widget, Layout, WidgetProperties } from "@/types/template";
+
+const CANVAS_MIN_HEIGHT = 600;
+const ITEM_HEIGHT = 100;
 
 interface WidgetCanvasProps {
   widgets: Record<string, Widget>;
@@ -26,17 +21,8 @@ interface WidgetCanvasProps {
   selectedWidgetId: string | null;
   onSelectWidget: (id: string) => void;
   onRemoveWidget: (id: string) => void;
-  onReorder: (orderedIds: string[]) => void;
+  onMoveWidget: (id: string, x: number, y: number) => void;
   viewOnly?: boolean;
-}
-
-function sortedWidgetIds(
-  widgets: Record<string, Widget>,
-  layouts: Record<string, Layout>,
-): string[] {
-  return Object.keys(widgets).sort(
-    (a, b) => (layouts[a]?.y ?? 0) - (layouts[b]?.y ?? 0),
-  );
 }
 
 export function WidgetCanvas({
@@ -46,29 +32,25 @@ export function WidgetCanvas({
   selectedWidgetId,
   onSelectWidget,
   onRemoveWidget,
-  onReorder,
+  onMoveWidget,
   viewOnly = false,
 }: WidgetCanvasProps) {
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
+  const sensors = useSensors(useSensor(PointerSensor));
 
-  const orderedIds = sortedWidgetIds(widgets, layouts);
-
+  const widgetIds = Object.keys(widgets);
   function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
+    const { active, delta } = event;
+    const id = active.id as string;
+    const current = layouts[id];
+    if (!current) return;
 
-    const oldIndex = orderedIds.indexOf(active.id as string);
-    const newIndex = orderedIds.indexOf(over.id as string);
-    const reordered = arrayMove(orderedIds, oldIndex, newIndex);
-    onReorder(reordered);
+    const newX = Math.floor(Math.max(0, current.x * 200 + delta.x) / 200);
+    console.log(newX, current.x + delta.x);
+    const newY = Math.floor(Math.max(0, current.y * 200 + delta.y));
+    onMoveWidget(id, newX, newY);
   }
 
-  if (orderedIds.length === 0) {
+  if (widgetIds.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-border p-12 text-center">
         <LayoutTemplate className="size-10 text-muted-foreground/50" />
@@ -85,29 +67,24 @@ export function WidgetCanvas({
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={orderedIds}
-        strategy={verticalListSortingStrategy}
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+      <div
+        className="relative HEEH w-full bg-white min-h-full"
+        style={{ width: 800 }}
       >
-        <div className="flex flex-col gap-2">
-          {orderedIds.map((id) => (
-            <WidgetItem
-              key={id}
-              widget={widgets[id]}
-              properties={properties[id] ?? { label: "" }}
-              isSelected={selectedWidgetId === id}
-              onSelect={() => onSelectWidget(id)}
-              onRemove={() => onRemoveWidget(id)}
-              viewOnly={viewOnly}
-            />
-          ))}
-        </div>
-      </SortableContext>
+        {widgetIds.map((id) => (
+          <WidgetItem
+            key={id}
+            widget={widgets[id]}
+            layout={layouts[id]}
+            properties={properties[id] ?? { label: "" }}
+            isSelected={selectedWidgetId === id}
+            onSelect={() => onSelectWidget(id)}
+            onRemove={() => onRemoveWidget(id)}
+            viewOnly={viewOnly}
+          />
+        ))}
+      </div>
     </DndContext>
   );
 }

@@ -16,6 +16,7 @@ export interface Layout {
   height: number;
   x: number;
   y: number;
+  idx: number;
 }
 
 export interface WidgetProperties {

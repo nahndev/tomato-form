@@ -1,14 +1,14 @@
 "use client";
 
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Trash2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import type { Widget, WidgetProperties } from "@/types/template";
+import { cn } from "@/lib/utils";
+import type { Layout, Widget, WidgetProperties } from "@/types/template";
+import { useDraggable } from "@dnd-kit/core";
+import { GripVertical, Trash2 } from "lucide-react";
 
 interface WidgetItemProps {
   widget: Widget;
+  layout: Layout;
   properties: WidgetProperties;
   isSelected: boolean;
   onSelect: () => void;
@@ -18,28 +18,34 @@ interface WidgetItemProps {
 
 export function WidgetItem({
   widget,
+  layout,
   properties,
   isSelected,
   onSelect,
   onRemove,
   viewOnly = false,
 }: WidgetItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: widget.id, disabled: viewOnly });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({ id: widget.id, disabled: viewOnly });
 
   return (
     <div
       ref={setNodeRef}
-      style={style}
+      style={{
+        position: "absolute",
+        left: layout.x * 25 + "%",
+        top: layout.y,
+        width: layout.width * 25 + "%",
+        height: layout.height,
+        transform: transform
+          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+          : undefined,
+        zIndex: isDragging ? 50 : undefined,
+      }}
       className={cn(
-        "group relative rounded-lg border bg-card p-3 transition-colors",
+        "group rounded-lg border bg-card p-3 transition-colors",
         isSelected && "border-primary ring-1 ring-primary",
-        isDragging && "opacity-50",
+        isDragging && "opacity-75 shadow-lg",
         !viewOnly && "cursor-pointer hover:border-primary/50",
       )}
       onClick={viewOnly ? undefined : onSelect}
@@ -94,13 +100,16 @@ function WidgetPreview({
   widget: Widget;
   properties: WidgetProperties;
 }) {
-  const placeholder = properties.placeholder ?? `Enter ${properties.label || widget.type}…`;
+  const placeholder =
+    properties.placeholder ?? `Enter ${properties.label || widget.type}…`;
 
   if (widget.type === "checkbox") {
     return (
       <div className="mt-2 flex items-center gap-2">
         <div className="size-4 rounded border border-input bg-background" />
-        <span className="text-xs text-muted-foreground">{properties.label}</span>
+        <span className="text-xs text-muted-foreground">
+          {properties.label}
+        </span>
       </div>
     );
   }

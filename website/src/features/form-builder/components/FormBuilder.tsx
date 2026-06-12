@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { Wifi, WifiOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useTemplateYjs } from "../hooks/useTemplateYjs";
-import { WidgetPicker } from "./WidgetPicker";
-import { WidgetCanvas } from "./WidgetCanvas";
-import { WidgetPropertiesPanel } from "./WidgetPropertiesPanel";
+import { Separator } from "@/components/ui/separator";
 import type { Template, WidgetType } from "@/types/template";
+import { Wifi, WifiOff } from "lucide-react";
+import { useCallback, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { useTemplateYjs } from "../hooks/useTemplateYjs";
+import { WidgetCanvas } from "./WidgetCanvas";
+import { WidgetPicker } from "./WidgetPicker";
+import { WidgetPropertiesPanel } from "./WidgetPropertiesPanel";
 
 interface FormBuilderProps {
   template: Template;
@@ -25,7 +25,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
     addWidget,
     removeWidget,
     updateProperties,
-    reorderWidgets,
+    updateLayout,
   } = useTemplateYjs(template.id, template);
 
   const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null);
@@ -36,7 +36,13 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
       const widgetCount = Object.keys(state.widgets).length;
       addWidget(
         { id, type },
-        { x: 0, y: widgetCount, width: 12, height: 1 },
+        {
+          x: 0,
+          y: widgetCount * 90,
+          width: 2,
+          height: 100,
+          idx: widgetCount,
+        },
         { label: `${type.charAt(0).toUpperCase() + type.slice(1)} field` },
       );
       setSelectedWidgetId(id);
@@ -44,13 +50,15 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
     [addWidget, state.widgets],
   );
 
-  const selectedWidget = selectedWidgetId ? state.widgets[selectedWidgetId] : null;
+  const selectedWidget = selectedWidgetId
+    ? state.widgets[selectedWidgetId]
+    : null;
   const selectedProps = selectedWidgetId
     ? state.properties[selectedWidgetId]
     : null;
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-gray-200">
       {/* Header */}
       <div className="flex items-center gap-3 border-b px-4 py-3">
         {viewOnly ? (
@@ -92,7 +100,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
 
         {/* Center: canvas */}
         <ScrollArea className="flex-1 p-6">
-          <div className="mx-auto max-w-2xl">
+          <div className="mx-auto w-min h-full">
             <WidgetCanvas
               widgets={state.widgets}
               layouts={state.layouts}
@@ -105,7 +113,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
                 removeWidget(id);
                 if (selectedWidgetId === id) setSelectedWidgetId(null);
               }}
-              onReorder={reorderWidgets}
+              onMoveWidget={(id, x, y) => updateLayout(id, { x, y })}
               viewOnly={viewOnly}
             />
           </div>

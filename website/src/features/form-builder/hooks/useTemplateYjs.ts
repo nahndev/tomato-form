@@ -1,10 +1,11 @@
 "use client";
 
-import type {
-  Layout,
-  Template,
-  Widget,
-  WidgetProperties,
+import { alignLayout } from "@/lib/layout";
+import {
+  type Layout,
+  type Template,
+  type Widget,
+  type WidgetProperties,
 } from "@/types/template";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { WebsocketProvider } from "y-websocket";
@@ -128,8 +129,10 @@ export function useTemplateYjs(
         y: 0,
         width: 12,
         height: 1,
+        idx: 0,
       };
       yLayouts.set(widgetId, { ...current, ...patch });
+      console.log(alignLayout(yLayouts));
     },
     [],
   );
@@ -153,6 +156,7 @@ export function useTemplateYjs(
           y: index,
           width: 12,
           height: 1,
+          idx: index,
         };
         yLayouts.set(id, { ...current, y: index });
       });
