@@ -81,12 +81,54 @@ TOMATO aims to become a unified platform for internal business processes, replac
 
 # Project Structure
 
-Using [CLAUDE](./CLAUDE.md) for frontend and backend development.
+Monorepo managed with [Turborepo](https://turbo.build/) and `pnpm` workspaces.
 
-- `website/` - React frontend application
-- `server/` - NestJS backend application
+```
+tomato-form/
+├── website/                  # Next.js frontend (@tomato-form/website)
+│   └── src/
+│       ├── app/              # Next.js App Router pages and layouts
+│       ├── components/       # Reusable UI components (shadcn/ui + custom)
+│       │   └── ui/           # shadcn/ui primitives
+│       └── lib/              # Utilities and helpers
+└── server/                   # NestJS backend (@tomato-form/server)
+    └── src/
+        ├── common/           # Shared filters and interceptors
+        │   ├── filters/
+        │   └── interceptors/
+        ├── config/           # Environment configuration
+        ├── database/         # MongoDB connection config
+        └── health/           # Health check endpoint
+```
 
-# Ports
+## Tech Stack
+
+| Layer    | Technology                                              |
+| -------- | ------------------------------------------------------- |
+| Frontend | Next.js 15, React 18, React Query, Formik, Zod, Zustand |
+| Styling  | Tailwind CSS v4, shadcn/ui, Radix UI                    |
+| Backend  | NestJS 10, Mongoose (MongoDB), class-validator          |
+| API Docs | Swagger UI at `/api/docs`                               |
+| Tooling  | Turborepo, pnpm, TypeScript, Jest, ESLint               |
+
+## Common Commands
+
+```bash
+# From repo root
+pnpm dev        # Start all apps in dev mode
+pnpm build      # Build all apps
+pnpm test       # Run all tests
+pnpm lint       # Lint all apps
+pnpm typecheck  # Type-check all apps
+```
+
+## Ports
 
 - Frontend: `http://localhost:3021`
 - Backend: `http://localhost:3022`
+- API Docs: `http://localhost:3022/api/docs`
+
+## Database
+
+- MongoDB connection string is configured.
+- Using uuid for identifiers instead of ObjectId.
