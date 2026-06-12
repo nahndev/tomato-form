@@ -125,8 +125,8 @@ pnpm typecheck  # Type-check all apps
 ## Ports
 
 - Frontend: `http://localhost:3021`
-- Backend: `http://localhost:3022`
-- API Docs: `http://localhost:3022/api/docs`
+- Backend: `http://localhost:3029`
+- API Docs: `http://localhost:3029/api/docs`
 
 ## Database
 
