@@ -1,6 +1,11 @@
 "use client";
 
-import type { Layout, Template, Widget, WidgetProperties } from "@/types/template";
+import type {
+  Layout,
+  Template,
+  Widget,
+  WidgetProperties,
+} from "@/types/template";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
@@ -21,7 +26,10 @@ export interface UseTemplateYjsReturn {
   addWidget: (widget: Widget, layout: Layout, props: WidgetProperties) => void;
   removeWidget: (widgetId: string) => void;
   updateLayout: (widgetId: string, layout: Partial<Layout>) => void;
-  updateProperties: (widgetId: string, props: Partial<WidgetProperties>) => void;
+  updateProperties: (
+    widgetId: string,
+    props: Partial<WidgetProperties>,
+  ) => void;
   reorderWidgets: (orderedIds: string[]) => void;
 }
 
@@ -59,28 +67,6 @@ export function useTemplateYjs(
     const yWidgets = doc.getMap<Widget>("widgets");
     const yLayouts = doc.getMap<Layout>("layouts");
     const yProperties = doc.getMap<WidgetProperties>("properties");
-
-    // Seed local doc with server data before the WebSocket syncs
-    if (initialData) {
-      doc.transact(() => {
-        if (yName.length === 0) yName.insert(0, initialData.name);
-        if (yWidgets.size === 0) {
-          Object.entries(initialData.widgets ?? {}).forEach(([k, v]) =>
-            yWidgets.set(k, v),
-          );
-        }
-        if (yLayouts.size === 0) {
-          Object.entries(initialData.layouts ?? {}).forEach(([k, v]) =>
-            yLayouts.set(k, v),
-          );
-        }
-        if (yProperties.size === 0) {
-          Object.entries(initialData.properties ?? {}).forEach(([k, v]) =>
-            yProperties.set(k, v),
-          );
-        }
-      }, "backend-seed");
-    }
 
     const provider = new WebsocketProvider(
       YJS_SERVER_URL,
