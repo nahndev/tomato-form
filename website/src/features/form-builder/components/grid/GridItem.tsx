@@ -36,7 +36,9 @@ export function GridItem({ id, children, isDragging }: GridItemProps) {
         zIndex: isDragging ? 50 : undefined,
       }}
     >
-      <div ref={contentRef}>{children}</div>
+      <div ref={contentRef} className="h-min w-full grid">
+        {children}
+      </div>
     </div>
   );
 }

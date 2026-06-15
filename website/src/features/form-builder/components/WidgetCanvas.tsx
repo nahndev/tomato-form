@@ -12,7 +12,11 @@ import { LayoutTemplate } from "lucide-react";
 import { useMemo } from "react";
 import { GridContainer } from "./grid/GridContainer";
 import { GridItem } from "./grid/GridItem";
-import { COLUMN_WIDTH, GRID_COLUMNS, GridLayoutProvider } from "./grid/GridLayoutContext";
+import {
+  COLUMN_WIDTH,
+  GRID_COLUMNS,
+  GridLayoutProvider,
+} from "./grid/GridLayoutContext";
 import { WidgetItem } from "./WidgetItem";
 
 interface WidgetCanvasProps {

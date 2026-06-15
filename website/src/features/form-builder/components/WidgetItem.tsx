@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { useGridLayoutContext } from "@/features/form-builder/components/grid/GridLayoutContext";
 import { cn } from "@/lib/utils";
 import type { Widget, WidgetProperties } from "@/types/template";
 import { useDraggable } from "@dnd-kit/core";
@@ -23,20 +24,38 @@ export function WidgetItem({
   onRemove,
   viewOnly = false,
 }: WidgetItemProps) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({ id: widget.id, disabled: viewOnly });
+  const { computedLayouts, setHeight } = useGridLayoutContext();
+  const layout = computedLayouts.get(widget.id);
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    isDragging,
+    activeNodeRect,
+    active,
+  } = useDraggable({
+    id: widget.id,
+    disabled: viewOnly,
+    data: { type: "widget", id: widget.id, layout },
+  });
+
+  if (isDragging) {
+    console.log("layout", layout);
+  }
 
   return (
     <div
       ref={setNodeRef}
       style={{
         position: "relative",
+        opacity: isDragging ? 0.75 : undefined,
         transform: transform
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,
-        opacity: isDragging ? 0.75 : undefined,
       }}
       className={cn(
+        "w-full",
         "group rounded-lg border bg-card p-3 transition-colors",
         isSelected && "border-primary ring-1 ring-primary",
         isDragging && "shadow-lg",

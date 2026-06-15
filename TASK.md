@@ -1,8 +1,12 @@
-# Using layout of yjs
+# Using clone dom instead DragOverlay and hidden drag item (don't appear ghost)
 
-Instead using idx for Layout, we can use the order of widgets in yjs to determine the layout. This way, we don't need to store idx in yjs and can avoid potential issues with syncing idx across clients.
+## Why?
+
+- DragOverlay and hidden drag item (don't appear ghost) is not working well with nested sortable
 
 ## Tasks
 
-- [x] Remove idx from Layout and update related code in useTemplateYjs.ts
-- [x] Create new records in yjs, save idx as array of widget ids, and use the order of ids to determine the layout
+- [x] Create start drag a item, clone it base on width and height of original item
+- [x] Clone all div and styles.
+- [x] Make sure the clone item is in the same position as original item
+- [x] Hidden (display:none) original item when dragging
