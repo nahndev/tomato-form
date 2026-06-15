@@ -78,10 +78,6 @@ export function alignLayout(yLayout: Y.Map<Layout>) {
     const right = left + layout.width - 1;
     const currentY = tree.query(left, right);
 
-    console.log(
-      `Widget ${id}: left=${left}, right=${right}, currentY=${currentY}`,
-    );
-
     yLayout.set(id, { ...layout, y: currentY });
     tree.update(left, right, currentY + layout.height);
   }
