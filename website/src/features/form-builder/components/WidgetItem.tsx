@@ -36,7 +36,6 @@ export function WidgetItem({
         left: layout.x * 25 + "%",
         top: layout.y,
         width: layout.width * 25 + "%",
-        height: layout.height,
         transform: transform
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,
@@ -116,8 +115,8 @@ function WidgetPreview({
 
   if (widget.type === "textarea") {
     return (
-      <div className="mt-2 h-12 w-full rounded-md border border-input bg-muted/30 px-2 py-1 text-xs text-muted-foreground">
-        {placeholder}
+      <div className="mt-2 w-full rounded-md border border-input bg-muted/30 px-2 py-1 text-xs text-muted-foreground">
+        <div contentEditable className="bg-red-50"></div>
       </div>
     );
   }
