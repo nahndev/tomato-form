@@ -1,6 +1,8 @@
-# Using axios + react query instead of fetch + useEffect
+# Using layout of yjs
 
-## Task
+Instead using idx for Layout, we can use the order of widgets in yjs to determine the layout. This way, we don't need to store idx in yjs and can avoid potential issues with syncing idx across clients.
 
-- [x] Refactor the existing codebase to replace all instances of `fetch` with `axios` for making HTTP requests.
-- [x] Replace all `useEffect` hooks that are currently being used to fetch data with `react-query` hooks.
+## Tasks
+
+- [x] Remove idx from Layout and update related code in useTemplateYjs.ts
+- [x] Create new records in yjs, save idx as array of widget ids, and use the order of ids to determine the layout

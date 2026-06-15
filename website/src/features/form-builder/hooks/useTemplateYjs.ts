@@ -1,6 +1,5 @@
 "use client";
 
-import { alignLayout } from "@/lib/layout";
 import {
   type Layout,
   type Template,
@@ -27,10 +26,7 @@ export interface UseTemplateYjsReturn {
   addWidget: (widget: Widget, layout: Layout, props: WidgetProperties) => void;
   removeWidget: (widgetId: string) => void;
   updateLayout: (widgetId: string, layout: Partial<Layout>) => void;
-  updateProperties: (
-    widgetId: string,
-    props: Partial<WidgetProperties>,
-  ) => void;
+  updateProperties: (widgetId: string, props: Partial<WidgetProperties>) => void;
   reorderWidgets: (orderedIds: string[]) => void;
 }
 
@@ -63,11 +59,6 @@ export function useTemplateYjs(
   useEffect(() => {
     const doc = new Y.Doc();
     docRef.current = doc;
-
-    const yName = doc.getText("name");
-    const yWidgets = doc.getMap<Widget>("widgets");
-    const yLayouts = doc.getMap<Layout>("layouts");
-    const yProperties = doc.getMap<WidgetProperties>("properties");
 
     const provider = new WebsocketProvider(
       YJS_SERVER_URL,
@@ -124,15 +115,8 @@ export function useTemplateYjs(
   const updateLayout = useCallback(
     (widgetId: string, patch: Partial<Layout>) => {
       const yLayouts = getDoc().getMap<Layout>("layouts");
-      const current = yLayouts.get(widgetId) ?? {
-        x: 0,
-        y: 0,
-        width: 12,
-        height: 1,
-        idx: 0,
-      };
+      const current = yLayouts.get(widgetId) ?? { x: 0, width: 4, idx: 0 };
       yLayouts.set(widgetId, { ...current, ...patch });
-      console.log(alignLayout(yLayouts));
     },
     [],
   );
@@ -151,14 +135,8 @@ export function useTemplateYjs(
     const yLayouts = doc.getMap<Layout>("layouts");
     doc.transact(() => {
       orderedIds.forEach((id, index) => {
-        const current = yLayouts.get(id) ?? {
-          x: 0,
-          y: index,
-          width: 12,
-          height: 1,
-          idx: index,
-        };
-        yLayouts.set(id, { ...current, y: index });
+        const current = yLayouts.get(id) ?? { x: 0, width: 4, idx: index };
+        yLayouts.set(id, { ...current, idx: index });
       });
     });
   }, []);

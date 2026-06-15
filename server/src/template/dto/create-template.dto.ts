@@ -27,4 +27,5 @@ export class CreateTemplateDto {
   @IsObject()
   @IsOptional()
   properties?: Record<string, WidgetProperties>;
+
 }

@@ -9,10 +9,11 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { LayoutTemplate } from "lucide-react";
+import { useMemo } from "react";
+import { GridContainer } from "./grid/GridContainer";
+import { GridItem } from "./grid/GridItem";
+import { COLUMN_WIDTH, GRID_COLUMNS, GridLayoutProvider } from "./grid/GridLayoutContext";
 import { WidgetItem } from "./WidgetItem";
-
-const CANVAS_MIN_HEIGHT = 600;
-const ITEM_HEIGHT = 100;
 
 interface WidgetCanvasProps {
   widgets: Record<string, Widget>;
@@ -21,7 +22,7 @@ interface WidgetCanvasProps {
   selectedWidgetId: string | null;
   onSelectWidget: (id: string) => void;
   onRemoveWidget: (id: string) => void;
-  onMoveWidget: (id: string, x: number, y: number) => void;
+  onMoveWidget: (id: string, x: number) => void;
   viewOnly?: boolean;
 }
 
@@ -37,18 +38,31 @@ export function WidgetCanvas({
 }: WidgetCanvasProps) {
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const widgetIds = Object.keys(widgets);
+  const gridItems = useMemo(
+    () =>
+      Object.entries(layouts).map(([id, layout]) => ({
+        id,
+        x: layout.x,
+        width: layout.width,
+        idx: layout.idx,
+      })),
+    [layouts],
+  );
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, delta } = event;
     const id = active.id as string;
     const current = layouts[id];
     if (!current) return;
 
-    const newX = Math.floor(Math.max(0, current.x * 200 + delta.x) / 200);
-    console.log(newX, current.x + delta.x);
-    const newY = Math.floor(Math.max(0, current.y * 200 + delta.y));
-    onMoveWidget(id, newX, newY);
+    const newX = Math.round(current.x + delta.x / COLUMN_WIDTH);
+    const clamped = Math.max(0, Math.min(newX, GRID_COLUMNS - current.width));
+    if (clamped !== current.x) {
+      onMoveWidget(id, clamped);
+    }
   }
+
+  const widgetIds = Object.keys(widgets);
 
   if (widgetIds.length === 0) {
     return (
@@ -68,23 +82,22 @@ export function WidgetCanvas({
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div
-        className="relative HEEH w-full bg-white min-h-full"
-        style={{ width: 800 }}
-      >
-        {widgetIds.map((id) => (
-          <WidgetItem
-            key={id}
-            widget={widgets[id]}
-            layout={layouts[id]}
-            properties={properties[id] ?? { label: "" }}
-            isSelected={selectedWidgetId === id}
-            onSelect={() => onSelectWidget(id)}
-            onRemove={() => onRemoveWidget(id)}
-            viewOnly={viewOnly}
-          />
-        ))}
-      </div>
+      <GridLayoutProvider items={gridItems}>
+        <GridContainer>
+          {widgetIds.map((id) => (
+            <GridItem key={id} id={id}>
+              <WidgetItem
+                widget={widgets[id]}
+                properties={properties[id] ?? { label: "" }}
+                isSelected={selectedWidgetId === id}
+                onSelect={() => onSelectWidget(id)}
+                onRemove={() => onRemoveWidget(id)}
+                viewOnly={viewOnly}
+              />
+            </GridItem>
+          ))}
+        </GridContainer>
+      </GridLayoutProvider>
     </DndContext>
   );
 }

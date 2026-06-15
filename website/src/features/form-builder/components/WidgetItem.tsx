@@ -2,13 +2,12 @@
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { Layout, Widget, WidgetProperties } from "@/types/template";
+import type { Widget, WidgetProperties } from "@/types/template";
 import { useDraggable } from "@dnd-kit/core";
 import { GripVertical, Trash2 } from "lucide-react";
 
 interface WidgetItemProps {
   widget: Widget;
-  layout: Layout;
   properties: WidgetProperties;
   isSelected: boolean;
   onSelect: () => void;
@@ -18,7 +17,6 @@ interface WidgetItemProps {
 
 export function WidgetItem({
   widget,
-  layout,
   properties,
   isSelected,
   onSelect,
@@ -32,19 +30,16 @@ export function WidgetItem({
     <div
       ref={setNodeRef}
       style={{
-        position: "absolute",
-        left: layout.x * 25 + "%",
-        top: layout.y,
-        width: layout.width * 25 + "%",
+        position: "relative",
         transform: transform
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,
-        zIndex: isDragging ? 50 : undefined,
+        opacity: isDragging ? 0.75 : undefined,
       }}
       className={cn(
         "group rounded-lg border bg-card p-3 transition-colors",
         isSelected && "border-primary ring-1 ring-primary",
-        isDragging && "opacity-75 shadow-lg",
+        isDragging && "shadow-lg",
         !viewOnly && "cursor-pointer hover:border-primary/50",
       )}
       onClick={viewOnly ? undefined : onSelect}
@@ -116,7 +111,7 @@ function WidgetPreview({
   if (widget.type === "textarea") {
     return (
       <div className="mt-2 w-full rounded-md border border-input bg-muted/30 px-2 py-1 text-xs text-muted-foreground">
-        <div contentEditable className="bg-red-50"></div>
+        <div className="h-10" />
       </div>
     );
   }

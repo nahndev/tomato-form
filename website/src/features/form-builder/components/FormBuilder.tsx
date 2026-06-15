@@ -36,13 +36,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
       const widgetCount = Object.keys(state.widgets).length;
       addWidget(
         { id, type },
-        {
-          x: 0,
-          y: widgetCount * 90,
-          width: 2,
-          height: 100,
-          idx: widgetCount,
-        },
+        { x: 0, width: 4, idx: widgetCount },
         { label: `${type.charAt(0).toUpperCase() + type.slice(1)} field` },
       );
       setSelectedWidgetId(id);
@@ -113,7 +107,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
                 removeWidget(id);
                 if (selectedWidgetId === id) setSelectedWidgetId(null);
               }}
-              onMoveWidget={(id, x, y) => updateLayout(id, { x, y })}
+              onMoveWidget={(id, x) => updateLayout(id, { x })}
               viewOnly={viewOnly}
             />
           </div>
