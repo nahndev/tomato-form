@@ -35,7 +35,8 @@ const GridLayoutContext = createContext<GridLayoutContextValue | null>(null);
 
 export function useGridLayoutContext() {
   const ctx = useContext(GridLayoutContext);
-  if (!ctx) throw new Error("useGridLayoutContext must be inside GridLayoutProvider");
+  if (!ctx)
+    throw new Error("useGridLayoutContext must be inside GridLayoutProvider");
   return ctx;
 }
 
@@ -73,7 +74,10 @@ interface GridLayoutProviderProps {
   children: React.ReactNode;
 }
 
-export function GridLayoutProvider({ items, children }: GridLayoutProviderProps) {
+export function GridLayoutProvider({
+  items,
+  children,
+}: GridLayoutProviderProps) {
   const heightsRef = useRef<Map<string, number>>(new Map());
   const itemsRef = useRef(items);
   itemsRef.current = items;
@@ -101,6 +105,8 @@ export function GridLayoutProvider({ items, children }: GridLayoutProviderProps)
     () => ({ computedLayouts, setHeight }),
     [computedLayouts, setHeight],
   );
+
+  console.log("GridLayoutProvider render", { items, computedLayouts, value });
 
   return (
     <GridLayoutContext.Provider value={value}>
