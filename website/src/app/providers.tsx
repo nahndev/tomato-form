@@ -1,8 +1,9 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
+import { useUserStore } from "@/store/user.store";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -20,6 +21,10 @@ export function Providers({ children }: ProvidersProps) {
         },
       }),
   );
+
+  useEffect(() => {
+    useUserStore.getState().init();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
