@@ -36,7 +36,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
       const widgetCount = Object.keys(state.widgets).length;
       addWidget(
         { id, type },
-        { x: 0, width: 2, idx: widgetCount },
+        { x: 0, width: 2, idx: widgetCount.toString() },
         { label: `${type.charAt(0).toUpperCase() + type.slice(1)} field` },
       );
       setSelectedWidgetId(id);

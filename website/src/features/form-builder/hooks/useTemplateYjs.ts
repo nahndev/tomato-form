@@ -26,7 +26,10 @@ export interface UseTemplateYjsReturn {
   addWidget: (widget: Widget, layout: Layout, props: WidgetProperties) => void;
   removeWidget: (widgetId: string) => void;
   updateLayout: (widgetId: string, layout: Partial<Layout>) => void;
-  updateProperties: (widgetId: string, props: Partial<WidgetProperties>) => void;
+  updateProperties: (
+    widgetId: string,
+    props: Partial<WidgetProperties>,
+  ) => void;
   reorderWidgets: (orderedIds: string[]) => void;
 }
 
@@ -115,7 +118,7 @@ export function useTemplateYjs(
   const updateLayout = useCallback(
     (widgetId: string, patch: Partial<Layout>) => {
       const yLayouts = getDoc().getMap<Layout>("layouts");
-      const current = yLayouts.get(widgetId) ?? { x: 0, width: 4, idx: 0 };
+      const current = yLayouts.get(widgetId) ?? { x: 0, width: 4, idx: "a" };
       yLayouts.set(widgetId, { ...current, ...patch });
     },
     [],
@@ -136,7 +139,7 @@ export function useTemplateYjs(
     doc.transact(() => {
       orderedIds.forEach((id, index) => {
         const current = yLayouts.get(id) ?? { x: 0, width: 4, idx: index };
-        yLayouts.set(id, { ...current, idx: index });
+        yLayouts.set(id, { ...current, idx: "a" });
       });
     });
   }, []);

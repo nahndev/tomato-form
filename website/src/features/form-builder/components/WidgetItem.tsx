@@ -25,25 +25,13 @@ export function WidgetItem({
   viewOnly = false,
 }: WidgetItemProps) {
   const { computedLayouts, setHeight } = useGridLayoutContext();
-  const layout = computedLayouts.get(widget.id);
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    isDragging,
-    activeNodeRect,
-    active,
-  } = useDraggable({
-    id: widget.id,
-    disabled: viewOnly,
-    data: { type: "widget", id: widget.id, layout },
-  });
-
-  if (isDragging) {
-    console.log("layout", layout);
-  }
-
+  const layout = computedLayouts[widget.id];
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: widget.id,
+      disabled: viewOnly,
+      data: { type: "widget", layout, widget },
+    });
   return (
     <div
       ref={setNodeRef}

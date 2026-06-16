@@ -12,7 +12,7 @@ interface GridItemProps {
 export function GridItem({ id, children, isDragging }: GridItemProps) {
   const { computedLayouts, setHeight } = useGridLayoutContext();
   const contentRef = useRef<HTMLDivElement>(null);
-  const layout = computedLayouts.get(id);
+  const layout = computedLayouts[id];
 
   useEffect(() => {
     const el = contentRef.current;
@@ -23,8 +23,6 @@ export function GridItem({ id, children, isDragging }: GridItemProps) {
     observer.observe(el);
     return () => observer.disconnect();
   }, [id, setHeight]);
-
-  if (!layout) return null;
 
   return (
     <div

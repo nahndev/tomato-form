@@ -14,7 +14,7 @@ export interface Widget {
 export interface Layout {
   x: number;
   width: number;
-  idx: number;
+  idx: string;
 }
 
 export interface WidgetProperties {

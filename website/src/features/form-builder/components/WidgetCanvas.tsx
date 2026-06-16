@@ -9,7 +9,6 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { LayoutTemplate } from "lucide-react";
-import { useMemo } from "react";
 import { GridContainer } from "./grid/GridContainer";
 import { GridItem } from "./grid/GridItem";
 import {
@@ -41,17 +40,6 @@ export function WidgetCanvas({
   viewOnly = false,
 }: WidgetCanvasProps) {
   const sensors = useSensors(useSensor(PointerSensor));
-
-  const gridItems = useMemo(
-    () =>
-      Object.entries(layouts).map(([id, layout]) => ({
-        id,
-        x: layout.x,
-        width: layout.width,
-        idx: layout.idx,
-      })),
-    [layouts],
-  );
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, delta } = event;
@@ -86,7 +74,7 @@ export function WidgetCanvas({
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <GridLayoutProvider items={gridItems}>
+      <GridLayoutProvider layoutMap={layouts}>
         <GridContainer>
           {widgetIds.map((id) => (
             <GridItem key={id} id={id}>

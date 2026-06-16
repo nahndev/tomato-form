@@ -18,7 +18,7 @@ export function GridContainer({ children, className }: GridContainerProps) {
 
   const containerHeight = useMemo(() => {
     let max = 0;
-    for (const layout of computedLayouts.values()) {
+    for (const layout of Object.values(computedLayouts)) {
       max = Math.max(max, layout.y + layout.height);
     }
     return max;

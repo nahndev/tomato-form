@@ -1,10 +1,13 @@
 "use client";
 
+import { Layout } from "@/types/template";
 import { useDndContext } from "@dnd-kit/core";
+import { generateKeyBetween } from "fractional-indexing";
 import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -13,22 +16,17 @@ import {
 export const GRID_COLUMNS = 4;
 export const COLUMN_WIDTH = 200; // px per column
 
-export interface GridItemDef {
+export interface GridLayout {
   id: string;
-  x: number;
-  width: number;
-  idx: number;
-}
-
-export interface ComputedLayout {
   x: number;
   y: number;
   width: number;
   height: number;
+  idx: string;
 }
 
 interface GridLayoutContextValue {
-  computedLayouts: Map<string, ComputedLayout>;
+  computedLayouts: Record<string, GridLayout>;
   setHeight: (id: string, height: number) => void;
 }
 
@@ -41,155 +39,138 @@ export function useGridLayoutContext() {
   return ctx;
 }
 
+function setMaxHeight(maxHeights: number[], layout: GridLayout) {
+  const col = Math.max(0, Math.min(layout.x, GRID_COLUMNS - 1));
+  const span = Math.max(1, Math.min(layout.width, GRID_COLUMNS - col));
+  const right = col + span - 1;
+  for (let i = col; i <= right; i++) {
+    maxHeights[i] = Math.max(maxHeights[i], layout.y + layout.height);
+  }
+  return maxHeights;
+}
+
+function getMaxHeight(maxHeights: number[], layout: GridLayout) {
+  const col = Math.max(0, Math.min(layout.x, GRID_COLUMNS - 1));
+  const span = Math.max(1, Math.min(layout.width, GRID_COLUMNS - col));
+  const right = col + span - 1;
+  return Math.max(...maxHeights.slice(col, right + 1));
+}
+
+function collision(a: GridLayout, b: GridLayout) {
+  if (a.x + a.width <= b.x) return false;
+  if (a.x >= b.x + b.width) return false;
+  if (a.y + a.height <= b.y) return false;
+  if (a.y >= b.y + b.height) return false;
+  return true;
+}
+
 function computeLayouts(
-  items: GridItemDef[],
-  heights: Map<string, number>,
-  moving: GridItemDef | null,
-  movingY: number,
-  movingInitialY: number,
-): Map<string, ComputedLayout> {
-  console.log("moving", moving, movingY);
-  const maxHeights = new Array<number>(GRID_COLUMNS).fill(0);
-  const sorted = [...items].sort((a, b) => a.idx - b.idx);
-  const result = new Map<string, ComputedLayout>();
-  let isApplyMoving = false;
-
-  for (const { id, x, width } of sorted) {
-    if (id === moving?.id) {
-      result.set(id, {
-        x,
-        y: movingInitialY,
-        width,
-        height: heights.get(id) ?? 0,
-      });
-      continue;
-    }
-    const col = Math.max(0, Math.min(x, GRID_COLUMNS - 1));
-    const span = Math.max(1, Math.min(width, GRID_COLUMNS - col));
-    const right = col + span - 1;
-
-    let y = 0;
-    for (let i = col; i <= right; i++) {
-      y = Math.max(y, maxHeights[i]);
-    }
-    const height = heights.get(id) ?? 0;
-
-    if (
-      !isApplyMoving &&
-      moving &&
-      y + height > movingY &&
-      moving.x <= right &&
-      moving.x + moving.width - 1 >= col
-    ) {
-      isApplyMoving = true;
-      const movingCol = Math.max(0, Math.min(moving.x, GRID_COLUMNS - 1));
-      const movingSpan = Math.max(
-        1,
-        Math.min(moving.width, GRID_COLUMNS - movingCol),
-      );
-      const movingRight = movingCol + movingSpan - 1;
-      const movingHeight = heights.get(moving.id) ?? 0;
-
-      if (movingCol <= right && movingRight >= col) {
-        maxHeights[movingCol] = Math.max(
-          maxHeights[movingCol],
-          y + movingHeight,
-        );
-      }
-      for (let i = col; i <= right; i++) {
-        y = Math.max(y, maxHeights[i]);
-      }
-    }
-
-    result.set(id, { x: col, y, width: span, height });
-
-    for (let i = col; i <= right; i++) {
-      maxHeights[i] = y + height;
-    }
+  items: Record<string, GridLayout>,
+  movingLayout: GridLayout | null = null,
+): Record<string, GridLayout> {
+  const result: Record<string, GridLayout> = {};
+  let maxHeights = new Array<number>(GRID_COLUMNS).fill(0);
+  const sorted = Object.values(items)
+    .filter((item) => item.id !== movingLayout?.id)
+    .sort((a, b) => (a.idx > b.idx ? 1 : -1));
+  let newIdx = null;
+  if (movingLayout) {
+    const index = movingLayout
+      ? sorted.findIndex((item) => collision(item, movingLayout))
+      : -1;
+    const newIndex = generateKeyBetween(
+      sorted[index - 1]?.idx,
+      sorted[index]?.idx,
+    );
+    sorted.splice(index, 0, { ...movingLayout, idx: newIndex });
   }
 
+  for (const item of sorted) {
+    const maxHeight = getMaxHeight(maxHeights, item);
+    result[item.id] = { ...item, y: maxHeight };
+    maxHeights = setMaxHeight(maxHeights, result[item.id]);
+  }
+
+  if (movingLayout) {
+    result[movingLayout.id] = { ...items[movingLayout.id], idx: newIdx! };
+  }
   return result;
 }
 
 interface GridLayoutProviderProps {
-  items: GridItemDef[];
+  layoutMap: Record<string, Layout>;
   children: React.ReactNode;
 }
 
 export function GridLayoutProvider({
-  items,
+  layoutMap,
   children,
 }: GridLayoutProviderProps) {
-  const heightsRef = useRef<Map<string, number>>(new Map());
-  const itemsRef = useRef(items);
-  itemsRef.current = items;
+  const [version, setVersion] = useState(0);
+  const heightsRef = useRef<Record<string, number>>({});
 
-  const { active, dragOverlay } = useDndContext();
+  const [items, setItems] = useState<Record<string, GridLayout>>({});
+  const moving = useMoving();
 
-  const moving = useMemo<GridItemDef | null>(() => {
-    if (!active) return null;
-    if (!active.rect.current.initial) return null;
-    if (!active.rect.current.translated) return null;
-    const current = active.data.current?.layout as ComputedLayout;
-    const transformX =
-      active.rect.current.translated.left - active.rect.current.initial.left;
-    const newX = Math.round(current.x + transformX / COLUMN_WIDTH);
-    const clamped = Math.max(0, Math.min(newX, GRID_COLUMNS - current.width));
+  useEffect(() => {
+    console.log("layoutMap changed, recomputing layouts", heightsRef.current);
+    setItems((prev) => {
+      const next = { ...prev };
+      for (const [id, layout] of Object.entries(layoutMap)) {
+        const existing = next[id] ?? {
+          ...layout,
+          id,
+          height: heightsRef.current[id] ?? 0,
+          y: 0,
+        };
+        next[id] = { ...existing, ...layout };
+      }
+      console.log("next", next);
+      return computeLayouts(next);
+    });
+  }, [layoutMap, moving, version]);
 
-    return {
-      id: active.data.current?.id as string,
-      x: clamped,
-      width: current.width,
-      idx: 0,
-    };
-  }, [active?.rect.current.translated?.left]);
-
-  const movingY = useMemo(() => {
-    if (!active) return 0;
-    if (!active.rect.current.initial) return 0;
-    if (!active.rect.current.translated) return 0;
-    const current = active.data.current?.layout as ComputedLayout;
-    return (
-      current.y +
-      active.rect.current.translated.top -
-      active.rect.current.initial.top
-    );
-  }, [active?.rect.current.translated?.top]);
-  const movingInitialY = active?.data.current?.layout?.y ?? 0;
-
-  // heightVersion bumps when any height changes, triggering layout recomputation
-  const [heightVersion, setHeightVersion] = useState(0);
-
-  const computedLayouts = useMemo(() => {
-    // Clean up heights for removed items
-    const activeIds = new Set(items.map((i) => i.id));
-    for (const id of heightsRef.current.keys()) {
-      if (!activeIds.has(id)) heightsRef.current.delete(id);
-    }
-    return computeLayouts(
-      items,
-      heightsRef.current,
-      moving,
-      movingY,
-      movingInitialY,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, heightVersion, moving]);
+  // useEffect(() => {
+  //   if (!moving) return;
+  //   setItems((prev) => computeLayouts(prev, moving));
+  // }, [moving]);
 
   const setHeight = useCallback((id: string, height: number) => {
-    if (heightsRef.current.get(id) === height) return;
-    heightsRef.current.set(id, height);
-    setHeightVersion((v) => v + 1);
+    console.log("setting height for", id, "to", height);
+    heightsRef.current[id] = height;
+    setVersion((v) => v + 1);
   }, []);
 
   const value = useMemo(
-    () => ({ computedLayouts, setHeight }),
-    [computedLayouts, setHeight],
+    () => ({ computedLayouts: items, setHeight }),
+    [items, setHeight],
   );
-
   return (
     <GridLayoutContext.Provider value={value}>
       {children}
     </GridLayoutContext.Provider>
   );
+}
+
+function useMoving() {
+  const { active } = useDndContext();
+  return useMemo<GridLayout | null>(() => {
+    if (!active) return null;
+    if (!active.rect.current.initial) return null;
+    if (!active.rect.current.translated) return null;
+    if (!active.data.current) return null;
+
+    const layout = active.data.current.layout as GridLayout;
+    const id = active.data.current.id as string;
+    const transformX =
+      active.rect.current.translated.left - active.rect.current.initial.left;
+    const transformY =
+      active.rect.current.translated.top - active.rect.current.initial.top;
+
+    const newX = Math.round(layout.x + transformX / COLUMN_WIDTH);
+    const clamped = Math.max(0, Math.min(newX, GRID_COLUMNS - layout.width));
+    const newY = layout.y + transformY;
+
+    return { ...layout, x: clamped, y: newY };
+  }, [active]);
 }
