@@ -2,10 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { useGridLayoutContext } from "@/features/form-builder/components/grid/GridLayoutContext";
-import { cn } from "@/lib/utils";
 import type { Widget, WidgetProperties } from "@/types/template";
-import { useDraggable } from "@dnd-kit/core";
-import { GripVertical, Trash2 } from "lucide-react";
 
 interface WidgetItemProps {
   widget: Widget;
@@ -26,70 +23,21 @@ export function WidgetItem({
 }: WidgetItemProps) {
   const { computedLayouts, setHeight } = useGridLayoutContext();
   const layout = computedLayouts[widget.id];
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: widget.id,
-      disabled: viewOnly,
-      data: { type: "widget", layout, widget },
-    });
+
   return (
-    <div
-      ref={setNodeRef}
-      style={{
-        position: "relative",
-        opacity: isDragging ? 0.75 : undefined,
-        transform: transform
-          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-          : undefined,
-      }}
-      className={cn(
-        "w-full",
-        "group rounded-lg border bg-card p-3 transition-colors",
-        isSelected && "border-primary ring-1 ring-primary",
-        isDragging && "shadow-lg",
-        !viewOnly && "cursor-pointer hover:border-primary/50",
-      )}
-      onClick={viewOnly ? undefined : onSelect}
-    >
-      <div className="flex items-start gap-2">
-        {!viewOnly && (
-          <button
-            type="button"
-            className="mt-0.5 shrink-0 cursor-grab text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
-            {...attributes}
-            {...listeners}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <GripVertical className="size-4" />
-          </button>
-        )}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <p className="truncate text-sm font-medium">
-              {properties.label || "(no label)"}
-            </p>
-            <Badge variant="secondary" className="shrink-0 text-[10px]">
-              {widget.type}
-            </Badge>
-            {properties.required && (
-              <span className="text-xs text-destructive">*</span>
-            )}
-          </div>
-          <WidgetPreview widget={widget} properties={properties} />
-        </div>
-        {!viewOnly && (
-          <button
-            type="button"
-            className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
-            onClick={(e) => {
-              e.stopPropagation();
-              onRemove();
-            }}
-          >
-            <Trash2 className="size-3.5" />
-          </button>
+    <div className="min-w-0 flex-1">
+      <div className="flex items-center gap-2">
+        <p className="truncate text-sm font-medium">
+          {properties.label || "(no label)"}
+        </p>
+        <Badge variant="secondary" className="shrink-0 text-[10px]">
+          {widget.type}
+        </Badge>
+        {properties.required && (
+          <span className="text-xs text-destructive">*</span>
         )}
       </div>
+      <WidgetPreview widget={widget} properties={properties} />
     </div>
   );
 }

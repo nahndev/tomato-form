@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import type { Template, WidgetType } from "@/types/template";
+import { generateKeyBetween } from "fractional-indexing";
 import { Wifi, WifiOff } from "lucide-react";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -33,15 +34,18 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
   const handleAddWidget = useCallback(
     (type: WidgetType) => {
       const id = uuidv4();
-      const widgetCount = Object.keys(state.widgets).length;
+      const lastIdx = Object.values(state.layouts)
+        .map((layout) => layout.idx)
+        .sort()
+        .pop();
       addWidget(
         { id, type },
-        { x: 0, width: 2, idx: widgetCount.toString() },
+        { x: 0, width: 2, idx: generateKeyBetween(lastIdx ?? null, null) },
         { label: `${type.charAt(0).toUpperCase() + type.slice(1)} field` },
       );
       setSelectedWidgetId(id);
     },
-    [addWidget, state.widgets],
+    [addWidget, state.layouts],
   );
 
   const selectedWidget = selectedWidgetId

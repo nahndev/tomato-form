@@ -1,17 +1,10 @@
 "use client";
 
 import { Layout } from "@/types/template";
-import { useDndContext } from "@dnd-kit/core";
+import { Active, useDndContext } from "@dnd-kit/core";
 import { generateKeyBetween } from "fractional-indexing";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useContext, useMemo, useRef } from "react";
+import { useMap } from "usehooks-ts";
 
 export const GRID_COLUMNS = 4;
 export const COLUMN_WIDTH = 200; // px per column
@@ -49,7 +42,7 @@ function setMaxHeight(maxHeights: number[], layout: GridLayout) {
   return maxHeights;
 }
 
-function getMaxHeight(maxHeights: number[], layout: GridLayout) {
+function getMaxHeight(maxHeights: number[], layout: Layout) {
   const col = Math.max(0, Math.min(layout.x, GRID_COLUMNS - 1));
   const span = Math.max(1, Math.min(layout.width, GRID_COLUMNS - col));
   const right = col + span - 1;
@@ -64,37 +57,71 @@ function collision(a: GridLayout, b: GridLayout) {
   return true;
 }
 
-function computeLayouts(
-  items: Record<string, GridLayout>,
-  movingLayout: GridLayout | null = null,
-): Record<string, GridLayout> {
-  const result: Record<string, GridLayout> = {};
-  let maxHeights = new Array<number>(GRID_COLUMNS).fill(0);
-  const sorted = Object.values(items)
-    .filter((item) => item.id !== movingLayout?.id)
-    .sort((a, b) => (a.idx > b.idx ? 1 : -1));
-  let newIdx = null;
-  if (movingLayout) {
-    const index = movingLayout
-      ? sorted.findIndex((item) => collision(item, movingLayout))
-      : -1;
-    const newIndex = generateKeyBetween(
-      sorted[index - 1]?.idx,
-      sorted[index]?.idx,
+function useComputeLayouts(items: Record<string, Layout>) {
+  const moving = useMoving();
+  const yMapRef = useRef(new Map<string, number>());
+  const [heightMap, heightMapActions] = useMap<string, number>();
+
+  const computedLayouts = useMemo(() => {
+    const baseLayouts: Array<GridLayout> = Object.entries(items).map(
+      ([id, layout]) => ({
+        id,
+        x: layout.x,
+        y: yMapRef.current.get(id) ?? 0,
+        width: layout.width,
+        height: heightMap.get(id) ?? 0,
+        idx: layout.idx,
+      }),
     );
-    sorted.splice(index, 0, { ...movingLayout, idx: newIndex });
-  }
+    let maxHeights = new Array<number>(GRID_COLUMNS).fill(0);
+    const sorted = baseLayouts
+      .filter((layout) => layout.id !== moving?.id)
+      .sort((a, b) => (a.idx > b.idx ? 1 : -1));
 
-  for (const item of sorted) {
-    const maxHeight = getMaxHeight(maxHeights, item);
-    result[item.id] = { ...item, y: maxHeight };
-    maxHeights = setMaxHeight(maxHeights, result[item.id]);
-  }
+    // console.log("Sorted layouts:", JSON.stringify(sorted, null, 2));
+    // console.log("Moving layout:", JSON.stringify(moving, null, 2));
+    if (moving) {
+      const movingIndex = sorted.findIndex((layout) =>
+        collision(layout, moving!),
+      );
 
-  if (movingLayout) {
-    result[movingLayout.id] = { ...items[movingLayout.id], idx: newIdx! };
-  }
-  return result;
+      console.log("--", movingIndex);
+      if (movingIndex === -1) {
+        sorted.push({
+          ...moving,
+          idx: generateKeyBetween(sorted[sorted.length - 1]?.idx, null),
+        });
+      } else {
+        sorted.splice(movingIndex, 0, {
+          ...moving,
+          idx: generateKeyBetween(
+            sorted[movingIndex - 1]?.idx,
+            sorted[movingIndex]?.idx,
+          ),
+        });
+      }
+    }
+
+    for (const item of sorted) {
+      const maxHeight = getMaxHeight(maxHeights, item);
+      yMapRef.current.set(item.id, maxHeight);
+      item.y = maxHeight;
+      maxHeights = setMaxHeight(maxHeights, item);
+    }
+    const results = Object.fromEntries(
+      sorted.map((item) => [
+        item.id,
+        {
+          ...item,
+          y: yMapRef.current.get(item.id) ?? 0,
+          height: heightMap.get(item.id) ?? 0,
+        },
+      ]),
+    );
+    return results;
+  }, [items, heightMap, moving]) as Record<string, GridLayout>;
+
+  return [computedLayouts, heightMapActions.set] as const;
 }
 
 interface GridLayoutProviderProps {
@@ -106,47 +133,12 @@ export function GridLayoutProvider({
   layoutMap,
   children,
 }: GridLayoutProviderProps) {
-  const [version, setVersion] = useState(0);
-  const heightsRef = useRef<Record<string, number>>({});
+  const [computedLayouts, setHeight] = useComputeLayouts(layoutMap);
 
-  const [items, setItems] = useState<Record<string, GridLayout>>({});
-  const moving = useMoving();
+  // console.log("Computed layouts:", JSON.stringify(computedLayouts, null, 2));
 
-  useEffect(() => {
-    console.log("layoutMap changed, recomputing layouts", heightsRef.current);
-    setItems((prev) => {
-      const next = { ...prev };
-      for (const [id, layout] of Object.entries(layoutMap)) {
-        const existing = next[id] ?? {
-          ...layout,
-          id,
-          height: heightsRef.current[id] ?? 0,
-          y: 0,
-        };
-        next[id] = { ...existing, ...layout };
-      }
-      console.log("next", next);
-      return computeLayouts(next);
-    });
-  }, [layoutMap, moving, version]);
-
-  // useEffect(() => {
-  //   if (!moving) return;
-  //   setItems((prev) => computeLayouts(prev, moving));
-  // }, [moving]);
-
-  const setHeight = useCallback((id: string, height: number) => {
-    console.log("setting height for", id, "to", height);
-    heightsRef.current[id] = height;
-    setVersion((v) => v + 1);
-  }, []);
-
-  const value = useMemo(
-    () => ({ computedLayouts: items, setHeight }),
-    [items, setHeight],
-  );
   return (
-    <GridLayoutContext.Provider value={value}>
+    <GridLayoutContext.Provider value={{ computedLayouts, setHeight }}>
       {children}
     </GridLayoutContext.Provider>
   );
@@ -155,22 +147,26 @@ export function GridLayoutProvider({
 function useMoving() {
   const { active } = useDndContext();
   return useMemo<GridLayout | null>(() => {
-    if (!active) return null;
-    if (!active.rect.current.initial) return null;
-    if (!active.rect.current.translated) return null;
-    if (!active.data.current) return null;
+    return getGridLayout(active);
+  }, [active?.rect.current.translated]);
+}
 
-    const layout = active.data.current.layout as GridLayout;
-    const id = active.data.current.id as string;
-    const transformX =
-      active.rect.current.translated.left - active.rect.current.initial.left;
-    const transformY =
-      active.rect.current.translated.top - active.rect.current.initial.top;
+function getGridLayout(active: Active | null): GridLayout | null {
+  if (!active) return null;
+  if (!active.rect.current.initial) return null;
+  if (!active.rect.current.translated) return null;
+  if (!active.data.current) return null;
 
-    const newX = Math.round(layout.x + transformX / COLUMN_WIDTH);
-    const clamped = Math.max(0, Math.min(newX, GRID_COLUMNS - layout.width));
-    const newY = layout.y + transformY;
+  const layout = active.data.current.layout as GridLayout;
+  const id = active.data.current.id as string;
+  const transformX =
+    active.rect.current.translated.left - active.rect.current.initial.left;
+  const transformY =
+    active.rect.current.translated.top - active.rect.current.initial.top;
 
-    return { ...layout, x: clamped, y: newY };
-  }, [active]);
+  const newX = Math.round(layout.x + transformX / COLUMN_WIDTH);
+  const clamped = Math.max(0, Math.min(newX, GRID_COLUMNS - layout.width));
+  const newY = layout.y + transformY;
+
+  return { ...layout, x: clamped, y: newY };
 }
