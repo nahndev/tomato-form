@@ -5,7 +5,7 @@ import {
   IsObject,
   IsOptional,
 } from "class-validator";
-import type { Widget, Layout, WidgetProperties } from "../template.schema";
+import type { Widget, GridLayout, WidgetProperties } from "../template.schema";
 
 export class CreateTemplateDto {
   @ApiProperty({ example: "My Form" })
@@ -21,7 +21,7 @@ export class CreateTemplateDto {
   @ApiPropertyOptional({ description: "Map of widget id → layout" })
   @IsObject()
   @IsOptional()
-  layouts?: Record<string, Layout>;
+  layouts?: Record<string, GridLayout>;
 
   @ApiPropertyOptional({ description: "Map of widget id → properties" })
   @IsObject()

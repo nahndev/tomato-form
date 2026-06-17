@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  type Layout,
+  type GridLayout,
   type Template,
   type Widget,
   type WidgetProperties,
@@ -9,13 +9,20 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
+import { GRID_COLUMNS } from "../components/grid/GridLayoutContext";
+
+function clampLayout(column: number, span: number): { column: number; span: number } {
+  const clampedColumn = Math.max(0, Math.min(column, GRID_COLUMNS - 1));
+  const clampedSpan = Math.max(1, Math.min(span, GRID_COLUMNS - clampedColumn));
+  return { column: clampedColumn, span: clampedSpan };
+}
 
 const YJS_SERVER_URL = process.env.NEXT_PUBLIC_YJS_URL ?? "ws://localhost:3028";
 
 export interface TemplateYjsState {
   name: string;
   widgets: Record<string, Widget>;
-  layouts: Record<string, Layout>;
+  layouts: Record<string, GridLayout>;
   properties: Record<string, WidgetProperties>;
 }
 
@@ -23,9 +30,9 @@ export interface UseTemplateYjsReturn {
   state: TemplateYjsState;
   isConnected: boolean;
   setName: (name: string) => void;
-  addWidget: (widget: Widget, layout: Layout, props: WidgetProperties) => void;
+  addWidget: (widget: Widget, layout: GridLayout, props: WidgetProperties) => void;
   removeWidget: (widgetId: string) => void;
-  updateLayout: (widgetId: string, layout: Partial<Layout>) => void;
+  updateLayout: (widgetId: string, layout: Partial<GridLayout>) => void;
   updateProperties: (
     widgetId: string,
     props: Partial<WidgetProperties>,
@@ -53,7 +60,7 @@ export function useTemplateYjs(
   const readState = (doc: Y.Doc): TemplateYjsState => ({
     name: doc.getText("name").toString(),
     widgets: Object.fromEntries(doc.getMap<Widget>("widgets").entries()),
-    layouts: Object.fromEntries(doc.getMap<Layout>("layouts").entries()),
+    layouts: Object.fromEntries(doc.getMap<GridLayout>("layouts").entries()),
     properties: Object.fromEntries(
       doc.getMap<WidgetProperties>("properties").entries(),
     ),
@@ -95,11 +102,12 @@ export function useTemplateYjs(
   }, []);
 
   const addWidget = useCallback(
-    (widget: Widget, layout: Layout, props: WidgetProperties) => {
+    (widget: Widget, layout: GridLayout, props: WidgetProperties) => {
       const doc = getDoc();
+      const { column, span } = clampLayout(layout.column, layout.span);
       doc.transact(() => {
         doc.getMap<Widget>("widgets").set(widget.id, widget);
-        doc.getMap<Layout>("layouts").set(widget.id, layout);
+        doc.getMap<GridLayout>("layouts").set(widget.id, { ...layout, column, span });
         doc.getMap<WidgetProperties>("properties").set(widget.id, props);
       });
     },
@@ -116,10 +124,12 @@ export function useTemplateYjs(
   }, []);
 
   const updateLayout = useCallback(
-    (widgetId: string, patch: Partial<Layout>) => {
-      const yLayouts = getDoc().getMap<Layout>("layouts");
-      const current = yLayouts.get(widgetId) ?? { x: 0, width: 4, idx: "a" };
-      yLayouts.set(widgetId, { ...current, ...patch });
+    (widgetId: string, patch: Partial<GridLayout>) => {
+      const yGridLayouts = getDoc().getMap<GridLayout>("layouts");
+      const current = yGridLayouts.get(widgetId) ?? { column: 0, span: 4, idx: "a" };
+      const merged = { ...current, ...patch };
+      const { column, span } = clampLayout(merged.column, merged.span);
+      yGridLayouts.set(widgetId, { ...merged, column, span });
     },
     [],
   );
@@ -135,11 +145,11 @@ export function useTemplateYjs(
 
   const reorderWidgets = useCallback((orderedIds: string[]) => {
     const doc = getDoc();
-    const yLayouts = doc.getMap<Layout>("layouts");
+    const yGridLayouts = doc.getMap<GridLayout>("layouts");
     doc.transact(() => {
       orderedIds.forEach((id, index) => {
-        const current = yLayouts.get(id) ?? { x: 0, width: 4, idx: index };
-        yLayouts.set(id, { ...current, idx: "a" });
+        const current = yGridLayouts.get(id) ?? { column: 0, span: 4, idx: index };
+        yGridLayouts.set(id, { ...current, idx: "a" });
       });
     });
   }, []);

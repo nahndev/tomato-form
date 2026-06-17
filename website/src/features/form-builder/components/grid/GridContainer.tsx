@@ -19,13 +19,14 @@ export function GridContainer({ children, className }: GridContainerProps) {
 
   const { setNodeRef } = useDroppable({ id: "droppable" });
 
-  const containerHeight = useMemo(() => {
-    let max = 0;
-    for (const layout of Object.values(computedLayouts)) {
-      max = Math.max(max, layout.y + layout.height);
-    }
-    return max;
-  }, [computedLayouts]);
+  const containerHeight = useMemo(
+    () =>
+      Object.values(computedLayouts).reduce(
+        (acc, layout) => Math.max(acc, layout.top + layout.height),
+        0,
+      ),
+    [computedLayouts],
+  );
 
   return (
     <div

@@ -6,9 +6,9 @@ export interface Widget {
   type: string;
 }
 
-export interface Layout {
-  x: number;
-  width: number;
+export interface GridLayout {
+  column: number;
+  span: number;
   idx: number;
 }
 
@@ -31,7 +31,7 @@ export class Template {
   widgets: Record<string, Widget>;
 
   @Prop({ type: Object, default: {} })
-  layouts: Record<string, Layout>;
+  layouts: Record<string, GridLayout>;
 
   @Prop({ type: Object, default: {} })
   properties: Record<string, WidgetProperties>;

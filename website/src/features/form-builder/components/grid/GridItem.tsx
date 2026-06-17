@@ -6,8 +6,7 @@ import clsx from "clsx";
 import { GripVertical } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
-  GRID_COLUMNS,
-  GridLayout,
+  AbsoluteLayout,
   useGridLayoutContext,
 } from "./GridLayoutContext";
 
@@ -19,7 +18,7 @@ interface GridItemProps {
 export function GridItem({ id, children }: GridItemProps) {
   const { computedLayouts, setHeight } = useGridLayoutContext();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [keepLayout, setKeepLayout] = useState<GridLayout | null>(null);
+  const [keepLayout, setKeepLayout] = useState<AbsoluteLayout | null>(null);
   const layout = computedLayouts[id];
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -48,8 +47,8 @@ export function GridItem({ id, children }: GridItemProps) {
   //   },
   // });
 
-  const translateX = layout.x;
-  const translateY = layout.y;
+  const translateX = layout.left;
+  const translateY = layout.top;
 
   return (
     <div
@@ -61,7 +60,7 @@ export function GridItem({ id, children }: GridItemProps) {
         position: "absolute",
         left: translateX,
         top: translateY,
-        width: `${(layout.width / GRID_COLUMNS) * 100}%`,
+        width: `${layout.width}px`,
         zIndex: isDragging ? 50 : undefined,
       }}
     >

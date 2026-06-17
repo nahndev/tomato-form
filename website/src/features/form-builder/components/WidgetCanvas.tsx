@@ -1,6 +1,6 @@
 "use client";
 
-import type { Layout, Widget, WidgetProperties } from "@/types/template";
+import type { GridLayout, Widget, WidgetProperties } from "@/types/template";
 import {
   DndContext,
   PointerSensor,
@@ -16,12 +16,12 @@ import { WidgetItem } from "./WidgetItem";
 
 interface WidgetCanvasProps {
   widgets: Record<string, Widget>;
-  layouts: Record<string, Layout>;
+  layouts: Record<string, GridLayout>;
   properties: Record<string, WidgetProperties>;
   selectedWidgetId: string | null;
   onSelectWidget: (id: string) => void;
   onRemoveWidget: (id: string) => void;
-  onMoveWidget: (id: string, x: number, idx: string) => void;
+  onMoveWidget: (id: string, column: number, idx: string) => void;
   viewOnly?: boolean;
 }
 

@@ -40,7 +40,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
         .pop();
       addWidget(
         { id, type },
-        { x: 0, width: 2, idx: generateKeyBetween(lastIdx ?? null, null) },
+        { column: 0, span: 2, idx: generateKeyBetween(lastIdx ?? null, null) },
         { label: `${type.charAt(0).toUpperCase() + type.slice(1)} field` },
       );
       setSelectedWidgetId(id);
@@ -111,7 +111,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
               removeWidget(id);
               if (selectedWidgetId === id) setSelectedWidgetId(null);
             }}
-            onMoveWidget={(id, x, idx) => updateLayout(id, { x, idx })}
+            onMoveWidget={(id, column, idx) => updateLayout(id, { column, idx })}
             viewOnly={viewOnly}
           />
         </div>

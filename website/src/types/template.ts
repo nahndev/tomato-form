@@ -11,9 +11,9 @@ export interface Widget {
   type: WidgetType;
 }
 
-export interface Layout {
-  x: number;
-  width: number;
+export interface GridLayout {
+  column: number;
+  span: number;
   idx: string;
 }
 
@@ -28,7 +28,7 @@ export interface Template {
   id: string;
   name: string;
   widgets: Record<string, Widget>;
-  layouts: Record<string, Layout>;
+  layouts: Record<string, GridLayout>;
   properties: Record<string, WidgetProperties>;
   createdAt?: string;
   updatedAt?: string;
@@ -37,7 +37,7 @@ export interface Template {
 export interface CreateTemplateInput {
   name: string;
   widgets?: Record<string, Widget>;
-  layouts?: Record<string, Layout>;
+  layouts?: Record<string, GridLayout>;
   properties?: Record<string, WidgetProperties>;
 }
 
