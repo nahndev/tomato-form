@@ -97,25 +97,24 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
         )}
 
         {/* Center: canvas */}
-        <ScrollArea className="flex-1 p-6">
-          <div className="mx-auto w-min h-full">
-            <WidgetCanvas
-              widgets={state.widgets}
-              layouts={state.layouts}
-              properties={state.properties}
-              selectedWidgetId={selectedWidgetId}
-              onSelectWidget={(id) =>
-                setSelectedWidgetId((prev) => (prev === id ? null : id))
-              }
-              onRemoveWidget={(id) => {
-                removeWidget(id);
-                if (selectedWidgetId === id) setSelectedWidgetId(null);
-              }}
-              onMoveWidget={(id, x) => updateLayout(id, { x })}
-              viewOnly={viewOnly}
-            />
-          </div>
-        </ScrollArea>
+
+        <div className="mx-auto w-min h-full">
+          <WidgetCanvas
+            widgets={state.widgets}
+            layouts={state.layouts}
+            properties={state.properties}
+            selectedWidgetId={selectedWidgetId}
+            onSelectWidget={(id) =>
+              setSelectedWidgetId((prev) => (prev === id ? null : id))
+            }
+            onRemoveWidget={(id) => {
+              removeWidget(id);
+              if (selectedWidgetId === id) setSelectedWidgetId(null);
+            }}
+            onMoveWidget={(id, x, idx) => updateLayout(id, { x, idx })}
+            viewOnly={viewOnly}
+          />
+        </div>
 
         {/* Right panel: properties */}
         {!viewOnly && (

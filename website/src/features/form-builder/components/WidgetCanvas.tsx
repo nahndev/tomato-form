@@ -11,11 +11,7 @@ import {
 import { LayoutTemplate } from "lucide-react";
 import { GridContainer } from "./grid/GridContainer";
 import { GridItem } from "./grid/GridItem";
-import {
-  COLUMN_WIDTH,
-  GRID_COLUMNS,
-  GridLayoutProvider,
-} from "./grid/GridLayoutContext";
+import { GridLayoutProvider } from "./grid/GridLayoutContext";
 import { WidgetItem } from "./WidgetItem";
 
 interface WidgetCanvasProps {
@@ -25,7 +21,7 @@ interface WidgetCanvasProps {
   selectedWidgetId: string | null;
   onSelectWidget: (id: string) => void;
   onRemoveWidget: (id: string) => void;
-  onMoveWidget: (id: string, x: number) => void;
+  onMoveWidget: (id: string, x: number, idx: string) => void;
   viewOnly?: boolean;
 }
 
@@ -42,16 +38,15 @@ export function WidgetCanvas({
   const sensors = useSensors(useSensor(PointerSensor));
 
   function handleDragEnd(event: DragEndEvent) {
-    const { active, delta } = event;
-    const id = active.id as string;
-    const current = layouts[id];
-    if (!current) return;
-
-    const newX = Math.round(current.x + delta.x / COLUMN_WIDTH);
-    const clamped = Math.max(0, Math.min(newX, GRID_COLUMNS - current.width));
-    if (clamped !== current.x) {
-      onMoveWidget(id, clamped);
-    }
+    // const { active, delta } = event;
+    // const id = active.id as string;
+    // const current = layouts[id];
+    // if (!current) return;
+    // const newX = Math.round(current.x + delta.x / COLUMN_WIDTH);
+    // const clamped = Math.max(0, Math.min(newX, GRID_COLUMNS - current.width));
+    // if (clamped !== current.x) {
+    //   onMoveWidget(id, clamped);
+    // }
   }
 
   const widgetIds = Object.keys(widgets);
@@ -73,8 +68,8 @@ export function WidgetCanvas({
   }
 
   return (
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <GridLayoutProvider layoutMap={layouts}>
+    <DndContext sensors={sensors}>
+      <GridLayoutProvider layoutMap={layouts} onMoveWidget={onMoveWidget}>
         <GridContainer>
           {widgetIds.map((id) => (
             <GridItem key={id} id={id}>
