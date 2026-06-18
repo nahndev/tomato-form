@@ -23,7 +23,6 @@ const YJS_SERVER_URL = process.env.NEXT_PUBLIC_YJS_URL ?? "ws://localhost:3028";
 
 const DEFAULT_SESSION_ID = "default-session";
 const DEFAULT_SESSION_NAME = "Section 1";
-const DEFAULT_SESSION_HEIGHT = 0;
 const DEFAULT_LAYOUT: GridLayout = { column: 0, span: GRID_COLUMNS, idx: "a" };
 
 type YSessionLayout = Y.Map<unknown>;
@@ -47,7 +46,6 @@ function getOrCreateSessionLayout(doc: Y.Doc, sessionId: string): YSessionLayout
   if (existing) return existing;
   const sessionLayout: YSessionLayout = new Y.Map();
   sessionLayout.set("layouts", new Y.Map<GridLayout>());
-  sessionLayout.set("height", DEFAULT_SESSION_HEIGHT);
   yLayout.set(sessionId, sessionLayout);
   return sessionLayout;
 }
@@ -81,12 +79,15 @@ export interface UseTemplateYjsReturn {
   addWidget: (widget: Widget, layout: GridLayout, props: WidgetProperties) => void;
   removeWidget: (widgetId: string) => void;
   addSession: (session: Session) => void;
-  updateLayout: (widgetId: string, layout: Partial<GridLayout>) => void;
+  updateLayout: (
+    widgetId: string,
+    sessionId: string,
+    layout: Partial<GridLayout>,
+  ) => void;
   updateProperties: (
     widgetId: string,
     props: Partial<WidgetProperties>,
   ) => void;
-  updateSessionHeight: (sessionId: string, height: number) => void;
   reorderWidgets: (orderedIds: string[]) => void;
 }
 
@@ -121,7 +122,6 @@ export function useTemplateYjs(
           sessionId,
           {
             layouts: Object.fromEntries(getLayoutsMap(sessionLayout).entries()),
-            height: (sessionLayout.get("height") as number | undefined) ?? 0,
           },
         ],
       ),
@@ -213,15 +213,22 @@ export function useTemplateYjs(
   }, []);
 
   const updateLayout = useCallback(
-    (widgetId: string, patch: Partial<GridLayout>) => {
+    (widgetId: string, sessionId: string, patch: Partial<GridLayout>) => {
       const doc = getDoc();
-      const sessionId =
-        findWidgetSessionId(doc, widgetId) ?? getOrCreateDefaultSessionId(doc);
-      const yLayouts = getLayoutsMap(getOrCreateSessionLayout(doc, sessionId));
-      const current = yLayouts.get(widgetId) ?? DEFAULT_LAYOUT;
+      const currentSessionId = findWidgetSessionId(doc, widgetId);
+      const currentLayouts = currentSessionId
+        ? getLayoutsMap(getOrCreateSessionLayout(doc, currentSessionId))
+        : undefined;
+      const current = currentLayouts?.get(widgetId) ?? DEFAULT_LAYOUT;
       const merged = { ...current, ...patch };
       const { column, span } = clampLayout(merged.column, merged.span);
-      yLayouts.set(widgetId, { ...merged, column, span });
+      const targetLayouts = getLayoutsMap(getOrCreateSessionLayout(doc, sessionId));
+      doc.transact(() => {
+        if (currentSessionId && currentSessionId !== sessionId) {
+          currentLayouts?.delete(widgetId);
+        }
+        targetLayouts.set(widgetId, { ...merged, column, span });
+      });
     },
     [],
   );
@@ -234,16 +241,6 @@ export function useTemplateYjs(
     },
     [],
   );
-
-  const updateSessionHeight = useCallback((sessionId: string, height: number) => {
-    const doc = getDoc();
-    const sessionLayout = getOrCreateSessionLayout(doc, sessionId);
-    // Guards against a render loop: this is called from a layout-effect
-    // driven by a derived value, so a no-op write would otherwise re-fire
-    // the Yjs "update" event on every render.
-    if (sessionLayout.get("height") === height) return;
-    sessionLayout.set("height", height);
-  }, []);
 
   const reorderWidgets = useCallback((orderedIds: string[]) => {
     const doc = getDoc();
@@ -267,7 +264,6 @@ export function useTemplateYjs(
     addSession,
     updateLayout,
     updateProperties,
-    updateSessionHeight,
     reorderWidgets,
   };
 }

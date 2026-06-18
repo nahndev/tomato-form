@@ -10,9 +10,8 @@ import type {
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { LayoutTemplate } from "lucide-react";
 import { GRID_COLUMNS } from "../libs/grid-layout/constants";
-import { GridContainer } from "./grid/GridContainer";
-import { GridItem } from "./grid/GridItem";
-import { GridLayoutProvider } from "./grid/GridLayoutContext";
+import type { SessionGroup } from "../libs/grid-layout/types";
+import { TemplateLayout } from "./grid/TemplateLayout";
 import { WidgetItem } from "./WidgetItem";
 
 const UNASSIGNED_SESSION: Session = { id: "unassigned", name: "Ungrouped" };
@@ -22,12 +21,6 @@ const FALLBACK_LAYOUT: GridLayout = {
   idx: "unassigned",
   isFullWidth: true,
 };
-
-interface SessionGroup {
-  sessionId: string;
-  session: Session;
-  layouts: Record<string, GridLayout>;
-}
 
 function buildSessionGroups(
   widgets: Record<string, Widget>,
@@ -62,8 +55,12 @@ interface WidgetCanvasProps {
   selectedWidgetId: string | null;
   onSelectWidget: (id: string) => void;
   onRemoveWidget: (id: string) => void;
-  onMoveWidget: (id: string, column: number, idx: string) => void;
-  onSessionHeightChange: (sessionId: string, height: number) => void;
+  onMoveWidget: (
+    widgetId: string,
+    sessionId: string,
+    column: number,
+    idx: string,
+  ) => void;
   viewOnly?: boolean;
 }
 
@@ -76,7 +73,6 @@ export function WidgetCanvas({
   onSelectWidget,
   onRemoveWidget,
   onMoveWidget,
-  onSessionHeightChange,
   viewOnly = false,
 }: WidgetCanvasProps) {
   const sensors = useSensors(useSensor(PointerSensor));
@@ -103,36 +99,20 @@ export function WidgetCanvas({
 
   return (
     <DndContext sensors={sensors}>
-      <div className="flex flex-col gap-4">
-        {sessionGroups.map(({ sessionId, session, layouts: sessionLayouts }) => (
-          <div key={sessionId} className="flex flex-col gap-2">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {session.name}
-            </p>
-            <GridLayoutProvider
-              layoutMap={sessionLayouts}
-              session={session}
-              onMoveWidget={onMoveWidget}
-              onHeightChange={(height) => onSessionHeightChange(sessionId, height)}
-            >
-              <GridContainer>
-                {Object.keys(sessionLayouts).map((id) => (
-                  <GridItem key={id} id={id}>
-                    <WidgetItem
-                      widget={widgets[id]}
-                      properties={properties[id] ?? { label: "" }}
-                      isSelected={selectedWidgetId === id}
-                      onSelect={() => onSelectWidget(id)}
-                      onRemove={() => onRemoveWidget(id)}
-                      viewOnly={viewOnly}
-                    />
-                  </GridItem>
-                ))}
-              </GridContainer>
-            </GridLayoutProvider>
-          </div>
-        ))}
-      </div>
+      <TemplateLayout
+        sessionGroups={sessionGroups}
+        onMoveWidget={onMoveWidget}
+        renderWidget={(id) => (
+          <WidgetItem
+            widget={widgets[id]}
+            properties={properties[id] ?? { label: "" }}
+            isSelected={selectedWidgetId === id}
+            onSelect={() => onSelectWidget(id)}
+            onRemove={() => onRemoveWidget(id)}
+            viewOnly={viewOnly}
+          />
+        )}
+      />
     </DndContext>
   );
 }

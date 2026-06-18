@@ -1,3 +1,5 @@
+import { GridLayout, Session } from "@/types/template";
+
 export interface AbsoluteLayout {
   id: string;
   left: number;
@@ -7,4 +9,10 @@ export interface AbsoluteLayout {
   idx: string;
   isStatic?: boolean;
   isFullWidth?: boolean;
+}
+
+export interface SessionGroup {
+  sessionId: string;
+  session: Session;
+  layouts: Record<string, GridLayout>;
 }

@@ -1,49 +1,9 @@
-# Update template structure.
+# Create useMovingInOver
 
-```ts
-export interface Template {
-  id: string;
-  name: string;
-  widgets: Record<string, Widget>;
-  layouts: Record<string, GridLayout>;
-  properties: Record<string, WidgetProperties>;
-  sessions: Record<string, Session>;
-  widgetSessions: Record<string, string>;
-  createdAt?: string;
-  updatedAt?: string;
-}
-```
-
-Update to
-
-```ts
-export interface Template {
-  id: string;
-  name: string;
-  widgets: Record<string, Widget>;
-  properties: Record<string, WidgetProperties>;
-  sessions: Record<string, Session>;
-  layout: Record<
-    string,
-    {
-      layouts: Record<string, GridLayout>;
-      height: number;
-    }
-  >;
-  createdAt?: string;
-  updatedAt?: string;
-}
-```
-
-## What is changed
-
-- Add `layout` is layout of template
-- `layout` is Record with sessionId and value is object with `layouts` and `height`
-- `layouts` is Record with widgetId and value is GridLayout
+- Current, moving with x and y base on the delta and it is default over.
+- When drag move to other session (over), that result will don't correct.
 
 ## Tasks
 
-- [x] Apply change
-- [x] Update all related code to use new `layout` structure
-- [x] Create new interface
-- [x] Update using code to use new interface
+- [x] Create new hooks `useMovingInSession`, base on over and active, return position of current moving widget on over session.
+- [x] Using `useMovingInSession` instead of `useTemplateLayoutcontext` in `SessionLayoutProvider`

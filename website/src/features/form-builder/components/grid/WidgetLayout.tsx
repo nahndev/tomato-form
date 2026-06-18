@@ -1,27 +1,28 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { useDraggable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { GripVertical } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { useWidgetDraggable } from "../../hooks/useWidgetDraggable";
 import { DRAGGING_Z_INDEX } from "../../libs/grid-layout/constants";
-import { useGridLayoutContext } from "./GridLayoutContext";
+import { useSessionLayoutContext } from "./SessionLayoutContext";
 
-interface GridItemProps {
+interface WidgetLayoutProps {
   id: string;
   children: React.ReactNode;
 }
 
-export function GridItem({ id, children }: GridItemProps) {
-  const { computedLayouts, setHeight, session } = useGridLayoutContext();
+export function WidgetLayout({ id, children }: WidgetLayoutProps) {
+  const { computedLayouts, setHeight, session } = useSessionLayoutContext();
   const contentRef = useRef<HTMLDivElement>(null);
   const layout = computedLayouts[id];
+  // console.log(JSON.stringify(computedLayouts, null, 2));
 
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-    id: id,
-    disabled: layout.isStatic,
-  });
+  const { attributes, listeners, setNodeRef, isDragging } = useWidgetDraggable(
+    id,
+    layout,
+  );
 
   useEffect(() => {
     const el = contentRef.current;
@@ -35,6 +36,8 @@ export function GridItem({ id, children }: GridItemProps) {
 
   const translateX = layout.left;
   const translateY = layout.top;
+
+  // console.log(translateX, translateY);
 
   return (
     <div

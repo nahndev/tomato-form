@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { useGridLayoutContext } from "@/features/form-builder/components/grid/GridLayoutContext";
+import { useSessionLayoutContext } from "@/features/form-builder/components/grid/SessionLayoutContext";
 import type { Widget, WidgetProperties } from "@/types/template";
 import { Clock } from "lucide-react";
 
@@ -22,7 +22,7 @@ export function WidgetItem({
   onRemove,
   viewOnly = false,
 }: WidgetItemProps) {
-  const { computedLayouts, setHeight } = useGridLayoutContext();
+  const { computedLayouts, setHeight } = useSessionLayoutContext();
   const layout = computedLayouts[widget.id];
 
   return (

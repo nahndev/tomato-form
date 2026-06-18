@@ -47,6 +47,7 @@ export function computeLayouts(
   items: Record<string, GridLayout>,
   heightMap: { get(id: string): number | undefined },
   moving: AbsoluteLayout | null,
+  isOver = false,
 ): Record<string, AbsoluteLayout> {
   const sorted = Object.entries(items)
     .filter(([id]) => id !== moving?.id)
@@ -66,7 +67,9 @@ export function computeLayouts(
     )
     .sort((a, b) => (a.idx > b.idx ? 1 : -1));
 
-  if (moving) {
+  console.log(isOver);
+
+  if (moving && isOver) {
     const insertAt = sorted.findIndex((layout) => collision(layout, moving));
     if (insertAt === -1) {
       sorted.push({

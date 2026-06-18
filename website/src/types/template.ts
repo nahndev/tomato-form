@@ -34,7 +34,6 @@ export interface Session {
 
 export interface SessionLayout {
   layouts: Record<string, GridLayout>;
-  height: number;
 }
 
 export interface Template {

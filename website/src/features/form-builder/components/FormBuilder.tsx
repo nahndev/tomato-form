@@ -30,7 +30,6 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
     addSession,
     updateProperties,
     updateLayout,
-    updateSessionHeight,
   } = useTemplateYjs(template.id, template);
 
   const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null);
@@ -146,10 +145,9 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
               removeWidget(id);
               if (selectedWidgetId === id) setSelectedWidgetId(null);
             }}
-            onMoveWidget={(id, column, idx) =>
-              updateLayout(id, { column, idx })
+            onMoveWidget={(id, sessionId, column, idx) =>
+              updateLayout(id, sessionId, { column, idx })
             }
-            onSessionHeightChange={updateSessionHeight}
             viewOnly={viewOnly}
           />
         </div>

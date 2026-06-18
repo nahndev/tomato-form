@@ -7,17 +7,17 @@ import {
   CONTAINER_MIN_HEIGHT,
   GRID_COLUMNS,
 } from "../../libs/grid-layout/constants";
-import { useGridLayoutContext } from "./GridLayoutContext";
+import { useSessionLayoutContext } from "./SessionLayoutContext";
 
-interface GridContainerProps {
+interface SessionLayoutProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export function GridContainer({ children, className }: GridContainerProps) {
-  const { containerHeight } = useGridLayoutContext();
+export function SessionLayout({ children, className }: SessionLayoutProps) {
+  const { sessionId, containerHeight } = useSessionLayoutContext();
 
-  const { setNodeRef } = useDroppable({ id: "droppable" });
+  const { setNodeRef } = useDroppable({ id: sessionId });
 
   return (
     <div
