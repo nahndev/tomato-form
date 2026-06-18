@@ -26,7 +26,7 @@ export function WidgetItem({
   const layout = computedLayouts[widget.id];
 
   return (
-    <div className="min-w-0 flex-1">
+    <div className="min-w-0 flex-1 bg-white rounded-md p-4">
       <div className="flex items-center gap-2">
         <p className="truncate text-sm font-medium">
           {properties.label || "(no label)"}

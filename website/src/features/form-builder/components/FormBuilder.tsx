@@ -53,11 +53,11 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
           label: isSession
             ? "Session"
             : `${type.charAt(0).toUpperCase() + type.slice(1)} field`,
-        }
+        },
       );
       setSelectedWidgetId(id);
     },
-    [addWidget, state.layouts]
+    [addWidget, state.layouts],
   );
 
   const selectedWidget = selectedWidgetId
@@ -110,7 +110,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
 
         {/* Center: canvas */}
 
-        <div className="mx-auto w-min h-full p-4 bg-white rounded-md shadow-sm">
+        <div className="mx-auto w-min h-min">
           <WidgetCanvas
             widgets={state.widgets}
             layouts={state.layouts}

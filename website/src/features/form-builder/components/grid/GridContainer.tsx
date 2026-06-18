@@ -24,15 +24,15 @@ export function GridContainer({ children, className }: GridContainerProps) {
     () =>
       Object.values(computedLayouts).reduce(
         (acc, layout) => Math.max(acc, layout.top + layout.height),
-        0
+        0,
       ),
-    [computedLayouts]
+    [computedLayouts],
   );
 
   return (
     <div
       ref={setNodeRef}
-      className={clsx(className, "z-0")}
+      className={clsx(className, "z-0 bg-gray-300")}
       style={{
         position: "relative",
         width: COLUMN_WIDTH * GRID_COLUMNS,

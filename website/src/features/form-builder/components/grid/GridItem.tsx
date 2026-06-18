@@ -47,13 +47,13 @@ export function GridItem({ id, children }: GridItemProps) {
       }}
     >
       <div ref={contentRef} className="h-min w-full grid">
-        <div ref={setNodeRef} className="relative w-full group p-3">
+        <div ref={setNodeRef} className="relative w-full group">
           {!layout.isStatic && (
             <button
               type="button"
               {...attributes}
               {...listeners}
-              className="mt-0.5 shrink-0 cursor-grab text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
+              className="absolute mt-0.5 shrink-0 cursor-grab text-muted-foreground  transition-opacity group-hover:opacity-100 active:cursor-grabbing"
               onClick={(e) => e.stopPropagation()}
             >
               <GripVertical className="size-4" />
