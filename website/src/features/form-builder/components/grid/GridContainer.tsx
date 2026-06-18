@@ -24,9 +24,9 @@ export function GridContainer({ children, className }: GridContainerProps) {
     () =>
       Object.values(computedLayouts).reduce(
         (acc, layout) => Math.max(acc, layout.top + layout.height),
-        0,
+        0
       ),
-    [computedLayouts],
+    [computedLayouts]
   );
 
   return (
@@ -41,17 +41,6 @@ export function GridContainer({ children, className }: GridContainerProps) {
       }}
     >
       {children}
-      <div className="bg-primary/10 absolute h-[120%] w-full -z-10 grid grid-cols-4">
-        {Array.from({ length: GRID_COLUMNS }).map((_, colIndex) => (
-          <div
-            key={colIndex}
-            className={clsx("border-l-2 border-border", {
-              "first:border-l-0": colIndex === 0,
-            })}
-            style={{ width: COLUMN_WIDTH }}
-          />
-        ))}
-      </div>
     </div>
   );
 }

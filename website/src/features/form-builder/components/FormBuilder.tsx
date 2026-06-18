@@ -46,18 +46,18 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
           column: 0,
           span: isSession ? GRID_COLUMNS : 2,
           idx: generateKeyBetween(lastIdx ?? null, null),
-          isStatic: isSession,
+          isStatic: false,
           isFullWidth: isSession,
         },
         {
           label: isSession
             ? "Session"
             : `${type.charAt(0).toUpperCase() + type.slice(1)} field`,
-        },
+        }
       );
       setSelectedWidgetId(id);
     },
-    [addWidget, state.layouts],
+    [addWidget, state.layouts]
   );
 
   const selectedWidget = selectedWidgetId
@@ -110,7 +110,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
 
         {/* Center: canvas */}
 
-        <div className="mx-auto w-min h-full">
+        <div className="mx-auto w-min h-full p-4 bg-white rounded-md shadow-sm">
           <WidgetCanvas
             widgets={state.widgets}
             layouts={state.layouts}
@@ -123,7 +123,9 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
               removeWidget(id);
               if (selectedWidgetId === id) setSelectedWidgetId(null);
             }}
-            onMoveWidget={(id, column, idx) => updateLayout(id, { column, idx })}
+            onMoveWidget={(id, column, idx) =>
+              updateLayout(id, { column, idx })
+            }
             viewOnly={viewOnly}
           />
         </div>

@@ -25,13 +25,13 @@ export function useGridLayoutContext() {
 
 function useComputeLayouts(
   items: Record<string, GridLayout>,
-  moving: AbsoluteLayout | null = null,
+  moving: AbsoluteLayout | null = null
 ) {
   const [heightMap, heightMapActions] = useMap<string, number>();
 
   const computedLayouts = useMemo(
     () => computeLayouts(items, heightMap, moving),
-    [items, heightMap, moving],
+    [items, heightMap, moving]
   );
 
   return [computedLayouts, heightMapActions.set] as const;
@@ -59,7 +59,7 @@ export function GridLayoutProvider({
             top: initial.top + delta.y,
           } as AbsoluteLayout)
         : null,
-    [initial, delta],
+    [initial, delta]
   );
   const [computedLayouts, setHeight] = useComputeLayouts(layoutMap, moving);
 
