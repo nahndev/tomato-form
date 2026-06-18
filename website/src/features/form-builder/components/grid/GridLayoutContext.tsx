@@ -17,6 +17,8 @@ export interface AbsoluteLayout {
   width: number;
   height: number;
   idx: string;
+  isStatic?: boolean;
+  isFullWidth?: boolean;
 }
 
 interface GridLayoutContextValue {
@@ -84,11 +86,15 @@ function useComputeLayouts(
       .filter(([id]) => id !== moving?.id)
       .map(([id, layout]): AbsoluteLayout => ({
         id,
-        left: layout.column * COLUMN_WIDTH,
+        left: layout.isFullWidth ? 0 : layout.column * COLUMN_WIDTH,
         top: 0,
-        width: layout.span * COLUMN_WIDTH,
+        width: layout.isFullWidth
+          ? GRID_COLUMNS * COLUMN_WIDTH
+          : layout.span * COLUMN_WIDTH,
         height: heightMap.get(id) ?? 0,
         idx: layout.idx,
+        isStatic: layout.isStatic,
+        isFullWidth: layout.isFullWidth,
       }))
       .sort((a, b) => (a.idx > b.idx ? 1 : -1));
 

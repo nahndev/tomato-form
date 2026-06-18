@@ -24,6 +24,7 @@ export function GridItem({ id, children }: GridItemProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: id,
+      disabled: layout.isStatic,
     });
 
   useEffect(() => {
@@ -75,15 +76,17 @@ export function GridItem({ id, children }: GridItemProps) {
             isDragging && "shadow-lg",
           )}
         >
-          <button
-            type="button"
-            {...attributes}
-            {...listeners}
-            className="mt-0.5 shrink-0 cursor-grab text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <GripVertical className="size-4" />
-          </button>
+          {!layout.isStatic && (
+            <button
+              type="button"
+              {...attributes}
+              {...listeners}
+              className="mt-0.5 shrink-0 cursor-grab text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <GripVertical className="size-4" />
+            </button>
+          )}
           {children}
         </div>
       </div>

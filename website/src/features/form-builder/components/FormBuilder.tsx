@@ -9,6 +9,7 @@ import { Wifi, WifiOff } from "lucide-react";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useTemplateYjs } from "../hooks/useTemplateYjs";
+import { GRID_COLUMNS } from "./grid/GridLayoutContext";
 import { WidgetCanvas } from "./WidgetCanvas";
 import { WidgetPicker } from "./WidgetPicker";
 import { WidgetPropertiesPanel } from "./WidgetPropertiesPanel";
@@ -38,10 +39,21 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
         .map((layout) => layout.idx)
         .sort()
         .pop();
+      const isSession = type === "session";
       addWidget(
         { id, type },
-        { column: 0, span: 2, idx: generateKeyBetween(lastIdx ?? null, null) },
-        { label: `${type.charAt(0).toUpperCase() + type.slice(1)} field` },
+        {
+          column: 0,
+          span: isSession ? GRID_COLUMNS : 2,
+          idx: generateKeyBetween(lastIdx ?? null, null),
+          isStatic: isSession,
+          isFullWidth: isSession,
+        },
+        {
+          label: isSession
+            ? "Session"
+            : `${type.charAt(0).toUpperCase() + type.slice(1)} field`,
+        },
       );
       setSelectedWidgetId(id);
     },

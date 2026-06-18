@@ -4,7 +4,8 @@ export type WidgetType =
   | "number"
   | "date"
   | "select"
-  | "checkbox";
+  | "checkbox"
+  | "session";
 
 export interface Widget {
   id: string;
@@ -15,6 +16,8 @@ export interface GridLayout {
   column: number;
   span: number;
   idx: string;
+  isStatic?: boolean;
+  isFullWidth?: boolean;
 }
 
 export interface WidgetProperties {

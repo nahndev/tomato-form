@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { useGridLayoutContext } from "@/features/form-builder/components/grid/GridLayoutContext";
 import type { Widget, WidgetProperties } from "@/types/template";
+import { Clock } from "lucide-react";
 
 interface WidgetItemProps {
   widget: Widget;
@@ -51,6 +52,15 @@ function WidgetPreview({
 }) {
   const placeholder =
     properties.placeholder ?? `Enter ${properties.label || widget.type}…`;
+
+  if (widget.type === "session") {
+    return (
+      <div className="mt-2 flex items-center gap-2 rounded-md border border-dashed border-primary/40 bg-primary/5 px-2 py-3 text-xs text-muted-foreground">
+        <Clock className="size-3.5 text-primary" />
+        <span>Full-width, fixed session block</span>
+      </div>
+    );
+  }
 
   if (widget.type === "checkbox") {
     return (

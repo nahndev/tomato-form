@@ -1,6 +1,6 @@
 "use client";
 
-import { Type, AlignLeft, Hash, Calendar, List, CheckSquare } from "lucide-react";
+import { Type, AlignLeft, Hash, Calendar, List, CheckSquare, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { WidgetType } from "@/types/template";
 
@@ -18,6 +18,7 @@ const WIDGET_DEFS: WidgetDef[] = [
   { type: "date", label: "Date", icon: Calendar, description: "Date picker" },
   { type: "select", label: "Select", icon: List, description: "Dropdown select" },
   { type: "checkbox", label: "Checkbox", icon: CheckSquare, description: "Boolean toggle" },
+  { type: "session", label: "Session", icon: Clock, description: "Full-width, fixed block" },
 ];
 
 interface WidgetPickerProps {

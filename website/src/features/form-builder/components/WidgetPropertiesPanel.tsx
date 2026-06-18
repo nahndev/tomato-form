@@ -85,7 +85,7 @@ export function WidgetPropertiesPanel({
         />
       </div>
 
-      {widget.type !== "checkbox" && (
+      {widget.type !== "checkbox" && widget.type !== "session" && (
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="prop-placeholder">Placeholder</Label>
           <Input
@@ -101,19 +101,21 @@ export function WidgetPropertiesPanel({
         </div>
       )}
 
-      <div className="flex items-center gap-2">
-        <input
-          id="prop-required"
-          type="checkbox"
-          checked={formik.values.required}
-          onChange={(e) => {
-            formik.setFieldValue("required", e.target.checked);
-            setTimeout(() => formik.submitForm(), 0);
-          }}
-          className="size-4 rounded border-input accent-primary"
-        />
-        <Label htmlFor="prop-required">Required</Label>
-      </div>
+      {widget.type !== "session" && (
+        <div className="flex items-center gap-2">
+          <input
+            id="prop-required"
+            type="checkbox"
+            checked={formik.values.required}
+            onChange={(e) => {
+              formik.setFieldValue("required", e.target.checked);
+              setTimeout(() => formik.submitForm(), 0);
+            }}
+            className="size-4 rounded border-input accent-primary"
+          />
+          <Label htmlFor="prop-required">Required</Label>
+        </div>
+      )}
 
       {widget.type === "select" && (
         <div className="flex flex-col gap-1.5">
