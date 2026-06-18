@@ -9,7 +9,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
-import { GRID_COLUMNS } from "../components/grid/GridLayoutContext";
+import { GRID_COLUMNS } from "../libs/grid-layout/constants";
 
 function clampLayout(column: number, span: number): { column: number; span: number } {
   const clampedColumn = Math.max(0, Math.min(column, GRID_COLUMNS - 1));

@@ -5,9 +5,10 @@ import clsx from "clsx";
 import { useMemo } from "react";
 import {
   COLUMN_WIDTH,
+  CONTAINER_MIN_HEIGHT,
   GRID_COLUMNS,
-  useGridLayoutContext,
-} from "./GridLayoutContext";
+} from "../../libs/grid-layout/constants";
+import { useGridLayoutContext } from "./GridLayoutContext";
 
 interface GridContainerProps {
   children: React.ReactNode;
@@ -36,7 +37,7 @@ export function GridContainer({ children, className }: GridContainerProps) {
         position: "relative",
         width: COLUMN_WIDTH * GRID_COLUMNS,
         height: containerHeight,
-        minHeight: 100,
+        minHeight: CONTAINER_MIN_HEIGHT,
       }}
     >
       {children}

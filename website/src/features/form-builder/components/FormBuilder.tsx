@@ -9,7 +9,7 @@ import { Wifi, WifiOff } from "lucide-react";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useTemplateYjs } from "../hooks/useTemplateYjs";
-import { GRID_COLUMNS } from "./grid/GridLayoutContext";
+import { GRID_COLUMNS } from "../libs/grid-layout/constants";
 import { WidgetCanvas } from "./WidgetCanvas";
 import { WidgetPicker } from "./WidgetPicker";
 import { WidgetPropertiesPanel } from "./WidgetPropertiesPanel";

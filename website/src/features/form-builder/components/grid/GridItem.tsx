@@ -1,14 +1,11 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { useDraggable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { GripVertical } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import {
-  AbsoluteLayout,
-  useGridLayoutContext,
-} from "./GridLayoutContext";
+import { useEffect, useRef } from "react";
+import { DRAGGING_Z_INDEX } from "../../libs/grid-layout/constants";
+import { useGridLayoutContext } from "./GridLayoutContext";
 
 interface GridItemProps {
   id: string;
@@ -18,14 +15,12 @@ interface GridItemProps {
 export function GridItem({ id, children }: GridItemProps) {
   const { computedLayouts, setHeight } = useGridLayoutContext();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [keepLayout, setKeepLayout] = useState<AbsoluteLayout | null>(null);
   const layout = computedLayouts[id];
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: id,
-      disabled: layout.isStatic,
-    });
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: id,
+    disabled: layout.isStatic,
+  });
 
   useEffect(() => {
     const el = contentRef.current;
@@ -37,45 +32,22 @@ export function GridItem({ id, children }: GridItemProps) {
     return () => observer.disconnect();
   }, [id, setHeight]);
 
-  // useDndMonitor({
-  //   onDragStart({ active }) {
-  //     if (active.id === id) {
-  //       setKeepLayout(layout);
-  //     }
-  //   },
-  //   onDragEnd({ active }) {
-  //     setKeepLayout(null);
-  //   },
-  // });
-
   const translateX = layout.left;
   const translateY = layout.top;
 
   return (
     <div
-      className={clsx(
-        "border-2 border-slate-500",
-        !isDragging && "duration-75",
-      )}
+      className={clsx(!isDragging && "duration-75")}
       style={{
         position: "absolute",
         left: translateX,
         top: translateY,
         width: `${layout.width}px`,
-        zIndex: isDragging ? 50 : undefined,
+        zIndex: isDragging ? DRAGGING_Z_INDEX : undefined,
       }}
     >
       <div ref={contentRef} className="h-min w-full grid">
-        <div
-          ref={setNodeRef}
-          className={cn(
-            "relative",
-            "w-full",
-            "group rounded-lg border bg-card p-3 transition-colors",
-            "border-primary ring-1 ring-primary",
-            isDragging && "shadow-lg",
-          )}
-        >
+        <div ref={setNodeRef} className="relative w-full group p-3">
           {!layout.isStatic && (
             <button
               type="button"
