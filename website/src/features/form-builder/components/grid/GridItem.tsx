@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { useDraggable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { GripVertical } from "lucide-react";
@@ -13,7 +14,7 @@ interface GridItemProps {
 }
 
 export function GridItem({ id, children }: GridItemProps) {
-  const { computedLayouts, setHeight } = useGridLayoutContext();
+  const { computedLayouts, setHeight, session } = useGridLayoutContext();
   const contentRef = useRef<HTMLDivElement>(null);
   const layout = computedLayouts[id];
 
@@ -48,6 +49,12 @@ export function GridItem({ id, children }: GridItemProps) {
     >
       <div ref={contentRef} className="h-min w-full grid">
         <div ref={setNodeRef} className="relative w-full group">
+          <Badge
+            variant="outline"
+            className="absolute -top-2 right-1 z-10 bg-background text-[10px]"
+          >
+            {session.name}
+          </Badge>
           {!layout.isStatic && (
             <button
               type="button"

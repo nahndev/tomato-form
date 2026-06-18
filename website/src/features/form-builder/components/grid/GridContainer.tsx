@@ -2,7 +2,6 @@
 
 import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
-import { useMemo } from "react";
 import {
   COLUMN_WIDTH,
   CONTAINER_MIN_HEIGHT,
@@ -16,18 +15,9 @@ interface GridContainerProps {
 }
 
 export function GridContainer({ children, className }: GridContainerProps) {
-  const { computedLayouts } = useGridLayoutContext();
+  const { containerHeight } = useGridLayoutContext();
 
   const { setNodeRef } = useDroppable({ id: "droppable" });
-
-  const containerHeight = useMemo(
-    () =>
-      Object.values(computedLayouts).reduce(
-        (acc, layout) => Math.max(acc, layout.top + layout.height),
-        0,
-      ),
-    [computedLayouts],
-  );
 
   return (
     <div

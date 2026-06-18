@@ -1,9 +1,9 @@
 "use client";
 
-import { GridLayout } from "@/types/template";
+import { GridLayout, Session } from "@/types/template";
 import { useDndMonitor } from "@dnd-kit/core";
 import { Coordinates } from "@dnd-kit/core/dist/types";
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useMap } from "usehooks-ts";
 import { COLUMN_WIDTH } from "../../libs/grid-layout/constants";
 import { AbsoluteLayout } from "../../libs/grid-layout/types";
@@ -12,6 +12,8 @@ import { computeLayouts } from "../../libs/grid-layout/utils";
 interface GridLayoutContextValue {
   computedLayouts: Record<string, AbsoluteLayout>;
   setHeight: (id: string, height: number) => void;
+  session: Session;
+  containerHeight: number;
 }
 
 const GridLayoutContext = createContext<GridLayoutContextValue | null>(null);
@@ -39,14 +41,18 @@ function useComputeLayouts(
 
 interface GridLayoutProviderProps {
   layoutMap: Record<string, GridLayout>;
+  session: Session;
   children: React.ReactNode;
   onMoveWidget: (id: string, column: number, idx: string) => void;
+  onHeightChange?: (height: number) => void;
 }
 
 export function GridLayoutProvider({
   layoutMap,
+  session,
   children,
   onMoveWidget,
+  onHeightChange,
 }: GridLayoutProviderProps) {
   const [initial, setInitial] = useState<AbsoluteLayout | null>(null);
   const [delta, setDelta] = useState<Coordinates | null>(null);
@@ -62,6 +68,19 @@ export function GridLayoutProvider({
     [initial, delta]
   );
   const [computedLayouts, setHeight] = useComputeLayouts(layoutMap, moving);
+
+  const containerHeight = useMemo(
+    () =>
+      Object.values(computedLayouts).reduce(
+        (acc, layout) => Math.max(acc, layout.top + layout.height),
+        0,
+      ),
+    [computedLayouts],
+  );
+
+  useEffect(() => {
+    onHeightChange?.(containerHeight);
+  }, [containerHeight, onHeightChange]);
 
   useDndMonitor({
     onDragStart({ active }) {
@@ -83,7 +102,9 @@ export function GridLayoutProvider({
   });
 
   return (
-    <GridLayoutContext.Provider value={{ computedLayouts, setHeight }}>
+    <GridLayoutContext.Provider
+      value={{ computedLayouts, setHeight, session, containerHeight }}
+    >
       {children}
     </GridLayoutContext.Provider>
   );

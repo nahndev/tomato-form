@@ -1,12 +1,49 @@
-# Refactoring code and logic of layout of widget.
+# Update template structure.
 
-## Scopes
+```ts
+export interface Template {
+  id: string;
+  name: string;
+  widgets: Record<string, Widget>;
+  layouts: Record<string, GridLayout>;
+  properties: Record<string, WidgetProperties>;
+  sessions: Record<string, Session>;
+  widgetSessions: Record<string, string>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+```
 
-- Apply for /website/src/features/form-builder/components/grid
+Update to
+
+```ts
+export interface Template {
+  id: string;
+  name: string;
+  widgets: Record<string, Widget>;
+  properties: Record<string, WidgetProperties>;
+  sessions: Record<string, Session>;
+  layout: Record<
+    string,
+    {
+      layouts: Record<string, GridLayout>;
+      height: number;
+    }
+  >;
+  createdAt?: string;
+  updatedAt?: string;
+}
+```
+
+## What is changed
+
+- Add `layout` is layout of template
+- `layout` is Record with sessionId and value is object with `layouts` and `height`
+- `layouts` is Record with widgetId and value is GridLayout
 
 ## Tasks
 
-- [x] Split shared login into a separate file for better maintainability (utils or helpers).
-- [x] Remove css for border, color, ... -> the grid only handles the layout, not the style.
-- [x] Move magic number into constants file.
-- [x] Create constants file for grid layout.
+- [x] Apply change
+- [x] Update all related code to use new `layout` structure
+- [x] Create new interface
+- [x] Update using code to use new interface

@@ -35,9 +35,15 @@ export default function SubmissionPage({ params }: PageProps) {
 
   const orderedWidgetIds = useMemo(() => {
     if (!template) return [];
+    const idxByWidgetId = new Map<string, string>();
+    for (const sessionLayout of Object.values(template.layout)) {
+      for (const [widgetId, layout] of Object.entries(sessionLayout.layouts)) {
+        idxByWidgetId.set(widgetId, layout.idx);
+      }
+    }
     return Object.keys(template.widgets).sort((a, b) => {
-      const idxA = template.layouts[a]?.idx ?? "";
-      const idxB = template.layouts[b]?.idx ?? "";
+      const idxA = idxByWidgetId.get(a) ?? "";
+      const idxB = idxByWidgetId.get(b) ?? "";
       return idxA.localeCompare(idxB);
     });
   }, [template]);

@@ -1,11 +1,12 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import type { Template, WidgetType } from "@/types/template";
 import { generateKeyBetween } from "fractional-indexing";
-import { Wifi, WifiOff } from "lucide-react";
+import { Plus, Wifi, WifiOff } from "lucide-react";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useTemplateYjs } from "../hooks/useTemplateYjs";
@@ -26,16 +27,27 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
     setName,
     addWidget,
     removeWidget,
+    addSession,
     updateProperties,
     updateLayout,
+    updateSessionHeight,
   } = useTemplateYjs(template.id, template);
 
   const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null);
 
+  const handleAddSession = useCallback(() => {
+    const sessionNumber = Object.keys(state.sessions).length + 1;
+    addSession({ id: uuidv4(), name: `Section ${sessionNumber}` });
+  }, [addSession, state.sessions]);
+
   const handleAddWidget = useCallback(
     (type: WidgetType) => {
       const id = uuidv4();
-      const lastIdx = Object.values(state.layouts)
+      const defaultSessionId = Object.keys(state.sessions)[0];
+      const sessionLayouts = defaultSessionId
+        ? state.layout[defaultSessionId]?.layouts ?? {}
+        : {};
+      const lastIdx = Object.values(sessionLayouts)
         .map((layout) => layout.idx)
         .sort()
         .pop();
@@ -57,7 +69,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
       );
       setSelectedWidgetId(id);
     },
-    [addWidget, state.layouts],
+    [addWidget, state.sessions, state.layout],
   );
 
   const selectedWidget = selectedWidgetId
@@ -102,6 +114,16 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
         {!viewOnly && (
           <>
             <ScrollArea className="w-56 shrink-0 border-r p-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="mb-3 w-full justify-start"
+                onClick={handleAddSession}
+              >
+                <Plus className="mr-1.5 size-4" />
+                Add Session
+              </Button>
               <WidgetPicker onAdd={handleAddWidget} />
             </ScrollArea>
             <Separator orientation="vertical" />
@@ -113,8 +135,9 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
         <div className="mx-auto w-min h-min">
           <WidgetCanvas
             widgets={state.widgets}
-            layouts={state.layouts}
             properties={state.properties}
+            sessions={state.sessions}
+            layout={state.layout}
             selectedWidgetId={selectedWidgetId}
             onSelectWidget={(id) =>
               setSelectedWidgetId((prev) => (prev === id ? null : id))
@@ -126,6 +149,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
             onMoveWidget={(id, column, idx) =>
               updateLayout(id, { column, idx })
             }
+            onSessionHeightChange={updateSessionHeight}
             viewOnly={viewOnly}
           />
         </div>
