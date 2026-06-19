@@ -46,11 +46,12 @@ export function collision(a: AbsoluteLayout, b: AbsoluteLayout): boolean {
 export function computeLayouts(
   items: Record<string, GridLayout>,
   heightMap: { get(id: string): number | undefined },
+  movingInSession: AbsoluteLayout | null,
   moving: AbsoluteLayout | null,
   isOver = false,
 ): Record<string, AbsoluteLayout> {
   const sorted = Object.entries(items)
-    .filter(([id]) => id !== moving?.id)
+    .filter(([id]) => id !== movingInSession?.id)
     .map(
       ([id, layout]): AbsoluteLayout => ({
         id,
@@ -67,18 +68,18 @@ export function computeLayouts(
     )
     .sort((a, b) => (a.idx > b.idx ? 1 : -1));
 
-  console.log(isOver);
-
-  if (moving && isOver) {
-    const insertAt = sorted.findIndex((layout) => collision(layout, moving));
+  if (movingInSession && isOver) {
+    const insertAt = sorted.findIndex((layout) =>
+      collision(layout, movingInSession),
+    );
     if (insertAt === -1) {
       sorted.push({
-        ...moving,
+        ...movingInSession,
         idx: generateKeyBetween(sorted.at(-1)?.idx ?? null, null),
       });
     } else {
       sorted.splice(insertAt, 0, {
-        ...moving,
+        ...movingInSession,
         idx: generateKeyBetween(
           sorted[insertAt - 1]?.idx ?? null,
           sorted[insertAt]?.idx,
@@ -97,13 +98,14 @@ export function computeLayouts(
     sorted.map((item) => [item.id, item]),
   );
 
-  if (moving) {
-    results[moving.id] = {
-      ...results[moving.id],
-      left: moving.left,
-      top: moving.top,
-    };
-  }
+  // if (moving) {
+  //   console.log("-", JSON.stringify(moving, null, 2));
+  //   results[moving.id] = {
+  //     ...results[moving.id],
+  //     left: moving.left,
+  //     top: moving.top,
+  //   };
+  // }
 
   return results;
 }

@@ -1,7 +1,10 @@
 "use client";
 
+import { COLUMN_WIDTH } from "@/features/form-builder/libs/grid-layout/constants";
 import { GridLayout, Session } from "@/types/template";
-import { createContext, useContext, useEffect, useMemo } from "react";
+import { useDndMonitor } from "@dnd-kit/core";
+import { Coordinates } from "@dnd-kit/core/dist/types";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useMap } from "usehooks-ts";
 import { useMovingInSession } from "../../hooks/useMovingInSession";
 import { AbsoluteLayout } from "../../libs/grid-layout/types";
@@ -14,6 +17,8 @@ interface SessionLayoutContextValue {
   setHeight: (id: string, height: number) => void;
   session: Session;
   containerHeight: number;
+  setPosition: (position: Coordinates) => void;
+  position: Coordinates;
 }
 
 const SessionLayoutContext = createContext<SessionLayoutContextValue | null>(
@@ -34,6 +39,7 @@ interface SessionLayoutProviderProps {
   layoutMap: Record<string, GridLayout>;
   session: Session;
   children: React.ReactNode;
+  onMoveWidget: (widgetId: string, column: number, idx: string) => void;
 }
 
 export function SessionLayoutProvider({
@@ -41,42 +47,58 @@ export function SessionLayoutProvider({
   layoutMap,
   session,
   children,
+  onMoveWidget,
 }: SessionLayoutProviderProps) {
-  const { initial, registerComputedLayouts } = useTemplateLayoutContext();
-  const moving = useMovingInSession(sessionId, initial);
-  const [heightMap, heightMapActions] = useMap<string, number>();
-  const isOver = moving !== null;
+  const [position, setPosition] = useState<Coordinates>({ x: 0, y: 0 });
+  const { initial, registerComputedLayouts, moving, setHeight } =
+    useTemplateLayoutContext();
+  const movingInSession = useMovingInSession(sessionId, initial);
 
-  const restLayouts = useMemo(
-    () => computeLayouts(layoutMap, heightMap, null),
-    [layoutMap, heightMap],
-  );
+  // console.log("moving", movingInSession?.top, movingInSession?.left);
+  const [heightMap, heightMapActions] = useMap<string, number>();
+  const isOver = movingInSession !== null;
 
   const computedLayouts = useMemo(() => {
-    return computeLayouts(layoutMap, heightMap, moving, isOver);
-  }, [moving, layoutMap, heightMap, isOver]);
+    // console.log(movingInSession, moving);
+    return computeLayouts(
+      layoutMap,
+      heightMap,
+      movingInSession,
+      moving,
+      isOver,
+    );
+  }, [movingInSession, layoutMap, heightMap, isOver, moving]);
+  // console.log("computedLayouts", computedLayouts);
 
   useEffect(() => {
     registerComputedLayouts(sessionId, computedLayouts);
   }, [sessionId, computedLayouts, registerComputedLayouts]);
 
-  const restMaxBottom = useMemo(
-    () =>
-      Object.values(restLayouts).reduce(
-        (acc, layout) => Math.max(acc, layout.top + layout.height),
-        0,
-      ),
-    [restLayouts],
-  );
+  useDndMonitor({
+    onDragEnd: ({ over }) => {
+      if (movingInSession) {
+        const { id, idx, left } = computedLayouts[movingInSession.id];
+        onMoveWidget(id, Math.floor(left / COLUMN_WIDTH), idx);
+      }
+    },
+  });
 
   const containerHeight = useMemo(() => {
-    if (!isOver || !moving) return restMaxBottom;
-    const movingBottom = moving.top + moving.height;
-    return Math.min(
-      Math.max(restMaxBottom, movingBottom),
-      restMaxBottom + moving.height,
+    // console.log("computedLayouts", computedLayouts);
+    const maxBottom = Object.values(computedLayouts).reduce(
+      (acc, layout) =>
+        moving?.id === layout.id
+          ? acc
+          : Math.max(acc, layout.top + layout.height),
+      0,
     );
-  }, [isOver, moving, restMaxBottom]);
+    // console.log(maxBottom, movingInSession?.height);
+    return maxBottom + (movingInSession ? movingInSession.height : 0);
+  }, [computedLayouts, moving, movingInSession]);
+
+  useEffect(() => {
+    setHeight(sessionId, containerHeight);
+  }, [setHeight, containerHeight]);
 
   return (
     <SessionLayoutContext.Provider
@@ -86,6 +108,8 @@ export function SessionLayoutProvider({
         setHeight: heightMapActions.set,
         session,
         containerHeight,
+        setPosition,
+        position,
       }}
     >
       {children}

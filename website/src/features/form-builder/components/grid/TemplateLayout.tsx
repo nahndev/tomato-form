@@ -1,5 +1,6 @@
 "use client";
 
+import { Widget } from "@/types/template";
 import type { SessionGroup } from "../../libs/grid-layout/types";
 import { SessionLayout } from "./SessionLayout";
 import { SessionLayoutProvider } from "./SessionLayoutContext";
@@ -7,6 +8,7 @@ import { TemplateLayoutProvider } from "./TemplateLayoutContext";
 import { WidgetLayout } from "./WidgetLayout";
 
 interface TemplateLayoutProps {
+  widgets: Record<string, Widget>;
   sessionGroups: SessionGroup[];
   onMoveWidget: (
     widgetId: string,
@@ -18,12 +20,13 @@ interface TemplateLayoutProps {
 }
 
 export function TemplateLayout({
+  widgets,
   sessionGroups,
   onMoveWidget,
   renderWidget,
 }: TemplateLayoutProps) {
   return (
-    <TemplateLayoutProvider onMoveWidget={onMoveWidget}>
+    <TemplateLayoutProvider widgets={widgets} onMoveWidget={onMoveWidget}>
       <div className="flex flex-col gap-4">
         {sessionGroups.map(({ sessionId, session, layouts }) => (
           <div key={sessionId} className="flex flex-col gap-2">
@@ -34,6 +37,9 @@ export function TemplateLayout({
               sessionId={sessionId}
               layoutMap={layouts}
               session={session}
+              onMoveWidget={(widgetId, column, idx) =>
+                onMoveWidget(widgetId, sessionId, column, idx)
+              }
             >
               <SessionLayout>
                 {Object.keys(layouts).map((id) => (

@@ -2,6 +2,7 @@
 
 import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
+import { useRef } from "react";
 import {
   COLUMN_WIDTH,
   CONTAINER_MIN_HEIGHT,
@@ -15,14 +16,16 @@ interface SessionLayoutProps {
 }
 
 export function SessionLayout({ children, className }: SessionLayoutProps) {
-  const { sessionId, containerHeight } = useSessionLayoutContext();
+  const boxRef = useRef<HTMLDivElement>(null);
+  const { sessionId, containerHeight, setPosition } = useSessionLayoutContext();
 
-  const { setNodeRef } = useDroppable({ id: sessionId });
+  const { setNodeRef, over } = useDroppable({ id: sessionId });
+
 
   return (
     <div
       ref={setNodeRef}
-      className={clsx(className, "z-0 bg-gray-300")}
+      className={clsx(className, "z-0 bg-gray-500")}
       style={{
         position: "relative",
         width: COLUMN_WIDTH * GRID_COLUMNS,
@@ -30,7 +33,7 @@ export function SessionLayout({ children, className }: SessionLayoutProps) {
         minHeight: CONTAINER_MIN_HEIGHT,
       }}
     >
-      {children}
+      <div ref={boxRef}>{children}</div>
     </div>
   );
 }

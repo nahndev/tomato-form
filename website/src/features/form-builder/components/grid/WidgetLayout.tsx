@@ -1,6 +1,8 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { useTemplateLayoutContext } from "@/features/form-builder/components/grid/TemplateLayoutContext";
+import { useDndMonitor } from "@dnd-kit/core";
 import clsx from "clsx";
 import { GripVertical } from "lucide-react";
 import { useEffect, useRef } from "react";
@@ -14,7 +16,10 @@ interface WidgetLayoutProps {
 }
 
 export function WidgetLayout({ id, children }: WidgetLayoutProps) {
-  const { computedLayouts, setHeight, session } = useSessionLayoutContext();
+  const { moving, setClone } = useTemplateLayoutContext();
+  const { computedLayouts, setHeight, session, position } =
+    useSessionLayoutContext();
+  const { relative, delta, setRelative } = useTemplateLayoutContext();
   const contentRef = useRef<HTMLDivElement>(null);
   const layout = computedLayouts[id];
   // console.log(JSON.stringify(computedLayouts, null, 2));
@@ -34,8 +39,36 @@ export function WidgetLayout({ id, children }: WidgetLayoutProps) {
     return () => observer.disconnect();
   }, [id, setHeight]);
 
-  const translateX = layout.left;
-  const translateY = layout.top;
+  useDndMonitor({
+    onDragStart({ active }) {
+      if (active?.id === id) {
+        // console.log("Dragging widget:", id);
+        const clone = contentRef.current?.cloneNode(
+          true,
+        ) as HTMLDivElement | null;
+        setClone(clone);
+      }
+    },
+  });
+
+  useDndMonitor({
+    onDragStart({ active }) {
+      if (active.id === id) {
+        console.log("Drag start:", contentRef.current?.getBoundingClientRect());
+        setRelative({
+          left: contentRef.current?.getBoundingClientRect().left || 0,
+          top: contentRef.current?.getBoundingClientRect().top || 0,
+        });
+      }
+    },
+  });
+
+  console.log("relative", relative, delta, isDragging);
+  const translateX = isDragging
+    ? relative?.left + (delta?.x ?? 0)
+    : layout.left;
+  const translateY = isDragging ? relative?.top + (delta?.y ?? 0) : layout.top;
+  // console.log("position", position);
 
   // console.log(translateX, translateY);
 
@@ -43,7 +76,7 @@ export function WidgetLayout({ id, children }: WidgetLayoutProps) {
     <div
       className={clsx(!isDragging && "duration-75")}
       style={{
-        position: "absolute",
+        position: isDragging ? "fixed" : "absolute",
         left: translateX,
         top: translateY,
         width: `${layout.width}px`,

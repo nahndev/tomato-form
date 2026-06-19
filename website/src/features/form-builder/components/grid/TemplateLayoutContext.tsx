@@ -1,14 +1,16 @@
 "use client";
 
+import { Widget } from "@/types/template";
 import { useDndMonitor } from "@dnd-kit/core";
 import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
-import { COLUMN_WIDTH } from "../../libs/grid-layout/constants";
 import { AbsoluteLayout } from "../../libs/grid-layout/types";
 
 interface TemplateLayoutContextValue {
@@ -18,6 +20,13 @@ interface TemplateLayoutContextValue {
     sessionId: string,
     layouts: Record<string, AbsoluteLayout>,
   ) => void;
+  moving: AbsoluteLayout | null;
+  heights: Record<string, number>;
+  setHeight: (id: string, height: number) => void;
+  setClone: (clone: HTMLDivElement | null) => void;
+  setRelative: (rect: { left: number; top: number } | null) => void;
+  relative: { left: number; top: number } | null;
+  delta: { x: number; y: number } | null;
 }
 
 const TemplateLayoutContext = createContext<TemplateLayoutContextValue | null>(
@@ -34,6 +43,7 @@ export function useTemplateLayoutContext() {
 }
 
 interface TemplateLayoutProviderProps {
+  widgets: Record<string, Widget>;
   children: React.ReactNode;
   onMoveWidget: (
     widgetId: string,
@@ -44,10 +54,28 @@ interface TemplateLayoutProviderProps {
 }
 
 export function TemplateLayoutProvider({
+  widgets,
   children,
   onMoveWidget,
 }: TemplateLayoutProviderProps) {
   const [initial, setInitial] = useState<AbsoluteLayout | null>(null);
+  const [relative, setRelative] = useState<{
+    left: number;
+    top: number;
+  } | null>(null);
+  const [delta, setDelta] = useState<{ x: number; y: number } | null>(null);
+  const [heights, setHeights] = useState<Record<string, number>>({});
+  const [clone, setClone] = useState<HTMLDivElement | null>(null);
+
+  const moving = useMemo(() => {
+    if (!initial || !delta) return null;
+    return {
+      ...initial,
+      left: initial.left + delta.x,
+      top: initial.top + delta.y,
+    };
+  }, [initial, delta]);
+
   const computedLayoutsRef = useRef<
     Record<string, Record<string, AbsoluteLayout>>
   >({});
@@ -59,33 +87,55 @@ export function TemplateLayoutProvider({
     [],
   );
 
+  console.log("relative", relative);
+
   useDndMonitor({
-    onDragEnd({ active, over }) {
-      const activeRect = active.rect.current.translated;
-      if (over && activeRect) {
-        const overSessionId = over.id as string;
-        const newLayout =
-          computedLayoutsRef.current[overSessionId]?.[active.id as string];
-        if (newLayout) {
-          const left = activeRect.left - over.rect.left;
-          const column = Math.floor(left / COLUMN_WIDTH);
-          onMoveWidget(
-            active.id as string,
-            overSessionId,
-            column,
-            newLayout.idx,
-          );
-        }
-      }
+    onDragMove({ delta }) {
+      setDelta(delta);
+    },
+    onDragEnd: ({ active, over }) => {
+      setDelta(null);
       setInitial(null);
     },
   });
 
+  const setHeight = useCallback(
+    (id: string, height: number) => {
+      setHeights((h) => ({ ...h, [id]: height }));
+    },
+    [setHeights],
+  );
+
   return (
     <TemplateLayoutContext.Provider
-      value={{ initial, setInitial, registerComputedLayouts }}
+      value={{
+        initial,
+        setInitial,
+        registerComputedLayouts,
+        moving,
+        heights,
+        setHeight,
+        setClone,
+        setRelative,
+        relative,
+        delta,
+      }}
     >
       {children}
     </TemplateLayoutContext.Provider>
   );
+}
+
+function Ghost({ clone }: { clone: HTMLDivElement | null }) {
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log("clone changed", clone, overlayRef.current);
+    if (clone && overlayRef.current) {
+      overlayRef.current.innerHTML = "";
+      overlayRef.current.appendChild(clone);
+    }
+  }, []);
+
+  return <div ref={overlayRef}></div>;
 }

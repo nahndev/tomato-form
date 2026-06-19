@@ -7,7 +7,12 @@ import type {
   Widget,
   WidgetProperties,
 } from "@/types/template";
-import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import {
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { LayoutTemplate } from "lucide-react";
 import { GRID_COLUMNS } from "../libs/grid-layout/constants";
 import type { SessionGroup } from "../libs/grid-layout/types";
@@ -100,6 +105,7 @@ export function WidgetCanvas({
   return (
     <DndContext sensors={sensors}>
       <TemplateLayout
+        widgets={widgets}
         sessionGroups={sessionGroups}
         onMoveWidget={onMoveWidget}
         renderWidget={(id) => (
