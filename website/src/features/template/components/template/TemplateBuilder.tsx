@@ -2,13 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import {
   useTemplateDocContext,
   useTemplateMode,
 } from "@/features/template/components/provider/TemplateProvider";
 import TemplateCanvas from "@/features/template/components/template/TemplateCanvas";
-import TemplateConnection from "@/features/template/components/template/TemplateConnection";
 import type { WidgetType } from "@/types/template";
 import { generateKeyBetween } from "fractional-indexing";
 import { Plus } from "lucide-react";
@@ -83,22 +81,20 @@ export function TemplateBuilder({}: TemplateBuilderProps) {
   return (
     <div className="size-full overflow-hidden flex flex-row">
       {!viewOnly && (
-        <div>
-          <TemplateConnection />
-          <ScrollArea className="w-56 shrink-0 border-r p-3">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mb-3 w-full justify-start"
-              onClick={handleAddSession}
-            >
-              <Plus className="mr-1.5 size-4" />
-              Add Session
-            </Button>
+        <div className="w-64 flex flex-col gap-4 border-r p-4">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="w-full justify-start"
+            onClick={handleAddSession}
+          >
+            <Plus className="mr-1.5 size-4" />
+            Add Session
+          </Button>
+          <ScrollArea className="flex-1">
             <WidgetPicker onAdd={handleAddWidget} />
           </ScrollArea>
-          <Separator orientation="vertical" />
         </div>
       )}
 
