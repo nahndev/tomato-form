@@ -15,9 +15,11 @@ interface WidgetItemProps {
 export function WidgetItem({ widget }: WidgetItemProps) {
   return (
     <WidgetProvider widget={widget}>
-      <div className="min-w-0 flex-1 bg-white rounded-md p-4">
-        <WidgetItemHeader widget={widget} />
-        <WidgetPreview widget={widget} />
+      <div className="p-1">
+        <div className="min-w-0 flex-1 bg-white rounded-md p-4">
+          <WidgetItemHeader widget={widget} />
+          <WidgetPreview widget={widget} />
+        </div>
       </div>
     </WidgetProvider>
   );

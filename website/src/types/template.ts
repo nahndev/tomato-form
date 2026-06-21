@@ -7,6 +7,11 @@ export type WidgetType =
   | "checkbox"
   | "session";
 
+export enum TemplateMode {
+  VIEW = "view",
+  EDIT = "edit",
+}
+
 export interface Widget {
   id: string;
   type: WidgetType;

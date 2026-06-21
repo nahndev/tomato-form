@@ -8,16 +8,19 @@ export type ItemLayoutProps = {
   setHeight: (id: string, height: number) => void;
   computedLayout: AbsoluteLayout;
   children?: React.ReactNode;
+  disabled?: boolean;
 };
 
 const ItemLayout: React.FC<ItemLayoutProps> = ({
   setHeight,
   computedLayout,
+  disabled,
   children,
 }: ItemLayoutProps) => {
   const { source } = useDragOperation();
   const { ref: draggableRef, isDragging } = useDraggable({
     id: computedLayout.id,
+    disabled: disabled,
   });
 
   const ref = useRef<HTMLDivElement>(null);
@@ -29,13 +32,10 @@ const ItemLayout: React.FC<ItemLayoutProps> = ({
   return (
     <div
       ref={draggableRef}
-      className={clsx(
-        "bg-blue-500 absolute",
-        source && !isDragging && "duration-300",
-      )}
+      className={clsx("absolute", source && !isDragging && "duration-300")}
       style={{ ...computedLayout }}
     >
-      <div ref={ref} className="bg-red-500 h-min w-full">
+      <div ref={ref} className="h-min w-full">
         {children}
       </div>
     </div>

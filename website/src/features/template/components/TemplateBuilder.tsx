@@ -5,7 +5,10 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import TemplateCanvas from "@/features/template/components/canvas/TemplateCanvas";
-import { useTemplateContext } from "@/features/template/components/provider/TemplateProvider";
+import {
+  useTemplateContext,
+  useTemplateMode,
+} from "@/features/template/components/provider/TemplateProvider";
 import type { WidgetType } from "@/types/template";
 import { generateKeyBetween } from "fractional-indexing";
 import { Plus, Wifi, WifiOff } from "lucide-react";
@@ -15,21 +18,18 @@ import { GRID_COLUMNS } from "../libs/grid-layout/constants";
 import { WidgetPicker } from "./WidgetPicker";
 import { WidgetPropertiesPanel } from "./WidgetPropertiesPanel";
 
-interface TemplateBuilderProps {
-  viewOnly?: boolean;
-}
+interface TemplateBuilderProps {}
 
-export function TemplateBuilder({ viewOnly = false }: TemplateBuilderProps) {
+export function TemplateBuilder({}: TemplateBuilderProps) {
   const {
     state,
     isConnected,
     setName,
     addWidget,
-    removeWidget,
     addSession,
     updateProperties,
-    updateLayout,
   } = useTemplateContext();
+  const { viewOnly } = useTemplateMode();
 
   const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null);
 

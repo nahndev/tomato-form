@@ -25,6 +25,7 @@ export interface ContainerLayoutProps {
   layouts: Record<string, GridLayout>;
   children: (id: string) => React.ReactNode;
   onMoving: (id: string, column: number, idx: string) => void;
+  disabled?: boolean;
 }
 
 export function ContainerLayout({
@@ -32,6 +33,7 @@ export function ContainerLayout({
   children,
   layouts,
   onMoving,
+  disabled,
 }: ContainerLayoutProps) {
   const [heightMap, { set: setHeight }] = useMap<string, number>();
   const { ref, isDropTarget } = useDroppable({ id });
@@ -122,7 +124,7 @@ export function ContainerLayout({
   return (
     <div
       ref={ref}
-      className="bg-blue-200 relative duration-500"
+      className="relative duration-500"
       style={{ width: GRID_COLUMNS * COLUMN_WIDTH, height: containerHeight }}
     >
       {computedLayouts.map((layout) => (
@@ -130,6 +132,7 @@ export function ContainerLayout({
           key={layout.id}
           setHeight={setHeight}
           computedLayout={layout}
+          disabled={disabled}
         >
           {children(layout.id)}
         </ItemLayout>

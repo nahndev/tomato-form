@@ -7,8 +7,8 @@ import {
   type Widget,
   type WidgetProperties,
 } from "@/types/template";
+import { HocuspocusProvider } from "@hocuspocus/provider";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
 import { GRID_COLUMNS } from "../libs/grid-layout/constants";
 
@@ -76,7 +76,7 @@ export function useTemplateYjs(
   initialData?: Template,
 ): UseTemplateYjsReturn {
   const docRef = useRef<Y.Doc | null>(null);
-  const providerRef = useRef<WebsocketProvider | null>(null);
+  const providerRef = useRef<HocuspocusProvider | null>(null);
 
   const [isConnected, setIsConnected] = useState(false);
   const [state, setState] = useState<TemplateYjsState>({
@@ -107,19 +107,19 @@ export function useTemplateYjs(
     const doc = new Y.Doc();
     docRef.current = doc;
 
-    const provider = new WebsocketProvider(
-      YJS_SERVER_URL,
-      `template-${templateId}`,
-      doc,
-    );
+    const provider = new HocuspocusProvider({
+      url: YJS_SERVER_URL,
+      name: `template-${templateId}`,
+      document: doc,
+    });
     providerRef.current = provider;
 
     provider.on("status", ({ status }: { status: string }) => {
       setIsConnected(status === "connected");
     });
 
-    provider.on("sync", (isSynced) => {
-      if (!isSynced) return;
+    provider.on("synced", ({ state }: { state: boolean }) => {
+      if (!state) return;
       doc.transact(() => {
         const sessionId = getOrCreateDefaultSessionId(doc);
         const layouts = doc.getMap<GridLayout>("layouts");

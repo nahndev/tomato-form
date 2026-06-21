@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { FormBuilder } from "@/features/template";
 import { TemplateProvider } from "@/features/template/components/provider/TemplateProvider";
 import { useTemplate } from "@/hooks/useTemplates";
+import { TemplateMode } from "@/types/template";
 import { ArrowLeft, Loader2, Pencil } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -16,8 +17,8 @@ interface PageProps {
 
 export default function TemplatePage({ params, searchParams }: PageProps) {
   const { id } = use(params);
-  const { mode } = use(searchParams);
-  const viewOnly = mode !== "edit";
+  const { mode = TemplateMode.EDIT } = use(searchParams);
+  const viewOnly = mode !== TemplateMode.EDIT;
 
   const { data: template, isLoading, isError } = useTemplate(id);
 
@@ -32,7 +33,7 @@ export default function TemplatePage({ params, searchParams }: PageProps) {
   if (isError || !template) notFound();
 
   return (
-    <TemplateProvider template={template}>
+    <TemplateProvider template={template} mode={mode as TemplateMode}>
       <div className="flex h-screen flex-col">
         <div className="flex items-center gap-2 border-b px-4 py-2">
           <Link href="/templates">
@@ -50,7 +51,7 @@ export default function TemplatePage({ params, searchParams }: PageProps) {
                 </Button>
               </Link>
             ) : (
-              <Link href={`/templates/${id}`}>
+              <Link href={`/templates/${id}?mode=view`}>
                 <Button size="sm" variant="outline">
                   Preview
                 </Button>
@@ -60,7 +61,7 @@ export default function TemplatePage({ params, searchParams }: PageProps) {
         </div>
 
         <div className="min-h-0 flex-1">
-          <FormBuilder viewOnly={viewOnly} />
+          <FormBuilder />
         </div>
       </div>
     </TemplateProvider>

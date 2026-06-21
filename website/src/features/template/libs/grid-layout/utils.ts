@@ -83,4 +83,3 @@ export function getMaxHeight(maxHeights: number[], layout: LayoutRect): number {
   const [col, right] = getColumnRange(layout);
   return Math.max(...maxHeights.slice(col, right + 1));
 }
-
