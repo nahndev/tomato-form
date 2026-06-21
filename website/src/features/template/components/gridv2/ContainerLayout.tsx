@@ -5,30 +5,39 @@ import {
 } from "@/features/template/libs/grid-layout/constants";
 import {
   AbsoluteLayoutUtils,
+  getColumn,
   getMaxHeight,
   LayoutRect,
   setMaxHeight,
 } from "@/features/template/libs/grid-layout/utils";
 import { GridLayout } from "@/types/template";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
+import { generateKeyBetween } from "fractional-indexing";
 import { useMemo, useState } from "react";
 import { useMap } from "usehooks-ts";
+
+export interface MovingLayout extends LayoutRect {
+  id: string;
+}
 
 export interface ContainerLayoutProps {
   id: string;
   layouts: Record<string, GridLayout>;
   children: (id: string) => React.ReactNode;
-  onDrop: (id: string, idx: string) => void;
+  onMoving: (id: string, column: number, idx: string) => void;
 }
 
 export function ContainerLayout({
   id,
   children,
   layouts,
+  onMoving,
 }: ContainerLayoutProps) {
   const [heightMap, { set: setHeight }] = useMap<string, number>();
   const { ref, isDropTarget } = useDroppable({ id });
-  const [moving, setMoving] = useState<LayoutRect | null>(null);
+  const [moving, setMoving] = useState<MovingLayout | null>(null);
+
+  // console.log("layouts", JSON.stringify(layouts, null, 2));
 
   const computedLayouts = useMemo(() => {
     const absoluteLayouts = Object.entries(layouts)
@@ -37,32 +46,48 @@ export function ContainerLayout({
       )
       .sort((a, b) => (a.idx > b.idx ? 1 : -1));
 
+    let isMovingInSession = false;
     let maxHeights = new Array<number>(GRID_COLUMNS).fill(0);
+    let isMovingRendered = false;
     for (const item of absoluteLayouts) {
-      item.top = getMaxHeight(maxHeights, item);
-      if (moving && AbsoluteLayoutUtils.collision(item, moving)) {
+      const top = getMaxHeight(maxHeights, item);
+      if (
+        !isMovingRendered &&
+        moving &&
+        AbsoluteLayoutUtils.collision({ ...item, top }, moving)
+      ) {
+        isMovingRendered = true;
         const ghost = { ...moving, top: getMaxHeight(maxHeights, moving) };
         maxHeights = setMaxHeight(maxHeights, ghost);
-        item.top = getMaxHeight(maxHeights, item);
       }
+      if (moving && moving.id === item.id) {
+        continue;
+      }
+      item.top = getMaxHeight(maxHeights, item);
       maxHeights = setMaxHeight(maxHeights, item);
     }
     return absoluteLayouts;
   }, [layouts, heightMap, moving]);
 
   const containerHeight = useMemo(() => {
-    return computedLayouts.reduce(
+    const maxBottom = computedLayouts.reduce(
       (max, layout) => Math.max(max, layout.top + layout.height),
-      200,
+      0,
     );
-  }, [computedLayouts]);
+    return Math.max(maxBottom + (moving?.height ?? 0), 200);
+  }, [computedLayouts, moving]);
+
+  console.log("containerHeight", containerHeight);
+
+  console.log("computedLayouts", JSON.stringify(computedLayouts, null, 2));
 
   useDragDropMonitor({
     onDragMove({ operation: { source, target } }) {
       const droppableRect = target?.element?.getBoundingClientRect();
       const draggableRect = source?.element?.getBoundingClientRect();
-      if (isDropTarget && droppableRect && draggableRect) {
+      if (isDropTarget && source && droppableRect && draggableRect) {
         setMoving({
+          id: source.id as string,
           left: draggableRect.left - droppableRect.left,
           top: draggableRect.top - droppableRect.top,
           width: draggableRect.width,
@@ -72,7 +97,26 @@ export function ContainerLayout({
         setMoving(null);
       }
     },
-    onDragEnd() {
+    onDragEnd({ operation: { source } }) {
+      if (isDropTarget && moving && source) {
+        const collisionIdx = computedLayouts.findIndex(
+          (layout) => layout.top > moving.top,
+        );
+        if (collisionIdx > -1) {
+          const preIdx = computedLayouts[collisionIdx - 1]?.idx ?? null;
+          const nextIdx = computedLayouts[collisionIdx]?.idx ?? null;
+          const newIdx = generateKeyBetween(preIdx, nextIdx);
+          const newColumn = getColumn(moving);
+          // console.log("onMoving", source.id, newColumn, newIdx);
+          onMoving(source.id as string, newColumn, newIdx);
+        } else {
+          const lastIdx = computedLayouts.at(-1)?.idx ?? null;
+          const newIdx = generateKeyBetween(lastIdx, null);
+          const newColumn = getColumn(moving);
+          // console.log("onMoving", source.id, newColumn, newIdx);
+          onMoving(source.id as string, newColumn, newIdx);
+        }
+      }
       setMoving(null);
     },
   });
@@ -80,7 +124,7 @@ export function ContainerLayout({
   return (
     <div
       ref={ref}
-      className="bg-blue-200 relative"
+      className="bg-blue-200 relative duration-500"
       style={{ width: GRID_COLUMNS * COLUMN_WIDTH, height: containerHeight }}
     >
       {computedLayouts.map((layout) => (

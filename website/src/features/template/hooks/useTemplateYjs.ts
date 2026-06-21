@@ -13,7 +13,10 @@ import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
 import { GRID_COLUMNS } from "../libs/grid-layout/constants";
 
-function clampLayout(column: number, span: number): { column: number; span: number } {
+function clampLayout(
+  column: number,
+  span: number,
+): { column: number; span: number } {
   const clampedColumn = Math.max(0, Math.min(column, GRID_COLUMNS - 1));
   const clampedSpan = Math.max(1, Math.min(span, GRID_COLUMNS - clampedColumn));
   return { column: clampedColumn, span: clampedSpan };
@@ -40,7 +43,10 @@ function getOrCreateDefaultSessionId(doc: Y.Doc): string {
   return DEFAULT_SESSION_ID;
 }
 
-function getOrCreateSessionLayout(doc: Y.Doc, sessionId: string): YSessionLayout {
+function getOrCreateSessionLayout(
+  doc: Y.Doc,
+  sessionId: string,
+): YSessionLayout {
   const yLayout = doc.getMap<YSessionLayout>("layout");
   const existing = yLayout.get(sessionId);
   if (existing) return existing;
@@ -76,7 +82,11 @@ export interface UseTemplateYjsReturn {
   state: TemplateYjsState;
   isConnected: boolean;
   setName: (name: string) => void;
-  addWidget: (widget: Widget, layout: GridLayout, props: WidgetProperties) => void;
+  addWidget: (
+    widget: Widget,
+    layout: GridLayout,
+    props: WidgetProperties,
+  ) => void;
   removeWidget: (widgetId: string) => void;
   addSession: (session: Session) => void;
   updateLayout: (
@@ -106,6 +116,8 @@ export function useTemplateYjs(
     sessions: initialData?.sessions ?? {},
     layout: initialData?.layout ?? {},
   });
+
+  console.log(">", JSON.stringify(state, null, 2));
 
   const getDoc = () => docRef.current!;
 
@@ -185,7 +197,11 @@ export function useTemplateYjs(
         const sessionId = getOrCreateDefaultSessionId(doc);
         const sessionLayout = getOrCreateSessionLayout(doc, sessionId);
         doc.getMap<Widget>("widgets").set(widget.id, widget);
-        getLayoutsMap(sessionLayout).set(widget.id, { ...layout, column, span });
+        getLayoutsMap(sessionLayout).set(widget.id, {
+          ...layout,
+          column,
+          span,
+        });
         doc.getMap<WidgetProperties>("properties").set(widget.id, props);
       });
     },
@@ -207,7 +223,9 @@ export function useTemplateYjs(
       doc.getMap("properties").delete(widgetId);
       const sessionId = findWidgetSessionId(doc, widgetId);
       if (sessionId) {
-        getLayoutsMap(getOrCreateSessionLayout(doc, sessionId)).delete(widgetId);
+        getLayoutsMap(getOrCreateSessionLayout(doc, sessionId)).delete(
+          widgetId,
+        );
       }
     });
   }, []);
@@ -221,13 +239,14 @@ export function useTemplateYjs(
         : undefined;
       const current = currentLayouts?.get(widgetId) ?? DEFAULT_LAYOUT;
       const merged = { ...current, ...patch };
-      const { column, span } = clampLayout(merged.column, merged.span);
-      const targetLayouts = getLayoutsMap(getOrCreateSessionLayout(doc, sessionId));
+      const targetLayouts = getLayoutsMap(
+        getOrCreateSessionLayout(doc, sessionId),
+      );
       doc.transact(() => {
         if (currentSessionId && currentSessionId !== sessionId) {
           currentLayouts?.delete(widgetId);
         }
-        targetLayouts.set(widgetId, { ...merged, column, span });
+        targetLayouts.set(widgetId, { ...merged, ...patch });
       });
     },
     [],
@@ -248,7 +267,9 @@ export function useTemplateYjs(
       orderedIds.forEach((id) => {
         const sessionId =
           findWidgetSessionId(doc, id) ?? getOrCreateDefaultSessionId(doc);
-        const yLayouts = getLayoutsMap(getOrCreateSessionLayout(doc, sessionId));
+        const yLayouts = getLayoutsMap(
+          getOrCreateSessionLayout(doc, sessionId),
+        );
         const current = yLayouts.get(id) ?? DEFAULT_LAYOUT;
         yLayouts.set(id, { ...current, idx: "a" });
       });

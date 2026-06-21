@@ -1,5 +1,6 @@
 import { AbsoluteLayout } from "@/features/template/libs/grid-layout/types";
-import { useDraggable } from "@dnd-kit/react";
+import { useDraggable, useDragOperation } from "@dnd-kit/react";
+import clsx from "clsx";
 import { useRef } from "react";
 import { useResizeObserver } from "usehooks-ts";
 
@@ -14,7 +15,10 @@ const ItemLayout: React.FC<ItemLayoutProps> = ({
   computedLayout,
   children,
 }: ItemLayoutProps) => {
-  const { ref: draggableRef } = useDraggable({ id: computedLayout.id });
+  const { source } = useDragOperation();
+  const { ref: draggableRef, isDragging } = useDraggable({
+    id: computedLayout.id,
+  });
 
   const ref = useRef<HTMLDivElement>(null);
   useResizeObserver({
@@ -25,7 +29,10 @@ const ItemLayout: React.FC<ItemLayoutProps> = ({
   return (
     <div
       ref={draggableRef}
-      className="bg-blue-500 absolute"
+      className={clsx(
+        "bg-blue-500 absolute",
+        source && !isDragging && "duration-300",
+      )}
       style={{ ...computedLayout }}
     >
       <div ref={ref} className="bg-red-500 h-min w-full">

@@ -9,6 +9,7 @@ export interface SessionContextValue {
   session: Session;
   layouts: Record<string, GridLayout>;
   widgets: Record<string, Widget>;
+  onMoving: (id: string, column: number, idx: string) => void;
 }
 
 const SessionContext = createContext<SessionContextValue | null>(null);
@@ -22,7 +23,7 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
   session,
   children,
 }) => {
-  const { state } = useTemplateContext();
+  const { state, updateLayout } = useTemplateContext();
 
   const layouts = useMemo(
     () => state.layout[session.id]?.layouts ?? {},
@@ -34,9 +35,13 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
     [state.widgets, layouts],
   );
 
+  const onMoving = (id: string, column: number, idx: string) => {
+    updateLayout(id, session.id, { column, idx });
+  };
+
   const value = useMemo<SessionContextValue>(
-    () => ({ session, layouts, widgets }),
-    [session, layouts, widgets],
+    () => ({ session, layouts, widgets, onMoving }),
+    [session, layouts, widgets, onMoving],
   );
 
   return (

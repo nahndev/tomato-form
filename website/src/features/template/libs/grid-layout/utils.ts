@@ -20,7 +20,6 @@ export class WidgetUtils {
     return layout.isFullWidth ? 0 : layout.column * COLUMN_WIDTH;
   }
 }
-
 export class AbsoluteLayoutUtils {
   static fromGridLayout(
     id: string,
@@ -50,15 +49,24 @@ export class AbsoluteLayoutUtils {
 }
 
 export function getColumnRange(layout: LayoutRect): [number, number] {
-  const col = Math.max(
+  const col = getColumn(layout);
+  const span = getSpan(layout);
+  return [col, col + span - 1];
+}
+
+export function getColumn(layout: LayoutRect): number {
+  return Math.max(
     0,
     Math.min(Math.floor(layout.left / COLUMN_WIDTH), GRID_COLUMNS - 1),
   );
-  const span = Math.max(
+}
+
+export function getSpan(layout: LayoutRect): number {
+  const col = getColumn(layout);
+  return Math.max(
     1,
     Math.min(Math.round(layout.width / COLUMN_WIDTH), GRID_COLUMNS - col),
   );
-  return [col, col + span - 1];
 }
 
 export function setMaxHeight(

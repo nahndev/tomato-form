@@ -25,7 +25,7 @@ export function useLayoutDraggable(args: UseDraggableArguments) {
       }
     },
     onDragMove({ delta, active }) {
-      console.log("initial", active.rect.current.translated);
+      // console.log("initial", active.rect.current.translated);
       setClientRect(active.rect.current.initial);
       setDelta(delta);
     },
