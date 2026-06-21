@@ -24,10 +24,10 @@ export interface WidgetProperties {
 @Schema({ timestamps: true, collection: "templates" })
 export class Template {
   @Prop({ required: true, unique: true })
-  id: string;
+  id!: string;
 
   @Prop({ required: true })
-  name: string;
+  name!: string;
 
   @Prop({ type: Object, default: {} })
   widgets: Record<string, Widget>;

@@ -4,13 +4,13 @@ import { Document } from "mongoose";
 @Schema({ timestamps: true, collection: "users" })
 export class User {
   @Prop({ required: true, unique: true })
-  uuid: string;
+  uuid!: string;
 
   @Prop({ required: true })
-  name: string;
+  name!: string;
 
   @Prop({ type: String, required: false, default: null })
-  email: string | null;
+  email!: string | null;
 }
 
 export type UserDocument = User & Document;

@@ -4,13 +4,13 @@ import { Document } from "mongoose";
 @Schema({ timestamps: true, collection: "submissions" })
 export class Submission {
   @Prop({ required: true, unique: true })
-  id: string;
+  id!: string;
 
   @Prop({ required: true })
-  boardId: string;
+  boardId!: string;
 
   @Prop({ required: true })
-  templateId: string;
+  templateId!: string;
 
   @Prop({ type: Object, default: {} })
   data: Record<string, unknown>;

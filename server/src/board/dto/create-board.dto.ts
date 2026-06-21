@@ -5,7 +5,7 @@ export class CreateBoardDto {
   @ApiProperty({ example: "Customer Feedback" })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ description: "Template ids linked to this board" })
   @IsArray()

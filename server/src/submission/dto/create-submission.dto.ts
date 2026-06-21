@@ -5,12 +5,12 @@ export class CreateSubmissionDto {
   @ApiProperty({ example: "b3f1c2..." })
   @IsString()
   @IsNotEmpty()
-  boardId: string;
+  boardId!: string;
 
   @ApiProperty({ example: "t9a2e4..." })
   @IsString()
   @IsNotEmpty()
-  templateId: string;
+  templateId!: string;
 
   @ApiPropertyOptional({ description: "Map of widget id → submitted value" })
   @IsObject()

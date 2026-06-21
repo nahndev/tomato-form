@@ -4,10 +4,10 @@ import { Document } from "mongoose";
 @Schema({ timestamps: true, collection: "boards" })
 export class Board {
   @Prop({ required: true, unique: true })
-  id: string;
+  id!: string;
 
   @Prop({ required: true })
-  name: string;
+  name!: string;
 
   @Prop({ type: [String], default: [] })
   templateIds: string[];

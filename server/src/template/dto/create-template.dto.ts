@@ -11,7 +11,7 @@ export class CreateTemplateDto {
   @ApiProperty({ example: "My Form" })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ description: "Map of widget id → widget" })
   @IsObject()
