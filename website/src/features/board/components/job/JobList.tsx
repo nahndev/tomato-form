@@ -1,6 +1,6 @@
 import { Briefcase } from "lucide-react";
 
-const Jobs: React.FC = () => {
+const JobList: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-16 text-center">
       <Briefcase className="mb-4 size-10 text-muted-foreground/40" />
@@ -12,4 +12,4 @@ const Jobs: React.FC = () => {
   );
 };
 
-export default Jobs;
+export default JobList;
