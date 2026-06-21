@@ -45,11 +45,11 @@ export function TemplateBuilder({ viewOnly = false }: TemplateBuilderProps) {
       // last widget there (idx strings sort lexicographically, so the
       // largest existing idx tells us where "last" is).
       const defaultSessionId = Object.keys(state.sessions)[0];
-      const sessionLayouts = defaultSessionId
-        ? (state.layout[defaultSessionId]?.layouts ?? {})
-        : {};
-      const lastIdx = Object.values(sessionLayouts)
-        .map((layout) => layout.idx)
+      const lastIdx = Object.entries(state.layouts)
+        .filter(
+          ([widgetId]) => state.widgetToSession[widgetId] === defaultSessionId,
+        )
+        .map(([, layout]) => layout.idx)
         .sort()
         .pop();
       const isSession = type === "session";
@@ -70,7 +70,7 @@ export function TemplateBuilder({ viewOnly = false }: TemplateBuilderProps) {
       );
       setSelectedWidgetId(id);
     },
-    [addWidget, state.sessions, state.layout],
+    [addWidget, state.sessions, state.layouts, state.widgetToSession],
   );
 
   const selectedWidget = selectedWidgetId

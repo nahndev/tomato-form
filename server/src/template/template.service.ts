@@ -19,6 +19,7 @@ export class TemplateService {
       name: dto.name,
       widgets: dto.widgets ?? {},
       layouts: dto.layouts ?? {},
+      widgetToSession: dto.widgetToSession ?? {},
       properties: dto.properties ?? {},
     });
     return doc.save();

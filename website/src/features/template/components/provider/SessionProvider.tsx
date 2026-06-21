@@ -26,8 +26,12 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
   const { state, updateLayout } = useTemplateContext();
 
   const layouts = useMemo(
-    () => state.layout[session.id]?.layouts ?? {},
-    [state.layout, session.id],
+    () =>
+      pickBy(
+        state.layouts,
+        (_, widgetId) => state.widgetToSession[widgetId] === session.id,
+      ),
+    [state.layouts, state.widgetToSession, session.id],
   );
 
   const widgets = useMemo(

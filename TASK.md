@@ -1,28 +1,8 @@
-# Cleanup feature code
+# Update layout format
 
-## Description
-
-- Current, some code is old and incorrect, wrong code, non-clean, tech debt, ....
+# Update name from `sessionOfWidgets` to `widgetToSession`
 
 ## Tasks
 
-- [x] Remove unused code
-- [x] Refactor code to be more readable and maintainable
-- [x] Rename variables and functions to be more descriptive
-- [x] re-structure utils functions.
-- [x] Improve code comments and documentation
-- [x] Optimize performance and reduce unnecessary re-renders
-
-## Acceptance Criteria
-
-- [x] All unused code has been removed
-- [x] Code is refactored and more readable
-- [x] Variables and functions have descriptive names
-- [x] Utils functions are re-structured and organized
-- [x] Code comments and documentation are improved
-- [x] Performance is optimized and unnecessary re-renders are reduced
-
-## Must
-
-- Only for `./website/src/features/template`
-- Don't change code business logic
+- [x] Update the layout format to reflect the new name `widgetToSession`.
+- [x] Update any references in the codebase, documentation, and tests to use `widgetToSession` instead of `sessionOfWidgets`.

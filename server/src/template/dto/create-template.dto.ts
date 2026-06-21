@@ -23,6 +23,11 @@ export class CreateTemplateDto {
   @IsOptional()
   layouts?: Record<string, GridLayout>;
 
+  @ApiPropertyOptional({ description: "Map of widget id → session id" })
+  @IsObject()
+  @IsOptional()
+  widgetToSession?: Record<string, string>;
+
   @ApiPropertyOptional({ description: "Map of widget id → properties" })
   @IsObject()
   @IsOptional()

@@ -7,7 +7,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Tomato — Form Service",
-  description: "Workflow-driven form platform for structured business processes",
+  description:
+    "Workflow-driven form platform for structured business processes",
 };
 
 interface RootLayoutProps {

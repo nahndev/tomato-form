@@ -32,17 +32,14 @@ export interface Session {
   name: string;
 }
 
-export interface SessionLayout {
-  layouts: Record<string, GridLayout>;
-}
-
 export interface Template {
   id: string;
   name: string;
   widgets: Record<string, Widget>;
   properties: Record<string, WidgetProperties>;
   sessions: Record<string, Session>;
-  layout: Record<string, SessionLayout>;
+  layouts: Record<string, GridLayout>;
+  widgetToSession: Record<string, string>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -52,7 +49,8 @@ export interface CreateTemplateInput {
   widgets?: Record<string, Widget>;
   properties?: Record<string, WidgetProperties>;
   sessions?: Record<string, Session>;
-  layout?: Record<string, SessionLayout>;
+  layouts?: Record<string, GridLayout>;
+  widgetToSession?: Record<string, string>;
 }
 
 export type UpdateTemplateInput = Partial<CreateTemplateInput>;

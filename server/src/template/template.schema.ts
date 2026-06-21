@@ -36,6 +36,9 @@ export class Template {
   layouts: Record<string, GridLayout>;
 
   @Prop({ type: Object, default: {} })
+  widgetToSession: Record<string, string>;
+
+  @Prop({ type: Object, default: {} })
   properties: Record<string, WidgetProperties>;
 }
 

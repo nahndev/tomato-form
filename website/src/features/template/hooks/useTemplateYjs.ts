@@ -3,7 +3,6 @@
 import {
   type GridLayout,
   type Session,
-  type SessionLayout,
   type Template,
   type Widget,
   type WidgetProperties,
@@ -28,8 +27,6 @@ const DEFAULT_SESSION_ID = "default-session";
 const DEFAULT_SESSION_NAME = "Section 1";
 const DEFAULT_LAYOUT: GridLayout = { column: 0, span: GRID_COLUMNS, idx: "a" };
 
-type YSessionLayout = Y.Map<unknown>;
-
 // Fixed id so concurrent clients that both find no session converge on the
 // same Y.Map key instead of creating two competing default sessions.
 function getOrCreateDefaultSessionId(doc: Y.Doc): string {
@@ -43,39 +40,13 @@ function getOrCreateDefaultSessionId(doc: Y.Doc): string {
   return DEFAULT_SESSION_ID;
 }
 
-function getOrCreateSessionLayout(
-  doc: Y.Doc,
-  sessionId: string,
-): YSessionLayout {
-  const yLayout = doc.getMap<YSessionLayout>("layout");
-  const existing = yLayout.get(sessionId);
-  if (existing) return existing;
-  const sessionLayout: YSessionLayout = new Y.Map();
-  sessionLayout.set("layouts", new Y.Map<GridLayout>());
-  yLayout.set(sessionId, sessionLayout);
-  return sessionLayout;
-}
-
-function getLayoutsMap(sessionLayout: YSessionLayout): Y.Map<GridLayout> {
-  return sessionLayout.get("layouts") as Y.Map<GridLayout>;
-}
-
-// A widget's session is implied by which session's nested layouts map
-// contains its id, since the flat widgetId → sessionId map was folded in.
-function findWidgetSessionId(doc: Y.Doc, widgetId: string): string | undefined {
-  const yLayout = doc.getMap<YSessionLayout>("layout");
-  for (const [sessionId, sessionLayout] of yLayout.entries()) {
-    if (getLayoutsMap(sessionLayout).has(widgetId)) return sessionId;
-  }
-  return undefined;
-}
-
 export interface TemplateYjsState {
   name: string;
   widgets: Record<string, Widget>;
   properties: Record<string, WidgetProperties>;
   sessions: Record<string, Session>;
-  layout: Record<string, SessionLayout>;
+  layouts: Record<string, GridLayout>;
+  widgetToSession: Record<string, string>;
 }
 
 export interface UseTemplateYjsReturn {
@@ -113,7 +84,8 @@ export function useTemplateYjs(
     widgets: initialData?.widgets ?? {},
     properties: initialData?.properties ?? {},
     sessions: initialData?.sessions ?? {},
-    layout: initialData?.layout ?? {},
+    layouts: initialData?.layouts ?? {},
+    widgetToSession: initialData?.widgetToSession ?? {},
   });
 
   const getDoc = () => docRef.current!;
@@ -125,15 +97,9 @@ export function useTemplateYjs(
       doc.getMap<WidgetProperties>("properties").entries(),
     ),
     sessions: Object.fromEntries(doc.getMap<Session>("sessions").entries()),
-    layout: Object.fromEntries(
-      Array.from(doc.getMap<YSessionLayout>("layout").entries()).map(
-        ([sessionId, sessionLayout]) => [
-          sessionId,
-          {
-            layouts: Object.fromEntries(getLayoutsMap(sessionLayout).entries()),
-          },
-        ],
-      ),
+    layouts: Object.fromEntries(doc.getMap<GridLayout>("layouts").entries()),
+    widgetToSession: Object.fromEntries(
+      doc.getMap<string>("widgetToSession").entries(),
     ),
   });
 
@@ -156,12 +122,12 @@ export function useTemplateYjs(
       if (!isSynced) return;
       doc.transact(() => {
         const sessionId = getOrCreateDefaultSessionId(doc);
-        const defaultLayouts = getLayoutsMap(
-          getOrCreateSessionLayout(doc, sessionId),
-        );
+        const layouts = doc.getMap<GridLayout>("layouts");
+        const widgetToSession = doc.getMap<string>("widgetToSession");
         doc.getMap<Widget>("widgets").forEach((_, widgetId) => {
-          if (findWidgetSessionId(doc, widgetId)) return;
-          defaultLayouts.set(widgetId, DEFAULT_LAYOUT);
+          if (widgetToSession.has(widgetId)) return;
+          layouts.set(widgetId, DEFAULT_LAYOUT);
+          widgetToSession.set(widgetId, sessionId);
         });
       });
     });
@@ -192,13 +158,13 @@ export function useTemplateYjs(
       const { column, span } = clampLayout(layout.column, layout.span);
       doc.transact(() => {
         const sessionId = getOrCreateDefaultSessionId(doc);
-        const sessionLayout = getOrCreateSessionLayout(doc, sessionId);
         doc.getMap<Widget>("widgets").set(widget.id, widget);
-        getLayoutsMap(sessionLayout).set(widget.id, {
+        doc.getMap<GridLayout>("layouts").set(widget.id, {
           ...layout,
           column,
           span,
         });
+        doc.getMap<string>("widgetToSession").set(widget.id, sessionId);
         doc.getMap<WidgetProperties>("properties").set(widget.id, props);
       });
     },
@@ -209,7 +175,6 @@ export function useTemplateYjs(
     const doc = getDoc();
     doc.transact(() => {
       doc.getMap<Session>("sessions").set(session.id, session);
-      getOrCreateSessionLayout(doc, session.id);
     });
   }, []);
 
@@ -218,32 +183,19 @@ export function useTemplateYjs(
     doc.transact(() => {
       doc.getMap("widgets").delete(widgetId);
       doc.getMap("properties").delete(widgetId);
-      const sessionId = findWidgetSessionId(doc, widgetId);
-      if (sessionId) {
-        getLayoutsMap(getOrCreateSessionLayout(doc, sessionId)).delete(
-          widgetId,
-        );
-      }
+      doc.getMap("layouts").delete(widgetId);
+      doc.getMap("widgetToSession").delete(widgetId);
     });
   }, []);
 
   const updateLayout = useCallback(
     (widgetId: string, sessionId: string, patch: Partial<GridLayout>) => {
       const doc = getDoc();
-      const currentSessionId = findWidgetSessionId(doc, widgetId);
-      const currentLayouts = currentSessionId
-        ? getLayoutsMap(getOrCreateSessionLayout(doc, currentSessionId))
-        : undefined;
-      const current = currentLayouts?.get(widgetId) ?? DEFAULT_LAYOUT;
-      const merged = { ...current, ...patch };
-      const targetLayouts = getLayoutsMap(
-        getOrCreateSessionLayout(doc, sessionId),
-      );
+      const layouts = doc.getMap<GridLayout>("layouts");
+      const current = layouts.get(widgetId) ?? DEFAULT_LAYOUT;
       doc.transact(() => {
-        if (currentSessionId && currentSessionId !== sessionId) {
-          currentLayouts?.delete(widgetId);
-        }
-        targetLayouts.set(widgetId, { ...merged, ...patch });
+        layouts.set(widgetId, { ...current, ...patch });
+        doc.getMap<string>("widgetToSession").set(widgetId, sessionId);
       });
     },
     [],
