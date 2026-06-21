@@ -1,20 +1,28 @@
-# Create provider for some components.
+# Cleanup feature code
 
-## Tasks 01: Create TemplateProvider
+## Description
 
-- [x] Create TemplateProvider, props is state (useTemplateYjs)
-- [x] Create hooks allow access state (without null)
+- Current, some code is old and incorrect, wrong code, non-clean, tech debt, ....
 
-## Tasks 02: Create SessionProvider
+## Tasks
 
-- [x] Create SessionProvider, props is session `Session`
-- [x] Create hooks useSession return `session` and `layouts`, `widget` in this session
+- [x] Remove unused code
+- [x] Refactor code to be more readable and maintainable
+- [x] Rename variables and functions to be more descriptive
+- [x] re-structure utils functions.
+- [x] Improve code comments and documentation
+- [x] Optimize performance and reduce unnecessary re-renders
 
-## Rules
+## Acceptance Criteria
 
-- Don't using context in `grid`, it is incorrect, only using `gridv2`
+- [x] All unused code has been removed
+- [x] Code is refactored and more readable
+- [x] Variables and functions have descriptive names
+- [x] Utils functions are re-structured and organized
+- [x] Code comments and documentation are improved
+- [x] Performance is optimized and unnecessary re-renders are reduced
 
-## Changes
+## Must
 
-- [x] TemplateProvider: props should is `template: Template` instead of `UseTemplateYjsReturn`
-- [x] TemplateProvider: load state from yjs and value of context is `state`.
+- Only for `./website/src/features/template`
+- Don't change code business logic

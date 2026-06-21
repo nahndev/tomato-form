@@ -109,6 +109,8 @@ export function WidgetPropertiesPanel({
             checked={formik.values.required}
             onChange={(e) => {
               formik.setFieldValue("required", e.target.checked);
+              // setFieldValue updates formik state asynchronously, so
+              // submitForm must wait a tick to see the new "required" value.
               setTimeout(() => formik.submitForm(), 0);
             }}
             className="size-4 rounded border-input accent-primary"

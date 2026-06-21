@@ -1,4 +1,4 @@
-import ItemLayout from "@/features/template/components/gridv2/ItemLayout";
+import ItemLayout from "@/features/template/components/grid/ItemLayout";
 import {
   COLUMN_WIDTH,
   GRID_COLUMNS,
@@ -37,16 +37,20 @@ export function ContainerLayout({
   const { ref, isDropTarget } = useDroppable({ id });
   const [moving, setMoving] = useState<MovingLayout | null>(null);
 
-  // console.log("layouts", JSON.stringify(layouts, null, 2));
-
+  // Lay widgets out top-to-bottom by idx, then make room for the widget
+  // currently being dragged ("moving") by reserving its height at the slot
+  // where it would land, pushing later widgets down.
   const computedLayouts = useMemo(() => {
     const absoluteLayouts = Object.entries(layouts)
-      .map(([id, layout]) =>
-        AbsoluteLayoutUtils.fromGridLayout(id, layout, heightMap.get(id) ?? 0),
+      .map(([widgetId, gridLayout]) =>
+        AbsoluteLayoutUtils.fromGridLayout(
+          widgetId,
+          gridLayout,
+          heightMap.get(widgetId) ?? 0,
+        ),
       )
       .sort((a, b) => (a.idx > b.idx ? 1 : -1));
 
-    let isMovingInSession = false;
     let maxHeights = new Array<number>(GRID_COLUMNS).fill(0);
     let isMovingRendered = false;
     for (const item of absoluteLayouts) {
@@ -77,10 +81,6 @@ export function ContainerLayout({
     return Math.max(maxBottom + (moving?.height ?? 0), 200);
   }, [computedLayouts, moving]);
 
-  console.log("containerHeight", containerHeight);
-
-  console.log("computedLayouts", JSON.stringify(computedLayouts, null, 2));
-
   useDragDropMonitor({
     onDragMove({ operation: { source, target } }) {
       const droppableRect = target?.element?.getBoundingClientRect();
@@ -107,13 +107,11 @@ export function ContainerLayout({
           const nextIdx = computedLayouts[collisionIdx]?.idx ?? null;
           const newIdx = generateKeyBetween(preIdx, nextIdx);
           const newColumn = getColumn(moving);
-          // console.log("onMoving", source.id, newColumn, newIdx);
           onMoving(source.id as string, newColumn, newIdx);
         } else {
           const lastIdx = computedLayouts.at(-1)?.idx ?? null;
           const newIdx = generateKeyBetween(lastIdx, null);
           const newColumn = getColumn(moving);
-          // console.log("onMoving", source.id, newColumn, newIdx);
           onMoving(source.id as string, newColumn, newIdx);
         }
       }

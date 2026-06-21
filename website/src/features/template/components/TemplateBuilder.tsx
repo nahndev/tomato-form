@@ -15,11 +15,11 @@ import { GRID_COLUMNS } from "../libs/grid-layout/constants";
 import { WidgetPicker } from "./WidgetPicker";
 import { WidgetPropertiesPanel } from "./WidgetPropertiesPanel";
 
-interface FormBuilderProps {
+interface TemplateBuilderProps {
   viewOnly?: boolean;
 }
 
-export function TemplateBuilder({ viewOnly = false }: FormBuilderProps) {
+export function TemplateBuilder({ viewOnly = false }: TemplateBuilderProps) {
   const {
     state,
     isConnected,
@@ -41,6 +41,9 @@ export function TemplateBuilder({ viewOnly = false }: FormBuilderProps) {
   const handleAddWidget = useCallback(
     (type: WidgetType) => {
       const id = uuidv4();
+      // New widgets always land in the first session, appended after the
+      // last widget there (idx strings sort lexicographically, so the
+      // largest existing idx tells us where "last" is).
       const defaultSessionId = Object.keys(state.sessions)[0];
       const sessionLayouts = defaultSessionId
         ? (state.layout[defaultSessionId]?.layouts ?? {})

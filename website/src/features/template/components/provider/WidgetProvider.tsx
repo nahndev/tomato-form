@@ -27,7 +27,7 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
   );
 
   return (
-    <WidgetContext.Provider value={{ widget, properties: properties }}>
+    <WidgetContext.Provider value={{ widget, properties }}>
       {children}
     </WidgetContext.Provider>
   );

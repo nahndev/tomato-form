@@ -1,10 +1,8 @@
-import { ContainerLayout } from "@/features/template/components/gridv2/ContainerLayout";
+import { ContainerLayout } from "@/features/template/components/grid/ContainerLayout";
 import { useSessionContext } from "@/features/template/components/provider/SessionProvider";
 import { WidgetItem } from "@/features/template/components/WidgetItem";
 
-export type SessionCanvasProps = {};
-
-const SessionCanvas: React.FC<SessionCanvasProps> = () => {
+const SessionCanvas: React.FC = () => {
   const { layouts, widgets, session, onMoving } = useSessionContext();
   return (
     <ContainerLayout layouts={layouts} id={session.id} onMoving={onMoving}>

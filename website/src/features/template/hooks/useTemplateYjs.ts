@@ -98,7 +98,6 @@ export interface UseTemplateYjsReturn {
     widgetId: string,
     props: Partial<WidgetProperties>,
   ) => void;
-  reorderWidgets: (orderedIds: string[]) => void;
 }
 
 export function useTemplateYjs(
@@ -116,8 +115,6 @@ export function useTemplateYjs(
     sessions: initialData?.sessions ?? {},
     layout: initialData?.layout ?? {},
   });
-
-  console.log(">", JSON.stringify(state, null, 2));
 
   const getDoc = () => docRef.current!;
 
@@ -261,21 +258,6 @@ export function useTemplateYjs(
     [],
   );
 
-  const reorderWidgets = useCallback((orderedIds: string[]) => {
-    const doc = getDoc();
-    doc.transact(() => {
-      orderedIds.forEach((id) => {
-        const sessionId =
-          findWidgetSessionId(doc, id) ?? getOrCreateDefaultSessionId(doc);
-        const yLayouts = getLayoutsMap(
-          getOrCreateSessionLayout(doc, sessionId),
-        );
-        const current = yLayouts.get(id) ?? DEFAULT_LAYOUT;
-        yLayouts.set(id, { ...current, idx: "a" });
-      });
-    });
-  }, []);
-
   return {
     state,
     isConnected,
@@ -285,6 +267,5 @@ export function useTemplateYjs(
     addSession,
     updateLayout,
     updateProperties,
-    reorderWidgets,
   };
 }

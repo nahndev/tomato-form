@@ -2,9 +2,7 @@ import { useTemplateContext } from "@/features/template/components/provider/Temp
 import SessionBox from "@/features/template/components/SessionBox";
 import { DragDropProvider } from "@dnd-kit/react";
 
-export type TemplateCanvasProps = {};
-
-const TemplateCanvas: React.FC<TemplateCanvasProps> = () => {
+const TemplateCanvas: React.FC = () => {
   const { state } = useTemplateContext();
   return (
     <DragDropProvider>

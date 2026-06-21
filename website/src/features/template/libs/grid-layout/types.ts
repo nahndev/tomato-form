@@ -1,5 +1,4 @@
 import { LayoutRect } from "@/features/template/libs/grid-layout/utils";
-import { GridLayout, Session } from "@/types/template";
 
 export interface AbsoluteLayout extends LayoutRect {
   id: string;
@@ -10,10 +9,4 @@ export interface AbsoluteLayout extends LayoutRect {
   idx: string;
   isStatic?: boolean;
   isFullWidth?: boolean;
-}
-
-export interface SessionGroup {
-  sessionId: string;
-  session: Session;
-  layouts: Record<string, GridLayout>;
 }

@@ -2,7 +2,7 @@
 
 import { useTemplateContext } from "@/features/template/components/provider/TemplateProvider";
 import type { GridLayout, Session, Widget } from "@/types/template";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useCallback, useContext, useMemo } from "react";
 import { pickBy } from "remeda";
 
 export interface SessionContextValue {
@@ -35,9 +35,12 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
     [state.widgets, layouts],
   );
 
-  const onMoving = (id: string, column: number, idx: string) => {
-    updateLayout(id, session.id, { column, idx });
-  };
+  const onMoving = useCallback(
+    (id: string, column: number, idx: string) => {
+      updateLayout(id, session.id, { column, idx });
+    },
+    [updateLayout, session.id],
+  );
 
   const value = useMemo<SessionContextValue>(
     () => ({ session, layouts, widgets, onMoving }),
