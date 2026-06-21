@@ -1,6 +1,6 @@
 "use client";
 
-import { useTemplateContext } from "@/features/template/components/provider/TemplateProvider";
+import { useTemplateDocContext } from "@/features/template/components/provider/TemplateProvider";
 import type { GridLayout, Session, Widget } from "@/types/template";
 import { createContext, useCallback, useContext, useMemo } from "react";
 import { pickBy } from "remeda";
@@ -23,7 +23,7 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
   session,
   children,
 }) => {
-  const { state, updateLayout } = useTemplateContext();
+  const { state, updateLayout } = useTemplateDocContext();
 
   const layouts = useMemo(
     () =>

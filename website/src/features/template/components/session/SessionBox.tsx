@@ -1,8 +1,8 @@
-import SessionCanvas from "@/features/template/components/canvas/SessionCanvas";
 import {
   SessionProvider,
   useSessionContext,
 } from "@/features/template/components/provider/SessionProvider";
+import SessionCanvas from "@/features/template/components/session/SessionCanvas";
 import { Session } from "@/types/template";
 
 export type SessionBuilderProps = {
@@ -11,10 +11,14 @@ export type SessionBuilderProps = {
 
 const SessionBox: React.FC<SessionBuilderProps> = ({ session }) => {
   return (
-    <SessionProvider session={session}>
-      <SessionHeader />
-      <SessionCanvas />
-    </SessionProvider>
+    <div className="flex flex-col items-center">
+      <div className="bg-white shadow-md rounded-md">
+        <SessionProvider session={session}>
+          <SessionHeader />
+          <SessionCanvas />
+        </SessionProvider>
+      </div>
+    </div>
   );
 };
 

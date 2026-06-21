@@ -10,6 +10,7 @@ import { createContext, useContext } from "react";
 const TemplateContext = createContext<{
   templateYjs: UseTemplateYjsReturn;
   mode: TemplateMode;
+  template: Template;
 } | null>(null);
 
 export interface TemplateProviderProps {
@@ -26,18 +27,28 @@ export const TemplateProvider: React.FC<TemplateProviderProps> = ({
   const templateYjs = useTemplateYjs(template.id, template);
 
   return (
-    <TemplateContext.Provider value={{ templateYjs, mode }}>
+    <TemplateContext.Provider value={{ template, templateYjs, mode }}>
       {children}
     </TemplateContext.Provider>
   );
 };
 
-export function useTemplateContext(): UseTemplateYjsReturn {
+export function useTemplateDocContext(): UseTemplateYjsReturn {
   const ctx = useContext(TemplateContext);
   if (!ctx) {
-    throw new Error("useTemplateContext must be used inside TemplateProvider");
+    throw new Error(
+      "useTemplateDocContext must be used inside TemplateProvider",
+    );
   }
   return ctx.templateYjs;
+}
+
+export function useTemplateContext(): Template {
+  const ctx = useContext(TemplateContext);
+  if (!ctx) {
+    throw new Error("useTemplate must be used inside TemplateProvider");
+  }
+  return ctx.template;
 }
 
 export interface TemplateBuilderContextValue {

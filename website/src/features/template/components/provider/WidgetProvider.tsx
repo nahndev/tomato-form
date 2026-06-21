@@ -1,6 +1,6 @@
 "use client";
 
-import { useTemplateContext } from "@/features/template/components/provider/TemplateProvider";
+import { useTemplateDocContext } from "@/features/template/components/provider/TemplateProvider";
 import type { Widget, WidgetProperties } from "@/types/template";
 import { createContext, useContext, useMemo } from "react";
 
@@ -20,7 +20,7 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
   widget,
   children,
 }) => {
-  const { state } = useTemplateContext();
+  const { state } = useTemplateDocContext();
   const properties = useMemo(
     () => state.properties[widget.id],
     [state.properties, widget.id],

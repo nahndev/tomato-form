@@ -1,1 +1,1 @@
-export { TemplateBuilder as FormBuilder } from "./components/TemplateBuilder";
+export { TemplateBuilder as FormBuilder } from "./components/template/TemplateBuilder";
