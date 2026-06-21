@@ -1,7 +1,15 @@
-# Create loading page
+# Re-build board page (by id) of project
 
-## Task
+## Description
 
-- Create a loading page that displays a spinner and the text "Loading..." while the main content of the website is being loaded.
-- The loading page should be displayed until all the necessary resources (such as images, scripts, and stylesheets) are fully loaded.
-- Once the loading is complete, the loading page should fade out smoothly, revealing the main content of the website.
+- Current, the board page of project is demo. Re-build it again.
+
+## UI design
+
+- Top first is `BoardHeader` include `BackButton`, `BoardTitle` and right is `BoardAction` include `MoreSubmissionButton`.
+- Then is window-tab with `BoardTab` include `TemplateSetting`, `SubmissionList` as default, `Jobs`, `Setting`, `History`, `Discussion`.
+
+## Acceptance Criteria
+
+- [x] Create new `features` modules with folder `board`.
+- [x] Create components for every part of board page

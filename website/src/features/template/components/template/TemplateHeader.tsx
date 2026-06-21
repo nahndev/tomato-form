@@ -15,11 +15,14 @@ const TemplateHeader: React.FC<TemplateHeaderProps> = () => {
   return (
     <div className="flex items-center gap-2 border-b px-4 py-2">
       <Link href="/templates">
-        <Button variant="ghost" size="sm">
-          <ArrowLeft className="mr-1.5 size-4" />
-          {name}
+        <Button variant="ghost" className="size-10">
+          <ArrowLeft />
         </Button>
       </Link>
+      <div>
+        <span>{name}</span>
+      </div>
+      <div className="flex-1" />
       <div className="ml-auto">
         {viewOnly ? (
           <Link href={`/templates/${id}?mode=edit`}>

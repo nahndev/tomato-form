@@ -1,3 +1,12 @@
+export enum BoardTabValue {
+  SUBMISSIONS = "submissions",
+  TEMPLATE = "template",
+  JOBS = "jobs",
+  SETTING = "setting",
+  HISTORY = "history",
+  DISCUSSION = "discussion",
+}
+
 export interface Board {
   id: string;
   name: string;
