@@ -7,8 +7,11 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@hocuspocus/extension-database": "^4.3.0",
     "@hocuspocus/server": "^4.2.0",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "mongodb": "^7.3.0",
+    "yjs": "^13.6.31"
   },
   "type": "module"
 }

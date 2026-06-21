@@ -259,12 +259,21 @@ importers:
 
   yjs-server:
     dependencies:
+      '@hocuspocus/extension-database':
+        specifier: ^4.3.0
+        version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
       '@hocuspocus/server':
         specifier: ^4.2.0
         version: 4.2.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
+      mongodb:
+        specifier: ^7.3.0
+        version: 7.3.0
+      yjs:
+        specifier: ^13.6.31
+        version: 13.6.31
 
 packages:
 
@@ -620,6 +629,14 @@ packages:
   '@hocuspocus/common@4.2.0':
     resolution: {integrity: sha512-031clELz+rW7MpmpFUFN7+vE52Gtk1wkrSVHyqydZgKSLf5AtrorliCf38cH65mGGltLR2/JrydzqOk2bVQhjw==}
 
+  '@hocuspocus/common@4.3.0':
+    resolution: {integrity: sha512-8USsMvso01aMKOSSyvb8oTAlfES/nBM+Y74XjW5Fy5ovmOaVpoRRBrktIrEVwydrp8Cr6C66ivc0orcW/3P+Kg==}
+
+  '@hocuspocus/extension-database@4.3.0':
+    resolution: {integrity: sha512-iiFU2l+/lxXVREXS9VUMDJQCOzM3LWOlFs0ezNkFIrXUf7u4LyagCR5v5y8zoBxMGNE5NwzMkP4xBiDX/Tc90A==}
+    peerDependencies:
+      yjs: ^13.6.8
+
   '@hocuspocus/provider@4.2.0':
     resolution: {integrity: sha512-w38vvgYBs4NDonMkxb4R//n+CgBJ+K/03RMXcr8yHx1I3TY8HYpTlRqOUWdIJpmgw2ZyuM9EdbJwwRPrZF7iEA==}
     peerDependencies:
@@ -628,6 +645,13 @@ packages:
 
   '@hocuspocus/server@4.2.0':
     resolution: {integrity: sha512-D3OjjH/62G2M6FDfJMJDtAgV3VdUcq1V4MNLjuVaUpdhWkRy5OdzC6Zwo9hfFmtoolDzAy+WUK+xFPN/FljtYw==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      y-protocols: ^1.0.6
+      yjs: ^13.6.8
+
+  '@hocuspocus/server@4.3.0':
+    resolution: {integrity: sha512-GX9ohUJAr6aIa2ewS0EPeyf3w12wLCBBSGfc76ZMOuZJZPUzDH6BJWFjkVlaVW3OmwZ5+jxdXXFUf6sAi4EIrg==}
     engines: {node: '>=22'}
     peerDependencies:
       y-protocols: ^1.0.6
@@ -2175,6 +2199,9 @@ packages:
   '@types/whatwg-url@11.0.5':
     resolution: {integrity: sha512-coYR071JRaHa+xoEvvYqvnIHaVqaYrLPbsufM9BF63HkwI5Lgmy2QR8Q5K/lYDYo5AK82wOvSOS0UsLTpTG7uQ==}
 
+  '@types/whatwg-url@13.0.0':
+    resolution: {integrity: sha512-N8WXpbE6Wgri7KUSvrmQcqrMllKZ9uxkYWMt+mCSGwNc0Hsw9VQTW7ApqI4XNrx6/SaM2QQJCzMPDEXE058s+Q==}
+
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
 
@@ -2705,6 +2732,10 @@ packages:
   bson@6.10.4:
     resolution: {integrity: sha512-WIsKqkSC0ABoBJuT1LEX+2HEvNmNKKgnTAyd0fL8qzK4SH2i9NXg+t08YtdZp/V9IZ33cxe3iV4yM0qg8lMQng==}
     engines: {node: '>=16.20.1'}
+
+  bson@7.3.0:
+    resolution: {integrity: sha512-WmjjMEwFwZHmGnAb7wn90MhkiT+mTm4x/rLj7dvAPWfwnVWDXhLun2e+UM88MJoDGW624yzZglVX/zTBy9ZZMw==}
+    engines: {node: '>=20.19.0'}
 
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
@@ -4640,6 +4671,10 @@ packages:
   mongodb-connection-string-url@3.0.2:
     resolution: {integrity: sha512-rMO7CGo/9BFwyZABcKAWL8UJwH/Kc2x0g72uhDWzG48URRax5TCIcJ7Rc3RZqffZzO/Gwff/jyKwCU9TN8gehA==}
 
+  mongodb-connection-string-url@7.0.1:
+    resolution: {integrity: sha512-h0AZ9A7IDVwwHyMxmdMXKy+9oNlF0zFoahHiX3vQ8e3KFcSP3VmsmfvtRSuLPxmyv2vjIDxqty8smTgie/SNRQ==}
+    engines: {node: '>=20.19.0'}
+
   mongodb@6.20.0:
     resolution: {integrity: sha512-Tl6MEIU3K4Rq3TSHd+sZQqRBoGlFsOgNrH5ltAcFBV62Re3Fd+FcaVf8uSEQFOJ51SDowDVttBTONMfoYWrWlQ==}
     engines: {node: '>=16.20.1'}
@@ -4651,6 +4686,33 @@ packages:
       mongodb-client-encryption: '>=6.0.0 <7'
       snappy: ^7.3.2
       socks: ^2.7.1
+    peerDependenciesMeta:
+      '@aws-sdk/credential-providers':
+        optional: true
+      '@mongodb-js/zstd':
+        optional: true
+      gcp-metadata:
+        optional: true
+      kerberos:
+        optional: true
+      mongodb-client-encryption:
+        optional: true
+      snappy:
+        optional: true
+      socks:
+        optional: true
+
+  mongodb@7.3.0:
+    resolution: {integrity: sha512-WpCqSx7JAU9vcyjm/SU7ydnHls2YrfU3Y3sx4Ml9D7sPe4mXPlaapndiurDXrQ7/VvJkB4/i7b7WovHb8bd8sg==}
+    engines: {node: '>=20.19.0'}
+    peerDependencies:
+      '@aws-sdk/credential-providers': ^3.806.0
+      '@mongodb-js/zstd': ^7.0.0
+      gcp-metadata: ^7.0.1
+      kerberos: ^7.0.0
+      mongodb-client-encryption: '>=7.0.0 <7.1.0'
+      snappy: ^7.3.2
+      socks: ^2.8.6
     peerDependenciesMeta:
       '@aws-sdk/credential-providers':
         optional: true
@@ -6702,6 +6764,18 @@ snapshots:
     dependencies:
       lib0: 0.2.117
 
+  '@hocuspocus/common@4.3.0':
+    dependencies:
+      lib0: 0.2.117
+
+  '@hocuspocus/extension-database@4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)':
+    dependencies:
+      '@hocuspocus/server': 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
+      yjs: 13.6.31
+    transitivePeerDependencies:
+      - srvx
+      - y-protocols
+
   '@hocuspocus/provider@4.2.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)':
     dependencies:
       '@hocuspocus/common': 4.2.0
@@ -6713,6 +6787,18 @@ snapshots:
   '@hocuspocus/server@4.2.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)':
     dependencies:
       '@hocuspocus/common': 4.2.0
+      async-mutex: 0.5.0
+      crossws: 0.4.6
+      kleur: 4.1.5
+      lib0: 0.2.117
+      y-protocols: 1.0.7(yjs@13.6.31)
+      yjs: 13.6.31
+    transitivePeerDependencies:
+      - srvx
+
+  '@hocuspocus/server@4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)':
+    dependencies:
+      '@hocuspocus/common': 4.3.0
       async-mutex: 0.5.0
       crossws: 0.4.6
       kleur: 4.1.5
@@ -8407,6 +8493,10 @@ snapshots:
     dependencies:
       '@types/webidl-conversions': 7.0.3
 
+  '@types/whatwg-url@13.0.0':
+    dependencies:
+      '@types/webidl-conversions': 7.0.3
+
   '@types/ws@8.18.1':
     dependencies:
       '@types/node': 20.19.43
@@ -9024,6 +9114,8 @@ snapshots:
       node-int64: 0.4.0
 
   bson@6.10.4: {}
+
+  bson@7.3.0: {}
 
   buffer-from@1.1.2: {}
 
@@ -11308,11 +11400,22 @@ snapshots:
       '@types/whatwg-url': 11.0.5
       whatwg-url: 14.2.0
 
+  mongodb-connection-string-url@7.0.1:
+    dependencies:
+      '@types/whatwg-url': 13.0.0
+      whatwg-url: 14.2.0
+
   mongodb@6.20.0:
     dependencies:
       '@mongodb-js/saslprep': 1.4.11
       bson: 6.10.4
       mongodb-connection-string-url: 3.0.2
+
+  mongodb@7.3.0:
+    dependencies:
+      '@mongodb-js/saslprep': 1.4.11
+      bson: 7.3.0
+      mongodb-connection-string-url: 7.0.1
 
   mongoose@8.24.0:
     dependencies:

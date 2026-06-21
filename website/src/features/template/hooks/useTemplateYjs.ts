@@ -118,19 +118,20 @@ export function useTemplateYjs(
       setIsConnected(status === "connected");
     });
 
-    provider.on("synced", ({ state }: { state: boolean }) => {
-      if (!state) return;
-      doc.transact(() => {
-        const sessionId = getOrCreateDefaultSessionId(doc);
-        const layouts = doc.getMap<GridLayout>("layouts");
-        const widgetToSession = doc.getMap<string>("widgetToSession");
-        doc.getMap<Widget>("widgets").forEach((_, widgetId) => {
-          if (widgetToSession.has(widgetId)) return;
-          layouts.set(widgetId, DEFAULT_LAYOUT);
-          widgetToSession.set(widgetId, sessionId);
-        });
-      });
-    });
+    // provider.on("synced", ({ state }: { state: boolean }) => {
+    //   debugger;
+    //   if (!state) return;
+    //   doc.transact(() => {
+    //     const sessionId = getOrCreateDefaultSessionId(doc);
+    //     const layouts = doc.getMap<GridLayout>("layouts");
+    //     const widgetToSession = doc.getMap<string>("widgetToSession");
+    //     doc.getMap<Widget>("widgets").forEach((_, widgetId) => {
+    //       if (widgetToSession.has(widgetId)) return;
+    //       layouts.set(widgetId, DEFAULT_LAYOUT);
+    //       widgetToSession.set(widgetId, sessionId);
+    //     });
+    //   });
+    // });
 
     const onDocUpdate = () => setState(readState(doc));
     doc.on("update", onDocUpdate);
