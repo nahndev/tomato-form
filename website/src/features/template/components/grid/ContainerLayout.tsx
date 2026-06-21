@@ -77,10 +77,16 @@ export function ContainerLayout({
 
   const containerHeight = useMemo(() => {
     const maxBottom = computedLayouts.reduce(
-      (max, layout) => Math.max(max, layout.top + layout.height),
+      (max, { top, height }) => Math.max(max, top + height),
       0,
     );
-    return Math.max(maxBottom + (moving?.height ?? 0), 200);
+
+    const movingBottom =
+      moving && moving.top + moving.height > maxBottom
+        ? maxBottom + moving.height
+        : 0;
+
+    return Math.max(maxBottom, movingBottom, 200);
   }, [computedLayouts, moving]);
 
   useDragDropMonitor({
@@ -124,7 +130,7 @@ export function ContainerLayout({
   return (
     <div
       ref={ref}
-      className="relative duration-500"
+      className="relative duration-300"
       style={{ width: GRID_COLUMNS * COLUMN_WIDTH, height: containerHeight }}
     >
       {computedLayouts.map((layout) => (

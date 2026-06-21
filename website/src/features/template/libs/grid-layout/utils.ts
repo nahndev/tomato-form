@@ -56,7 +56,10 @@ export function getColumnRange(layout: LayoutRect): [number, number] {
 export function getColumn(layout: LayoutRect): number {
   return Math.max(
     0,
-    Math.min(Math.floor(layout.left / COLUMN_WIDTH), GRID_COLUMNS - 1),
+    Math.min(
+      Math.floor(layout.left / COLUMN_WIDTH),
+      GRID_COLUMNS - Math.floor(layout.width / COLUMN_WIDTH),
+    ),
   );
 }
 
