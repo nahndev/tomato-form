@@ -1,6 +1,7 @@
+import { LayoutRect } from "@/features/template/libs/grid-layout/utils";
 import { GridLayout, Session } from "@/types/template";
 
-export interface AbsoluteLayout {
+export interface AbsoluteLayout extends LayoutRect {
   id: string;
   left: number;
   top: number;

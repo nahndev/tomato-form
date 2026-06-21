@@ -12,7 +12,7 @@ export function useWidgetDraggable(id: string, layout: AbsoluteLayout) {
     onDragStart({ active }) {
       if (active.id === id) {
         setInitial(layout);
-        console.log("Drag start:", active.rect.current.initial);
+        // console.log("Drag start:", active.rect.current.initial);
       }
     },
   });

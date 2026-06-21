@@ -4,23 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import type { Template, WidgetType } from "@/types/template";
+import TemplateCanvas from "@/features/template/components/canvas/TemplateCanvas";
+import { useTemplateContext } from "@/features/template/components/provider/TemplateProvider";
+import type { WidgetType } from "@/types/template";
 import { generateKeyBetween } from "fractional-indexing";
 import { Plus, Wifi, WifiOff } from "lucide-react";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useTemplateYjs } from "../hooks/useTemplateYjs";
 import { GRID_COLUMNS } from "../libs/grid-layout/constants";
-import { WidgetCanvas } from "./WidgetCanvas";
 import { WidgetPicker } from "./WidgetPicker";
 import { WidgetPropertiesPanel } from "./WidgetPropertiesPanel";
 
 interface FormBuilderProps {
-  template: Template;
   viewOnly?: boolean;
 }
 
-export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
+export function TemplateBuilder({ viewOnly = false }: FormBuilderProps) {
   const {
     state,
     isConnected,
@@ -30,7 +29,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
     addSession,
     updateProperties,
     updateLayout,
-  } = useTemplateYjs(template.id, template);
+  } = useTemplateContext();
 
   const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null);
 
@@ -44,7 +43,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
       const id = uuidv4();
       const defaultSessionId = Object.keys(state.sessions)[0];
       const sessionLayouts = defaultSessionId
-        ? state.layout[defaultSessionId]?.layouts ?? {}
+        ? (state.layout[defaultSessionId]?.layouts ?? {})
         : {};
       const lastIdx = Object.values(sessionLayouts)
         .map((layout) => layout.idx)
@@ -132,24 +131,7 @@ export function FormBuilder({ template, viewOnly = false }: FormBuilderProps) {
         {/* Center: canvas */}
 
         <div className="mx-auto w-min h-min">
-          <WidgetCanvas
-            widgets={state.widgets}
-            properties={state.properties}
-            sessions={state.sessions}
-            layout={state.layout}
-            selectedWidgetId={selectedWidgetId}
-            onSelectWidget={(id) =>
-              setSelectedWidgetId((prev) => (prev === id ? null : id))
-            }
-            onRemoveWidget={(id) => {
-              removeWidget(id);
-              if (selectedWidgetId === id) setSelectedWidgetId(null);
-            }}
-            onMoveWidget={(id, sessionId, column, idx) =>
-              updateLayout(id, sessionId, { column, idx })
-            }
-            viewOnly={viewOnly}
-          />
+          <TemplateCanvas />
         </div>
 
         {/* Right panel: properties */}

@@ -3,7 +3,53 @@ import { generateKeyBetween } from "fractional-indexing";
 import { COLUMN_WIDTH, GRID_COLUMNS } from "./constants";
 import { AbsoluteLayout } from "./types";
 
-export function getColumnRange(layout: AbsoluteLayout): [number, number] {
+export interface LayoutRect {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+export class WidgetUtils {
+  static getAbsoluteWidth(layout: GridLayout): number {
+    return layout.isFullWidth
+      ? GRID_COLUMNS * COLUMN_WIDTH
+      : layout.span * COLUMN_WIDTH;
+  }
+
+  static getAbsoluteLeft(layout: GridLayout): number {
+    return layout.isFullWidth ? 0 : layout.column * COLUMN_WIDTH;
+  }
+}
+
+export class AbsoluteLayoutUtils {
+  static fromGridLayout(
+    id: string,
+    layout: GridLayout,
+    height: number,
+  ): AbsoluteLayout {
+    return {
+      id,
+      left: WidgetUtils.getAbsoluteLeft(layout),
+      top: 0,
+      width: WidgetUtils.getAbsoluteWidth(layout),
+      height,
+      idx: layout.idx,
+      isStatic: layout.isStatic,
+      isFullWidth: layout.isFullWidth,
+    };
+  }
+
+  static collision(a: LayoutRect, b: LayoutRect): boolean {
+    return (
+      a.left < b.left + b.width &&
+      a.left + a.width > b.left &&
+      a.top < b.top + b.height &&
+      a.top + a.height > b.top
+    );
+  }
+}
+
+export function getColumnRange(layout: LayoutRect): [number, number] {
   const col = Math.max(
     0,
     Math.min(Math.floor(layout.left / COLUMN_WIDTH), GRID_COLUMNS - 1),
@@ -17,7 +63,7 @@ export function getColumnRange(layout: AbsoluteLayout): [number, number] {
 
 export function setMaxHeight(
   maxHeights: number[],
-  layout: AbsoluteLayout,
+  layout: LayoutRect,
 ): number[] {
   const [col, right] = getColumnRange(layout);
   for (let i = col; i <= right; i++) {
@@ -26,10 +72,7 @@ export function setMaxHeight(
   return maxHeights;
 }
 
-export function getMaxHeight(
-  maxHeights: number[],
-  layout: AbsoluteLayout,
-): number {
+export function getMaxHeight(maxHeights: number[], layout: LayoutRect): number {
   const [col, right] = getColumnRange(layout);
   return Math.max(...maxHeights.slice(col, right + 1));
 }
