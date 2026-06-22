@@ -1,10 +1,3 @@
-export enum JobStatus {
-  IDLE = "idle",
-  RUNNING = "running",
-  SUCCESS = "success",
-  FAILED = "failed",
-}
-
 export enum JobExecutionStatus {
   RUNNING = "running",
   SUCCESS = "success",
@@ -22,21 +15,17 @@ export interface SubmissionCreationAction {
 export interface Job {
   id: string;
   name: string;
-  cronExpression: string;
+  expression: string;
   actions: SubmissionCreationAction[];
-  enabled: boolean;
-  status: JobStatus;
-  lastRunAt?: string | null;
-  nextRunAt?: string | null;
-  lastError?: string | null;
+  enable: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface CreateJobInput {
   name: string;
-  cronExpression: string;
-  enabled?: boolean;
+  expression: string;
+  enable?: boolean;
   actions: SubmissionCreationAction[];
 }
 

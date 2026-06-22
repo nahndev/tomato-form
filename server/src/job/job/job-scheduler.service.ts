@@ -2,7 +2,6 @@ import { Injectable, OnModuleInit } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { SchedulerRegistry } from "@nestjs/schedule";
 import { CronJob as CronTimer } from "cron";
-import { parseExpression } from "cron-parser";
 import { Model } from "mongoose";
 import { CronJob, CronJobDocument } from "../schemas/cron-job.schema";
 import { JobRunner } from "./job-runner.service";
@@ -17,24 +16,19 @@ export class JobScheduler implements OnModuleInit {
   ) {}
 
   async onModuleInit(): Promise<void> {
-    const cronJobs = await this.cronJobModel.find({ enabled: true }).exec();
+    const cronJobs = await this.cronJobModel.find({ enable: true }).exec();
     for (const cronJob of cronJobs) {
       await this.schedule(cronJob);
     }
   }
 
   async schedule(cronJob: CronJob): Promise<void> {
-    const nextRunAt = parseExpression(cronJob.cronExpression).next().toDate();
-    await this.cronJobModel
-      .findOneAndUpdate({ id: cronJob.id }, { $set: { nextRunAt } })
-      .exec();
-
     const name = this.cronName(cronJob.id);
     if (this.schedulerRegistry.doesExist("cron", name)) {
       this.schedulerRegistry.deleteCronJob(name);
     }
 
-    const timer = new CronTimer(cronJob.cronExpression, async () => {
+    const timer = new CronTimer(cronJob.expression, async () => {
       await this.jobRunner.run(cronJob);
     });
     this.schedulerRegistry.addCronJob(name, timer);
@@ -50,7 +44,7 @@ export class JobScheduler implements OnModuleInit {
 
   async reschedule(cronJob: CronJob): Promise<void> {
     this.unschedule(cronJob.id);
-    if (cronJob.enabled) {
+    if (cronJob.enable) {
       await this.schedule(cronJob);
     }
   }

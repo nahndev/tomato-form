@@ -1,15 +1,10 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { parseExpression } from "cron-parser";
 import { Model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import { ActionRunnerRegistry } from "../action/action-runner-registry.service";
 import { ActionRunContext } from "../action/action-runner.interface";
-import {
-  CronJob,
-  CronJobDocument,
-  JobStatus,
-} from "../schemas/cron-job.schema";
+import { CronJob } from "../schemas/cron-job.schema";
 import {
   JobExecution,
   JobExecutionDocument,
@@ -21,8 +16,6 @@ export class JobRunner {
   private readonly logger = new Logger(JobRunner.name);
 
   constructor(
-    @InjectModel(CronJob.name)
-    private readonly cronJobModel: Model<CronJobDocument>,
     @InjectModel(JobExecution.name)
     private readonly jobExecutionModel: Model<JobExecutionDocument>,
     private readonly actionRunner: ActionRunnerRegistry,
@@ -36,23 +29,15 @@ export class JobRunner {
       startedAt: new Date(),
     }).save();
 
-    await this.cronJobModel
-      .findOneAndUpdate(
-        { id: cronJob.id },
-        { $set: { status: JobStatus.RUNNING } },
-      )
-      .exec();
-
     try {
       const results = await this.dispatch(cronJob);
-      await this.complete(execution.id, cronJob, JobStatus.SUCCESS, results);
+      await this.complete(execution.id, JobExecutionStatus.SUCCESS, results);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
       this.logger.error(`Job ${cronJob.id} failed: ${message}`);
       await this.complete(
         execution.id,
-        cronJob,
-        JobStatus.FAILED,
+        JobExecutionStatus.FAILED,
         null,
         message,
       );
@@ -76,50 +61,22 @@ export class JobRunner {
 
   private async complete(
     executionId: string,
-    cronJob: CronJob,
-    status: JobStatus,
+    status: JobExecutionStatus,
     results: Record<string, unknown>[] | null,
     error?: string,
   ): Promise<void> {
-    const finishedAt = new Date();
-
     await this.jobExecutionModel
       .findOneAndUpdate(
         { id: executionId },
         {
           $set: {
-            status:
-              status === JobStatus.SUCCESS
-                ? JobExecutionStatus.SUCCESS
-                : JobExecutionStatus.FAILED,
-            finishedAt,
+            status,
+            finishedAt: new Date(),
             result: results ? { actions: results } : null,
             error: error ?? null,
           },
         },
       )
       .exec();
-
-    await this.cronJobModel
-      .findOneAndUpdate(
-        { id: cronJob.id },
-        {
-          $set: {
-            status,
-            lastRunAt: finishedAt,
-            lastError: error ?? null,
-            nextRunAt: this.computeNextRunAt(cronJob.cronExpression),
-          },
-        },
-      )
-      .exec();
-  }
-
-  private computeNextRunAt(cronExpression: string): Date | null {
-    try {
-      return parseExpression(cronExpression).next().toDate();
-    } catch {
-      return null;
-    }
   }
 }

@@ -7,13 +7,6 @@ import {
   SubmissionCreationActionSchema,
 } from "./action.schema";
 
-export enum JobStatus {
-  IDLE = "idle",
-  RUNNING = "running",
-  SUCCESS = "success",
-  FAILED = "failed",
-}
-
 @Schema({ timestamps: true, collection: "cron_jobs" })
 export class CronJob {
   @Prop({ required: true, unique: true })
@@ -23,25 +16,13 @@ export class CronJob {
   name!: string;
 
   @Prop({ required: true })
-  cronExpression!: string;
+  expression!: string;
 
   @Prop({ type: [ActionSchema], default: [] })
   actions!: Action[];
 
   @Prop({ default: true })
-  enabled!: boolean;
-
-  @Prop({ type: String, enum: JobStatus, default: JobStatus.IDLE })
-  status!: JobStatus;
-
-  @Prop({ type: Date, default: null })
-  lastRunAt!: Date | null;
-
-  @Prop({ type: Date, default: null })
-  nextRunAt!: Date | null;
-
-  @Prop({ type: String, default: null })
-  lastError!: string | null;
+  enable!: boolean;
 }
 
 export type CronJobDocument = CronJob & Document;

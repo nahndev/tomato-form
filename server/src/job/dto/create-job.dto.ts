@@ -9,6 +9,7 @@ import {
   IsString,
   ValidateNested,
 } from "class-validator";
+import { IsCronExpression } from "../../common/decorators/is-cron-expression.decorator";
 import { ActionType } from "../schemas/action.schema";
 
 export class CreateActionDto {
@@ -39,12 +40,13 @@ export class CreateJobDto {
   })
   @IsString()
   @IsNotEmpty()
-  cronExpression!: string;
+  @IsCronExpression()
+  expression!: string;
 
   @ApiPropertyOptional({ default: true })
   @IsOptional()
   @IsBoolean()
-  enabled?: boolean;
+  enable?: boolean;
 
   @ApiProperty({ type: [CreateActionDto] })
   @ValidateNested({ each: true })

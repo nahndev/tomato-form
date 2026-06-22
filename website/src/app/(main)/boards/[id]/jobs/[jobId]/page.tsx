@@ -10,20 +10,12 @@ import { useJob, useJobExecutions } from "@/hooks/useJobs";
 import { useTemplate } from "@/hooks/useTemplates";
 import {
   JobExecutionStatus,
-  JobStatus,
   SubmissionCreationAction,
 } from "@/types/job";
 
 interface PageProps {
   params: Promise<{ id: string; jobId: string }>;
 }
-
-const JOB_STATUS_VARIANT: Record<JobStatus, "secondary" | "default" | "destructive"> = {
-  [JobStatus.IDLE]: "secondary",
-  [JobStatus.RUNNING]: "default",
-  [JobStatus.SUCCESS]: "default",
-  [JobStatus.FAILED]: "destructive",
-};
 
 const EXECUTION_STATUS_VARIANT: Record<
   JobExecutionStatus,
@@ -92,31 +84,12 @@ export default function JobDetailPage({ params }: PageProps) {
         <div>
           <h1 className="text-2xl font-bold">{job.name}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {job.cronExpression}
+            {job.expression}
           </p>
         </div>
-        <Badge variant={JOB_STATUS_VARIANT[job.status]}>{job.status}</Badge>
-      </div>
-
-      <div className="mb-6 grid grid-cols-2 gap-4 rounded-lg border border-border p-4 text-sm">
-        <div>
-          <div className="text-muted-foreground">Last run</div>
-          <div>
-            {job.lastRunAt ? new Date(job.lastRunAt).toLocaleString() : "—"}
-          </div>
-        </div>
-        <div>
-          <div className="text-muted-foreground">Next run</div>
-          <div>
-            {job.nextRunAt ? new Date(job.nextRunAt).toLocaleString() : "—"}
-          </div>
-        </div>
-        {job.lastError && (
-          <div className="col-span-2">
-            <div className="text-muted-foreground">Last error</div>
-            <div className="text-destructive">{job.lastError}</div>
-          </div>
-        )}
+        <Badge variant={job.enable ? "default" : "secondary"}>
+          {job.enable ? "Enabled" : "Disabled"}
+        </Badge>
       </div>
 
       <h2 className="mb-3 text-lg font-semibold">Actions</h2>

@@ -22,6 +22,7 @@ import CronExpressionBuilder from "@/features/board/components/job/CronExpressio
 import { useBoards } from "@/hooks/useBoards";
 import { useCreateJob } from "@/hooks/useJobs";
 import { useTemplates } from "@/hooks/useTemplates";
+import { isCronExpression } from "@/lib/validators/cron-expression";
 import { ACTION_TYPE_SUBMISSION_CREATION } from "@/types/job";
 
 interface ActionFormValues {
@@ -31,7 +32,9 @@ interface ActionFormValues {
 
 const createSchema = Yup.object({
   name: Yup.string().required("Job name is required"),
-  cronExpression: Yup.string().required("Schedule is required"),
+  expression: Yup.string()
+    .required("Schedule is required")
+    .test("is-cron-expression", "Invalid cron expression", isCronExpression),
   actions: Yup.array()
     .of(
       Yup.object({
@@ -59,7 +62,7 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
   const formik = useFormik({
     initialValues: {
       name: "",
-      cronExpression: "0 9 * * *",
+      expression: "0 9 * * *",
       actions: [{ templateId: "", boardId: board.id }] as ActionFormValues[],
     },
     validationSchema: createSchema,
@@ -67,8 +70,8 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
       try {
         await createJob({
           name: values.name,
-          cronExpression: values.cronExpression,
-          enabled: true,
+          expression: values.expression,
+          enable: true,
           actions: values.actions.map((action) => ({
             type: ACTION_TYPE_SUBMISSION_CREATION,
             templateId: action.templateId,
@@ -156,8 +159,8 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
           </div>
 
           <CronExpressionBuilder
-            value={formik.values.cronExpression}
-            onChange={(value) => formik.setFieldValue("cronExpression", value)}
+            value={formik.values.expression}
+            onChange={(value) => formik.setFieldValue("expression", value)}
           />
 
           <div className="flex flex-col gap-2">

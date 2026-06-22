@@ -5,6 +5,7 @@ import { parseExpression } from "cron-parser";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isCronExpression } from "@/lib/validators/cron-expression";
 
 export type CronExpressionBuilderProps = {
   value: string;
@@ -24,12 +25,11 @@ const CronExpressionBuilder: React.FC<CronExpressionBuilderProps> = ({
   onChange,
 }) => {
   const preview = useMemo(() => {
-    try {
-      const next = parseExpression(value).next().toDate();
-      return { nextRun: next.toLocaleString(), error: null as string | null };
-    } catch {
+    if (!isCronExpression(value)) {
       return { nextRun: null, error: "Invalid cron expression" };
     }
+    const next = parseExpression(value).next().toDate();
+    return { nextRun: next.toLocaleString(), error: null as string | null };
   }, [value]);
 
   return (

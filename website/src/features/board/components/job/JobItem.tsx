@@ -5,17 +5,10 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useDeleteJob } from "@/hooks/useJobs";
-import { Job, JobStatus } from "@/types/job";
+import { Job } from "@/types/job";
 
 export type JobItemProps = {
   job: Job;
-};
-
-const STATUS_VARIANT: Record<JobStatus, "secondary" | "default" | "destructive"> = {
-  [JobStatus.IDLE]: "secondary",
-  [JobStatus.RUNNING]: "default",
-  [JobStatus.SUCCESS]: "default",
-  [JobStatus.FAILED]: "destructive",
 };
 
 const JobItem: React.FC<JobItemProps> = ({ job }) => {
@@ -27,13 +20,12 @@ const JobItem: React.FC<JobItemProps> = ({ job }) => {
       <div className="flex flex-row items-center gap-3 p-2 group hover:bg-accent">
         <div className="flex items-center gap-2">
           <span className="text-base">{job.name}</span>
-          <Badge variant={STATUS_VARIANT[job.status]}>{job.status}</Badge>
+          <Badge variant={job.enable ? "default" : "secondary"}>
+            {job.enable ? "Enabled" : "Disabled"}
+          </Badge>
         </div>
         <div className="ml-2 flex-1" />
-        <div className="text-sm text-muted-foreground">
-          Next run:{" "}
-          {job.nextRunAt ? new Date(job.nextRunAt).toLocaleString() : "—"}
-        </div>
+        <div className="text-sm text-muted-foreground">{job.expression}</div>
         <div>
           <button
             onClick={(e) => {

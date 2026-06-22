@@ -1,16 +1,11 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { parseExpression } from "cron-parser";
 import { Model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import { CreateJobDto } from "./dto/create-job.dto";
 import { UpdateJobDto } from "./dto/update-job.dto";
 import { JobScheduler } from "./job/job-scheduler.service";
-import { CronJob, CronJobDocument, JobStatus } from "./schemas/cron-job.schema";
+import { CronJob, CronJobDocument } from "./schemas/cron-job.schema";
 import {
   JobExecution,
   JobExecutionDocument,
@@ -27,18 +22,15 @@ export class JobService {
   ) {}
 
   async create(dto: CreateJobDto): Promise<CronJob> {
-    this.assertValidCronExpression(dto.cronExpression);
-
     const doc = await new this.cronJobModel({
       id: uuidv4(),
       name: dto.name,
-      cronExpression: dto.cronExpression,
+      expression: dto.expression,
       actions: dto.actions,
-      enabled: dto.enabled ?? true,
-      status: JobStatus.IDLE,
+      enable: dto.enable ?? true,
     }).save();
 
-    if (doc.enabled) {
+    if (doc.enable) {
       await this.jobScheduler.schedule(doc);
     }
 
@@ -58,16 +50,12 @@ export class JobService {
   }
 
   async update(id: string, dto: UpdateJobDto): Promise<CronJob> {
-    if (dto.cronExpression) {
-      this.assertValidCronExpression(dto.cronExpression);
-    }
-
     const doc = await this.cronJobModel
       .findOneAndUpdate({ id }, { $set: dto }, { new: true })
       .exec();
     if (!doc) throw new NotFoundException(`Job ${id} not found`);
 
-    // Always resync the scheduler, not just when cronExpression/enabled change —
+    // Always resync the scheduler, not just when expression/enable change —
     // the registered cron tick closure captures the whole `cronJob` object (e.g.
     // its actions), so any update must refresh it or a stale closure keeps
     // running with outdated action data.
@@ -89,15 +77,5 @@ export class JobService {
       .find({ jobId })
       .sort({ startedAt: -1 })
       .exec();
-  }
-
-  private assertValidCronExpression(cronExpression: string): void {
-    try {
-      parseExpression(cronExpression);
-    } catch {
-      throw new BadRequestException(
-        `Invalid cron expression: ${cronExpression}`,
-      );
-    }
   }
 }
