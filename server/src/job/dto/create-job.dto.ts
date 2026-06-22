@@ -1,33 +1,33 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import {
+  ApiExtraModels,
+  ApiProperty,
+  ApiPropertyOptional,
+  getSchemaPath,
+} from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
   ArrayMinSize,
   IsBoolean,
-  IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
   ValidateNested,
 } from "class-validator";
 import { IsCronExpression } from "../../common/decorators/is-cron-expression.decorator";
-import { ActionType } from "../schemas/action.schema";
+import { ActionType } from "../action/base-action.schema";
+import { CreateSubmissionCreationActionDto } from "../action/submission-creation/submission-creation-action.dto";
+import { CreateSendMailActionDto } from "../action/send-mail/send-mail-action.dto";
 
 export class CreateActionDto {
-  @ApiProperty({ enum: [ActionType.SUBMISSION_CREATION] })
-  @IsIn([ActionType.SUBMISSION_CREATION])
+  @ApiProperty({ enum: ActionType })
   type!: ActionType;
-
-  @ApiProperty({ example: "b3f1c2..." })
-  @IsString()
-  @IsNotEmpty()
-  templateId!: string;
-
-  @ApiProperty({ example: "f7e9a1..." })
-  @IsString()
-  @IsNotEmpty()
-  boardId!: string;
 }
 
+export type CreateJobActionDto =
+  | CreateSubmissionCreationActionDto
+  | CreateSendMailActionDto;
+
+@ApiExtraModels(CreateSubmissionCreationActionDto, CreateSendMailActionDto)
 export class CreateJobDto {
   @ApiProperty({ example: "Daily feedback submission" })
   @IsString()
@@ -48,9 +48,29 @@ export class CreateJobDto {
   @IsBoolean()
   enable?: boolean;
 
-  @ApiProperty({ type: [CreateActionDto] })
+  @ApiProperty({
+    type: "array",
+    items: {
+      oneOf: [
+        { $ref: getSchemaPath(CreateSubmissionCreationActionDto) },
+        { $ref: getSchemaPath(CreateSendMailActionDto) },
+      ],
+    },
+  })
   @ValidateNested({ each: true })
-  @Type(() => CreateActionDto)
+  @Type(() => CreateActionDto, {
+    discriminator: {
+      property: "type",
+      subTypes: [
+        {
+          value: CreateSubmissionCreationActionDto,
+          name: ActionType.SUBMISSION_CREATION,
+        },
+        { value: CreateSendMailActionDto, name: ActionType.SEND_MAIL },
+      ],
+    },
+    keepDiscriminatorProperty: true,
+  })
   @ArrayMinSize(1)
-  actions!: CreateActionDto[];
+  actions!: CreateJobActionDto[];
 }

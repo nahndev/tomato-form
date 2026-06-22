@@ -23,6 +23,11 @@ services:
       BACKEND_URL: http://server:3022
     depends_on:
       - server
+  mail:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 
   server:
     build:

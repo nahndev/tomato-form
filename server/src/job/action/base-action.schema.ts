@@ -1,7 +1,8 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Schema, SchemaFactory } from "@nestjs/mongoose";
 
 export enum ActionType {
   SUBMISSION_CREATION = "SUBMISSION_CREATION",
+  SEND_MAIL = "SEND_MAIL",
 }
 
 @Schema({ discriminatorKey: "type", _id: false })
@@ -13,16 +14,3 @@ export class Action {
 }
 
 export const ActionSchema = SchemaFactory.createForClass(Action);
-
-@Schema({ _id: false })
-export class SubmissionCreationAction extends Action {
-  @Prop({ required: true })
-  templateId!: string;
-
-  @Prop({ required: true })
-  boardId!: string;
-}
-
-export const SubmissionCreationActionSchema = SchemaFactory.createForClass(
-  SubmissionCreationAction,
-);

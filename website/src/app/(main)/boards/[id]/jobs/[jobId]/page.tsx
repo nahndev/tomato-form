@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -8,8 +8,14 @@ import { Badge } from "@/components/ui/badge";
 import { useBoard } from "@/hooks/useBoards";
 import { useJob, useJobExecutions } from "@/hooks/useJobs";
 import { useTemplate } from "@/hooks/useTemplates";
+import { useUserStore } from "@/store/user.store";
 import {
+  ACTION_TYPE_SEND_MAIL,
+  JobAction,
   JobExecutionStatus,
+  Recipient,
+  RecipientType,
+  SendMailAction,
   SubmissionCreationAction,
 } from "@/types/job";
 
@@ -26,21 +32,21 @@ const EXECUTION_STATUS_VARIANT: Record<
   [JobExecutionStatus.FAILED]: "destructive",
 };
 
-function JobActionSummary({
-  index,
+const ACTION_LABEL: Record<JobAction["type"], string> = {
+  SUBMISSION_CREATION: "Create submission",
+  SEND_MAIL: "Send mail",
+};
+
+function SubmissionCreationActionSummary({
   action,
 }: {
-  index: number;
   action: SubmissionCreationAction;
 }) {
   const { data: board } = useBoard(action.boardId);
   const { data: template } = useTemplate(action.templateId);
 
   return (
-    <div className="grid grid-cols-2 gap-4 rounded-lg border border-border p-4 text-sm">
-      <div className="col-span-2 text-xs font-medium text-muted-foreground">
-        Action {index + 1}: Create submission
-      </div>
+    <>
       <div>
         <div className="text-muted-foreground">Board</div>
         <div>{board?.name ?? "—"}</div>
@@ -49,6 +55,58 @@ function JobActionSummary({
         <div className="text-muted-foreground">Template</div>
         <div>{template?.name ?? "—"}</div>
       </div>
+    </>
+  );
+}
+
+function SendMailActionSummary({ action }: { action: SendMailAction }) {
+  const users = useUserStore((s) => s.users);
+  const initUsers = useUserStore((s) => s.init);
+
+  useEffect(() => {
+    initUsers();
+  }, [initUsers]);
+
+  function recipientLabel(recipient: Recipient) {
+    if (recipient.type === RecipientType.USER) {
+      return (
+        users.find((u) => u.uuid === recipient.value)?.name ?? recipient.value
+      );
+    }
+    return recipient.value;
+  }
+
+  return (
+    <>
+      <div className="col-span-2">
+        <div className="text-muted-foreground">Subject</div>
+        <div>{action.content.subject}</div>
+      </div>
+      <div className="col-span-2">
+        <div className="text-muted-foreground">Recipients</div>
+        <div>{action.recipients.map(recipientLabel).join(", ")}</div>
+      </div>
+    </>
+  );
+}
+
+function JobActionSummary({
+  index,
+  action,
+}: {
+  index: number;
+  action: JobAction;
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-4 rounded-lg border border-border p-4 text-sm">
+      <div className="col-span-2 text-xs font-medium text-muted-foreground">
+        Action {index + 1}: {ACTION_LABEL[action.type]}
+      </div>
+      {action.type === ACTION_TYPE_SEND_MAIL ? (
+        <SendMailActionSummary action={action} />
+      ) : (
+        <SubmissionCreationActionSummary action={action} />
+      )}
     </div>
   );
 }

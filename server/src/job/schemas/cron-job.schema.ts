@@ -1,11 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document } from "mongoose";
-import {
-  Action,
-  ActionSchema,
-  ActionType,
-  SubmissionCreationActionSchema,
-} from "./action.schema";
+import { Action, ActionSchema, ActionType } from "../action/base-action.schema";
+import { SubmissionCreationActionSchema } from "../action/submission-creation/submission-creation-action.schema";
+import { SendMailActionSchema } from "../action/send-mail/send-mail-action.schema";
 
 @Schema({ timestamps: true, collection: "cron_jobs" })
 export class CronJob {
@@ -37,3 +34,4 @@ actions.discriminator(
   ActionType.SUBMISSION_CREATION,
   SubmissionCreationActionSchema,
 );
+actions.discriminator(ActionType.SEND_MAIL, SendMailActionSchema);

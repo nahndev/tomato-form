@@ -1,14 +1,15 @@
-# Update CronJob schema
+# Implement mail server for my system
 
 ## Tasks
 
-- [x] `cronExpression` should be `expression`
-- [x] `status` should removed - only need `enable`
-- [x] `lastRunAt` and `nextRunAt` and `lastError` should removed
-- [ ]
+- [ ] Add env
 
-## Tasks 02 - assertValidCronExpression should in DTO
+```shell
+SMTP_HOST=localhost
+SMTP_PORT=1025
 
-- [x] Build custom Dto validator `IsCronExpression`
-- [x] Instead using `assertValidCronExpression`, then using `IsCronExpression`
-- [x] `IsCronExpression` should using for global nextjs
+MAIL_FROM=no-reply@tomato.com
+
+```
+
+- [ ] Add package nodemailer and update `MailService` to sendMail to this `SMTP`

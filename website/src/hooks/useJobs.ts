@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { jobApi } from "@/services/job.api";
-import type { CreateJobInput, UpdateJobInput } from "@/types/job";
+import { ACTION_TYPE_SUBMISSION_CREATION } from "@/types/job";
+import type { CreateJobInput, JobAction, UpdateJobInput } from "@/types/job";
 
 const jobsKey = (boardId?: string) => ["jobs", boardId ?? "all"] as const;
 const jobKey = (id: string) => ["jobs", "item", id] as const;
@@ -29,9 +30,13 @@ export function useJobExecutions(jobId: string) {
   });
 }
 
-function invalidateJobBoards(qc: ReturnType<typeof useQueryClient>, job: { actions: { boardId: string }[] }) {
+function invalidateJobBoards(qc: ReturnType<typeof useQueryClient>, job: { actions: JobAction[] }) {
   qc.invalidateQueries({ queryKey: jobsKey() });
-  const boardIds = new Set(job.actions.map((action) => action.boardId));
+  const boardIds = new Set(
+    job.actions
+      .filter((action) => action.type === ACTION_TYPE_SUBMISSION_CREATION)
+      .map((action) => action.boardId),
+  );
   boardIds.forEach((boardId) => qc.invalidateQueries({ queryKey: jobsKey(boardId) }));
 }
 

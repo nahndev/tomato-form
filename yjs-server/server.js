@@ -15,23 +15,23 @@ const server = new Server({
     if (!fs.existsSync(file)) {
       return new Y.Doc();
     }
-
-    const doc = new Y.Doc();
-
-    const data = fs.readFileSync(file);
-
-    Y.applyUpdate(doc, new Uint8Array(data));
-
-    return doc;
+    return YDocHelper.fromFile(file);
   },
 
   async onStoreDocument({ documentName, document }) {
     const file = `${DATA_DIR}/${documentName}.yjs`;
-
     const update = Y.encodeStateAsUpdate(document);
-
     fs.writeFileSync(file, Buffer.from(update));
   },
 });
 
 server.listen();
+
+class YDocHelper {
+  static fromFile(file) {
+    const doc = new Y.Doc();
+    const data = fs.readFileSync(file);
+    Y.applyUpdate(doc, new Uint8Array(data));
+    return doc;
+  }
+}

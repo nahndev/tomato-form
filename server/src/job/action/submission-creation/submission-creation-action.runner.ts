@@ -4,7 +4,7 @@ import {
   ActionRunContext,
   ActionRunnerHandler,
 } from "../action-runner.interface";
-import { SubmissionCreationAction } from "../../schemas/action.schema";
+import { SubmissionCreationAction } from "./submission-creation-action.schema";
 
 @Injectable()
 export class SubmissionCreationActionRunner implements ActionRunnerHandler<SubmissionCreationAction> {

@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2, Plus, Trash2 } from "lucide-react";
-import { useFormik } from "formik";
+import { getIn, useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -19,16 +19,52 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import CronExpressionBuilder from "@/features/board/components/job/CronExpressionBuilder";
-import { useBoards } from "@/hooks/useBoards";
+import ActionCard, {
+  ActionCardErrors,
+  JobActionPatch,
+} from "@/features/board/components/job/actions/ActionCard";
+import {
+  ACTION_TYPE_OPTIONS,
+  createDefaultAction,
+} from "@/features/board/components/job/actions/create-default-action";
 import { useCreateJob } from "@/hooks/useJobs";
-import { useTemplates } from "@/hooks/useTemplates";
 import { isCronExpression } from "@/lib/validators/cron-expression";
-import { ACTION_TYPE_SUBMISSION_CREATION } from "@/types/job";
+import {
+  ACTION_TYPE_SEND_MAIL,
+  ACTION_TYPE_SUBMISSION_CREATION,
+  JobAction,
+  RecipientType,
+} from "@/types/job";
 
-interface ActionFormValues {
-  templateId: string;
-  boardId: string;
-}
+const submissionCreationActionSchema = Yup.object({
+  type: Yup.string().required(),
+  templateId: Yup.string().required("Template is required"),
+  boardId: Yup.string().required("Board is required"),
+});
+
+const sendMailActionSchema = Yup.object({
+  type: Yup.string().required(),
+  recipients: Yup.array()
+    .of(
+      Yup.object({
+        type: Yup.string()
+          .oneOf([RecipientType.MAIL, RecipientType.USER])
+          .required(),
+        value: Yup.string().required("Value is required"),
+      }),
+    )
+    .min(1, "At least one recipient is required"),
+  content: Yup.object({
+    subject: Yup.string().required("Subject is required"),
+    body: Yup.string().required("Body is required"),
+  }),
+});
+
+const actionSchema = Yup.lazy((value: { type?: string } | undefined) =>
+  value?.type === ACTION_TYPE_SEND_MAIL
+    ? sendMailActionSchema
+    : submissionCreationActionSchema,
+);
 
 const createSchema = Yup.object({
   name: Yup.string().required("Job name is required"),
@@ -36,12 +72,7 @@ const createSchema = Yup.object({
     .required("Schedule is required")
     .test("is-cron-expression", "Invalid cron expression", isCronExpression),
   actions: Yup.array()
-    .of(
-      Yup.object({
-        templateId: Yup.string().required("Template is required"),
-        boardId: Yup.string().required("Board is required"),
-      }),
-    )
+    .of(actionSchema)
     .min(1, "At least one action is required"),
 });
 
@@ -55,15 +86,15 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
   onOpenChange,
 }) => {
   const board = useBoardContext();
-  const { data: boards = [] } = useBoards();
-  const { data: templates = [] } = useTemplates();
   const { mutateAsync: createJob } = useCreateJob();
 
   const formik = useFormik({
     initialValues: {
       name: "",
       expression: "0 9 * * *",
-      actions: [{ templateId: "", boardId: board.id }] as ActionFormValues[],
+      actions: [
+        createDefaultAction(ACTION_TYPE_SUBMISSION_CREATION, board.id),
+      ] as JobAction[],
     },
     validationSchema: createSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -72,11 +103,7 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
           name: values.name,
           expression: values.expression,
           enable: true,
-          actions: values.actions.map((action) => ({
-            type: ACTION_TYPE_SUBMISSION_CREATION,
-            templateId: action.templateId,
-            boardId: action.boardId,
-          })),
+          actions: values.actions,
         });
         toast.success("Job created");
         resetForm();
@@ -90,9 +117,16 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
     },
   });
 
-  function updateAction(index: number, patch: Partial<ActionFormValues>) {
+  function updateAction(index: number, patch: JobActionPatch) {
     const next = formik.values.actions.map((action, i) =>
-      i === index ? { ...action, ...patch } : action,
+      i === index ? ({ ...action, ...patch } as JobAction) : action,
+    );
+    formik.setFieldValue("actions", next);
+  }
+
+  function changeActionType(index: number, type: JobAction["type"]) {
+    const next = formik.values.actions.map((action, i) =>
+      i === index ? createDefaultAction(type, board.id) : action,
     );
     formik.setFieldValue("actions", next);
   }
@@ -100,7 +134,7 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
   function addAction() {
     formik.setFieldValue("actions", [
       ...formik.values.actions,
-      { templateId: "", boardId: board.id },
+      createDefaultAction(ACTION_TYPE_SUBMISSION_CREATION, board.id),
     ]);
   }
 
@@ -111,13 +145,10 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
     );
   }
 
-  function actionError(index: number, field: keyof ActionFormValues) {
-    const errors = formik.errors.actions;
-    if (!Array.isArray(errors)) return undefined;
-    const entry = errors[index];
-    return entry && typeof entry === "object"
-      ? (entry as Record<string, string>)[field]
-      : undefined;
+  function actionErrors(index: number): ActionCardErrors | undefined {
+    return getIn(formik.errors, `actions[${index}]`) as
+      | ActionCardErrors
+      | undefined;
   }
 
   return (
@@ -140,7 +171,7 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
           <DialogTitle>New Job</DialogTitle>
           <DialogDescription>
             Run one or more scheduled actions in the background, like
-            creating a submission on a recurring basis.
+            creating a submission or sending an email on a recurring basis.
           </DialogDescription>
         </DialogHeader>
 
@@ -184,7 +215,7 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium text-muted-foreground">
-                    Action {index + 1}: Create submission
+                    Action {index + 1}
                   </span>
                   <button
                     type="button"
@@ -198,42 +229,33 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor={`job-board-${index}`}>Board</Label>
+                  <Label htmlFor={`job-action-type-${index}`}>
+                    Action Type
+                  </Label>
                   <Select
-                    id={`job-board-${index}`}
-                    value={action.boardId}
+                    id={`job-action-type-${index}`}
+                    value={action.type}
                     onChange={(e) =>
-                      updateAction(index, { boardId: e.target.value })
+                      changeActionType(
+                        index,
+                        e.target.value as JobAction["type"],
+                      )
                     }
-                    error={actionError(index, "boardId")}
                   >
-                    <option value="">Select a board…</option>
-                    {boards.map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {b.name}
+                    {ACTION_TYPE_OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                   </Select>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor={`job-template-${index}`}>Template</Label>
-                  <Select
-                    id={`job-template-${index}`}
-                    value={action.templateId}
-                    onChange={(e) =>
-                      updateAction(index, { templateId: e.target.value })
-                    }
-                    error={actionError(index, "templateId")}
-                  >
-                    <option value="">Select a template…</option>
-                    {templates.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.name}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
+                <ActionCard
+                  idPrefix={`job-action-${index}`}
+                  value={action}
+                  onChange={(patch) => updateAction(index, patch)}
+                  errors={actionErrors(index)}
+                />
               </div>
             ))}
           </div>

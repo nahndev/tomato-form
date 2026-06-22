@@ -1,4 +1,4 @@
-import { Action } from "../schemas/action.schema";
+import { Action } from "./base-action.schema";
 
 export interface ActionRunContext {
   results: Record<string, unknown>[];
