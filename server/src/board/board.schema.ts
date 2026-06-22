@@ -10,7 +10,7 @@ export class Board {
   name!: string;
 
   @Prop({ type: [String], default: [] })
-  templateIds: string[];
+  templateIds: string[] = [];
 }
 
 export type BoardDocument = Board & Document;

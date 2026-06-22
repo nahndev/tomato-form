@@ -1,19 +1,20 @@
-ex:
+# Add new action - SendMail
 
-A { x: 0, width: 2, idx: 0, y: 0, height: 50 }
-B { x: 2, width: 2, idx: 1, y: 0, height: 100 }
-C { x: 0, width: 2, idx: 2, y: 50, height: 50 }
+## Tasks
 
-Moving C to mouse { x: 1, y: 50}
-Because C collision with B so result is:
-Using dragging:
-A { x: 0, width: 2, idx: 0, y: 0, height: 50 }
-B { x: 2, width: 2, idx: 1, y: 100, height: 100 }
-C { x: 0, width: 2, idx: 0.5, y: 50, height: 50 }
--> keep all, only update index for C. Update y for B.
+- [ ] Add action `SendMailAction` to send mail to user
+- [ ] The `SendMailAction` will send `mail` base on `content` when job running.
+- [ ] The `MailService` should is `mockup` and only write to logging.
+- [ ] The `MailService` should is shared service for nextjs.
 
-End dragging:
-A { x: 0, width: 2, idx: 0, y: 0, height: 50 }
-B { x: 2, width: 2, idx: 1, y: 100, height: 100 }
-C { x: 1, width: 2, idx: 0.5, y: 50, height: 50 }
--> update all of C and B.
+- [ ] Add new UI for `SendMailActionCard` include `RecipientEditor` and `ContentEditor`
+- [ ] `RecipientEditor` with multiple line, every line include 2 column `type` and `value`
+- [ ] `type` is `RecipientType` include `mail` and `user`
+- [ ] With `mail` should `input` to enter mail
+- [ ] With `user` should `selector` to select user
+- [ ] `ContentEditor` include `subject` and `mail`.
+
+## Approval rules
+
+- Should wrap code of `send-mail-action` to folder.
+- Should

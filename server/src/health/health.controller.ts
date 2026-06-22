@@ -1,9 +1,9 @@
 import { Controller, Get } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiOkResponse } from "@nestjs/swagger";
+import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 class HealthResponseDto {
-  status: string;
-  timestamp: string;
+  status!: string;
+  timestamp!: string;
 }
 
 @ApiTags("Health")

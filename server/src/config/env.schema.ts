@@ -9,17 +9,17 @@ import {
 
 export class EnvironmentVariables {
   @IsIn(["development", "production", "test"])
-  NODE_ENV: string;
+  NODE_ENV!: string;
 
   @IsNumber()
   @IsOptional()
   PORT: number = 3022;
 
   @IsString()
-  MONGODB_URI: string;
+  MONGODB_URI!: string;
 
   @IsString()
-  CORS_ORIGIN: string;
+  CORS_ORIGIN!: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

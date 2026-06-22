@@ -7,7 +7,7 @@ import { User } from "./user.schema";
 })
 export class UserGateway {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   emitUsers(users: User[]) {
     this.server.emit("users:updated", users);

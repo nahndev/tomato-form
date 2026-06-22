@@ -13,7 +13,7 @@ export class Submission {
   templateId!: string;
 
   @Prop({ type: Object, default: {} })
-  data: Record<string, unknown>;
+  data: Record<string, unknown> = {};
 }
 
 export type SubmissionDocument = Submission & Document;
