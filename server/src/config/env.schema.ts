@@ -1,5 +1,6 @@
 import { plainToInstance } from "class-transformer";
 import {
+  IsEmail,
   IsIn,
   IsNumber,
   IsOptional,
@@ -20,6 +21,16 @@ export class EnvironmentVariables {
 
   @IsString()
   CORS_ORIGIN!: string;
+
+  @IsString()
+  SMTP_HOST!: string;
+
+  @IsNumber()
+  @IsOptional()
+  SMTP_PORT: number = 1025;
+
+  @IsEmail()
+  MAIL_FROM!: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

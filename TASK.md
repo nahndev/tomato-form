@@ -2,7 +2,7 @@
 
 ## Tasks
 
-- [ ] Add env
+- [x] Add env
 
 ```shell
 SMTP_HOST=localhost
@@ -12,4 +12,4 @@ MAIL_FROM=no-reply@tomato.com
 
 ```
 
-- [ ] Add package nodemailer and update `MailService` to sendMail to this `SMTP`
+- [x] Add package nodemailer and update `MailService` to sendMail to this `SMTP`
