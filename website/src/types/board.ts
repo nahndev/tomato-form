@@ -11,6 +11,7 @@ export interface Board {
   id: string;
   name: string;
   templateIds: string[];
+  jobIds: string[];
   createdAt?: string;
   updatedAt?: string;
 }

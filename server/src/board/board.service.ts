@@ -45,4 +45,18 @@ export class BoardService {
     if (result.deletedCount === 0)
       throw new NotFoundException(`Board ${id} not found`);
   }
+
+  async addJobId(boardId: string, jobId: string): Promise<void> {
+    const result = await this.boardModel
+      .updateOne({ id: boardId }, { $push: { jobIds: jobId } })
+      .exec();
+    if (result.matchedCount === 0)
+      throw new NotFoundException(`Board ${boardId} not found`);
+  }
+
+  async removeJobId(jobId: string): Promise<void> {
+    await this.boardModel
+      .updateMany({ jobIds: jobId }, { $pull: { jobIds: jobId } })
+      .exec();
+  }
 }

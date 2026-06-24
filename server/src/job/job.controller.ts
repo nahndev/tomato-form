@@ -7,19 +7,15 @@ import {
   HttpStatus,
   Param,
   Patch,
-  Post,
   Put,
-  Query,
 } from "@nestjs/common";
 import {
   ApiBody,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { CreateJobDto } from "./dto/create-job.dto";
 import { UpdateJobDto } from "./dto/update-job.dto";
 import { JobService } from "./job.service";
 
@@ -27,23 +23,6 @@ import { JobService } from "./job.service";
 @Controller("jobs")
 export class JobController {
   constructor(private readonly jobService: JobService) {}
-
-  @Post()
-  @ApiOperation({ summary: "Create a new job" })
-  @ApiBody({ type: CreateJobDto })
-  @ApiResponse({ status: 201, description: "Job created" })
-  @ApiResponse({ status: 400, description: "Invalid cron expression" })
-  create(@Body() dto: CreateJobDto) {
-    return this.jobService.create(dto);
-  }
-
-  @Get()
-  @ApiOperation({ summary: "List jobs, optionally filtered by board" })
-  @ApiQuery({ name: "boardId", required: false, type: String })
-  @ApiResponse({ status: 200, description: "Jobs list" })
-  findAll(@Query("boardId") boardId?: string) {
-    return this.jobService.findAll(boardId);
-  }
 
   @Get(":id")
   @ApiOperation({ summary: "Get a job by ID" })

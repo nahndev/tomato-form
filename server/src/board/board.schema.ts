@@ -11,6 +11,9 @@ export class Board {
 
   @Prop({ type: [String], default: [] })
   templateIds: string[] = [];
+
+  @Prop({ type: [String], default: [] })
+  jobIds: string[] = [];
 }
 
 export type BoardDocument = Board & Document;

@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import { CronEmitter } from "../emitter/cron/cron.emitter";
+import { JobRemovedEvent } from "../shared/events/job-removed.event";
 import { JobTriggeredEvent } from "../shared/events/job-triggered.event";
 import { CreateJobDto } from "./dto/create-job.dto";
 import { UpdateJobDto } from "./dto/update-job.dto";
@@ -20,6 +22,7 @@ export class JobService {
     @InjectModel(JobExecution.name)
     private readonly jobExecutionModel: Model<JobExecutionDocument>,
     private readonly cronEmitter: CronEmitter,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async create(dto: CreateJobDto): Promise<Job> {
@@ -42,10 +45,8 @@ export class JobService {
     return doc;
   }
 
-  async findAll(boardId?: string): Promise<Job[]> {
-    return this.jobModel
-      .find(boardId ? { "actions.boardId": boardId } : {})
-      .exec();
+  async findByIds(ids: string[]): Promise<Job[]> {
+    return this.jobModel.find({ id: { $in: ids } }).exec();
   }
 
   async findOne(id: string): Promise<Job> {
@@ -68,6 +69,7 @@ export class JobService {
     if (result.deletedCount === 0)
       throw new NotFoundException(`Job ${id} not found`);
     await this.cronEmitter.remove(id);
+    this.eventEmitter.emit(JobRemovedEvent.name, new JobRemovedEvent(id));
   }
 
   async findExecutions(jobId: string): Promise<JobExecution[]> {

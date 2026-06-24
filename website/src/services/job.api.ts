@@ -17,9 +17,9 @@ interface ApiResponse<T> {
 }
 
 export const jobApi = {
-  list(boardId?: string): Promise<Job[]> {
+  list(boardId: string): Promise<Job[]> {
     return api
-      .get<ApiResponse<Job[]>>("/jobs", { params: { boardId } })
+      .get<ApiResponse<Job[]>>(`/boards/${boardId}/jobs`)
       .then((r) => r.data.data);
   },
 
@@ -27,8 +27,10 @@ export const jobApi = {
     return api.get<ApiResponse<Job>>(`/jobs/${id}`).then((r) => r.data.data);
   },
 
-  create(input: CreateJobInput): Promise<Job> {
-    return api.post<ApiResponse<Job>>("/jobs", input).then((r) => r.data.data);
+  create(boardId: string, input: CreateJobInput): Promise<Job> {
+    return api
+      .post<ApiResponse<Job>>(`/boards/${boardId}/jobs`, input)
+      .then((r) => r.data.data);
   },
 
   update(id: string, input: UpdateJobInput): Promise<Job> {

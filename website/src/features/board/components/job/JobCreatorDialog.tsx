@@ -86,7 +86,7 @@ const JobCreatorDialog: React.FC<JobCreatorDialogProps> = ({
   onOpenChange,
 }) => {
   const board = useBoardContext();
-  const { mutateAsync: createJob } = useCreateJob();
+  const { mutateAsync: createJob } = useCreateJob(board.id);
 
   const formik = useFormik({
     initialValues: {
