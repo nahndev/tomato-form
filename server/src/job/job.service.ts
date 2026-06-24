@@ -31,7 +31,7 @@ export class JobService {
       name: dto.name,
       expression: dto.expression,
       actions: dto.actions,
-      enable: dto.enable ?? true,
+      enable: false,
     }).save();
 
     if (doc.enable) {
@@ -92,10 +92,10 @@ export class JobService {
         doc.expression,
         new JobTriggeredEvent(doc.id),
       );
-    } else {
-      await this.cronEmitter.remove(doc.id);
+      return doc;
     }
 
+    await this.cronEmitter.remove(doc.id);
     return doc;
   }
 }

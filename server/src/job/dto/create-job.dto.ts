@@ -1,22 +1,15 @@
-import {
-  ApiExtraModels,
-  ApiProperty,
-  ApiPropertyOptional,
-  getSchemaPath,
-} from "@nestjs/swagger";
+import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
   ArrayMinSize,
-  IsBoolean,
   IsNotEmpty,
-  IsOptional,
   IsString,
   ValidateNested,
 } from "class-validator";
 import { IsCronExpression } from "../../common/decorators/is-cron-expression.decorator";
 import { ActionType } from "../action/base-action.schema";
-import { CreateSubmissionCreationActionDto } from "../action/submission-creation/submission-creation-action.dto";
 import { CreateSendMailActionDto } from "../action/send-mail/send-mail-action.dto";
+import { CreateSubmissionCreationActionDto } from "../action/submission-creation/submission-creation-action.dto";
 
 export class CreateActionDto {
   @ApiProperty({ enum: ActionType })
@@ -42,11 +35,6 @@ export class CreateJobDto {
   @IsNotEmpty()
   @IsCronExpression()
   expression!: string;
-
-  @ApiPropertyOptional({ default: true })
-  @IsOptional()
-  @IsBoolean()
-  enable?: boolean;
 
   @ApiProperty({
     type: "array",
