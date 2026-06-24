@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { CqrsModule } from "@nestjs/cqrs";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 import { ScheduleModule } from "@nestjs/schedule";
 import { validateEnv } from "./config/env.schema";
 import { DatabaseModule } from "./database/database.module";
@@ -18,7 +18,7 @@ import { SubmissionModule } from "./submission/submission.module";
       envFilePath: ".env",
       validate: validateEnv,
     }),
-    CqrsModule.forRoot(),
+    EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
     DatabaseModule,
     HealthModule,

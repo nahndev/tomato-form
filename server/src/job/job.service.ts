@@ -3,16 +3,14 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import { CronEmitter } from "../emitter/cron/cron.emitter";
-import { EmitterService } from "../emitter/emitter.service";
 import { JobTriggeredEvent } from "../shared/events/job-triggered.event";
 import { CreateJobDto } from "./dto/create-job.dto";
 import { UpdateJobDto } from "./dto/update-job.dto";
-import { JobRunner } from "./job/job-runner.service";
-import { Job, JobDocument } from "./schemas/job.schema";
 import {
   JobExecution,
   JobExecutionDocument,
 } from "./schemas/job-execution.schema";
+import { Job, JobDocument } from "./schemas/job.schema";
 
 @Injectable()
 export class JobService {
@@ -21,23 +19,22 @@ export class JobService {
     private readonly jobModel: Model<JobDocument>,
     @InjectModel(JobExecution.name)
     private readonly jobExecutionModel: Model<JobExecutionDocument>,
-    private readonly jobRunner: JobRunner,
-    private readonly emitterService: EmitterService,
+    private readonly cronEmitter: CronEmitter,
   ) {}
 
   async create(dto: CreateJobDto): Promise<Job> {
     const doc = await new this.jobModel({
       id: uuidv4(),
       name: dto.name,
-      emitter: { expression: dto.expression },
+      expression: dto.expression,
       actions: dto.actions,
       enable: dto.enable ?? true,
     }).save();
 
     if (doc.enable) {
-      await this.emitterService.register(
+      await this.cronEmitter.register(
         doc.id,
-        new CronEmitter(doc.emitter.expression),
+        doc.expression,
         new JobTriggeredEvent(doc.id),
       );
     }
@@ -58,30 +55,11 @@ export class JobService {
   }
 
   async update(id: string, dto: UpdateJobDto): Promise<Job> {
-    const { expression, ...rest } = dto;
-    const update: Record<string, unknown> = { ...rest };
-    if (expression !== undefined) {
-      update["emitter.expression"] = expression;
-    }
-
     const doc = await this.jobModel
-      .findOneAndUpdate({ id }, { $set: update }, { new: true })
+      .findOneAndUpdate({ id }, { $set: dto }, { new: true })
       .exec();
     if (!doc) throw new NotFoundException(`Job ${id} not found`);
-
-    // Always resync, not just when expression/enable change — the cron
-    // emitter's persisted expression must stay in sync with the job's, and
-    // toggling `enable` needs to register/unregister the schedule.
-    if (doc.enable) {
-      await this.emitterService.register(
-        doc.id,
-        new CronEmitter(doc.emitter.expression),
-        new JobTriggeredEvent(doc.id),
-      );
-    } else {
-      await this.emitterService.remove(doc.id);
-    }
-
+    this.setEnabled(doc.id, false);
     return doc;
   }
 
@@ -89,7 +67,7 @@ export class JobService {
     const result = await this.jobModel.deleteOne({ id }).exec();
     if (result.deletedCount === 0)
       throw new NotFoundException(`Job ${id} not found`);
-    await this.emitterService.remove(id);
+    await this.cronEmitter.remove(id);
   }
 
   async findExecutions(jobId: string): Promise<JobExecution[]> {
@@ -100,9 +78,22 @@ export class JobService {
       .exec();
   }
 
-  async execute(jobId: string): Promise<void> {
-    const job = await this.jobModel.findOne({ id: jobId }).exec();
-    if (!job) return;
-    await this.jobRunner.run(job);
+  async setEnabled(id: string, enable: boolean): Promise<Job> {
+    const doc = await this.jobModel
+      .findOneAndUpdate({ id }, { $set: { enable } }, { new: true })
+      .exec();
+    if (!doc) throw new NotFoundException(`Job ${id} not found`);
+
+    if (doc.enable) {
+      await this.cronEmitter.register(
+        doc.id,
+        doc.expression,
+        new JobTriggeredEvent(doc.id),
+      );
+    } else {
+      await this.cronEmitter.remove(doc.id);
+    }
+
+    return doc;
   }
 }

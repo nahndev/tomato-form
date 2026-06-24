@@ -1,27 +1,38 @@
 import { Injectable, Logger } from "@nestjs/common";
+import { OnEvent } from "@nestjs/event-emitter";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
-import { ActionRunnerRegistry } from "../action/action-runner-registry.service";
-import { ActionRunContext } from "../action/action-runner.interface";
-import { Job } from "../schemas/job.schema";
+import { JobTriggeredEvent } from "../shared/events/job-triggered.event";
+import { ActionRunnerRegistry } from "./action/action-runner-registry.service";
+import { ActionRunContext } from "./action/action-runner.interface";
+import { Job, JobDocument } from "./schemas/job.schema";
 import {
   JobExecution,
   JobExecutionDocument,
   JobExecutionStatus,
-} from "../schemas/job-execution.schema";
+} from "./schemas/job-execution.schema";
 
 @Injectable()
-export class JobRunner {
-  private readonly logger = new Logger(JobRunner.name);
+export class JobHandler {
+  private readonly logger = new Logger(JobHandler.name);
 
   constructor(
+    @InjectModel(Job.name)
+    private readonly jobModel: Model<JobDocument>,
     @InjectModel(JobExecution.name)
     private readonly jobExecutionModel: Model<JobExecutionDocument>,
     private readonly actionRunner: ActionRunnerRegistry,
   ) {}
 
-  async run(job: Job): Promise<JobExecution> {
+  @OnEvent(JobTriggeredEvent.name)
+  async handle(event: JobTriggeredEvent): Promise<void> {
+    const job = await this.jobModel.findOne({ id: event.jobId }).exec();
+    if (!job) return;
+    await this.run(job);
+  }
+
+  private async run(job: Job): Promise<JobExecution> {
     const execution = await new this.jobExecutionModel({
       id: uuidv4(),
       jobId: job.id,

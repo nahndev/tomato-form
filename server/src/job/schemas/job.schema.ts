@@ -1,4 +1,3 @@
-import { Cron, CronSchema } from "@/job/schemas/cron.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document } from "mongoose";
 import { Action, ActionSchema, ActionType } from "../action/base-action.schema";
@@ -13,8 +12,8 @@ export class Job {
   @Prop({ required: true })
   name!: string;
 
-  @Prop({ type: CronSchema, required: true })
-  emitter!: Cron;
+  @Prop({ required: true })
+  expression!: string;
 
   @Prop({ type: [ActionSchema], default: [] })
   actions!: Action[];

@@ -8,9 +8,8 @@ import { ActionRunnerRegistry } from "./action/action-runner-registry.service";
 import { SubmissionCreationActionRunner } from "./action/submission-creation/submission-creation-action.runner";
 import { SendMailActionRunner } from "./action/send-mail/send-mail-action.runner";
 import { JobController } from "./job.controller";
+import { JobHandler } from "./job.handler";
 import { JobService } from "./job.service";
-import { JobRunner } from "./job/job-runner.service";
-import { JobTriggeredListener } from "./job/job-triggered.listener";
 import { Job, JobSchema } from "./schemas/job.schema";
 import {
   JobExecution,
@@ -31,8 +30,7 @@ import {
   controllers: [JobController],
   providers: [
     JobService,
-    JobRunner,
-    JobTriggeredListener,
+    JobHandler,
     ActionRunnerRegistry,
     SubmissionCreationActionRunner,
     SendMailActionRunner,

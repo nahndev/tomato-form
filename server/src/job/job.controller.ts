@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -71,6 +72,24 @@ export class JobController {
   @ApiResponse({ status: 404, description: "Job not found" })
   update(@Param("id") id: string, @Body() dto: UpdateJobDto) {
     return this.jobService.update(id, dto);
+  }
+
+  @Patch(":id/activate")
+  @ApiOperation({ summary: "Activate a job" })
+  @ApiParam({ name: "id", type: String })
+  @ApiResponse({ status: 200, description: "Job activated" })
+  @ApiResponse({ status: 404, description: "Job not found" })
+  activate(@Param("id") id: string) {
+    return this.jobService.setEnabled(id, true);
+  }
+
+  @Patch(":id/deactivate")
+  @ApiOperation({ summary: "Deactivate a job" })
+  @ApiParam({ name: "id", type: String })
+  @ApiResponse({ status: 200, description: "Job deactivated" })
+  @ApiResponse({ status: 404, description: "Job not found" })
+  deactivate(@Param("id") id: string) {
+    return this.jobService.setEnabled(id, false);
   }
 
   @Delete(":id")
