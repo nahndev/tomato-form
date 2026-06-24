@@ -2,10 +2,13 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
+import { CronEmitter } from "../emitter/cron/cron.emitter";
+import { EmitterService } from "../emitter/emitter.service";
+import { JobTriggeredEvent } from "../shared/events/job-triggered.event";
 import { CreateJobDto } from "./dto/create-job.dto";
 import { UpdateJobDto } from "./dto/update-job.dto";
-import { JobScheduler } from "./job/job-scheduler.service";
-import { CronJob, CronJobDocument } from "./schemas/cron-job.schema";
+import { JobRunner } from "./job/job-runner.service";
+import { Job, JobDocument } from "./schemas/job.schema";
 import {
   JobExecution,
   JobExecutionDocument,
@@ -14,61 +17,79 @@ import {
 @Injectable()
 export class JobService {
   constructor(
-    @InjectModel(CronJob.name)
-    private readonly cronJobModel: Model<CronJobDocument>,
+    @InjectModel(Job.name)
+    private readonly jobModel: Model<JobDocument>,
     @InjectModel(JobExecution.name)
     private readonly jobExecutionModel: Model<JobExecutionDocument>,
-    private readonly jobScheduler: JobScheduler,
+    private readonly jobRunner: JobRunner,
+    private readonly emitterService: EmitterService,
   ) {}
 
-  async create(dto: CreateJobDto): Promise<CronJob> {
-    const doc = await new this.cronJobModel({
+  async create(dto: CreateJobDto): Promise<Job> {
+    const doc = await new this.jobModel({
       id: uuidv4(),
       name: dto.name,
-      expression: dto.expression,
+      emitter: { expression: dto.expression },
       actions: dto.actions,
       enable: dto.enable ?? true,
     }).save();
 
     if (doc.enable) {
-      await this.jobScheduler.schedule(doc);
+      await this.emitterService.register(
+        doc.id,
+        new CronEmitter(doc.emitter.expression),
+        new JobTriggeredEvent(doc.id),
+      );
     }
 
     return doc;
   }
 
-  async findAll(boardId?: string): Promise<CronJob[]> {
-    return this.cronJobModel
+  async findAll(boardId?: string): Promise<Job[]> {
+    return this.jobModel
       .find(boardId ? { "actions.boardId": boardId } : {})
       .exec();
   }
 
-  async findOne(id: string): Promise<CronJob> {
-    const doc = await this.cronJobModel.findOne({ id }).exec();
+  async findOne(id: string): Promise<Job> {
+    const doc = await this.jobModel.findOne({ id }).exec();
     if (!doc) throw new NotFoundException(`Job ${id} not found`);
     return doc;
   }
 
-  async update(id: string, dto: UpdateJobDto): Promise<CronJob> {
-    const doc = await this.cronJobModel
-      .findOneAndUpdate({ id }, { $set: dto }, { new: true })
+  async update(id: string, dto: UpdateJobDto): Promise<Job> {
+    const { expression, ...rest } = dto;
+    const update: Record<string, unknown> = { ...rest };
+    if (expression !== undefined) {
+      update["emitter.expression"] = expression;
+    }
+
+    const doc = await this.jobModel
+      .findOneAndUpdate({ id }, { $set: update }, { new: true })
       .exec();
     if (!doc) throw new NotFoundException(`Job ${id} not found`);
 
-    // Always resync the scheduler, not just when expression/enable change —
-    // the registered cron tick closure captures the whole `cronJob` object (e.g.
-    // its actions), so any update must refresh it or a stale closure keeps
-    // running with outdated action data.
-    await this.jobScheduler.reschedule(doc);
+    // Always resync, not just when expression/enable change — the cron
+    // emitter's persisted expression must stay in sync with the job's, and
+    // toggling `enable` needs to register/unregister the schedule.
+    if (doc.enable) {
+      await this.emitterService.register(
+        doc.id,
+        new CronEmitter(doc.emitter.expression),
+        new JobTriggeredEvent(doc.id),
+      );
+    } else {
+      await this.emitterService.remove(doc.id);
+    }
 
     return doc;
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.cronJobModel.deleteOne({ id }).exec();
+    const result = await this.jobModel.deleteOne({ id }).exec();
     if (result.deletedCount === 0)
       throw new NotFoundException(`Job ${id} not found`);
-    this.jobScheduler.unschedule(id);
+    await this.emitterService.remove(id);
   }
 
   async findExecutions(jobId: string): Promise<JobExecution[]> {
@@ -77,5 +98,11 @@ export class JobService {
       .find({ jobId })
       .sort({ startedAt: -1 })
       .exec();
+  }
+
+  async execute(jobId: string): Promise<void> {
+    const job = await this.jobModel.findOne({ id: jobId }).exec();
+    if (!job) return;
+    await this.jobRunner.run(job);
   }
 }

@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
+import { EmitterModule } from "../emitter/emitter.module";
 import { SubmissionModule } from "../submission/submission.module";
 import { UserModule } from "../user/user.module";
 import { MailModule } from "../mail/mail.module";
@@ -9,8 +10,8 @@ import { SendMailActionRunner } from "./action/send-mail/send-mail-action.runner
 import { JobController } from "./job.controller";
 import { JobService } from "./job.service";
 import { JobRunner } from "./job/job-runner.service";
-import { JobScheduler } from "./job/job-scheduler.service";
-import { CronJob, CronJobSchema } from "./schemas/cron-job.schema";
+import { JobTriggeredListener } from "./job/job-triggered.listener";
+import { Job, JobSchema } from "./schemas/job.schema";
 import {
   JobExecution,
   JobExecutionSchema,
@@ -19,18 +20,19 @@ import {
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: CronJob.name, schema: CronJobSchema },
+      { name: Job.name, schema: JobSchema },
       { name: JobExecution.name, schema: JobExecutionSchema },
     ]),
     SubmissionModule,
     UserModule,
     MailModule,
+    EmitterModule,
   ],
   controllers: [JobController],
   providers: [
     JobService,
     JobRunner,
-    JobScheduler,
+    JobTriggeredListener,
     ActionRunnerRegistry,
     SubmissionCreationActionRunner,
     SendMailActionRunner,

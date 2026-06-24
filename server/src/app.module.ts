@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { CqrsModule } from "@nestjs/cqrs";
 import { ScheduleModule } from "@nestjs/schedule";
 import { validateEnv } from "./config/env.schema";
 import { DatabaseModule } from "./database/database.module";
@@ -17,6 +18,7 @@ import { SubmissionModule } from "./submission/submission.module";
       envFilePath: ".env",
       validate: validateEnv,
     }),
+    CqrsModule.forRoot(),
     ScheduleModule.forRoot(),
     DatabaseModule,
     HealthModule,

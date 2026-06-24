@@ -4,7 +4,7 @@ import { Model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import { ActionRunnerRegistry } from "../action/action-runner-registry.service";
 import { ActionRunContext } from "../action/action-runner.interface";
-import { CronJob } from "../schemas/cron-job.schema";
+import { Job } from "../schemas/job.schema";
 import {
   JobExecution,
   JobExecutionDocument,
@@ -21,20 +21,20 @@ export class JobRunner {
     private readonly actionRunner: ActionRunnerRegistry,
   ) {}
 
-  async run(cronJob: CronJob): Promise<JobExecution> {
+  async run(job: Job): Promise<JobExecution> {
     const execution = await new this.jobExecutionModel({
       id: uuidv4(),
-      jobId: cronJob.id,
+      jobId: job.id,
       status: JobExecutionStatus.RUNNING,
       startedAt: new Date(),
     }).save();
 
     try {
-      const results = await this.dispatch(cronJob);
+      const results = await this.dispatch(job);
       await this.complete(execution.id, JobExecutionStatus.SUCCESS, results);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
-      this.logger.error(`Job ${cronJob.id} failed: ${message}`);
+      this.logger.error(`Job ${job.id} failed: ${message}`);
       await this.complete(
         execution.id,
         JobExecutionStatus.FAILED,
@@ -49,9 +49,9 @@ export class JobRunner {
     return refreshed!;
   }
 
-  private async dispatch(cronJob: CronJob): Promise<Record<string, unknown>[]> {
+  private async dispatch(job: Job): Promise<Record<string, unknown>[]> {
     const context: ActionRunContext = { results: [] };
-    for (const action of cronJob.actions) {
+    for (const action of job.actions) {
       const runner = this.actionRunner.getRunner(action.type);
       const result = await runner.run(action, context);
       context.results.push(result);

@@ -1,19 +1,20 @@
+import { Cron, CronSchema } from "@/job/schemas/cron.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document } from "mongoose";
 import { Action, ActionSchema, ActionType } from "../action/base-action.schema";
-import { SubmissionCreationActionSchema } from "../action/submission-creation/submission-creation-action.schema";
 import { SendMailActionSchema } from "../action/send-mail/send-mail-action.schema";
+import { SubmissionCreationActionSchema } from "../action/submission-creation/submission-creation-action.schema";
 
-@Schema({ timestamps: true, collection: "cron_jobs" })
-export class CronJob {
+@Schema({ timestamps: true, collection: "jobs" })
+export class Job {
   @Prop({ required: true, unique: true })
   id!: string;
 
   @Prop({ required: true })
   name!: string;
 
-  @Prop({ required: true })
-  expression!: string;
+  @Prop({ type: CronSchema, required: true })
+  emitter!: Cron;
 
   @Prop({ type: [ActionSchema], default: [] })
   actions!: Action[];
@@ -22,11 +23,11 @@ export class CronJob {
   enable!: boolean;
 }
 
-export type CronJobDocument = CronJob & Document;
-export const CronJobSchema = SchemaFactory.createForClass(CronJob);
-CronJobSchema.index({ id: 1 }, { unique: true });
+export type JobDocument = Job & Document;
+export const JobSchema = SchemaFactory.createForClass(Job);
+JobSchema.index({ id: 1 }, { unique: true });
 
-const actions = CronJobSchema.path(
+const actions = JobSchema.path(
   "actions",
 ) as mongoose.Schema.Types.DocumentArray;
 
