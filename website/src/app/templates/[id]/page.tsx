@@ -1,7 +1,7 @@
 "use client";
 
+import { TemplateBuilder } from "@/features/template";
 import { TemplateProvider } from "@/features/template/components/provider/TemplateProvider";
-import { TemplateBuilder } from "@/features/template/components/template/TemplateBuilder";
 import TemplateHeader from "@/features/template/components/template/TemplateHeader";
 import { useTemplate } from "@/hooks/useTemplates";
 import { TemplateMode } from "@/types/template";

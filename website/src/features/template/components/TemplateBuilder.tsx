@@ -7,15 +7,15 @@ import {
   useTemplateMode,
 } from "@/features/template/components/provider/TemplateProvider";
 import TemplateCanvas from "@/features/template/components/template/TemplateCanvas";
+import ToolbarPanel from "@/features/template/components/toolbar/ToolbarPanel";
 import { Plus } from "lucide-react";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { WidgetPicker } from "../WidgetPicker";
-import { WidgetPropertiesPanel } from "../WidgetPropertiesPanel";
+import { WidgetPicker } from "./toolbar/creation/WidgetPicker";
 
 interface TemplateBuilderProps {}
 
-export function TemplateBuilder({}: TemplateBuilderProps) {
+const TemplateBuilder: React.FC<TemplateBuilderProps> = () => {
   const { state, addSession, updateProperties } = useTemplateDocContext();
   const { viewOnly } = useTemplateMode();
 
@@ -59,23 +59,9 @@ export function TemplateBuilder({}: TemplateBuilderProps) {
       </div>
 
       {/* Right panel: properties */}
-      {!viewOnly && (
-        <ScrollArea className="w-64 shrink-0 border-l p-4">
-          {selectedWidget && selectedProps ? (
-            <WidgetPropertiesPanel
-              widget={selectedWidget}
-              properties={selectedProps}
-              onUpdate={(patch) => updateProperties(selectedWidget.id, patch)}
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center gap-2 py-8 text-center">
-              <p className="text-sm text-muted-foreground">
-                Select a widget to edit its properties
-              </p>
-            </div>
-          )}
-        </ScrollArea>
-      )}
+      {!viewOnly && <ToolbarPanel />}
     </div>
   );
-}
+};
+
+export default TemplateBuilder;
