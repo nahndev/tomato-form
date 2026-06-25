@@ -26,16 +26,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useTemplates, useCreateTemplate, useDeleteTemplate } from "@/hooks/useTemplates";
+import { WIDGET_LIST } from "@/features/template/components/widget/registry";
 import type { WidgetType } from "@/types/template";
 
-const WIDGET_TYPES: { label: string; value: WidgetType }[] = [
-  { label: "Text", value: "text" },
-  { label: "Textarea", value: "textarea" },
-  { label: "Number", value: "number" },
-  { label: "Date", value: "date" },
-  { label: "Select", value: "select" },
-  { label: "Checkbox", value: "checkbox" },
-];
+const WIDGET_TYPES: { label: string; value: WidgetType }[] = WIDGET_LIST.map((def) => ({
+  label: def.label,
+  value: def.type,
+}));
 
 const createSchema = Yup.object({
   name: Yup.string().required("Template name is required").min(1),

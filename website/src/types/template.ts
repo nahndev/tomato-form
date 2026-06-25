@@ -1,10 +1,19 @@
 export type WidgetType =
   | "text"
-  | "textarea"
+  | "text-area"
   | "number"
   | "date"
+  | "datetime"
+  | "time"
   | "select"
   | "checkbox"
+  | "radio"
+  | "label"
+  | "signature"
+  | "button"
+  | "image-uploader"
+  | "file-uploader"
+  | "break"
   | "session";
 
 export enum TemplateMode {
@@ -30,6 +39,10 @@ export interface WidgetProperties {
   placeholder?: string;
   required?: boolean;
   options?: string[];
+  /** Static display text for the `label` widget. */
+  content?: string;
+  /** Target URL the `button` widget opens on click. */
+  url?: string;
 }
 
 export interface Session {

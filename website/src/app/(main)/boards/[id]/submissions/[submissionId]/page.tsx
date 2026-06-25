@@ -6,10 +6,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import { useTemplate } from "@/hooks/useTemplates";
 import { useSubmission, useUpdateSubmission } from "@/hooks/useSubmissions";
 
@@ -62,7 +60,16 @@ export default function SubmissionPage({ params }: PageProps) {
 
   async function handleSave() {
     try {
-      await updateSubmission({ data: values });
+      // Defensive filter: never persist values for widgets that don't
+      // collect data (break/session/button/label), in case stale data
+      // exists from a widget that previously had a different type.
+      const data = Object.fromEntries(
+        Object.entries(values).filter(([widgetId]) => {
+          const type = template?.widgets[widgetId]?.type;
+          return type ? WIDGET_REGISTRY[type].isDataField : false;
+        }),
+      );
+      await updateSubmission({ data });
       toast.success("Submission saved");
     } catch (err) {
       console.error("Failed to save submission:", err);
@@ -104,59 +111,24 @@ export default function SubmissionPage({ params }: PageProps) {
           {orderedWidgetIds.map((widgetId) => {
             const widget = template.widgets[widgetId];
             const props = template.properties[widgetId];
-            const value = values[widgetId];
+            const def = WIDGET_REGISTRY[widget.type];
+            const Field = def.Field;
 
             return (
               <div key={widgetId} className="flex flex-col gap-1.5">
-                <Label htmlFor={widgetId}>
-                  {props?.label ?? widgetId}
-                  {props?.required ? " *" : ""}
-                </Label>
-
-                {widget.type === "textarea" ? (
-                  <Textarea
-                    id={widgetId}
-                    value={(value as string) ?? ""}
-                    placeholder={props?.placeholder}
-                    onChange={(e) => setValue(widgetId, e.target.value)}
-                  />
-                ) : widget.type === "select" ? (
-                  <Select
-                    id={widgetId}
-                    value={(value as string) ?? ""}
-                    onChange={(e) => setValue(widgetId, e.target.value)}
-                  >
-                    <option value="">Select…</option>
-                    {(props?.options ?? []).map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
-                  </Select>
-                ) : widget.type === "checkbox" ? (
-                  <input
-                    id={widgetId}
-                    type="checkbox"
-                    checked={Boolean(value)}
-                    onChange={(e) => setValue(widgetId, e.target.checked)}
-                    className="size-4 rounded border-input"
-                  />
-                ) : (
-                  <Input
-                    id={widgetId}
-                    type={widget.type === "number" ? "number" : widget.type === "date" ? "date" : "text"}
-                    value={(value as string | number) ?? ""}
-                    placeholder={props?.placeholder}
-                    onChange={(e) =>
-                      setValue(
-                        widgetId,
-                        widget.type === "number"
-                          ? e.target.valueAsNumber
-                          : e.target.value,
-                      )
-                    }
-                  />
+                {def.isDataField && (
+                  <Label htmlFor={widgetId}>
+                    {props?.label ?? widgetId}
+                    {props?.required ? " *" : ""}
+                  </Label>
                 )}
+                <Field
+                  widgetId={widgetId}
+                  properties={props}
+                  mode="fill"
+                  value={values[widgetId]}
+                  onChange={(value) => setValue(widgetId, value)}
+                />
               </div>
             );
           })}

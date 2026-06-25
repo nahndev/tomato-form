@@ -1,25 +1,8 @@
 "use client";
 
-import { Type, AlignLeft, Hash, Calendar, List, CheckSquare, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { WIDGET_LIST } from "@/features/template/components/widget/registry";
 import type { WidgetType } from "@/types/template";
-
-interface WidgetDef {
-  type: WidgetType;
-  label: string;
-  icon: React.ElementType;
-  description: string;
-}
-
-const WIDGET_DEFS: WidgetDef[] = [
-  { type: "text", label: "Text", icon: Type, description: "Single-line text" },
-  { type: "textarea", label: "Textarea", icon: AlignLeft, description: "Multi-line text" },
-  { type: "number", label: "Number", icon: Hash, description: "Numeric input" },
-  { type: "date", label: "Date", icon: Calendar, description: "Date picker" },
-  { type: "select", label: "Select", icon: List, description: "Dropdown select" },
-  { type: "checkbox", label: "Checkbox", icon: CheckSquare, description: "Boolean toggle" },
-  { type: "session", label: "Session", icon: Clock, description: "Full-width, fixed block" },
-];
 
 interface WidgetPickerProps {
   onAdd: (type: WidgetType) => void;
@@ -31,7 +14,7 @@ export function WidgetPicker({ onAdd }: WidgetPickerProps) {
       <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
         Widgets
       </p>
-      {WIDGET_DEFS.map((def) => {
+      {WIDGET_LIST.map((def) => {
         const Icon = def.icon;
         return (
           <button

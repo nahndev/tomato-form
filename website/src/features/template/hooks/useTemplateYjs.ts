@@ -25,7 +25,9 @@ const YJS_SERVER_URL = process.env.NEXT_PUBLIC_YJS_URL ?? "ws://localhost:3028";
 
 const DEFAULT_SESSION_ID = "default-session";
 const DEFAULT_SESSION_NAME = "Section 1";
-const DEFAULT_LAYOUT: GridLayout = { column: 0, span: GRID_COLUMNS, idx: "a" };
+// Generic fallback for a missing layout entry - intentionally NOT full
+// width (GRID_COLUMNS) since most widgets are half-width by default.
+const DEFAULT_LAYOUT: GridLayout = { column: 0, span: 2, idx: "a" };
 
 // Fixed id so concurrent clients that both find no session converge on the
 // same Y.Map key instead of creating two competing default sessions.

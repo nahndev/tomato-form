@@ -7,12 +7,12 @@ import {
   useTemplateMode,
 } from "@/features/template/components/provider/TemplateProvider";
 import TemplateCanvas from "@/features/template/components/template/TemplateCanvas";
+import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import type { WidgetType } from "@/types/template";
 import { generateKeyBetween } from "fractional-indexing";
 import { Plus } from "lucide-react";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { GRID_COLUMNS } from "../../libs/grid-layout/constants";
 import { WidgetPicker } from "../WidgetPicker";
 import { WidgetPropertiesPanel } from "../WidgetPropertiesPanel";
 
@@ -50,21 +50,11 @@ export function TemplateBuilder({}: TemplateBuilderProps) {
         .map(([, layout]) => layout.idx)
         .sort()
         .pop();
-      const isSession = type === "session";
+      const def = WIDGET_REGISTRY[type];
       addWidget(
         { id, type },
-        {
-          column: 0,
-          span: isSession ? GRID_COLUMNS : 2,
-          idx: generateKeyBetween(lastIdx ?? null, null),
-          isStatic: false,
-          isFullWidth: isSession,
-        },
-        {
-          label: isSession
-            ? "Session"
-            : `${type.charAt(0).toUpperCase() + type.slice(1)} field`,
-        },
+        { ...def.defaultLayout, idx: generateKeyBetween(lastIdx ?? null, null) },
+        { ...def.defaultSettings },
       );
       setSelectedWidgetId(id);
     },
