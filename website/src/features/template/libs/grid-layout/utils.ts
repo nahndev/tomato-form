@@ -1,4 +1,5 @@
 import { GridLayout } from "@/types/template";
+import { generateKeyBetween } from "fractional-indexing";
 import { COLUMN_WIDTH, GRID_COLUMNS } from "./constants";
 import { AbsoluteLayout } from "./types";
 
@@ -45,6 +46,15 @@ export class AbsoluteLayoutUtils {
       a.top + a.height > b.top
     );
   }
+}
+
+export function getNewIdx(layouts: Record<string, GridLayout>) {
+  console.log(Object.entries(layouts));
+  const lastIdx = Object.entries(layouts)
+    .map(([, layout]) => layout.idx)
+    .sort()
+    .pop();
+  return generateKeyBetween(lastIdx ?? null, null);
 }
 
 export function getColumnRange(layout: LayoutRect): [number, number] {

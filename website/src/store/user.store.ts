@@ -6,8 +6,10 @@ import type { CreateUserInput, UpdateUserInput, User } from "@/types/user";
 interface UserStore {
   users: User[];
   isLoading: boolean;
+  isError: boolean;
   isInitialized: boolean;
   init: () => void;
+  refetch: () => void;
   createUser: (input: CreateUserInput) => Promise<User>;
   updateUser: (uuid: string, input: UpdateUserInput) => Promise<User>;
   deleteUser: (uuid: string) => Promise<void>;
@@ -16,18 +18,26 @@ interface UserStore {
 export const useUserStore = create<UserStore>((set, get) => ({
   users: [],
   isLoading: false,
+  isError: false,
   isInitialized: false,
 
   init: () => {
     if (get().isInitialized) return;
-    set({ isInitialized: true, isLoading: true });
+    set({ isInitialized: true });
+    get().refetch();
 
+    getSocket().on("users:updated", (users: User[]) => set({ users, isError: false }));
+  },
+
+  refetch: () => {
+    set({ isLoading: true, isError: false });
     userApi
       .list()
       .then((users) => set({ users, isLoading: false }))
-      .catch(() => set({ isLoading: false }));
-
-    getSocket().on("users:updated", (users: User[]) => set({ users }));
+      .catch((err) => {
+        console.error("Failed to load users:", err);
+        set({ isLoading: false, isError: true });
+      });
   },
 
   createUser: (input) => userApi.create(input),

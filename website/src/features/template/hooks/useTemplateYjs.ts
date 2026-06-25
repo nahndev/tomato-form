@@ -1,5 +1,7 @@
 "use client";
 
+import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { getNewIdx } from "@/features/template/libs/grid-layout/utils";
 import {
   type GridLayout,
   type Session,
@@ -55,11 +57,7 @@ export interface UseTemplateYjsReturn {
   state: TemplateYjsState;
   isConnected: boolean;
   setName: (name: string) => void;
-  addWidget: (
-    widget: Widget,
-    layout: GridLayout,
-    props: WidgetProperties,
-  ) => void;
+  addWidget: (id: Widget["id"], type: Widget["type"]) => void;
   removeWidget: (widgetId: string) => void;
   addSession: (session: Session) => void;
   updateLayout: (
@@ -71,6 +69,45 @@ export interface UseTemplateYjsReturn {
     widgetId: string,
     props: Partial<WidgetProperties>,
   ) => void;
+}
+
+export class StateReader {
+  static readState(doc: Y.Doc): TemplateYjsState {
+    return {
+      name: StateReader.readName(doc),
+      widgets: StateReader.readWidgets(doc),
+      properties: StateReader.readProperties(doc),
+      sessions: StateReader.readSessions(doc),
+      layouts: StateReader.readLayouts(doc),
+      widgetToSession: StateReader.readWidgetToSession(doc),
+    };
+  }
+
+  static readName(doc: Y.Doc): TemplateYjsState["name"] {
+    return doc.getText("name").toString();
+  }
+
+  static readWidgets(doc: Y.Doc): TemplateYjsState["widgets"] {
+    return Object.fromEntries(doc.getMap<Widget>("widgets").entries());
+  }
+
+  static readProperties(doc: Y.Doc): TemplateYjsState["properties"] {
+    return Object.fromEntries(
+      doc.getMap<WidgetProperties>("properties").entries(),
+    );
+  }
+
+  static readSessions(doc: Y.Doc): TemplateYjsState["sessions"] {
+    return Object.fromEntries(doc.getMap<Session>("sessions").entries());
+  }
+
+  static readLayouts(doc: Y.Doc): TemplateYjsState["layouts"] {
+    return Object.fromEntries(doc.getMap<GridLayout>("layouts").entries());
+  }
+
+  static readWidgetToSession(doc: Y.Doc): TemplateYjsState["widgetToSession"] {
+    return Object.fromEntries(doc.getMap<string>("widgetToSession").entries());
+  }
 }
 
 export function useTemplateYjs(
@@ -92,19 +129,6 @@ export function useTemplateYjs(
 
   const getDoc = () => docRef.current!;
 
-  const readState = (doc: Y.Doc): TemplateYjsState => ({
-    name: doc.getText("name").toString(),
-    widgets: Object.fromEntries(doc.getMap<Widget>("widgets").entries()),
-    properties: Object.fromEntries(
-      doc.getMap<WidgetProperties>("properties").entries(),
-    ),
-    sessions: Object.fromEntries(doc.getMap<Session>("sessions").entries()),
-    layouts: Object.fromEntries(doc.getMap<GridLayout>("layouts").entries()),
-    widgetToSession: Object.fromEntries(
-      doc.getMap<string>("widgetToSession").entries(),
-    ),
-  });
-
   useEffect(() => {
     const doc = new Y.Doc();
     docRef.current = doc;
@@ -120,7 +144,7 @@ export function useTemplateYjs(
       setIsConnected(status === "connected");
     });
 
-    const onDocUpdate = () => setState(readState(doc));
+    const onDocUpdate = () => setState(StateReader.readState(doc));
     doc.on("update", onDocUpdate);
 
     return () => {
@@ -140,24 +164,22 @@ export function useTemplateYjs(
     });
   }, []);
 
-  const addWidget = useCallback(
-    (widget: Widget, layout: GridLayout, props: WidgetProperties) => {
-      const doc = getDoc();
-      const { column, span } = clampLayout(layout.column, layout.span);
-      doc.transact(() => {
-        const sessionId = getOrCreateDefaultSessionId(doc);
-        doc.getMap<Widget>("widgets").set(widget.id, widget);
-        doc.getMap<GridLayout>("layouts").set(widget.id, {
-          ...layout,
-          column,
-          span,
-        });
-        doc.getMap<string>("widgetToSession").set(widget.id, sessionId);
-        doc.getMap<WidgetProperties>("properties").set(widget.id, props);
-      });
-    },
-    [],
-  );
+  const addWidget = useCallback((id: Widget["id"], type: Widget["type"]) => {
+    const doc = getDoc();
+    const def = WIDGET_REGISTRY[type];
+    const props = def.defaultSettings;
+    const layout = {
+      ...def.defaultLayout,
+      idx: getNewIdx(StateReader.readLayouts(doc)),
+    };
+    doc.transact(() => {
+      const sessionId = getOrCreateDefaultSessionId(doc);
+      doc.getMap<Widget>("widgets").set(id, { id, type });
+      doc.getMap<GridLayout>("layouts").set(id, layout);
+      doc.getMap<string>("widgetToSession").set(id, sessionId);
+      doc.getMap<WidgetProperties>("properties").set(id, props);
+    });
+  }, []);
 
   const addSession = useCallback((session: Session) => {
     const doc = getDoc();

@@ -1,24 +1,18 @@
-# Add Widget
+# New design for `UserManager`
 
-- Currently, widget is simply for demo, now i will implement it.
-- Read current widget design
+## Design - From top left to bottom right
+
+- Back navigator
+- Title `UserManager`
+- Subtitle `....`
+- Right is avatar and name of current user (only layout)
+- `All users` - `count(users)` - <space> - `Search name` - `Filter` - `Create button`
+- List all user (page 01)
+- Pagination
 
 ## Tasks
 
-- [x] Read current code of [components](./website/src/features/template/components), add README.md to `widget` folder to instruction "How to create new widget?"
-- [x] Create some widgets
-  - `text` - Text input
-  - `text-area` - Textarea with auto rows
-  - `date` - Input date only
-  - `datetime` - Input date + time (epoch-unix)
-  - `time` - Input time only
-  - `break` - A break line with full width
-  - `checkbox` - A list checkbox
-  - `radio` - A list radio
-  - `label` - Readonly content
-  - `signature` - A component allow user sign
-  - `button` - A button allow user click it
-  - `image-uploader` - Upload and show image
-  - `file-uploader` - Upload files and show as list
-- [x] Every widget should has default setting (as constants)
-- [x] Every widget should has default layout (as constants)
+- [x] Add new folder in `./website/src/features/user`
+- [x] Design `User management` with this design
+- [x] Using `shadcn/ui`
+- [x] Update `./website/src/app/(main)/users`

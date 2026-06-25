@@ -7,9 +7,6 @@ import {
   useTemplateMode,
 } from "@/features/template/components/provider/TemplateProvider";
 import TemplateCanvas from "@/features/template/components/template/TemplateCanvas";
-import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
-import type { WidgetType } from "@/types/template";
-import { generateKeyBetween } from "fractional-indexing";
 import { Plus } from "lucide-react";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -19,14 +16,7 @@ import { WidgetPropertiesPanel } from "../WidgetPropertiesPanel";
 interface TemplateBuilderProps {}
 
 export function TemplateBuilder({}: TemplateBuilderProps) {
-  const {
-    state,
-    isConnected,
-    setName,
-    addWidget,
-    addSession,
-    updateProperties,
-  } = useTemplateDocContext();
+  const { state, addSession, updateProperties } = useTemplateDocContext();
   const { viewOnly } = useTemplateMode();
 
   const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null);
@@ -35,31 +25,6 @@ export function TemplateBuilder({}: TemplateBuilderProps) {
     const sessionNumber = Object.keys(state.sessions).length + 1;
     addSession({ id: uuidv4(), name: `Section ${sessionNumber}` });
   }, [addSession, state.sessions]);
-
-  const handleAddWidget = useCallback(
-    (type: WidgetType) => {
-      const id = uuidv4();
-      // New widgets always land in the first session, appended after the
-      // last widget there (idx strings sort lexicographically, so the
-      // largest existing idx tells us where "last" is).
-      const defaultSessionId = Object.keys(state.sessions)[0];
-      const lastIdx = Object.entries(state.layouts)
-        .filter(
-          ([widgetId]) => state.widgetToSession[widgetId] === defaultSessionId,
-        )
-        .map(([, layout]) => layout.idx)
-        .sort()
-        .pop();
-      const def = WIDGET_REGISTRY[type];
-      addWidget(
-        { id, type },
-        { ...def.defaultLayout, idx: generateKeyBetween(lastIdx ?? null, null) },
-        { ...def.defaultSettings },
-      );
-      setSelectedWidgetId(id);
-    },
-    [addWidget, state.sessions, state.layouts, state.widgetToSession],
-  );
 
   const selectedWidget = selectedWidgetId
     ? state.widgets[selectedWidgetId]
@@ -83,7 +48,7 @@ export function TemplateBuilder({}: TemplateBuilderProps) {
             Add Session
           </Button>
           <ScrollArea className="flex-1">
-            <WidgetPicker onAdd={handleAddWidget} />
+            <WidgetPicker />
           </ScrollArea>
         </div>
       )}

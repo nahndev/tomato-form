@@ -5,6 +5,7 @@ import { TemplateBuilder } from "@/features/template/components/template/Templat
 import TemplateHeader from "@/features/template/components/template/TemplateHeader";
 import { useTemplate } from "@/hooks/useTemplates";
 import { TemplateMode } from "@/types/template";
+import { DragDropProvider } from "@dnd-kit/react";
 import { Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { use } from "react";
@@ -32,11 +33,13 @@ export default function TemplatePage({ params, searchParams }: PageProps) {
   if (isError || !template) notFound();
 
   return (
-    <TemplateProvider template={template} mode={mode as TemplateMode}>
-      <div className="h-screen grid grid-rows-[auto_1fr] overflow-hidden">
-        <TemplateHeader />
-        <TemplateBuilder />
-      </div>
-    </TemplateProvider>
+    <DragDropProvider>
+      <TemplateProvider template={template} mode={mode as TemplateMode}>
+        <div className="h-screen grid grid-rows-[auto_1fr] overflow-hidden">
+          <TemplateHeader />
+          <TemplateBuilder />
+        </div>
+      </TemplateProvider>
+    </DragDropProvider>
   );
 }
