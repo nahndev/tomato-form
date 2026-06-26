@@ -1,6 +1,9 @@
 "use client";
 
-import { useTemplateDocContext } from "@/features/template/components/provider/TemplateProvider";
+import {
+  useTemplateDocContext,
+  useWidgetSelection,
+} from "@/features/template/components/provider/TemplateProvider";
 import { WIDGET_LIST } from "@/features/template/components/widget/registry";
 import { WidgetDefinition } from "@/features/template/components/widget/types";
 import { cn } from "@/lib/utils";
@@ -29,14 +32,20 @@ export type WidgetCreationButtonProps = {
   def: WidgetDefinition;
 };
 const WidgetCreationButton: React.FC<WidgetCreationButtonProps> = ({ def }) => {
+  const { selected, selectKey } = useWidgetSelection();
   const [id, setId] = useState(v4());
   const { addWidget } = useTemplateDocContext();
   const { ref: draggableRef, isDragging } = useDraggable({ id });
 
+  const handleAddWidget = () => {
+    addWidget(id, def.type, selected);
+    selectKey(id);
+  };
+
   useDragDropMonitor({
     onDragStart({ operation: { source } }) {
       if (source && source.id === id) {
-        addWidget(id, def.type);
+        handleAddWidget();
       }
     },
     onDragEnd() {
@@ -48,7 +57,7 @@ const WidgetCreationButton: React.FC<WidgetCreationButtonProps> = ({ def }) => {
     <button
       key={id}
       ref={draggableRef}
-      onClick={() => addWidget(id, def.type)}
+      onClick={handleAddWidget}
       className={cn(
         "cursor-pointer",
         "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",

@@ -1,7 +1,30 @@
-import { GridLayout } from "@/types/template";
+import { GridLayout, Widget } from "@/types/template";
 import { generateKeyBetween } from "fractional-indexing";
+import * as R from "remeda";
 import { COLUMN_WIDTH, GRID_COLUMNS } from "./constants";
 import { AbsoluteLayout } from "./types";
+
+export class LayoutIdx {
+  static getInsertIdx(
+    layouts: Record<string, GridLayout>,
+    before: Widget | null,
+  ): string {
+    console.log(before);
+    const ordered = R.pipe(
+      R.entries(layouts),
+      R.sortBy(([, layout]) => layout.idx),
+    );
+
+    if (before) {
+      const index = ordered.findIndex(([id]) => id === before.id);
+      const [, { idx: prevIdx }] = ordered[index] ?? [null, { idx: null }];
+      const [, { idx: nextIdx }] = ordered[index + 1] ?? [null, { idx: null }];
+      return generateKeyBetween(prevIdx, nextIdx);
+    }
+
+    return generateKeyBetween(R.last(ordered)?.[1].idx ?? null, null);
+  }
+}
 
 export interface LayoutRect {
   left: number;

@@ -1,6 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTemplateDocContext } from "@/features/template/components/provider/TemplateProvider";
 import SessionBox from "@/features/template/components/session/SessionBox";
+import SessionCreation from "@/features/template/components/session/SessionCreation";
 
 const TemplateCanvas: React.FC = () => {
   const { state } = useTemplateDocContext();
@@ -10,6 +11,7 @@ const TemplateCanvas: React.FC = () => {
         {Object.values(state.sessions).map((session) => (
           <SessionBox key={session.id} session={session} />
         ))}
+        <SessionCreation />
       </div>
     </ScrollArea>
   );

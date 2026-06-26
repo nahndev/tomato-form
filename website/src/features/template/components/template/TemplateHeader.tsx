@@ -4,6 +4,7 @@ import {
   useTemplateMode,
 } from "@/features/template/components/provider/TemplateProvider";
 import TemplateConnection from "@/features/template/components/template/TemplateConnection";
+import { TemplateMode } from "@/types/template";
 import { ArrowLeft, Pencil } from "lucide-react";
 import Link from "next/link";
 
@@ -11,7 +12,7 @@ export type TemplateHeaderProps = {};
 
 const TemplateHeader: React.FC<TemplateHeaderProps> = () => {
   const { id, name } = useTemplateContext();
-  const { viewOnly } = useTemplateMode();
+  const mode = useTemplateMode();
   return (
     <div className="flex items-center gap-2 border-b px-4 py-2">
       <Link href="/templates">
@@ -24,7 +25,7 @@ const TemplateHeader: React.FC<TemplateHeaderProps> = () => {
       </div>
       <div className="flex-1" />
       <div className="ml-auto">
-        {viewOnly ? (
+        {mode === TemplateMode.VIEW ? (
           <Link href={`/templates/${id}?mode=edit`}>
             <Button size="sm">
               <Pencil className="mr-1.5 size-4" />

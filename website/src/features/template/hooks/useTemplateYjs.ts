@@ -1,12 +1,12 @@
 "use client";
 
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
-import { getNewIdx } from "@/features/template/libs/grid-layout/utils";
+import { LayoutIdx } from "@/features/template/libs/grid-layout/utils";
 import {
+  Widget,
   type GridLayout,
   type Session,
   type Template,
-  type Widget,
   type WidgetProperties,
 } from "@/types/template";
 import { HocuspocusProvider } from "@hocuspocus/provider";
@@ -57,7 +57,11 @@ export interface UseTemplateYjsReturn {
   state: TemplateYjsState;
   isConnected: boolean;
   setName: (name: string) => void;
-  addWidget: (id: Widget["id"], type: Widget["type"]) => void;
+  addWidget: (
+    id: Widget["id"],
+    type: Widget["type"],
+    before: Widget | null,
+  ) => void;
   removeWidget: (widgetId: string) => void;
   addSession: (session: Session) => void;
   updateLayout: (
@@ -128,7 +132,6 @@ export function useTemplateYjs(
   });
 
   const getDoc = () => docRef.current!;
-
   useEffect(() => {
     const doc = new Y.Doc();
     docRef.current = doc;
@@ -164,22 +167,28 @@ export function useTemplateYjs(
     });
   }, []);
 
-  const addWidget = useCallback((id: Widget["id"], type: Widget["type"]) => {
-    const doc = getDoc();
-    const def = WIDGET_REGISTRY[type];
-    const props = def.defaultSettings;
-    const layout = {
-      ...def.defaultLayout,
-      idx: getNewIdx(StateReader.readLayouts(doc)),
-    };
-    doc.transact(() => {
-      const sessionId = getOrCreateDefaultSessionId(doc);
-      doc.getMap<Widget>("widgets").set(id, { id, type });
-      doc.getMap<GridLayout>("layouts").set(id, layout);
-      doc.getMap<string>("widgetToSession").set(id, sessionId);
-      doc.getMap<WidgetProperties>("properties").set(id, props);
-    });
-  }, []);
+  const addWidget = useCallback(
+    (id: Widget["id"], type: Widget["type"], before: Widget | null) => {
+      const doc = getDoc();
+      const def = WIDGET_REGISTRY[type];
+      const props = def.defaultSettings;
+      const layout = {
+        ...def.defaultLayout,
+        idx: LayoutIdx.getInsertIdx(StateReader.readLayouts(doc), before),
+      };
+      const beforeSessionId =
+        before && StateReader.readWidgetToSession(doc)[before.id];
+
+      doc.transact(() => {
+        const sessionId = beforeSessionId ?? getOrCreateDefaultSessionId(doc);
+        doc.getMap<Widget>("widgets").set(id, { id, type });
+        doc.getMap<GridLayout>("layouts").set(id, layout);
+        doc.getMap<WidgetProperties>("properties").set(id, props);
+        doc.getMap<string>("widgetToSession").set(id, sessionId);
+      });
+    },
+    [],
+  );
 
   const addSession = useCallback((session: Session) => {
     const doc = getDoc();

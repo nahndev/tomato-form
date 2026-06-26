@@ -8,7 +8,7 @@ export type TemplateConnectionProps = {};
 
 const TemplateConnection: React.FC<TemplateConnectionProps> = () => {
   const { state, setName, isConnected } = useTemplateDocContext();
-  const { viewOnly } = useTemplateMode();
+  const mode = useTemplateMode();
   return (
     <div className="flex items-center gap-3 px-4 py-3">
       <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">

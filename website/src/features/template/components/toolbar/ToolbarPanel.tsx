@@ -12,7 +12,7 @@ const ToolbarPanel: React.FC<ToolbarPanelProps> = () => {
   const [type, setType] = useState<ToolbarType>(ToolbarType.Widget);
 
   return (
-    <div className={clsx("flex flex-row", "w-80 h-full")}>
+    <div className={clsx("flex flex-row", "w-[25em] h-full")}>
       <div className="flex-1">
         <ToolbarContent type={type} />
       </div>
@@ -26,7 +26,16 @@ interface ToolbarContentProps {
 }
 const ToolbarContent: React.FC<ToolbarContentProps> = ({ type }) => {
   const def = TOOLBAR_REGISTRY[type];
-  return <def.Component />;
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="bg-slate-100 p-2">
+        <h6 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          {def.label}
+        </h6>
+      </div>
+      <def.Component />
+    </div>
+  );
 };
 
 interface ToolbarMenuListProps {

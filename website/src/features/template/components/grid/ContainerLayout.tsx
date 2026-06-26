@@ -38,6 +38,7 @@ export function ContainerLayout({
   const [heightMap, { set: setHeight }] = useMap<string, number>();
   const { ref, isDropTarget } = useDroppable({ id });
   const [moving, setMoving] = useState<MovingLayout | null>(null);
+  const [hidden, setHidden] = useState<string | null>(null);
 
   // Lay widgets out top-to-bottom by idx, then make room for the widget
   // currently being dragged ("moving") by reserving its height at the slot
@@ -66,7 +67,7 @@ export function ContainerLayout({
         const ghost = { ...moving, top: getMaxHeight(maxHeights, moving) };
         maxHeights = setMaxHeight(maxHeights, ghost);
       }
-      if (moving && moving.id === item.id) {
+      if (hidden && hidden === item.id) {
         continue;
       }
       item.top = getMaxHeight(maxHeights, item);
@@ -93,6 +94,9 @@ export function ContainerLayout({
     onDragMove({ operation: { source, target } }) {
       const droppableRect = target?.element?.getBoundingClientRect();
       const draggableRect = source?.element?.getBoundingClientRect();
+      if (source) {
+        setHidden(source.id as string);
+      }
       if (isDropTarget && source && droppableRect && draggableRect) {
         setMoving({
           id: source.id as string,
@@ -124,6 +128,7 @@ export function ContainerLayout({
         }
       }
       setMoving(null);
+      setHidden(null);
     },
   });
 

@@ -2,16 +2,17 @@ import { ContainerLayout } from "@/features/template/components/grid/ContainerLa
 import { useSessionContext } from "@/features/template/components/provider/SessionProvider";
 import { useTemplateMode } from "@/features/template/components/provider/TemplateProvider";
 import { WidgetItem } from "@/features/template/components/widget/WidgetItem";
+import { TemplateMode } from "@/types/template";
 
 const SessionCanvas: React.FC = () => {
-  const { viewOnly } = useTemplateMode();
+  const mode = useTemplateMode();
   const { layouts, widgets, session, onMoving } = useSessionContext();
   return (
     <ContainerLayout
       layouts={layouts}
       id={session.id}
       onMoving={onMoving}
-      disabled={viewOnly}
+      disabled={mode === TemplateMode.VIEW}
     >
       {(id) => <WidgetItem key={id} widget={widgets[id]} />}
     </ContainerLayout>

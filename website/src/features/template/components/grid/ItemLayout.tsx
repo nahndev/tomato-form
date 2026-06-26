@@ -32,7 +32,10 @@ const ItemLayout: React.FC<ItemLayoutProps> = ({
   return (
     <div
       ref={draggableRef}
-      className={clsx("absolute", source && !isDragging && "duration-300")}
+      className={clsx(
+        "absolute",
+        !source || (source.id !== computedLayout.id && "duration-300"),
+      )}
       style={{ ...computedLayout }}
     >
       <div ref={ref} className="h-min w-full">
