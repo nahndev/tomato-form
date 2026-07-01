@@ -12,6 +12,7 @@ import {
 } from "@/features/template/libs/grid-layout/utils";
 import { GridLayout } from "@/types/template";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
+import clsx from "clsx";
 import { generateKeyBetween } from "fractional-indexing";
 import { useMemo, useState } from "react";
 import { useMap } from "usehooks-ts";
@@ -37,6 +38,7 @@ export function ContainerLayout({
 }: ContainerLayoutProps) {
   const [heightMap, { set: setHeight }] = useMap<string, number>();
   const { ref, isDropTarget } = useDroppable({ id });
+  const [version, setVersion] = useState<number>(0);
   const [moving, setMoving] = useState<MovingLayout | null>(null);
   const [hidden, setHidden] = useState<string | null>(null);
 
@@ -74,7 +76,7 @@ export function ContainerLayout({
       maxHeights = setMaxHeight(maxHeights, item);
     }
     return absoluteLayouts;
-  }, [layouts, heightMap, moving]);
+  }, [layouts, heightMap, moving, version]);
 
   const containerHeight = useMemo(() => {
     const maxBottom = computedLayouts.reduce(
@@ -88,7 +90,7 @@ export function ContainerLayout({
         : 0;
 
     return Math.max(maxBottom, movingBottom, 200);
-  }, [computedLayouts, moving]);
+  }, [computedLayouts, moving, hidden]);
 
   useDragDropMonitor({
     onDragMove({ operation: { source, target } }) {
@@ -129,13 +131,14 @@ export function ContainerLayout({
       }
       setMoving(null);
       setHidden(null);
+      setVersion(Date.now());
     },
   });
 
   return (
     <div
       ref={ref}
-      className="relative duration-300"
+      className={clsx("relative", hidden && "duration-300")}
       style={{ width: GRID_COLUMNS * COLUMN_WIDTH, height: containerHeight }}
     >
       {computedLayouts.map((layout) => (

@@ -13,9 +13,8 @@ const ToolbarPanel: React.FC<ToolbarPanelProps> = () => {
 
   return (
     <div className={clsx("flex flex-row", "w-[25em] h-full")}>
-      <div className="flex-1">
-        <ToolbarContent type={type} />
-      </div>
+      <ToolbarContent type={type} className="flex-1" />
+
       <ToolbarMenuList type={type} setType={setType} />
     </div>
   );
@@ -23,11 +22,12 @@ const ToolbarPanel: React.FC<ToolbarPanelProps> = () => {
 
 interface ToolbarContentProps {
   type: ToolbarType;
+  className: string;
 }
-const ToolbarContent: React.FC<ToolbarContentProps> = ({ type }) => {
+const ToolbarContent: React.FC<ToolbarContentProps> = ({ type, className }) => {
   const def = TOOLBAR_REGISTRY[type];
   return (
-    <div className="flex flex-col gap-3">
+    <div className={clsx("grid grid-rows-[auto_1fr]", className)}>
       <div className="bg-slate-100 p-2">
         <h6 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           {def.label}

@@ -1,5 +1,6 @@
 "use client";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   useTemplateDocContext,
   useWidgetSelection,
@@ -17,14 +18,11 @@ export function WidgetPicker({}: WidgetPickerProps) {
   const { state } = useTemplateDocContext();
   const version = useMemo(() => Object.keys(state.widgets).length, [state]);
   return (
-    <div className="flex flex-col gap-1">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        Widgets
-      </p>
+    <ScrollArea className="size-full">
       {WIDGET_LIST.map((def) => (
         <WidgetCreationButton key={def.type + version} def={def} />
       ))}
-    </div>
+    </ScrollArea>
   );
 }
 

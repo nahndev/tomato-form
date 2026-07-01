@@ -18,7 +18,7 @@ const ItemLayout: React.FC<ItemLayoutProps> = ({
   children,
 }: ItemLayoutProps) => {
   const { source } = useDragOperation();
-  const { ref: draggableRef, isDragging } = useDraggable({
+  const { ref: draggableRef } = useDraggable({
     id: computedLayout.id,
     disabled: disabled,
   });

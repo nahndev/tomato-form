@@ -63,7 +63,7 @@
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.65 0.22 45);
+    --primary: rgb(244, 80, 0);
     --primary-foreground: oklch(0.98 0.01 60);
     --secondary: oklch(0.97 0.01 60);
     --secondary-foreground: oklch(0.25 0.05 45);
@@ -127,4 +127,29 @@
   html {
     @apply font-sans;
   }
+}
+
+.scroll-area {
+  --sb-track-color: #e2e8f000;
+  --sb-thumb-color: #f45000;
+  --sb-size: 4px;
+}
+
+.scroll-area::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+.scroll-area:hover::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-track);
+  border-radius: 2px;
+  transition: background 3s linear;
+}
+
+.scroll-area:hover::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 2px;
 }

@@ -6,7 +6,7 @@ import SessionCreation from "@/features/template/components/session/SessionCreat
 const TemplateCanvas: React.FC = () => {
   const { state } = useTemplateDocContext();
   return (
-    <ScrollArea className="size-full bg-slate-200 p-10 overflow-y-scroll">
+    <ScrollArea className="size-full bg-slate-200 p-10 overflow-y-scroll group/template">
       <div className="flex flex-col gap-10">
         {Object.values(state.sessions).map((session) => (
           <SessionBox key={session.id} session={session} />
