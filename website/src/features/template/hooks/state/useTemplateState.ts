@@ -1,12 +1,12 @@
 "use client";
 
 import { useTemplateDoc } from "@/features/template/components/provider/TemplateDocProvider";
-import { useTemplateMeta } from "@/features/template/hooks/internal/templateMeta";
 import {
   readTemplateState,
   templateToState,
   type TemplateState,
 } from "@/features/template/hooks/internal/templateStateReader";
+import { useTemplateMeta } from "@/features/template/hooks/state/useTemplateMeta";
 import { useEffect, useState } from "react";
 
 /**

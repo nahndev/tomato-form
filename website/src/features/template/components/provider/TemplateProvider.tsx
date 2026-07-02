@@ -1,12 +1,12 @@
 "use client";
 
 import { TemplateDocProvider } from "@/features/template/components/provider/TemplateDocProvider";
-import { useSelection } from "@/features/template/hooks/useSelection";
 import {
   TemplateMetaContext,
   useTemplateMeta,
-} from "@/features/template/hooks/internal/templateMeta";
+} from "@/features/template/hooks/state/useTemplateMeta";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
+import { useSelection } from "@/features/template/hooks/useSelection";
 import type { Template, TemplateMode, Widget } from "@/types/template";
 import { createContext, useContext } from "react";
 import { values } from "remeda";
@@ -27,7 +27,9 @@ export const TemplateProvider: React.FC<TemplateProviderProps> = ({
   children,
 }) => (
   <TemplateDocProvider templateId={template.id}>
-    <TemplateMetaContext.Provider value={{ id: template.id, mode, initial: template }}>
+    <TemplateMetaContext.Provider
+      value={{ id: template.id, mode, initial: template }}
+    >
       <WidgetSelectionProvider>{children}</WidgetSelectionProvider>
     </TemplateMetaContext.Provider>
   </TemplateDocProvider>
