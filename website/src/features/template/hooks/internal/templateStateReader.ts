@@ -1,7 +1,6 @@
 import type {
   GridLayout,
   Session,
-  Template,
   Widget,
   WidgetProperties,
 } from "@/types/template";
@@ -28,17 +27,6 @@ export function readTemplateState(doc: Y.Doc): TemplateState {
     widgetToSession: Object.fromEntries(
       doc.getMap<string>("widgetToSession").entries(),
     ),
-  };
-}
-
-export function templateToState(template?: Template): TemplateState {
-  return {
-    name: template?.name ?? "",
-    widgets: template?.widgets ?? {},
-    properties: template?.properties ?? {},
-    sessions: template?.sessions ?? {},
-    layouts: template?.layouts ?? {},
-    widgetToSession: template?.widgetToSession ?? {},
   };
 }
 

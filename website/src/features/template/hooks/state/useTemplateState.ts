@@ -3,36 +3,20 @@
 import { useTemplateDoc } from "@/features/template/components/provider/TemplateDocProvider";
 import {
   readTemplateState,
-  templateToState,
   type TemplateState,
 } from "@/features/template/hooks/internal/templateStateReader";
-import { useTemplateMeta } from "@/features/template/hooks/state/useTemplateMeta";
 import { useEffect, useState } from "react";
 
-/**
- * State-only, doc-independent: falls back to the nearest `<TemplateProvider>`'s
- * initial data, and layers live yjs updates on top once `<TemplateDocProvider>`
- * connects the doc.
- */
+/** Reads live state off the doc from the nearest `<TemplateDocProvider>`. */
 export function useTemplateState(): TemplateState {
   const doc = useTemplateDoc();
-  const { initial } = useTemplateMeta();
-
-  const [state, setState] = useState<TemplateState>(() =>
-    doc ? readTemplateState(doc) : templateToState(initial),
-  );
+  const [state, setState] = useState<TemplateState>(() => readTemplateState(doc));
 
   useEffect(() => {
-    if (!doc) {
-      setState(templateToState(initial));
-      return;
-    }
-
     setState(readTemplateState(doc));
     const onUpdate = () => setState(readTemplateState(doc));
     doc.on("update", onUpdate);
     return () => doc.off("update", onUpdate);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc]);
 
   return state;

@@ -1,14 +1,7 @@
 "use client";
 
 import { HocuspocusProvider } from "@hocuspocus/provider";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import * as Y from "yjs";
 
 const YJS_SERVER_URL = process.env.NEXT_PUBLIC_YJS_URL ?? "ws://localhost:3028";
@@ -23,8 +16,9 @@ export interface TemplateDocProviderProps {
 
 /**
  * The only piece of the template feature coupled to yjs/Hocuspocus - owns the
- * `Y.Doc` + realtime connection lifecycle and hands it down via context so
- * everything else can stay decoupled from yjs.
+ * `Y.Doc` + realtime connection lifecycle and hands it down via context.
+ * Renders nothing until the doc exists, so every descendant can assume
+ * `useTemplateDoc()` is safe to call unconditionally.
  */
 export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
   templateId,
@@ -55,6 +49,8 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
     };
   }, [templateId]);
 
+  if (!doc) return null;
+
   return (
     <TemplateDocContext.Provider value={doc}>
       <TemplateConnectionContext.Provider value={isConnected}>
@@ -64,33 +60,13 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
   );
 };
 
-/** The doc is naturally `null` until `TemplateDocProvider`'s effect connects it. */
-export function useTemplateDoc(): Y.Doc | null {
-  return useContext(TemplateDocContext);
-}
-
-/**
- * Returns a stable getter for the doc, for action hooks that must mutate it.
- * The doc is created inside an effect (after the first commit), so reading
- * it eagerly at render time would throw on that very first render, before
- * the effect gets a chance to run - components like `SessionCreation` or
- * `WidgetPicker` call action hooks unconditionally on mount. A getter defers
- * the read (and the "not ready" check) to when the action actually fires,
- * by which point the effect has long since populated the doc.
- */
-export function useTemplateDocGetter(): () => Y.Doc {
+/** Safe to call unconditionally - `TemplateDocProvider` never renders children before the doc exists. */
+export function useTemplateDoc(): Y.Doc {
   const doc = useContext(TemplateDocContext);
-  const docRef = useRef(doc);
-  docRef.current = doc;
-
-  return useCallback(() => {
-    if (!docRef.current) {
-      throw new Error(
-        "This action requires a connected <TemplateDocProvider> ancestor",
-      );
-    }
-    return docRef.current;
-  }, []);
+  if (!doc) {
+    throw new Error("This hook must be used inside <TemplateDocProvider>");
+  }
+  return doc;
 }
 
 export function useTemplateConnection(): boolean {

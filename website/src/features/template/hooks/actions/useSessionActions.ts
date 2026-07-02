@@ -1,6 +1,6 @@
 "use client";
 
-import { useTemplateDocGetter } from "@/features/template/components/provider/TemplateDocProvider";
+import { useTemplateDoc } from "@/features/template/components/provider/TemplateDocProvider";
 import {
   DEFAULT_LAYOUT,
 } from "@/features/template/hooks/internal/templateStateReader";
@@ -22,21 +22,19 @@ export interface SessionActions {
  * call time (not from React state) so merges always see the latest value.
  */
 export function useSessionActions(): SessionActions {
-  const getDoc = useTemplateDocGetter();
+  const doc = useTemplateDoc();
 
   const addSession = useCallback(
     (session: Session) => {
-      const doc = getDoc();
       doc.transact(() => {
         doc.getMap<Session>("sessions").set(session.id, session);
       });
     },
-    [getDoc],
+    [doc],
   );
 
   const updateLayout = useCallback(
     (widgetId: string, sessionId: string, patch: Partial<GridLayout>) => {
-      const doc = getDoc();
       const layouts = doc.getMap<GridLayout>("layouts");
       const current = layouts.get(widgetId) ?? DEFAULT_LAYOUT;
       doc.transact(() => {
@@ -44,7 +42,7 @@ export function useSessionActions(): SessionActions {
         doc.getMap<string>("widgetToSession").set(widgetId, sessionId);
       });
     },
-    [getDoc],
+    [doc],
   );
 
   return { addSession, updateLayout };
