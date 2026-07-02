@@ -1,42 +1,28 @@
 "use client";
 
-import { useTemplateDocContext } from "@/features/template/components/provider/TemplateProvider";
-import type { Widget, WidgetProperties } from "@/types/template";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext } from "react";
 
-export interface WidgetContextValue {
-  widget: Widget;
-  properties: WidgetProperties;
-}
-
-const WidgetContext = createContext<WidgetContextValue | null>(null);
+const WidgetIdContext = createContext<string | null>(null);
 
 export interface WidgetProviderProps {
-  widget: Widget;
+  widgetId: string;
   children: React.ReactNode;
 }
 
+/** Passes down which widget its subtree belongs to - no yjs/doc dependency. */
 export const WidgetProvider: React.FC<WidgetProviderProps> = ({
-  widget,
+  widgetId,
   children,
-}) => {
-  const { state } = useTemplateDocContext();
-  const properties = useMemo(
-    () => state.properties[widget.id],
-    [state.properties, widget.id],
-  );
+}) => (
+  <WidgetIdContext.Provider value={widgetId}>
+    {children}
+  </WidgetIdContext.Provider>
+);
 
-  return (
-    <WidgetContext.Provider value={{ widget, properties }}>
-      {children}
-    </WidgetContext.Provider>
-  );
-};
-
-export function useWidgetContext(): WidgetContextValue {
-  const ctx = useContext(WidgetContext);
-  if (!ctx) {
-    throw new Error("useWidget must be used inside WidgetProvider");
+export function useWidgetId(): string {
+  const id = useContext(WidgetIdContext);
+  if (!id) {
+    throw new Error("This hook must be used inside <WidgetProvider>");
   }
-  return ctx;
+  return id;
 }

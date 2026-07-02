@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import {
-  useTemplateContext,
+  useTemplateId,
   useTemplateMode,
 } from "@/features/template/components/provider/TemplateProvider";
 import TemplateConnection from "@/features/template/components/template/TemplateConnection";
+import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { TemplateMode } from "@/types/template";
 import { ArrowLeft, Pencil } from "lucide-react";
 import Link from "next/link";
@@ -11,7 +12,8 @@ import Link from "next/link";
 export type TemplateHeaderProps = {};
 
 const TemplateHeader: React.FC<TemplateHeaderProps> = () => {
-  const { id, name } = useTemplateContext();
+  const id = useTemplateId();
+  const { name } = useTemplateState();
   const mode = useTemplateMode();
   return (
     <div className="flex items-center gap-2 border-b px-4 py-2">

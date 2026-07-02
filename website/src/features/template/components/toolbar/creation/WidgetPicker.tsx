@@ -1,12 +1,11 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  useTemplateDocContext,
-  useWidgetSelection,
-} from "@/features/template/components/provider/TemplateProvider";
+import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import { WIDGET_LIST } from "@/features/template/components/widget/registry";
 import { WidgetDefinition } from "@/features/template/components/widget/types";
+import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
+import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { cn } from "@/lib/utils";
 import { useDragDropMonitor, useDraggable } from "@dnd-kit/react";
 import React, { useMemo, useState } from "react";
@@ -15,8 +14,8 @@ import { v4 } from "uuid";
 interface WidgetPickerProps {}
 
 export function WidgetPicker({}: WidgetPickerProps) {
-  const { state } = useTemplateDocContext();
-  const version = useMemo(() => Object.keys(state.widgets).length, [state]);
+  const { widgets } = useTemplateState();
+  const version = useMemo(() => Object.keys(widgets).length, [widgets]);
   return (
     <ScrollArea className="size-full">
       {WIDGET_LIST.map((def) => (
@@ -32,7 +31,7 @@ export type WidgetCreationButtonProps = {
 const WidgetCreationButton: React.FC<WidgetCreationButtonProps> = ({ def }) => {
   const { selected, selectKey } = useWidgetSelection();
   const [id, setId] = useState(v4());
-  const { addWidget } = useTemplateDocContext();
+  const { addWidget } = useWidgetActions();
   const { ref: draggableRef, isDragging } = useDraggable({ id });
 
   const handleAddWidget = () => {

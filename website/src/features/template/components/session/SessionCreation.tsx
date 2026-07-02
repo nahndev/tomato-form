@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { useTemplateDocContext } from "@/features/template/components/provider/TemplateProvider";
+import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
 import { Plus } from "lucide-react";
 import { v4 } from "uuid";
 
 export type SessionCreationProps = {};
 
 const SessionCreation: React.FC<SessionCreationProps> = () => {
-  const { addSession } = useTemplateDocContext();
+  const { addSession } = useSessionActions();
   return (
     <div className="mx-auto">
       <Button

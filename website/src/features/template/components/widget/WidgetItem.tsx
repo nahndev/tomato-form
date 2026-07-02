@@ -2,11 +2,9 @@
 
 import { Badge } from "@/components/ui/badge";
 import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
-import {
-  useWidgetContext,
-  WidgetProvider,
-} from "@/features/template/components/provider/WidgetProvider";
+import { WidgetProvider } from "@/features/template/components/provider/WidgetProvider";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { useWidgetState } from "@/features/template/hooks/state/useWidgetState";
 import type { Widget } from "@/types/template";
 import clsx from "clsx";
 
@@ -17,11 +15,10 @@ interface WidgetItemProps {
 export function WidgetItem({ widget }: WidgetItemProps) {
   const { isSelected, select } = useWidgetSelection();
   return (
-    <WidgetProvider widget={widget}>
+    <WidgetProvider widgetId={widget.id}>
       <div className="p-1">
         <div
           className={clsx(
-            "cursor-pointer",
             "border border-dashed rounded-md",
             isSelected(widget) ? "border-orange-500" : "border-transparent",
           )}
@@ -38,16 +35,16 @@ export function WidgetItem({ widget }: WidgetItemProps) {
 }
 
 function WidgetItemHeader({ widget }: { widget: Widget }) {
-  const { properties } = useWidgetContext();
+  const { properties } = useWidgetState();
   return (
     <div className="flex items-center gap-2">
       <p className="truncate text-sm font-medium">
-        {properties.label || "(no label)"}
+        {properties?.label || "(no label)"}
       </p>
       <Badge variant="secondary" className="shrink-0 text-[10px]">
         {widget.type}
       </Badge>
-      {properties.required && (
+      {properties?.required && (
         <span className="text-xs text-destructive">*</span>
       )}
     </div>
@@ -55,8 +52,14 @@ function WidgetItemHeader({ widget }: { widget: Widget }) {
 }
 
 function WidgetPreview({ widget }: { widget: Widget }) {
-  const { properties } = useWidgetContext();
+  const { properties } = useWidgetState();
   const def = WIDGET_REGISTRY[widget.type];
   const Field = def.Field;
-  return <Field widgetId={widget.id} properties={properties} mode="preview" />;
+  return (
+    <Field
+      widgetId={widget.id}
+      properties={properties ?? def.defaultSettings}
+      mode="preview"
+    />
+  );
 }

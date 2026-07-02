@@ -1,9 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  useTemplateDocContext,
-  useWidgetSelection,
-} from "@/features/template/components/provider/TemplateProvider";
+import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { cn } from "@/lib/utils";
 import { Session, Widget, WidgetProperties } from "@/types/template";
 import { useMemo } from "react";
@@ -23,8 +21,8 @@ interface SessionThumbnail {
 }
 
 const StructureToolbarBox: React.FC<StructureToolbarBoxProps> = () => {
-  const { state } = useTemplateDocContext();
-  const { sessions, widgets, properties, widgetToSession, layouts } = state;
+  const { sessions, widgets, properties, widgetToSession, layouts } =
+    useTemplateState();
 
   const tree = useMemo<SessionThumbnail[]>(
     () =>
