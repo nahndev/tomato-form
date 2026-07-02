@@ -1,14 +1,15 @@
-# Update properties base on key of `WidgetProperties`
+# Update `WIDGET_REGISTRY`
 
 ## Currently
 
-- Property in `./website/src/features/template/components/toolbar/property` using group `properties` by `tabs`
-- It don't better for expand.
-- We want update base on `key` of `WidgetProperties`
+- The `WIDGET_REGISTRY` load default setting and read default layout from subfolder
+- But it's too messy and has too many problems.
+- Solution is a file for all default setting, a file for all default layout, a folder include all Component
 
 ## Tasks
 
-- [x] Restructure of `WidgetPropertyBox` become list instead of tabs
-- [x] Registry should is `key - WidgetType` include many `key - WidgetProperties`
-- [x] Every `key` will has a `Component`
-- [x] Add new action of `useWidgetActions` set property base on `key` of `WidgetProperties`
+- [x] Create new files save all default setting is `Record<WidgetType, WidgetProperties>`
+- [x] Create new files save all default layout is `Record<WidgetType, GridLayout>
+- [x] File `registry` should load `setting` and `layout` from 2 files
+- [x] Create `subfolder` is `items` include all components is `widget` component
+- [x] Remove and cleanup

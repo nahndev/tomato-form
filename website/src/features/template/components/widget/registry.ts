@@ -17,54 +17,25 @@ import {
   Clock,
 } from "lucide-react";
 import type { WidgetDefinition, WidgetRegistry } from "./types";
+import { DEFAULT_SETTINGS } from "./settings";
+import { DEFAULT_LAYOUTS } from "./layouts";
 
-import { Field as TextField } from "./text/Field";
-import * as textDefaults from "./text/defaults";
-
-import { Field as TextAreaField } from "./text-area/Field";
-import * as textAreaDefaults from "./text-area/defaults";
-
-import { Field as NumberField } from "./number/Field";
-import * as numberDefaults from "./number/defaults";
-
-import { Field as DateField } from "./date/Field";
-import * as dateDefaults from "./date/defaults";
-
-import { Field as DatetimeField } from "./datetime/Field";
-import * as datetimeDefaults from "./datetime/defaults";
-
-import { Field as TimeField } from "./time/Field";
-import * as timeDefaults from "./time/defaults";
-
-import { Field as SelectField } from "./select/Field";
-import * as selectDefaults from "./select/defaults";
-
-import { Field as CheckboxField } from "./checkbox/Field";
-import * as checkboxDefaults from "./checkbox/defaults";
-
-import { Field as RadioField } from "./radio/Field";
-import * as radioDefaults from "./radio/defaults";
-
-import { Field as LabelField } from "./label/Field";
-import * as labelDefaults from "./label/defaults";
-
-import { Field as SignatureField } from "./signature/Field";
-import * as signatureDefaults from "./signature/defaults";
-
-import { Field as ButtonField } from "./button/Field";
-import * as buttonDefaults from "./button/defaults";
-
-import { Field as ImageUploaderField } from "./image-uploader/Field";
-import * as imageUploaderDefaults from "./image-uploader/defaults";
-
-import { Field as FileUploaderField } from "./file-uploader/Field";
-import * as fileUploaderDefaults from "./file-uploader/defaults";
-
-import { Field as BreakField } from "./break/Field";
-import * as breakDefaults from "./break/defaults";
-
-import { Field as SessionField } from "./session/Field";
-import * as sessionDefaults from "./session/defaults";
+import { Field as TextField } from "./items/text";
+import { Field as TextAreaField } from "./items/text-area";
+import { Field as NumberField } from "./items/number";
+import { Field as DateField } from "./items/date";
+import { Field as DatetimeField } from "./items/datetime";
+import { Field as TimeField } from "./items/time";
+import { Field as SelectField } from "./items/select";
+import { Field as CheckboxField } from "./items/checkbox";
+import { Field as RadioField } from "./items/radio";
+import { Field as LabelField } from "./items/label";
+import { Field as SignatureField } from "./items/signature";
+import { Field as ButtonField } from "./items/button";
+import { Field as ImageUploaderField } from "./items/image-uploader";
+import { Field as FileUploaderField } from "./items/file-uploader";
+import { Field as BreakField } from "./items/break";
+import { Field as SessionField } from "./items/session";
 
 export const WIDGET_REGISTRY: WidgetRegistry = {
   text: {
@@ -74,8 +45,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Single-line text",
     isDataField: true,
     Field: TextField as WidgetDefinition["Field"],
-    defaultSettings: textDefaults.DEFAULT_SETTINGS,
-    defaultLayout: textDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.text,
+    defaultLayout: DEFAULT_LAYOUTS.text,
   },
   "text-area": {
     type: "text-area",
@@ -84,8 +55,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Multi-line text with auto-growing rows",
     isDataField: true,
     Field: TextAreaField as WidgetDefinition["Field"],
-    defaultSettings: textAreaDefaults.DEFAULT_SETTINGS,
-    defaultLayout: textAreaDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS["text-area"],
+    defaultLayout: DEFAULT_LAYOUTS["text-area"],
   },
   number: {
     type: "number",
@@ -94,8 +65,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Numeric input",
     isDataField: true,
     Field: NumberField as WidgetDefinition["Field"],
-    defaultSettings: numberDefaults.DEFAULT_SETTINGS,
-    defaultLayout: numberDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.number,
+    defaultLayout: DEFAULT_LAYOUTS.number,
   },
   date: {
     type: "date",
@@ -104,8 +75,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Date only",
     isDataField: true,
     Field: DateField as WidgetDefinition["Field"],
-    defaultSettings: dateDefaults.DEFAULT_SETTINGS,
-    defaultLayout: dateDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.date,
+    defaultLayout: DEFAULT_LAYOUTS.date,
   },
   datetime: {
     type: "datetime",
@@ -114,8 +85,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Date and time (stored as epoch ms)",
     isDataField: true,
     Field: DatetimeField as WidgetDefinition["Field"],
-    defaultSettings: datetimeDefaults.DEFAULT_SETTINGS,
-    defaultLayout: datetimeDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.datetime,
+    defaultLayout: DEFAULT_LAYOUTS.datetime,
   },
   time: {
     type: "time",
@@ -124,8 +95,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Time only",
     isDataField: true,
     Field: TimeField as WidgetDefinition["Field"],
-    defaultSettings: timeDefaults.DEFAULT_SETTINGS,
-    defaultLayout: timeDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.time,
+    defaultLayout: DEFAULT_LAYOUTS.time,
   },
   select: {
     type: "select",
@@ -134,8 +105,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Dropdown select",
     isDataField: true,
     Field: SelectField as WidgetDefinition["Field"],
-    defaultSettings: selectDefaults.DEFAULT_SETTINGS,
-    defaultLayout: selectDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.select,
+    defaultLayout: DEFAULT_LAYOUTS.select,
   },
   checkbox: {
     type: "checkbox",
@@ -144,8 +115,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "A list of checkboxes (multi-select)",
     isDataField: true,
     Field: CheckboxField as WidgetDefinition["Field"],
-    defaultSettings: checkboxDefaults.DEFAULT_SETTINGS,
-    defaultLayout: checkboxDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.checkbox,
+    defaultLayout: DEFAULT_LAYOUTS.checkbox,
   },
   radio: {
     type: "radio",
@@ -154,8 +125,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "A list of radio buttons (single-select)",
     isDataField: true,
     Field: RadioField as WidgetDefinition["Field"],
-    defaultSettings: radioDefaults.DEFAULT_SETTINGS,
-    defaultLayout: radioDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.radio,
+    defaultLayout: DEFAULT_LAYOUTS.radio,
   },
   label: {
     type: "label",
@@ -164,8 +135,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Readonly display content",
     isDataField: false,
     Field: LabelField as WidgetDefinition["Field"],
-    defaultSettings: labelDefaults.DEFAULT_SETTINGS,
-    defaultLayout: labelDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.label,
+    defaultLayout: DEFAULT_LAYOUTS.label,
   },
   signature: {
     type: "signature",
@@ -174,8 +145,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Lets the person sign with their pointer",
     isDataField: true,
     Field: SignatureField as WidgetDefinition["Field"],
-    defaultSettings: signatureDefaults.DEFAULT_SETTINGS,
-    defaultLayout: signatureDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.signature,
+    defaultLayout: DEFAULT_LAYOUTS.signature,
   },
   button: {
     type: "button",
@@ -184,8 +155,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "A clickable button, optionally linking to a URL",
     isDataField: false,
     Field: ButtonField as WidgetDefinition["Field"],
-    defaultSettings: buttonDefaults.DEFAULT_SETTINGS,
-    defaultLayout: buttonDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.button,
+    defaultLayout: DEFAULT_LAYOUTS.button,
   },
   "image-uploader": {
     type: "image-uploader",
@@ -194,8 +165,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Upload and preview an image",
     isDataField: true,
     Field: ImageUploaderField as WidgetDefinition["Field"],
-    defaultSettings: imageUploaderDefaults.DEFAULT_SETTINGS,
-    defaultLayout: imageUploaderDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS["image-uploader"],
+    defaultLayout: DEFAULT_LAYOUTS["image-uploader"],
   },
   "file-uploader": {
     type: "file-uploader",
@@ -204,8 +175,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Upload files and show them as a list",
     isDataField: true,
     Field: FileUploaderField as WidgetDefinition["Field"],
-    defaultSettings: fileUploaderDefaults.DEFAULT_SETTINGS,
-    defaultLayout: fileUploaderDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS["file-uploader"],
+    defaultLayout: DEFAULT_LAYOUTS["file-uploader"],
   },
   break: {
     type: "break",
@@ -214,8 +185,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "A full-width divider line",
     isDataField: false,
     Field: BreakField as WidgetDefinition["Field"],
-    defaultSettings: breakDefaults.DEFAULT_SETTINGS,
-    defaultLayout: breakDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.break,
+    defaultLayout: DEFAULT_LAYOUTS.break,
   },
   session: {
     type: "session",
@@ -224,8 +195,8 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     description: "Full-width, fixed block",
     isDataField: false,
     Field: SessionField as WidgetDefinition["Field"],
-    defaultSettings: sessionDefaults.DEFAULT_SETTINGS,
-    defaultLayout: sessionDefaults.DEFAULT_LAYOUT,
+    defaultSettings: DEFAULT_SETTINGS.session,
+    defaultLayout: DEFAULT_LAYOUTS.session,
   },
 };
 

@@ -66,6 +66,6 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   button: [LABEL, LINK_URL],
   "image-uploader": [LABEL, REQUIRED],
   "file-uploader": [LABEL, REQUIRED],
-  break: [LABEL],
+  break: [],
   session: [LABEL],
 };

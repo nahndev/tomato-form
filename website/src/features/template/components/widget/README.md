@@ -23,15 +23,16 @@ key of `WidgetProperties` the type exposes for editing (e.g. `label`,
 widget/
   types.ts             # WidgetDefinition, FieldComponentProps, FieldMode
   registry.ts           # WIDGET_REGISTRY: Record<WidgetType, WidgetDefinition>
-  shared/                # small components reused by more than one widget
-  <type>/
-    Field.tsx             # required
-    defaults.ts            # required: DEFAULT_SETTINGS, DEFAULT_LAYOUT
+  settings.ts            # DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties>
+  layouts.ts              # DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">>
+  shared/                  # small components reused by more than one widget
+  items/
+    <type>.tsx             # Field component for one widget type
 ```
 
 ## Required exports
 
-### `Field.tsx`
+### `items/<type>.tsx`
 
 A single component implementing:
 
@@ -54,26 +55,38 @@ interface FieldComponentProps<TValue = unknown> {
   e.g. `break`, `label`, `button`, `session`), never call `onChange` and
   ignore `value`.
 
-### `defaults.ts`
+### `settings.ts` / `layouts.ts`
+
+All widgets' defaults live in these two files, keyed by `WidgetType`:
 
 ```ts
-export const DEFAULT_SETTINGS: WidgetProperties = { label: "...", ... };
-export const DEFAULT_LAYOUT: Omit<GridLayout, "idx"> = { column: 0, span: 2 };
+// settings.ts
+export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
+  ...
+  rating: { label: "Rating" },
+};
+
+// layouts.ts
+export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
+  ...
+  rating: { column: 0, span: 2 },
+};
 ```
 
-`idx` is intentionally omitted - it is always computed at insertion time
-from sibling widgets via `generateKeyBetween` (see
+`idx` is intentionally omitted from layouts - it is always computed at
+insertion time from sibling widgets via `generateKeyBetween` (see
 `TemplateBuilder.handleAddWidget`).
 
 ## Registering a new widget
 
 1. Add the new id to the `WidgetType` union in `src/types/template.ts`.
-2. Create `widget/<type>/Field.tsx` and `widget/<type>/defaults.ts`.
-3. In `registry.ts`, import them and add one entry to `WIDGET_REGISTRY`:
+2. Create `widget/items/<type>.tsx`.
+3. Add the new type's entries to `settings.ts` and `layouts.ts`.
+4. In `registry.ts`, import the Field component and add one entry to
+   `WIDGET_REGISTRY`:
 
 ```ts
-import { Field as RatingField } from "./rating/Field";
-import * as ratingDefaults from "./rating/defaults";
+import { Field as RatingField } from "./items/rating";
 
 // inside WIDGET_REGISTRY = { ... }
 rating: {
@@ -83,12 +96,12 @@ rating: {
   description: "1-5 star rating",
   isDataField: true,
   Field: RatingField as WidgetDefinition["Field"],
-  defaultSettings: ratingDefaults.DEFAULT_SETTINGS,
-  defaultLayout: ratingDefaults.DEFAULT_LAYOUT,
+  defaultSettings: DEFAULT_SETTINGS.rating,
+  defaultLayout: DEFAULT_LAYOUTS.rating,
 },
 ```
 
-4. In `toolbar/property/registry.ts`, add an entry to
+5. In `toolbar/property/registry.ts`, add an entry to
    `WIDGET_PROPERTY_REGISTRY` for the new type: a list of the
    `WidgetPropertyDescriptor`s to show, in display order (at minimum `[LABEL]`;
    add `PLACEHOLDER`/`REQUIRED`/`OPTIONS`/`CONTENT`/`LINK_URL` or a new
