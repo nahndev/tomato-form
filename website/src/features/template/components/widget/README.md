@@ -5,9 +5,17 @@ plugin. `registry.ts` is the single source of truth consumed by:
 
 - the widget picker sidebar (`WidgetPicker.tsx`)
 - the builder canvas preview (`WidgetItem.tsx`)
-- the properties panel (`WidgetPropertiesPanel.tsx`)
+- the properties panel (`toolbar/property/WidgetPropertyContent.tsx`, driven
+  by `toolbar/property/registry.ts` - see below)
 - the submission fill-out page (`app/(main)/boards/[id]/submissions/[submissionId]/page.tsx`)
 - the "add widget" handler (`template/TemplateBuilder.tsx`)
+
+Setting-related components (the fields shown in the properties panel) are
+**not** registered here - they live in a separate registry,
+`toolbar/property/registry.ts` (`WIDGET_PROPERTY_REGISTRY`), keyed by the
+same `WidgetType`. Each entry is a list of `WidgetPropertyDescriptor`s, one per
+key of `WidgetProperties` the type exposes for editing (e.g. `label`,
+`placeholder`, `options`) - see `toolbar/property/types.ts`.
 
 ## Folder layout
 
@@ -19,7 +27,6 @@ widget/
   <type>/
     Field.tsx             # required
     defaults.ts            # required: DEFAULT_SETTINGS, DEFAULT_LAYOUT
-    SettingsFields.tsx     # optional: extra properties-panel fields
 ```
 
 ## Required exports
@@ -58,22 +65,10 @@ export const DEFAULT_LAYOUT: Omit<GridLayout, "idx"> = { column: 0, span: 2 };
 from sibling widgets via `generateKeyBetween` (see
 `TemplateBuilder.handleAddWidget`).
 
-### `SettingsFields.tsx` (optional)
-
-Only needed if the widget has properties beyond the common
-label/placeholder/required (e.g. an options list for select/checkbox/radio,
-a content textarea for `label`, or a URL field for `button`). It receives
-`{ value: WidgetProperties, onChange: (patch: Partial<WidgetProperties>) => void }`
-and is responsible for its own auto-save-on-blur - it is rendered
-independently from the common fields' form. Reuse the building blocks in
-`shared/SettingsFields.tsx` (`OptionsListEditor`, `ContentEditor`, `UrlField`)
-where they fit.
-
 ## Registering a new widget
 
 1. Add the new id to the `WidgetType` union in `src/types/template.ts`.
-2. Create `widget/<type>/Field.tsx` and `widget/<type>/defaults.ts`
-   (+ `SettingsFields.tsx` if needed).
+2. Create `widget/<type>/Field.tsx` and `widget/<type>/defaults.ts`.
 3. In `registry.ts`, import them and add one entry to `WIDGET_REGISTRY`:
 
 ```ts
@@ -93,10 +88,16 @@ rating: {
 },
 ```
 
+4. In `toolbar/property/registry.ts`, add an entry to
+   `WIDGET_PROPERTY_REGISTRY` for the new type: a list of the
+   `WidgetPropertyDescriptor`s to show, in display order (at minimum `[LABEL]`;
+   add `PLACEHOLDER`/`REQUIRED`/`OPTIONS`/`CONTENT`/`LINK_URL` or a new
+   bespoke field if the widget needs a property beyond the existing keys).
+
 That's it - the picker, canvas preview, properties panel, fill page, and
-"add widget" button all pick this up automatically. `WIDGET_REGISTRY` is
-typed as `Record<WidgetType, WidgetDefinition>`, so forgetting step 3 is a
-TypeScript compile error, not a silent runtime gap.
+"add widget" button all pick this up automatically. `WIDGET_REGISTRY` and
+`WIDGET_PROPERTY_REGISTRY` are both typed as `Record<WidgetType, ...>`, so
+forgetting a step is a TypeScript compile error, not a silent runtime gap.
 
 ## Notes / known limitations
 

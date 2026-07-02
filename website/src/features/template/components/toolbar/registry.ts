@@ -1,11 +1,13 @@
 import { WidgetPicker } from "@/features/template/components/toolbar/creation/WidgetPicker";
+import { WidgetPropertyBox } from "@/features/template/components/toolbar/property/WidgetPropertyBox";
 import StructureToolbarBox from "@/features/template/components/toolbar/structure/StructureToolbarBox";
-import { ListTree, LucideIcon, TicketPlus } from "lucide-react";
+import { ListTree, LucideIcon, Settings2, TicketPlus } from "lucide-react";
 import { ComponentType } from "react";
 
 export enum ToolbarType {
   Widget = "widget",
   Structure = "structure",
+  Property = "property",
 }
 export interface ToolbarDefinition {
   icon: LucideIcon;
@@ -26,5 +28,11 @@ export const TOOLBAR_REGISTRY: Record<ToolbarType, ToolbarDefinition> = {
     icon: ListTree,
     label: "Structure",
     Component: StructureToolbarBox,
+  },
+  [ToolbarType.Property]: {
+    type: ToolbarType.Property,
+    icon: Settings2,
+    label: "Properties",
+    Component: WidgetPropertyBox,
   },
 };

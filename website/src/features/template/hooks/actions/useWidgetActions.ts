@@ -14,9 +14,10 @@ export interface WidgetActions {
     before: Widget | null,
   ) => void;
   removeWidget: (widgetId: string) => void;
-  updateProperties: (
+  setProperty: <K extends keyof WidgetProperties>(
     widgetId: string,
-    patch: Partial<WidgetProperties>,
+    key: K,
+    value: WidgetProperties[K],
   ) => void;
 }
 
@@ -63,14 +64,18 @@ export function useWidgetActions(): WidgetActions {
     [doc],
   );
 
-  const updateProperties = useCallback(
-    (widgetId: string, patch: Partial<WidgetProperties>) => {
+  const setProperty = useCallback(
+    <K extends keyof WidgetProperties>(
+      widgetId: string,
+      key: K,
+      value: WidgetProperties[K],
+    ) => {
       const yProps = doc.getMap<WidgetProperties>("properties");
       const current = yProps.get(widgetId) ?? { label: "" };
-      yProps.set(widgetId, { ...current, ...patch });
+      yProps.set(widgetId, { ...current, [key]: value });
     },
     [doc],
   );
 
-  return { addWidget, removeWidget, updateProperties };
+  return { addWidget, removeWidget, setProperty };
 }

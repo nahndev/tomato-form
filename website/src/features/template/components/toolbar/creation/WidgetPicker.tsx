@@ -17,7 +17,7 @@ export function WidgetPicker({}: WidgetPickerProps) {
   const { widgets } = useTemplateState();
   const version = useMemo(() => Object.keys(widgets).length, [widgets]);
   return (
-    <ScrollArea className="size-full">
+    <ScrollArea className="size-full flex flex-col">
       {WIDGET_LIST.map((def) => (
         <WidgetCreationButton key={def.type + version} def={def} />
       ))}

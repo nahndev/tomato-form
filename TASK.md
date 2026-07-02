@@ -1,24 +1,14 @@
-# New solution of `useTemplateYjs`
+# Update properties base on key of `WidgetProperties`
 
-## Problems
+## Currently
 
-- `useTemplateYjs` export both `state` and `action`
-- `useTemplateYjs` alway need context to using
-- `useTemplateYjs` with other hook using mixin, hard refactoring and maintenance
-
-## Rules
-
-- Keep everything separate and decoupling.
-- Should a `Provider` to pass `doc` (yjs)
-- Should a `hook` to pass `template` - action only
-- Should a `hook` to pass `session` - action only using `observe`
-- Should a `hook` to pass `widget` - action only using `observer`
-- should a `hook` to pass `widget` - state only
-- Should a `hook` to pass `template` - state only
-- Should a `hook` to pass `session` - state only
-- `hook` of state should don't dependency in `doc` (yjs), allow using without doc.
+- Property in `./website/src/features/template/components/toolbar/property` using group `properties` by `tabs`
+- It don't better for expand.
+- We want update base on `key` of `WidgetProperties`
 
 ## Tasks
 
-- [x] Create hook and update all component in `./website/src/features/template`
-- [x] Separate and refactoring `useTemplateYjs`
+- [x] Restructure of `WidgetPropertyBox` become list instead of tabs
+- [x] Registry should is `key - WidgetType` include many `key - WidgetProperties`
+- [x] Every `key` will has a `Component`
+- [x] Add new action of `useWidgetActions` set property base on `key` of `WidgetProperties`

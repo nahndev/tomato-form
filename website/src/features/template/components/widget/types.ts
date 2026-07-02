@@ -20,21 +20,13 @@ export interface FieldComponentProps<TValue = unknown> {
   onChange?: (value: TValue) => void;
 }
 
-export interface WidgetSettingsFieldsProps {
-  value: WidgetProperties;
-  onChange: (patch: Partial<WidgetProperties>) => void;
-}
-
 export interface WidgetDefinition<TValue = unknown> {
   type: WidgetType;
   label: string;
   icon: LucideIcon;
   description: string;
   isDataField: boolean;
-  showPlaceholder?: boolean;
-  showRequired?: boolean;
   Field: ComponentType<FieldComponentProps<TValue>>;
-  SettingsFields?: ComponentType<WidgetSettingsFieldsProps>;
   defaultSettings: WidgetProperties;
   defaultLayout: Omit<GridLayout, "idx">;
 }
