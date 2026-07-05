@@ -14,7 +14,7 @@ export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   select: { label: "Select field", options: ["Option 1", "Option 2"] },
   checkbox: { label: "Checkbox field", options: ["Option 1", "Option 2"] },
   radio: { label: "Radio field", options: ["Option 1", "Option 2"] },
-  label: { label: "Label", content: "Enter content…" },
+  label: { label: "Label" },
   signature: { label: "Signature" },
   button: { label: "Click me" },
   "image-uploader": { label: "Image upload field" },

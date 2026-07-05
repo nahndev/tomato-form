@@ -68,7 +68,7 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   select: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
   checkbox: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
   radio: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
-  label: [LABEL, LABEL_FORMAT],
+  label: [LABEL, CONTENT],
   signature: [LABEL, REQUIRED],
   button: [LABEL, LINK_URL],
   "image-uploader": [LABEL, REQUIRED],
