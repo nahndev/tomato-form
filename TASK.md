@@ -1,12 +1,8 @@
-# Enhance `ContentDescriptor`
+# Separate `LexicalEditor` from `ContentDescriptor`
 
-## Currently
-
-- `ContentDescriptor` using normal `text`
-- I should support better with styles, should using `lexical`
+- Currently, `ContentDescriptor` owner `LexicalEditor`
+- The system will using some other editors.
 
 ## Tasks
 
-- [x] Install lexical
-- [x] Update `ContentDescriptor` should using `lexical`
-- [x] Update `LabelField` shown `content` with `lexical`
+- [x] Create `TextEditor` in folder `./website/src/components/ui/lexical`

@@ -1,23 +1,23 @@
 "use client";
 
-import { serializeContentState } from "@/features/template/components/widget/lexical/config";
+import { serializeEditorState } from "@/components/ui/lexical/config";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $createParagraphNode, $getRoot, type SerializedEditorState } from "lexical";
 import { useEffect, useRef } from "react";
 
 /**
  * `LexicalComposer` only reads `initialConfig.editorState` on mount, so an
- * editor never reflects a `content` prop that changes later (e.g. a yjs sync
+ * editor never reflects a `value` prop that changes later (e.g. a yjs sync
  * from another client, or after committing our own edit). This keeps the
- * editor state in lockstep with `content`, without clobbering an in-progress
+ * editor state in lockstep with `value`, without clobbering an in-progress
  * local edit that already produced the same value.
  */
-export function useSyncContentState(content: SerializedEditorState | undefined) {
+export function useSyncEditorState(value: SerializedEditorState | undefined) {
   const [editor] = useLexicalComposerContext();
-  const lastSeenJson = useRef(serializeContentState(content));
+  const lastSeenJson = useRef(serializeEditorState(value));
 
   useEffect(() => {
-    const nextJson = serializeContentState(content);
+    const nextJson = serializeEditorState(value);
     if (nextJson === lastSeenJson.current) return;
     lastSeenJson.current = nextJson;
 
@@ -34,5 +34,5 @@ export function useSyncContentState(content: SerializedEditorState | undefined) 
     }
 
     editor.setEditorState(editor.parseEditorState(nextJson));
-  }, [editor, content]);
+  }, [editor, value]);
 }
