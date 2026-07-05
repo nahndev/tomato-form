@@ -3,6 +3,7 @@ import { LabelDescriptor } from "@/features/template/components/toolbar/property
 import { OptionsDescriptor } from "@/features/template/components/toolbar/property/descriptors/OptionsDescriptor";
 import { PlaceholderDescriptor } from "@/features/template/components/toolbar/property/descriptors/PlaceholderDescriptor";
 import { RequiredDescriptor } from "@/features/template/components/toolbar/property/descriptors/RequiredDescriptor";
+import { TextFormatDescriptor } from "@/features/template/components/toolbar/property/descriptors/TextFormatDescriptor";
 import { UrlDescriptor } from "@/features/template/components/toolbar/property/descriptors/UrlDescriptor";
 import type {
   WidgetPropertyDescriptor,
@@ -45,6 +46,12 @@ const LINK_URL: WidgetPropertyDescriptor = {
   Component: UrlDescriptor,
 };
 
+const LABEL_FORMAT: WidgetPropertyDescriptor = {
+  key: "labelStyle",
+  label: "",
+  Component: TextFormatDescriptor,
+};
+
 /**
  * Property-editing components per widget type, decoupled from
  * `widget/registry.ts`. Each entry's `key` is a key of `WidgetProperties`;
@@ -61,7 +68,7 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   select: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
   checkbox: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
   radio: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
-  label: [LABEL, CONTENT],
+  label: [LABEL, LABEL_FORMAT],
   signature: [LABEL, REQUIRED],
   button: [LABEL, LINK_URL],
   "image-uploader": [LABEL, REQUIRED],

@@ -1,3 +1,5 @@
+import { CSSProperties } from "react";
+
 export type WidgetType =
   | "text"
   | "text-area"
@@ -34,6 +36,11 @@ export interface GridLayout {
   isFullWidth?: boolean;
 }
 
+export interface TextFormatProperties {
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+}
 export interface WidgetProperties {
   label: string;
   placeholder?: string;
@@ -43,6 +50,8 @@ export interface WidgetProperties {
   content?: string;
   /** Target URL the `button` widget opens on click. */
   url?: string;
+  compact?: boolean;
+  labelStyle?: CSSProperties;
 }
 
 export interface Session {

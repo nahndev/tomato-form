@@ -1,11 +1,14 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
+import {
+  useTemplateMode,
+  useWidgetSelection,
+} from "@/features/template/components/provider/TemplateProvider";
 import { WidgetProvider } from "@/features/template/components/provider/WidgetProvider";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import { useWidgetState } from "@/features/template/hooks/state/useWidgetState";
-import type { Widget } from "@/types/template";
+import { TemplateMode, type Widget } from "@/types/template";
 import clsx from "clsx";
 
 interface WidgetItemProps {
@@ -13,14 +16,16 @@ interface WidgetItemProps {
 }
 
 export function WidgetItem({ widget }: WidgetItemProps) {
+  const mode = useTemplateMode();
   const { isSelected, select } = useWidgetSelection();
+  const isShowSelectedBorder = mode === TemplateMode.EDIT && isSelected(widget);
   return (
     <WidgetProvider widgetId={widget.id}>
       <div className="p-1">
         <div
           className={clsx(
             "border border-dashed rounded-md",
-            isSelected(widget) ? "border-orange-500" : "border-transparent",
+            isShowSelectedBorder ? "border-orange-500" : "border-transparent",
           )}
           onClick={() => select(widget)}
         >
@@ -35,13 +40,26 @@ export function WidgetItem({ widget }: WidgetItemProps) {
 }
 
 function WidgetItemHeader({ widget }: { widget: Widget }) {
+  const mode = useTemplateMode();
   const { properties } = useWidgetState();
+
   return (
-    <div className="flex items-center gap-2">
+    <div
+      className={clsx(
+        "flex items-center gap-2",
+        properties?.compact && "hidden",
+      )}
+    >
       <p className="truncate text-sm font-medium">
         {properties?.label || "(no label)"}
       </p>
-      <Badge variant="secondary" className="shrink-0 text-[10px]">
+      <Badge
+        variant="secondary"
+        className={clsx(
+          "shrink-0 text-[10px]",
+          mode === TemplateMode.VIEW && "hidden",
+        )}
+      >
         {widget.type}
       </Badge>
       {properties?.required && (

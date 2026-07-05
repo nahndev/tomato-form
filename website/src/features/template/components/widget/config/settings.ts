@@ -19,6 +19,6 @@ export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   button: { label: "Click me" },
   "image-uploader": { label: "Image upload field" },
   "file-uploader": { label: "File upload field" },
-  break: { label: "Break" },
+  break: { label: "Break", compact: true },
   session: { label: "Session" },
 };
