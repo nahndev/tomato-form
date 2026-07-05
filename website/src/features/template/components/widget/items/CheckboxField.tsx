@@ -3,7 +3,7 @@
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
 /** A multi-select list of checkboxes. Value is the array of selected options. */
-export function Field({
+export function CheckboxField({
   widgetId,
   properties,
   mode,

@@ -9,7 +9,7 @@ const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 160;
 
 /** Value is a PNG data URL produced by canvas.toDataURL(). */
-export function Field({ mode, value, onChange }: FieldComponentProps<string>) {
+export function SignatureField({ mode, value, onChange }: FieldComponentProps<string>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);

@@ -3,7 +3,7 @@
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
 /** A single-select list of radio buttons. */
-export function Field({
+export function RadioField({
   widgetId,
   properties,
   mode,

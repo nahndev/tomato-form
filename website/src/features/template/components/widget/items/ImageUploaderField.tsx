@@ -15,7 +15,7 @@ export interface UploadedImage {
 // server/src). The selected image is kept client-side as a base64 data URL
 // for demo purposes only - a future task must add a real upload endpoint
 // and switch this to upload-then-store-URL instead.
-export function Field({
+export function ImageUploaderField({
   widgetId,
   mode,
   value,

@@ -1,41 +1,41 @@
 import {
-  Type,
   AlignLeft,
-  Hash,
   Calendar,
   CalendarClock,
-  Timer,
-  List,
   CheckSquare,
   CircleDot,
-  FileText,
-  PenTool,
-  MousePointerClick,
-  Image as ImageIcon,
-  Paperclip,
-  Minus,
   Clock,
+  FileText,
+  Hash,
+  Image as ImageIcon,
+  List,
+  Minus,
+  MousePointerClick,
+  Paperclip,
+  PenTool,
+  Timer,
+  Type,
 } from "lucide-react";
+import { DEFAULT_LAYOUTS } from "./config/layouts";
+import { DEFAULT_SETTINGS } from "./config/settings";
 import type { WidgetDefinition, WidgetRegistry } from "./types";
-import { DEFAULT_SETTINGS } from "./settings";
-import { DEFAULT_LAYOUTS } from "./layouts";
 
-import { Field as TextField } from "./items/text";
-import { Field as TextAreaField } from "./items/text-area";
-import { Field as NumberField } from "./items/number";
-import { Field as DateField } from "./items/date";
-import { Field as DatetimeField } from "./items/datetime";
-import { Field as TimeField } from "./items/time";
-import { Field as SelectField } from "./items/select";
-import { Field as CheckboxField } from "./items/checkbox";
-import { Field as RadioField } from "./items/radio";
-import { Field as LabelField } from "./items/label";
-import { Field as SignatureField } from "./items/signature";
-import { Field as ButtonField } from "./items/button";
-import { Field as ImageUploaderField } from "./items/image-uploader";
-import { Field as FileUploaderField } from "./items/file-uploader";
-import { Field as BreakField } from "./items/break";
-import { Field as SessionField } from "./items/session";
+import { BreakField } from "./items/BreakField";
+import { ButtonField } from "./items/ButtonField";
+import { CheckboxField } from "./items/CheckboxField";
+import { DateField } from "./items/DateField";
+import { DatetimeField } from "./items/DatetimeField";
+import { FileUploaderField } from "./items/FileUploaderField";
+import { ImageUploaderField } from "./items/ImageUploaderField";
+import { LabelField } from "./items/LabelField";
+import { NumberField } from "./items/NumberField";
+import { RadioField } from "./items/RadioField";
+import { SelectField } from "./items/SelectField";
+import { SessionField } from "./items/SessionField";
+import { SignatureField } from "./items/SignatureField";
+import { TextField } from "./items/TextField";
+import { TextAreaField } from "./items/TextAreaField";
+import { TimeField } from "./items/TimeField";
 
 export const WIDGET_REGISTRY: WidgetRegistry = {
   text: {

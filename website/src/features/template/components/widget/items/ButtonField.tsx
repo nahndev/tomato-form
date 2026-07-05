@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
 /** A clickable action button. Never collects a value. */
-export function Field({ properties, mode }: FieldComponentProps<unknown>) {
+export function ButtonField({ properties, mode }: FieldComponentProps<unknown>) {
   function handleClick() {
     if (properties.url) {
       window.open(properties.url, "_blank", "noopener,noreferrer");

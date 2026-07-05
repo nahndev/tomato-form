@@ -2,7 +2,7 @@
 
 import { Paperclip, X } from "lucide-react";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
-import { formatBytes } from "@/features/template/components/widget/shared/format";
+import { formatBytes } from "@/lib/format";
 
 export interface UploadedFileMeta {
   name: string;
@@ -14,7 +14,7 @@ export interface UploadedFileMeta {
 // server/src). Only file metadata (name/size/type) is kept - no file
 // content is persisted - for demo purposes only. A future task must add a
 // real upload endpoint.
-export function Field({
+export function FileUploaderField({
   widgetId,
   mode,
   value,

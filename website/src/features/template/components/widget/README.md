@@ -23,18 +23,18 @@ key of `WidgetProperties` the type exposes for editing (e.g. `label`,
 widget/
   types.ts             # WidgetDefinition, FieldComponentProps, FieldMode
   registry.ts           # WIDGET_REGISTRY: Record<WidgetType, WidgetDefinition>
-  settings.ts            # DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties>
-  layouts.ts              # DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">>
-  shared/                  # small components reused by more than one widget
+  config/
+    settings.ts           # DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties>
+    layouts.ts             # DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">>
   items/
-    <type>.tsx             # Field component for one widget type
+    <Type>Field.tsx        # Field component for one widget type, e.g. TextField.tsx
 ```
 
 ## Required exports
 
-### `items/<type>.tsx`
+### `items/<Type>Field.tsx`
 
-A single component implementing:
+A single named-export component implementing:
 
 ```ts
 interface FieldComponentProps<TValue = unknown> {
@@ -55,18 +55,18 @@ interface FieldComponentProps<TValue = unknown> {
   e.g. `break`, `label`, `button`, `session`), never call `onChange` and
   ignore `value`.
 
-### `settings.ts` / `layouts.ts`
+### `config/settings.ts` / `config/layouts.ts`
 
 All widgets' defaults live in these two files, keyed by `WidgetType`:
 
 ```ts
-// settings.ts
+// config/settings.ts
 export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   ...
   rating: { label: "Rating" },
 };
 
-// layouts.ts
+// config/layouts.ts
 export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
   ...
   rating: { column: 0, span: 2 },
@@ -80,13 +80,14 @@ insertion time from sibling widgets via `generateKeyBetween` (see
 ## Registering a new widget
 
 1. Add the new id to the `WidgetType` union in `src/types/template.ts`.
-2. Create `widget/items/<type>.tsx`.
-3. Add the new type's entries to `settings.ts` and `layouts.ts`.
+2. Create `widget/items/<Type>Field.tsx`, exporting a component named
+   `<Type>Field` (e.g. `RatingField`).
+3. Add the new type's entries to `config/settings.ts` and `config/layouts.ts`.
 4. In `registry.ts`, import the Field component and add one entry to
    `WIDGET_REGISTRY`:
 
 ```ts
-import { Field as RatingField } from "./items/rating";
+import { RatingField } from "./items/RatingField";
 
 // inside WIDGET_REGISTRY = { ... }
 rating: {
