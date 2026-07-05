@@ -1,16 +1,15 @@
 "use client";
 
-import { Briefcase, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { Briefcase, Loader2, Plus } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
-import JobCreatorDialog from "@/features/board/components/job/JobCreatorDialog";
-import JobItem from "@/features/board/components/job/JobItem";
-import { useJobs } from "@/hooks/useJobs";
+import JobItem from "@/features/job/components/JobItem";
+import { useJobs } from "@/features/job/hooks/useJobs";
 
 const JobList: React.FC = () => {
   const board = useBoardContext();
   const { data: jobs = [], isLoading } = useJobs(board.id);
-  const [open, setOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -23,7 +22,12 @@ const JobList: React.FC = () => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-end">
-        <JobCreatorDialog open={open} onOpenChange={setOpen} />
+        <Button size="sm" asChild>
+          <Link href={`/boards/${board.id}/jobs/new`}>
+            <Plus className="mr-2 size-4" />
+            New Job
+          </Link>
+        </Button>
       </div>
 
       {jobs.length === 0 ? (

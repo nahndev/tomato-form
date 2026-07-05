@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Discussion from "@/features/board/components/Discussion";
 import History from "@/features/board/components/History";
-import JobList from "@/features/board/components/job/JobList";
+import { JobList } from "@/features/job";
 import Setting from "@/features/board/components/Setting";
 import SubmissionList from "@/features/board/components/submission/SubmissionList";
 import TemplateSetting from "@/features/board/components/TemplateSetting";
