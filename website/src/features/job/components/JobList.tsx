@@ -23,7 +23,7 @@ const JobList: React.FC = () => {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-end">
         <Button size="sm" asChild>
-          <Link href={`/boards/${board.id}/jobs/new`}>
+          <Link href={`/jobs/new?boardId=${board.id}`}>
             <Plus className="mr-2 size-4" />
             New Job
           </Link>

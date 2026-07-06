@@ -1,28 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
-import Link from "next/link";
-import { notFound, useRouter } from "next/navigation";
-import { ArrowLeft, Loader2, Pencil, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-import { useBoard } from "@/hooks/useBoards";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import JobForm, { JobFormValues } from "@/features/job/components/JobForm";
 import {
   useDeleteJob,
   useJob,
   useJobExecutions,
   useUpdateJob,
 } from "@/features/job/hooks/useJobs";
+import { useBoard } from "@/hooks/useBoards";
 import { useTemplate } from "@/hooks/useTemplates";
 import { useUserStore } from "@/store/user.store";
-import JobForm, { JobFormValues } from "@/features/job/components/JobForm";
 import {
   ACTION_TYPE_SEND_MAIL,
   JobAction,
@@ -32,6 +22,11 @@ import {
   SendMailAction,
   SubmissionCreationAction,
 } from "@/types/job";
+import { ArrowLeft, Loader2, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { notFound, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 enum JobDetailTab {
   SETUP = "setup",
@@ -148,7 +143,7 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex min-h-60 items-center justify-center">
         <Loader2 className="size-6 animate-spin text-muted-foreground" />
       </div>
     );
@@ -164,7 +159,7 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
         actions: values.actions,
       });
       toast.success("Job updated");
-      router.push(`/boards/${boardId}/jobs/${jobId}?mode=view`);
+      router.push(`/jobs/${jobId}?boardId=${boardId}&mode=view`);
     } catch (err) {
       console.error("Failed to update job:", err);
       toast.error("Failed to update job");
@@ -183,49 +178,43 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
   }
 
   return (
-    <div className="container mx-auto max-w-2xl px-6 py-10">
-      <Link
-        href={`/boards/${boardId}`}
-        className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" />
-        Board
-      </Link>
+    <div className="container mx-auto px-6 py-10">
+      <div className="flex flex-row items-center gap-2">
+        <Link href={`/boards/${boardId}`}>
+          <ArrowLeft className="size-4" />
+        </Link>
+        <h1 className="text-xl font-bold">{job.name}</h1>
+        <div className="flex-1" />
 
-      <div className="mb-6 flex items-start justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-bold">{job.name}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {job.expression}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant={job.enable ? "default" : "secondary"}>
-            {job.enable ? "Enabled" : "Disabled"}
-          </Badge>
-          {mode === "view" && (
-            <>
-              <Button variant="outline" size="sm" asChild>
-                <Link href={`/boards/${boardId}/jobs/${jobId}?mode=edit`}>
-                  <Pencil className="size-3.5" />
-                  Edit
-                </Link>
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={handleDelete}
-                disabled={isDeleting}
-              >
-                {isDeleting ? (
-                  <Loader2 className="size-3.5 animate-spin" />
-                ) : (
-                  <Trash2 className="size-3.5" />
-                )}
-                Delete
-              </Button>
-            </>
-          )}
+        <div className="mb-6 flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Badge variant={job.enable ? "default" : "secondary"}>
+              {job.enable ? "Enabled" : "Disabled"}
+            </Badge>
+            {mode === "view" && (
+              <>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={`/jobs/${jobId}?boardId=${boardId}&mode=edit`}>
+                    <Pencil className="size-3.5" />
+                    Edit
+                  </Link>
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <Loader2 className="size-3.5 animate-spin" />
+                  ) : (
+                    <Trash2 className="size-3.5" />
+                  )}
+                  Delete
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -248,7 +237,7 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
               submittingLabel="Saving…"
               onSubmit={handleUpdate}
               onCancel={() =>
-                router.push(`/boards/${boardId}/jobs/${jobId}?mode=view`)
+                router.push(`/jobs/${jobId}?boardId=${boardId}&mode=view`)
               }
             />
           ) : (
@@ -288,9 +277,7 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
                       </span>
                     </div>
                     {execution.error && (
-                      <div className="text-destructive">
-                        {execution.error}
-                      </div>
+                      <div className="text-destructive">{execution.error}</div>
                     )}
                   </div>
                 ))}

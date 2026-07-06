@@ -1,12 +1,13 @@
 "use client";
 
-import { Loader2, Pencil, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useDeleteJob } from "@/features/job/hooks/useJobs";
 import { Job } from "@/types/job";
+import { Loader2, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export type JobItemProps = {
   job: Job;
@@ -28,14 +29,17 @@ const JobItem: React.FC<JobItemProps> = ({ job }) => {
   }
 
   return (
-    <div
+    <Link
       role="button"
       tabIndex={0}
-      onClick={() => router.push(`/boards/${board.id}/jobs/${job.id}?mode=view`)}
+      href={`/jobs/${job.id}?boardId=${board.id}&mode=view`}
+      onClick={() =>
+        router.push(`/jobs/${job.id}?boardId=${board.id}&mode=view`)
+      }
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          router.push(`/boards/${board.id}/jobs/${job.id}?mode=view`);
+          router.push(`/jobs/${job.id}?boardId=${board.id}&mode=view`);
         }
       }}
       className="flex flex-row items-center gap-3 p-2 group hover:bg-accent"
@@ -52,7 +56,7 @@ const JobItem: React.FC<JobItemProps> = ({ job }) => {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            router.push(`/boards/${board.id}/jobs/${job.id}?mode=edit`);
+            router.push(`/jobs/${job.id}?boardId=${board.id}&mode=edit`);
           }}
           className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
           aria-label="Edit job"
@@ -75,7 +79,7 @@ const JobItem: React.FC<JobItemProps> = ({ job }) => {
           )}
         </button>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -26,7 +26,7 @@ const JobCreationPage: React.FC<JobCreationPageProps> = ({ boardId }) => {
         actions: values.actions,
       });
       toast.success("Job created");
-      router.push(`/boards/${boardId}/jobs/${job.id}?mode=view`);
+      router.push(`/jobs/${job.id}?boardId=${boardId}&mode=view`);
     } catch (err) {
       console.error("Failed to create job:", err);
       toast.error("Failed to create job");
