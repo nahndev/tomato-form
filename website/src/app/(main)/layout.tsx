@@ -1,3 +1,4 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { AppSidebar } from "./_components/AppSidebar";
 
 interface MainLayoutProps {
@@ -6,9 +7,11 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="flex min-h-screen">
+    <div className="w-screen h-screen flex flex-row">
       <AppSidebar />
-      <main className="min-w-0 flex-1">{children}</main>
+      <ScrollArea className="flex-1">
+        <main className="min-w-0">{children}</main>
+      </ScrollArea>
     </div>
   );
 }
