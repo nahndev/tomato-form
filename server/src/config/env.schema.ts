@@ -17,7 +17,7 @@ export class EnvironmentVariables {
   PORT: number = 3022;
 
   @IsString()
-  MONGODB_URI!: string;
+  DATABASE_URL!: string;
 
   @IsString()
   CORS_ORIGIN!: string;

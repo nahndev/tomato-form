@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common";
-import { MongooseModule } from "@nestjs/mongoose";
 import { EmitterModule } from "../emitter/emitter.module";
 import { SubmissionModule } from "../submission/submission.module";
 import { UserModule } from "../user/user.module";
@@ -10,23 +9,9 @@ import { SendMailActionRunner } from "./action/send-mail/send-mail-action.runner
 import { JobController } from "./job.controller";
 import { JobHandler } from "./job.handler";
 import { JobService } from "./job.service";
-import { Job, JobSchema } from "./schemas/job.schema";
-import {
-  JobExecution,
-  JobExecutionSchema,
-} from "./schemas/job-execution.schema";
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: Job.name, schema: JobSchema },
-      { name: JobExecution.name, schema: JobExecutionSchema },
-    ]),
-    SubmissionModule,
-    UserModule,
-    MailModule,
-    EmitterModule,
-  ],
+  imports: [SubmissionModule, UserModule, MailModule, EmitterModule],
   controllers: [JobController],
   providers: [
     JobService,

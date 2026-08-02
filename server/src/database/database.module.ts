@@ -1,15 +1,9 @@
-import { Module } from "@nestjs/common";
-import { MongooseModule } from "@nestjs/mongoose";
-import { ConfigService } from "@nestjs/config";
+import { Global, Module } from "@nestjs/common";
+import { PrismaService } from "./prisma.service";
 
+@Global()
 @Module({
-  imports: [
-    MongooseModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        uri: config.getOrThrow<string>("MONGODB_URI"),
-      }),
-    }),
-  ],
+  providers: [PrismaService],
+  exports: [PrismaService],
 })
 export class DatabaseModule {}

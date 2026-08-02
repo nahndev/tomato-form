@@ -1,38 +1,64 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { v4 as uuidv4 } from "uuid";
+import { Action, ActionType, Job, Prisma } from "@/database/prisma-client";
+import { isPrismaNotFoundError } from "../common/utils/prisma.util";
+import { PrismaService } from "../database/prisma.service";
 import { CronEmitter } from "../emitter/cron/cron.emitter";
-import { JobRemovedEvent } from "../shared/events/job-removed.event";
 import { JobTriggeredEvent } from "../shared/events/job-triggered.event";
-import { CreateJobDto } from "./dto/create-job.dto";
+import { CreateJobActionDto, CreateJobDto } from "./dto/create-job.dto";
 import { UpdateJobDto } from "./dto/update-job.dto";
-import {
-  JobExecution,
-  JobExecutionDocument,
-} from "./schemas/job-execution.schema";
-import { Job, JobDocument } from "./schemas/job.schema";
+
+export type JobWithActions = Job & { actions: Action[] };
+
+function toActionCreateInput(
+  action: CreateJobActionDto,
+  order: number,
+): Prisma.ActionUncheckedCreateWithoutJobInput {
+  if (action.type === ActionType.SUBMISSION_CREATION) {
+    return {
+      type: ActionType.SUBMISSION_CREATION,
+      order,
+      templateId: action.templateId,
+      boardId: action.boardId,
+      payload: {},
+    };
+  }
+
+  return {
+    type: ActionType.SEND_MAIL,
+    order,
+    payload: {
+      recipients: action.recipients,
+      content: action.content,
+    } as unknown as Prisma.InputJsonValue,
+  };
+}
+
+const ORDERED_ACTIONS_INCLUDE = {
+  actions: { orderBy: { order: "asc" as const } },
+};
 
 @Injectable()
 export class JobService {
   constructor(
-    @InjectModel(Job.name)
-    private readonly jobModel: Model<JobDocument>,
-    @InjectModel(JobExecution.name)
-    private readonly jobExecutionModel: Model<JobExecutionDocument>,
+    private readonly prisma: PrismaService,
     private readonly cronEmitter: CronEmitter,
-    private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async create(dto: CreateJobDto): Promise<Job> {
-    const doc = await new this.jobModel({
-      id: uuidv4(),
-      name: dto.name,
-      expression: dto.expression,
-      actions: dto.actions,
-      enable: false,
-    }).save();
+  async create(dto: CreateJobDto, boardId: string): Promise<JobWithActions> {
+    const doc = await this.prisma.job.create({
+      data: {
+        boardId,
+        name: dto.name,
+        expression: dto.expression,
+        enable: false,
+        actions: {
+          create: dto.actions.map((action, order) =>
+            toActionCreateInput(action, order),
+          ),
+        },
+      },
+      include: ORDERED_ACTIONS_INCLUDE,
+    });
 
     if (doc.enable) {
       await this.cronEmitter.register(
@@ -45,46 +71,85 @@ export class JobService {
     return doc;
   }
 
-  async findByIds(ids: string[]): Promise<Job[]> {
-    return this.jobModel.find({ id: { $in: ids } }).exec();
+  async findByBoardId(boardId: string): Promise<Job[]> {
+    return this.prisma.job.findMany({ where: { boardId } });
   }
 
-  async findOne(id: string): Promise<Job> {
-    const doc = await this.jobModel.findOne({ id }).exec();
+  async findOne(id: string): Promise<JobWithActions> {
+    const doc = await this.prisma.job.findUnique({
+      where: { id },
+      include: ORDERED_ACTIONS_INCLUDE,
+    });
     if (!doc) throw new NotFoundException(`Job ${id} not found`);
     return doc;
   }
 
-  async update(id: string, dto: UpdateJobDto): Promise<Job> {
-    const doc = await this.jobModel
-      .findOneAndUpdate({ id }, { $set: dto }, { new: true })
-      .exec();
-    if (!doc) throw new NotFoundException(`Job ${id} not found`);
+  async update(id: string, dto: UpdateJobDto): Promise<JobWithActions> {
+    const doc = await this.prisma.$transaction(async (tx) => {
+      const existing = await tx.job.findUnique({ where: { id } });
+      if (!existing) throw new NotFoundException(`Job ${id} not found`);
+
+      if (dto.actions) {
+        await tx.action.deleteMany({ where: { jobId: id } });
+      }
+
+      return tx.job.update({
+        where: { id },
+        data: {
+          ...(dto.name !== undefined ? { name: dto.name } : {}),
+          ...(dto.expression !== undefined
+            ? { expression: dto.expression }
+            : {}),
+          ...(dto.actions
+            ? {
+                actions: {
+                  create: dto.actions.map((action, order) =>
+                    toActionCreateInput(action, order),
+                  ),
+                },
+              }
+            : {}),
+        },
+        include: ORDERED_ACTIONS_INCLUDE,
+      });
+    });
+
     this.setEnabled(doc.id, false);
     return doc;
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.jobModel.deleteOne({ id }).exec();
-    if (result.deletedCount === 0)
-      throw new NotFoundException(`Job ${id} not found`);
+    try {
+      await this.prisma.job.delete({ where: { id } });
+    } catch (err) {
+      if (isPrismaNotFoundError(err))
+        throw new NotFoundException(`Job ${id} not found`);
+      throw err;
+    }
     await this.cronEmitter.remove(id);
-    this.eventEmitter.emit(JobRemovedEvent.name, new JobRemovedEvent(id));
   }
 
-  async findExecutions(jobId: string): Promise<JobExecution[]> {
+  async findExecutions(jobId: string) {
     await this.findOne(jobId);
-    return this.jobExecutionModel
-      .find({ jobId })
-      .sort({ startedAt: -1 })
-      .exec();
+    return this.prisma.jobExecution.findMany({
+      where: { jobId },
+      orderBy: { startedAt: "desc" },
+    });
   }
 
-  async setEnabled(id: string, enable: boolean): Promise<Job> {
-    const doc = await this.jobModel
-      .findOneAndUpdate({ id }, { $set: { enable } }, { new: true })
-      .exec();
-    if (!doc) throw new NotFoundException(`Job ${id} not found`);
+  async setEnabled(id: string, enable: boolean): Promise<JobWithActions> {
+    let doc: JobWithActions;
+    try {
+      doc = await this.prisma.job.update({
+        where: { id },
+        data: { enable },
+        include: ORDERED_ACTIONS_INCLUDE,
+      });
+    } catch (err) {
+      if (isPrismaNotFoundError(err))
+        throw new NotFoundException(`Job ${id} not found`);
+      throw err;
+    }
 
     if (doc.enable) {
       await this.cronEmitter.register(

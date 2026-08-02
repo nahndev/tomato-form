@@ -6,8 +6,8 @@ import {
   IsString,
   ValidateNested,
 } from "class-validator";
+import { ActionType } from "@/database/prisma-client";
 import { IsCronExpression } from "../../common/decorators/is-cron-expression.decorator";
-import { ActionType } from "../action/base-action.schema";
 import { CreateSendMailActionDto } from "../action/send-mail/send-mail-action.dto";
 import { CreateSubmissionCreationActionDto } from "../action/submission-creation/submission-creation-action.dto";
 

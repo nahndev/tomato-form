@@ -86,9 +86,7 @@ export class BoardController {
     @Body() dto: CreateJobDto,
   ) {
     await this.boardService.findOne(boardId);
-    const job = await this.jobService.create(dto);
-    await this.boardService.addJobId(boardId, job.id);
-    return job;
+    return this.jobService.create(dto, boardId);
   }
 
   @Get(":boardId/jobs")
@@ -97,7 +95,7 @@ export class BoardController {
   @ApiResponse({ status: 200, description: "Jobs list" })
   @ApiResponse({ status: 404, description: "Board not found" })
   async findJobs(@Param("boardId") boardId: string) {
-    const board = await this.boardService.findOne(boardId);
-    return this.jobService.findByIds(board.jobIds);
+    await this.boardService.findOne(boardId);
+    return this.jobService.findByBoardId(boardId);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
+import { ActionType } from "@/database/prisma-client";
 import { ActionRunnerHandler } from "./action-runner.interface";
-import { ActionType } from "./base-action.schema";
 import { SubmissionCreationActionRunner } from "./submission-creation/submission-creation-action.runner";
 import { SendMailActionRunner } from "./send-mail/send-mail-action.runner";
 

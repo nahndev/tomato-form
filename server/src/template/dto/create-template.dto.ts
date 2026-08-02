@@ -5,7 +5,7 @@ import {
   IsObject,
   IsOptional,
 } from "class-validator";
-import type { Widget, GridLayout, WidgetProperties } from "../template.schema";
+import type { Widget, GridLayout, WidgetProperties } from "../template.types";
 
 export class CreateTemplateDto {
   @ApiProperty({ example: "My Form" })

@@ -1,49 +1,72 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { v4 as uuidv4 } from "uuid";
-import { Submission, SubmissionDocument } from "./submission.schema";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { Prisma, Submission } from "@/database/prisma-client";
+import {
+  isPrismaForeignKeyError,
+  isPrismaNotFoundError,
+} from "../common/utils/prisma.util";
+import { PrismaService } from "../database/prisma.service";
 import { CreateSubmissionDto } from "./dto/create-submission.dto";
 import { UpdateSubmissionDto } from "./dto/update-submission.dto";
 
 @Injectable()
 export class SubmissionService {
-  constructor(
-    @InjectModel(Submission.name)
-    private readonly submissionModel: Model<SubmissionDocument>,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateSubmissionDto): Promise<Submission> {
-    const doc = new this.submissionModel({
-      id: uuidv4(),
-      boardId: dto.boardId,
-      templateId: dto.templateId,
-      data: dto.data ?? {},
-    });
-    return doc.save();
+    try {
+      return await this.prisma.submission.create({
+        data: {
+          boardId: dto.boardId,
+          templateId: dto.templateId,
+          data: (dto.data ?? {}) as Prisma.InputJsonValue,
+        },
+      });
+    } catch (err) {
+      if (isPrismaForeignKeyError(err)) {
+        throw new ConflictException(
+          "Submission references a board or template that does not exist",
+        );
+      }
+      throw err;
+    }
   }
 
   async findAll(boardId?: string): Promise<Submission[]> {
-    return this.submissionModel.find(boardId ? { boardId } : {}).exec();
+    return this.prisma.submission.findMany({
+      where: boardId ? { boardId } : undefined,
+    });
   }
 
   async findOne(id: string): Promise<Submission> {
-    const doc = await this.submissionModel.findOne({ id }).exec();
+    const doc = await this.prisma.submission.findUnique({ where: { id } });
     if (!doc) throw new NotFoundException(`Submission ${id} not found`);
     return doc;
   }
 
   async update(id: string, dto: UpdateSubmissionDto): Promise<Submission> {
-    const doc = await this.submissionModel
-      .findOneAndUpdate({ id }, { $set: dto }, { new: true })
-      .exec();
-    if (!doc) throw new NotFoundException(`Submission ${id} not found`);
-    return doc;
+    try {
+      return await this.prisma.submission.update({
+        where: { id },
+        data: {
+          ...(dto.data !== undefined
+            ? { data: dto.data as Prisma.InputJsonValue }
+            : {}),
+        },
+      });
+    } catch (err) {
+      if (isPrismaNotFoundError(err))
+        throw new NotFoundException(`Submission ${id} not found`);
+      throw err;
+    }
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.submissionModel.deleteOne({ id }).exec();
-    if (result.deletedCount === 0)
-      throw new NotFoundException(`Submission ${id} not found`);
+    try {
+      await this.prisma.submission.delete({ where: { id } });
+    } catch (err) {
+      if (isPrismaNotFoundError(err))
+        throw new NotFoundException(`Submission ${id} not found`);
+      throw err;
+    }
   }
 }

@@ -1,62 +1,81 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { v4 as uuidv4 } from "uuid";
-import { Board, BoardDocument } from "./board.schema";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { Board } from "@/database/prisma-client";
+import {
+  isPrismaForeignKeyError,
+  isPrismaNotFoundError,
+} from "../common/utils/prisma.util";
+import { PrismaService } from "../database/prisma.service";
+import { JobService } from "../job/job.service";
 import { CreateBoardDto } from "./dto/create-board.dto";
 import { UpdateBoardDto } from "./dto/update-board.dto";
 
 @Injectable()
 export class BoardService {
   constructor(
-    @InjectModel(Board.name)
-    private readonly boardModel: Model<BoardDocument>,
+    private readonly prisma: PrismaService,
+    private readonly jobService: JobService,
   ) {}
 
   async create(dto: CreateBoardDto): Promise<Board> {
-    const doc = new this.boardModel({
-      id: uuidv4(),
-      name: dto.name,
-      templateIds: dto.templateIds ?? [],
+    return this.prisma.board.create({
+      data: {
+        name: dto.name,
+        templates: dto.templateIds
+          ? { connect: dto.templateIds.map((id) => ({ id })) }
+          : undefined,
+      },
     });
-    return doc.save();
   }
 
   async findAll(): Promise<Board[]> {
-    return this.boardModel.find().exec();
+    return this.prisma.board.findMany();
   }
 
   async findOne(id: string): Promise<Board> {
-    const doc = await this.boardModel.findOne({ id }).exec();
+    const doc = await this.prisma.board.findUnique({ where: { id } });
     if (!doc) throw new NotFoundException(`Board ${id} not found`);
     return doc;
   }
 
   async update(id: string, dto: UpdateBoardDto): Promise<Board> {
-    const doc = await this.boardModel
-      .findOneAndUpdate({ id }, { $set: dto }, { new: true })
-      .exec();
-    if (!doc) throw new NotFoundException(`Board ${id} not found`);
-    return doc;
+    try {
+      return await this.prisma.board.update({
+        where: { id },
+        data: {
+          ...(dto.name !== undefined ? { name: dto.name } : {}),
+          ...(dto.templateIds
+            ? {
+                templates: {
+                  set: dto.templateIds.map((templateId) => ({ id: templateId })),
+                },
+              }
+            : {}),
+        },
+      });
+    } catch (err) {
+      if (isPrismaNotFoundError(err))
+        throw new NotFoundException(`Board ${id} not found`);
+      throw err;
+    }
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.boardModel.deleteOne({ id }).exec();
-    if (result.deletedCount === 0)
-      throw new NotFoundException(`Board ${id} not found`);
-  }
+    await this.findOne(id);
 
-  async addJobId(boardId: string, jobId: string): Promise<void> {
-    const result = await this.boardModel
-      .updateOne({ id: boardId }, { $push: { jobIds: jobId } })
-      .exec();
-    if (result.matchedCount === 0)
-      throw new NotFoundException(`Board ${boardId} not found`);
-  }
+    const jobs = await this.prisma.job.findMany({ where: { boardId: id } });
+    for (const job of jobs) {
+      await this.jobService.remove(job.id);
+    }
 
-  async removeJobId(jobId: string): Promise<void> {
-    await this.boardModel
-      .updateMany({ jobIds: jobId }, { $pull: { jobIds: jobId } })
-      .exec();
+    try {
+      await this.prisma.board.delete({ where: { id } });
+    } catch (err) {
+      if (isPrismaForeignKeyError(err)) {
+        throw new ConflictException(
+          `Board ${id} cannot be deleted: still referenced by other jobs`,
+        );
+      }
+      throw err;
+    }
   }
 }

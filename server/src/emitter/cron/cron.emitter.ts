@@ -1,49 +1,57 @@
 import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { InjectModel } from "@nestjs/mongoose";
 import { SchedulerRegistry } from "@nestjs/schedule";
+import { Prisma } from "@/database/prisma-client";
 import { CronJob as CronTimer } from "cron";
-import { Model } from "mongoose";
+import { isPrismaNotFoundError } from "../../common/utils/prisma.util";
+import { PrismaService } from "../../database/prisma.service";
+import { EventCodec, EventDescriptor } from "../../shared/utils/event-codec.util";
 import { Emitter } from "../emitter.interface";
-import { EventCodec } from "../../shared/utils/event-codec.util";
-import { Cron, CronDocument } from "./cron.schema";
 
 @Injectable()
 export class CronEmitter
-  implements Emitter<[expression: string, event: object]>, OnApplicationBootstrap
+  implements
+    Emitter<[expression: string, event: object]>,
+    OnApplicationBootstrap
 {
   constructor(
-    @InjectModel(Cron.name)
-    private readonly cronModel: Model<CronDocument>,
+    private readonly prisma: PrismaService,
     private readonly schedulerRegistry: SchedulerRegistry,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    const crons = await this.cronModel.find().exec();
+    const crons = await this.prisma.cron.findMany();
     for (const { key, expression, event } of crons) {
+      const descriptor = event as unknown as EventDescriptor;
       if (this.schedulerRegistry.doesExist("cron", key)) {
         this.schedulerRegistry.deleteCronJob(key);
       }
 
       const timer = new CronTimer(expression, () => {
-        this.eventEmitter.emit(event.type, EventCodec.decode(event));
+        this.eventEmitter.emit(descriptor.type, EventCodec.decode(descriptor));
       });
       this.schedulerRegistry.addCronJob(key, timer);
       timer.start();
     }
   }
 
-  async register(key: string, expression: string, event: object): Promise<void> {
+  async register(
+    key: string,
+    expression: string,
+    event: object,
+  ): Promise<void> {
     const descriptor = EventCodec.encode(event);
 
-    await this.cronModel
-      .findOneAndUpdate(
-        { key },
-        { $set: { key, expression, event: descriptor } },
-        { upsert: true },
-      )
-      .exec();
+    await this.prisma.cron.upsert({
+      where: { key },
+      update: { expression, event: descriptor as unknown as Prisma.InputJsonValue },
+      create: {
+        key,
+        expression,
+        event: descriptor as unknown as Prisma.InputJsonValue,
+      },
+    });
 
     if (this.schedulerRegistry.doesExist("cron", key)) {
       this.schedulerRegistry.deleteCronJob(key);
@@ -57,7 +65,12 @@ export class CronEmitter
   }
 
   async remove(key: string): Promise<void> {
-    await this.cronModel.deleteOne({ key }).exec();
+    try {
+      await this.prisma.cron.delete({ where: { key } });
+    } catch (err) {
+      if (!isPrismaNotFoundError(err)) throw err;
+    }
+
     if (this.schedulerRegistry.doesExist("cron", key)) {
       this.schedulerRegistry.deleteCronJob(key);
     }

@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { ActionType } from "@/database/prisma-client";
 import { Type } from "class-transformer";
 import {
   ArrayMinSize,
@@ -8,8 +9,7 @@ import {
   IsString,
   ValidateNested,
 } from "class-validator";
-import { ActionType } from "../base-action.schema";
-import { RecipientType } from "./send-mail-action.schema";
+import { RecipientType } from "./send-mail-action.types";
 
 export class CreateRecipientDto {
   @ApiProperty({ enum: RecipientType })
@@ -37,7 +37,7 @@ export class CreateMailContentDto {
 export class CreateSendMailActionDto {
   @ApiProperty({ enum: [ActionType.SEND_MAIL] })
   @IsIn([ActionType.SEND_MAIL])
-  type!: ActionType.SEND_MAIL;
+  type!: typeof ActionType.SEND_MAIL;
 
   @ApiProperty({ type: [CreateRecipientDto] })
   @ValidateNested({ each: true })

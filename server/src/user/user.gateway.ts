@@ -1,6 +1,6 @@
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { User } from "@/database/prisma-client";
 import { Server } from "socket.io";
-import { User } from "./user.schema";
 
 @WebSocketGateway({
   cors: { origin: process.env.CORS_ORIGIN?.split(",") ?? "*" },

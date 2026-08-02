@@ -1,15 +1,17 @@
 version: "3.9"
 
 services:
-  mongodb:
-    image: mongo:7
+  postgres:
+    image: postgres:16
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "5432:5432"
     volumes:
-      - mongo_data:/data/db
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      MONGO_INITDB_DATABASE: tomato_form
+      POSTGRES_DB: tomato_form
+      POSTGRES_USER: tomato
+      POSTGRES_PASSWORD: tomato
 
   yjs-server:
     build:
@@ -38,10 +40,10 @@ services:
     environment:
       NODE_ENV: production
       PORT: "3022"
-      MONGODB_URI: mongodb://mongodb:27017/tomato_form
+      DATABASE_URL: postgresql://tomato:tomato@postgres:5432/tomato_form
       CORS_ORIGIN: http://localhost:3021
     depends_on:
-      - mongodb
+      - postgres
 
 volumes:
-  mongo_data:
+  postgres_data:

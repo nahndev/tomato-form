@@ -1,51 +1,83 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { v4 as uuidv4 } from "uuid";
-import { Template, TemplateDocument } from "./template.schema";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { Prisma, Template } from "@/database/prisma-client";
+import {
+  isPrismaForeignKeyError,
+  isPrismaNotFoundError,
+} from "../common/utils/prisma.util";
+import { PrismaService } from "../database/prisma.service";
 import { CreateTemplateDto } from "./dto/create-template.dto";
 import { UpdateTemplateDto } from "./dto/update-template.dto";
 
 @Injectable()
 export class TemplateService {
-  constructor(
-    @InjectModel(Template.name)
-    private readonly templateModel: Model<TemplateDocument>,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateTemplateDto): Promise<Template> {
-    const doc = new this.templateModel({
-      id: uuidv4(),
-      name: dto.name,
-      widgets: dto.widgets ?? {},
-      layouts: dto.layouts ?? {},
-      widgetToSession: dto.widgetToSession ?? {},
-      properties: dto.properties ?? {},
+    return this.prisma.template.create({
+      data: {
+        name: dto.name,
+        widgets: (dto.widgets ?? {}) as unknown as Prisma.InputJsonValue,
+        layouts: (dto.layouts ?? {}) as unknown as Prisma.InputJsonValue,
+        widgetToSession: (dto.widgetToSession ??
+          {}) as unknown as Prisma.InputJsonValue,
+        properties: (dto.properties ?? {}) as unknown as Prisma.InputJsonValue,
+      },
     });
-    return doc.save();
   }
 
   async findAll(): Promise<Template[]> {
-    return this.templateModel.find().exec();
+    return this.prisma.template.findMany();
   }
 
   async findOne(id: string): Promise<Template> {
-    const doc = await this.templateModel.findOne({ id }).exec();
+    const doc = await this.prisma.template.findUnique({ where: { id } });
     if (!doc) throw new NotFoundException(`Template ${id} not found`);
     return doc;
   }
 
   async update(id: string, dto: UpdateTemplateDto): Promise<Template> {
-    const doc = await this.templateModel
-      .findOneAndUpdate({ id }, { $set: dto }, { new: true })
-      .exec();
-    if (!doc) throw new NotFoundException(`Template ${id} not found`);
-    return doc;
+    try {
+      return await this.prisma.template.update({
+        where: { id },
+        data: {
+          ...(dto.name !== undefined ? { name: dto.name } : {}),
+          ...(dto.widgets !== undefined
+            ? { widgets: dto.widgets as unknown as Prisma.InputJsonValue }
+            : {}),
+          ...(dto.layouts !== undefined
+            ? { layouts: dto.layouts as unknown as Prisma.InputJsonValue }
+            : {}),
+          ...(dto.widgetToSession !== undefined
+            ? {
+                widgetToSession: dto.widgetToSession as unknown as Prisma.InputJsonValue,
+              }
+            : {}),
+          ...(dto.properties !== undefined
+            ? {
+                properties: dto.properties as unknown as Prisma.InputJsonValue,
+              }
+            : {}),
+        },
+      });
+    } catch (err) {
+      if (isPrismaNotFoundError(err))
+        throw new NotFoundException(`Template ${id} not found`);
+      throw err;
+    }
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.templateModel.deleteOne({ id }).exec();
-    if (result.deletedCount === 0)
-      throw new NotFoundException(`Template ${id} not found`);
+    try {
+      await this.prisma.template.delete({ where: { id } });
+    } catch (err) {
+      if (isPrismaNotFoundError(err))
+        throw new NotFoundException(`Template ${id} not found`);
+      if (isPrismaForeignKeyError(err)) {
+        throw new ConflictException(
+          `Template ${id} cannot be deleted: still referenced by submissions or job actions`,
+        );
+      }
+      throw err;
+    }
   }
 }
