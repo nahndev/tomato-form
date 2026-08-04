@@ -2,14 +2,14 @@ import ItemLayout from "@/features/template/components/grid/ItemLayout";
 import {
   COLUMN_WIDTH,
   GRID_COLUMNS,
-} from "@/features/template/libs/grid-layout/constants";
+} from "@/features/template/libs/grid/constants";
 import {
   AbsoluteLayoutUtils,
   getColumn,
   getMaxHeight,
   LayoutRect,
   setMaxHeight,
-} from "@/features/template/libs/grid-layout/utils";
+} from "@/features/template/libs/grid/utils";
 import { GridLayout } from "@/types/template";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";

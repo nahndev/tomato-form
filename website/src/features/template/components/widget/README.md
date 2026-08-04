@@ -63,13 +63,13 @@ All widgets' defaults live in these two files, keyed by `WidgetType`:
 // config/settings.ts
 export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   ...
-  rating: { label: "Rating" },
+  [WidgetType.RATING]: { label: "Rating" },
 };
 
 // config/layouts.ts
 export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
   ...
-  rating: { column: 0, span: 2 },
+  [WidgetType.RATING]: { column: 0, span: 2 },
 };
 ```
 
@@ -79,7 +79,7 @@ insertion time from sibling widgets via `generateKeyBetween` (see
 
 ## Registering a new widget
 
-1. Add the new id to the `WidgetType` union in `src/types/template.ts`.
+1. Add the new member to the `WidgetType` enum in `src/types/template.ts`.
 2. Create `widget/items/<Type>Field.tsx`, exporting a component named
    `<Type>Field` (e.g. `RatingField`).
 3. Add the new type's entries to `config/settings.ts` and `config/layouts.ts`.
@@ -90,15 +90,15 @@ insertion time from sibling widgets via `generateKeyBetween` (see
 import { RatingField } from "./items/RatingField";
 
 // inside WIDGET_REGISTRY = { ... }
-rating: {
-  type: "rating",
+[WidgetType.RATING]: {
+  type: WidgetType.RATING,
   label: "Rating",
   icon: Star,
   description: "1-5 star rating",
   isDataField: true,
   Field: RatingField as WidgetDefinition["Field"],
-  defaultSettings: DEFAULT_SETTINGS.rating,
-  defaultLayout: DEFAULT_LAYOUTS.rating,
+  defaultSettings: DEFAULT_SETTINGS[WidgetType.RATING],
+  defaultLayout: DEFAULT_LAYOUTS[WidgetType.RATING],
 },
 ```
 

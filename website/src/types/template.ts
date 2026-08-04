@@ -1,23 +1,24 @@
 import { CSSProperties } from "react";
 import type { SerializedEditorState } from "lexical";
 
-export type WidgetType =
-  | "text"
-  | "text-area"
-  | "number"
-  | "date"
-  | "datetime"
-  | "time"
-  | "select"
-  | "checkbox"
-  | "radio"
-  | "label"
-  | "signature"
-  | "button"
-  | "image-uploader"
-  | "file-uploader"
-  | "break"
-  | "session";
+export enum WidgetType {
+  TEXT = "text",
+  TEXT_AREA = "text-area",
+  NUMBER = "number",
+  DATE = "date",
+  DATETIME = "datetime",
+  TIME = "time",
+  SELECT = "select",
+  CHECKBOX = "checkbox",
+  RADIO = "radio",
+  LABEL = "label",
+  SIGNATURE = "signature",
+  BUTTON = "button",
+  IMAGE_UPLOADER = "image-uploader",
+  FILE_UPLOADER = "file-uploader",
+  BREAK = "break",
+  SESSION = "session",
+}
 
 export enum TemplateMode {
   VIEW = "view",

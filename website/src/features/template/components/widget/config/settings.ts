@@ -1,24 +1,37 @@
-import type { WidgetProperties, WidgetType } from "@/types/template";
+import { WidgetType } from "@/types/template";
+import type { WidgetProperties } from "@/types/template";
 
 /**
  * Default `WidgetProperties` applied when a widget is inserted, before any
  * user edits via the properties panel.
  */
 export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
-  text: { label: "Text field", placeholder: "Enter text…" },
-  "text-area": { label: "Text area field", placeholder: "Enter text…" },
-  number: { label: "Number field", placeholder: "0" },
-  date: { label: "Date field" },
-  datetime: { label: "Date & time field" },
-  time: { label: "Time field" },
-  select: { label: "Select field", options: ["Option 1", "Option 2"] },
-  checkbox: { label: "Checkbox field", options: ["Option 1", "Option 2"] },
-  radio: { label: "Radio field", options: ["Option 1", "Option 2"] },
-  label: { label: "Label" },
-  signature: { label: "Signature" },
-  button: { label: "Click me" },
-  "image-uploader": { label: "Image upload field" },
-  "file-uploader": { label: "File upload field" },
-  break: { label: "Break", compact: true },
-  session: { label: "Session" },
+  [WidgetType.TEXT]: { label: "Text field", placeholder: "Enter text…" },
+  [WidgetType.TEXT_AREA]: {
+    label: "Text area field",
+    placeholder: "Enter text…",
+  },
+  [WidgetType.NUMBER]: { label: "Number field", placeholder: "0" },
+  [WidgetType.DATE]: { label: "Date field" },
+  [WidgetType.DATETIME]: { label: "Date & time field" },
+  [WidgetType.TIME]: { label: "Time field" },
+  [WidgetType.SELECT]: {
+    label: "Select field",
+    options: ["Option 1", "Option 2"],
+  },
+  [WidgetType.CHECKBOX]: {
+    label: "Checkbox field",
+    options: ["Option 1", "Option 2"],
+  },
+  [WidgetType.RADIO]: {
+    label: "Radio field",
+    options: ["Option 1", "Option 2"],
+  },
+  [WidgetType.LABEL]: { label: "Label" },
+  [WidgetType.SIGNATURE]: { label: "Signature" },
+  [WidgetType.BUTTON]: { label: "Click me" },
+  [WidgetType.IMAGE_UPLOADER]: { label: "Image upload field" },
+  [WidgetType.FILE_UPLOADER]: { label: "File upload field" },
+  [WidgetType.BREAK]: { label: "Break", compact: true },
+  [WidgetType.SESSION]: { label: "Session" },
 };

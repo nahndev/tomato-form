@@ -1,4 +1,4 @@
-import { AbsoluteLayout } from "@/features/template/libs/grid-layout/types";
+import { AbsoluteLayout } from "@/features/template/libs/grid/types";
 import { useDraggable, useDragOperation } from "@dnd-kit/react";
 import clsx from "clsx";
 import { useRef } from "react";

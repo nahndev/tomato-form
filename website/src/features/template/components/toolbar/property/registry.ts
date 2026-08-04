@@ -1,3 +1,4 @@
+import { WidgetType } from "@/types/template";
 import { ContentDescriptor } from "@/features/template/components/toolbar/property/descriptors/ContentDescriptor";
 import { LabelDescriptor } from "@/features/template/components/toolbar/property/descriptors/LabelDescriptor";
 import { OptionsDescriptor } from "@/features/template/components/toolbar/property/descriptors/OptionsDescriptor";
@@ -59,20 +60,20 @@ const LABEL_FORMAT: WidgetPropertyDescriptor = {
  * writes edits back via `useWidgetActions().setProperty(widgetId, key, value)`.
  */
 export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
-  text: [LABEL, PLACEHOLDER, REQUIRED],
-  "text-area": [LABEL, PLACEHOLDER, REQUIRED],
-  number: [LABEL, PLACEHOLDER, REQUIRED],
-  date: [LABEL, PLACEHOLDER, REQUIRED],
-  datetime: [LABEL, PLACEHOLDER, REQUIRED],
-  time: [LABEL, PLACEHOLDER, REQUIRED],
-  select: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
-  checkbox: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
-  radio: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
-  label: [LABEL, CONTENT],
-  signature: [LABEL, REQUIRED],
-  button: [LABEL, LINK_URL],
-  "image-uploader": [LABEL, REQUIRED],
-  "file-uploader": [LABEL, REQUIRED],
-  break: [],
-  session: [LABEL],
+  [WidgetType.TEXT]: [LABEL, PLACEHOLDER, REQUIRED],
+  [WidgetType.TEXT_AREA]: [LABEL, PLACEHOLDER, REQUIRED],
+  [WidgetType.NUMBER]: [LABEL, PLACEHOLDER, REQUIRED],
+  [WidgetType.DATE]: [LABEL, PLACEHOLDER, REQUIRED],
+  [WidgetType.DATETIME]: [LABEL, PLACEHOLDER, REQUIRED],
+  [WidgetType.TIME]: [LABEL, PLACEHOLDER, REQUIRED],
+  [WidgetType.SELECT]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
+  [WidgetType.CHECKBOX]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
+  [WidgetType.RADIO]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
+  [WidgetType.LABEL]: [LABEL, CONTENT],
+  [WidgetType.SIGNATURE]: [LABEL, REQUIRED],
+  [WidgetType.BUTTON]: [LABEL, LINK_URL],
+  [WidgetType.IMAGE_UPLOADER]: [LABEL, REQUIRED],
+  [WidgetType.FILE_UPLOADER]: [LABEL, REQUIRED],
+  [WidgetType.BREAK]: [],
+  [WidgetType.SESSION]: [LABEL],
 };

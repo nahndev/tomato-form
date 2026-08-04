@@ -1,4 +1,4 @@
-import { LayoutRect } from "@/features/template/libs/grid-layout/utils";
+import { LayoutRect } from "@/features/template/libs/grid/utils";
 
 export interface AbsoluteLayout extends LayoutRect {
   id: string;

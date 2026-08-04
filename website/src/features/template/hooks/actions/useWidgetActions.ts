@@ -3,7 +3,7 @@
 import { useTemplateDoc } from "@/features/template/components/provider/TemplateDocProvider";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import { getOrCreateDefaultSessionId } from "@/features/template/hooks/internal/templateStateReader";
-import { LayoutIdx } from "@/features/template/libs/grid-layout/utils";
+import { LayoutIdx } from "@/features/template/libs/grid/utils";
 import type { GridLayout, Widget, WidgetProperties } from "@/types/template";
 import { useCallback } from "react";
 
@@ -36,7 +36,10 @@ export function useWidgetActions(): WidgetActions {
       const layouts = doc.getMap<GridLayout>("layouts");
       const layout = {
         ...def.defaultLayout,
-        idx: LayoutIdx.getInsertIdx(Object.fromEntries(layouts.entries()), before),
+        idx: LayoutIdx.getInsertIdx(
+          Object.fromEntries(layouts.entries()),
+          before,
+        ),
       };
       const beforeSessionId =
         before && doc.getMap<string>("widgetToSession").get(before.id);
