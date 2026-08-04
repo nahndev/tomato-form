@@ -13,6 +13,17 @@ export function useSelection<T, K extends keyof T>(list: T[], key: K) {
     [key],
   );
 
+  const toggle = useCallback(
+    (item: T | null) => {
+      if (item && item[key] === selectedKey) {
+        setSelectedKey(null);
+        return;
+      }
+      select(item);
+    },
+    [selectedKey, key],
+  );
+
   const selectKey = useCallback((k: T[K] | null) => setSelectedKey(k), [key]);
 
   const isSelected = useCallback(
@@ -20,5 +31,5 @@ export function useSelection<T, K extends keyof T>(list: T[], key: K) {
     [selected, key],
   );
 
-  return { selected, isSelected, select, selectKey } as const;
+  return { selected, isSelected, select, selectKey, toggle } as const;
 }

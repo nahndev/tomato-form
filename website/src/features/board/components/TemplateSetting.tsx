@@ -14,7 +14,7 @@ const TemplateSetting: React.FC = () => {
   const { mutateAsync: updateBoard, isPending } = useUpdateBoard(board.id);
 
   const [draftTemplateIds, setDraftTemplateIds] = useState<string[]>(
-    board.templateIds,
+    board.templates.map((t) => t.id),
   );
 
   function toggleDraftTemplate(tid: string) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -15,25 +15,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
-import { useTemplates } from "@/hooks/useTemplates";
 import { useCreateSubmission } from "@/hooks/useSubmissions";
 import { Loader2, Plus } from "lucide-react";
 
 const MoreSubmissionButton: React.FC = () => {
   const board = useBoardContext();
-  const { data: templates = [] } = useTemplates();
   const { mutateAsync: createSubmission, isPending } = useCreateSubmission();
 
   const [open, setOpen] = useState(false);
   const [pickedTemplateId, setPickedTemplateId] = useState("");
 
-  const templateById = useMemo(
-    () => new Map(templates.map((t) => [t.id, t])),
-    [templates],
-  );
-
   function openDialog() {
-    setPickedTemplateId(board.templateIds[0] ?? "");
+    setPickedTemplateId(board.templates[0]?.id ?? "");
     setOpen(true);
   }
 
@@ -55,7 +48,7 @@ const MoreSubmissionButton: React.FC = () => {
         <Button
           size="sm"
           onClick={openDialog}
-          disabled={board.templateIds.length === 0}
+          disabled={board.templates.length === 0}
         >
           <Plus className="mr-1.5 size-4" />
           New Submission
@@ -76,9 +69,9 @@ const MoreSubmissionButton: React.FC = () => {
             value={pickedTemplateId}
             onChange={(e) => setPickedTemplateId(e.target.value)}
           >
-            {board.templateIds.map((tid) => (
-              <option key={tid} value={tid}>
-                {templateById.get(tid)?.name ?? tid}
+            {board.templates.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
               </option>
             ))}
           </Select>

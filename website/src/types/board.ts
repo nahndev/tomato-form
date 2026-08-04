@@ -1,3 +1,6 @@
+import type { Template } from "./template";
+import type { Job } from "./job";
+
 export enum BoardTabValue {
   SUBMISSIONS = "submissions",
   TEMPLATE = "template",
@@ -10,8 +13,8 @@ export enum BoardTabValue {
 export interface Board {
   id: string;
   name: string;
-  templateIds: string[];
-  jobIds: string[];
+  templates: Template[];
+  jobs: Job[];
   createdAt?: string;
   updatedAt?: string;
 }

@@ -6,10 +6,7 @@ const BoardTitle: React.FC = () => {
   return (
     <div>
       <span className="font-medium">{board.name}</span>
-      <p className="text-xs text-muted-foreground">
-        {board.templateIds.length} template
-        {board.templateIds.length !== 1 ? "s" : ""} linked
-      </p>
+      <p className="text-xs text-muted-foreground"></p>
     </div>
   );
 };

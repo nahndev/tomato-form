@@ -17,7 +17,7 @@ interface WidgetItemProps {
 
 export function WidgetItem({ widget }: WidgetItemProps) {
   const mode = useTemplateMode();
-  const { isSelected, select } = useWidgetSelection();
+  const { isSelected, toggle } = useWidgetSelection();
   const isShowSelectedBorder = mode === TemplateMode.EDIT && isSelected(widget);
   return (
     <WidgetProvider widgetId={widget.id}>
@@ -26,8 +26,9 @@ export function WidgetItem({ widget }: WidgetItemProps) {
           className={clsx(
             "border border-dashed rounded-md",
             isShowSelectedBorder ? "border-orange-500" : "border-transparent",
+            "cursor-pointer",
           )}
-          onClick={() => select(widget)}
+          onClick={() => toggle(widget)}
         >
           <div className="min-w-0 flex-1 bg-white rounded-md p-4">
             <WidgetItemHeader widget={widget} />

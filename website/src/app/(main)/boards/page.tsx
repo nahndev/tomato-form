@@ -255,8 +255,8 @@ export default function BoardsPage() {
                     </button>
                   </div>
                   <CardDescription>
-                    {b.templateIds.length} template
-                    {b.templateIds.length !== 1 ? "s" : ""}
+                    {b.templates.length} template
+                    {b.templates.length !== 1 ? "s" : ""}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

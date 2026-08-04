@@ -1,5 +1,9 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Board } from "@/database/prisma-client";
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import {
   isPrismaForeignKeyError,
   isPrismaNotFoundError,
@@ -24,15 +28,24 @@ export class BoardService {
           ? { connect: dto.templateIds.map((id) => ({ id })) }
           : undefined,
       },
+      include: {
+        templates: true,
+        jobs: true,
+      },
     });
   }
 
   async findAll(): Promise<Board[]> {
-    return this.prisma.board.findMany();
+    return this.prisma.board.findMany({
+      include: { templates: true, jobs: true },
+    });
   }
 
   async findOne(id: string): Promise<Board> {
-    const doc = await this.prisma.board.findUnique({ where: { id } });
+    const doc = await this.prisma.board.findUnique({
+      where: { id },
+      include: { templates: true, jobs: true },
+    });
     if (!doc) throw new NotFoundException(`Board ${id} not found`);
     return doc;
   }
@@ -46,10 +59,16 @@ export class BoardService {
           ...(dto.templateIds
             ? {
                 templates: {
-                  set: dto.templateIds.map((templateId) => ({ id: templateId })),
+                  set: dto.templateIds.map((templateId) => ({
+                    id: templateId,
+                  })),
                 },
               }
             : {}),
+        },
+        include: {
+          templates: true,
+          jobs: true,
         },
       });
     } catch (err) {
