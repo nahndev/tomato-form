@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
-import { useCreateSubmission } from "@/hooks/useSubmissions";
+import { useCreateSubmission } from "@/features/board/hooks/useSubmissions";
 import { Loader2, Plus } from "lucide-react";
 
 const MoreSubmissionButton: React.FC = () => {

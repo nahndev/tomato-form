@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
-import { useTemplate } from "@/hooks/useTemplates";
-import { useSubmission, useUpdateSubmission } from "@/hooks/useSubmissions";
+import { useTemplate } from "@/features/template";
+import { useSubmission, useUpdateSubmission } from "@/features/board";
 
 interface PageProps {
   params: Promise<{ id: string; submissionId: string }>;

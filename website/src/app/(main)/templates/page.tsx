@@ -25,8 +25,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useTemplates, useCreateTemplate, useDeleteTemplate } from "@/hooks/useTemplates";
 import { WIDGET_LIST } from "@/features/template/components/widget/registry";
+import {
+  useTemplates,
+  useCreateTemplate,
+  useDeleteTemplate,
+} from "@/features/template";
 import type { WidgetType } from "@/types/template";
 
 const WIDGET_TYPES: { label: string; value: WidgetType }[] = WIDGET_LIST.map((def) => ({

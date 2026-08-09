@@ -1,4 +1,4 @@
-import { ContainerLayout } from "@/components/grid/ContainerLayout";
+import { ContainerLayout } from "@/components/ui/grid";
 import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { WidgetItem } from "@/features/template/components/widget/WidgetItem";

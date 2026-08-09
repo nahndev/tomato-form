@@ -1,5 +1,5 @@
-import { GridDndType } from "@/components/grid/type";
-import { AbsoluteLayout } from "@/lib/grid/types";
+import { GridDndType } from "@/components/ui/grid/types";
+import { AbsoluteLayout } from "@/components/ui/grid/types";
 import { useDraggable, useDragOperation } from "@dnd-kit/react";
 import clsx from "clsx";
 import { useRef } from "react";

@@ -1,6 +1,6 @@
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
-import { useDeleteSubmission } from "@/hooks/useSubmissions";
-import { useTemplates } from "@/hooks/useTemplates";
+import { useDeleteSubmission } from "@/features/board/hooks/useSubmissions";
+import { useTemplates } from "@/features/template";
 import { Submission } from "@/types/submission";
 import { Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";

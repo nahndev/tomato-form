@@ -19,7 +19,7 @@ import {
   ACTION_TYPE_OPTIONS,
   createDefaultAction,
 } from "@/features/job/components/actions/create-default-action";
-import { isCronExpression } from "@/lib/validators/cron-expression";
+import { isCronExpression } from "@/features/job/lib/validators/cron-expression";
 import {
   ACTION_TYPE_SEND_MAIL,
   ACTION_TYPE_SUBMISSION_CREATION,

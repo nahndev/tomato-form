@@ -1,10 +1,9 @@
 "use client";
 
-import { TemplateBuilder } from "@/features/template";
+import { TemplateBuilder, useTemplate } from "@/features/template";
 import { TemplateBuilderProvider } from "@/features/template/components/provider/TemplateBuilderProvider";
 import { TemplateProvider } from "@/features/template/components/provider/TemplateProvider";
 import TemplateHeader from "@/features/template/components/template/TemplateHeader";
-import { useTemplate } from "@/hooks/useTemplates";
 import { TemplateMode } from "@/types/template";
 import { DragDropProvider } from "@dnd-kit/react";
 import { Loader2 } from "lucide-react";

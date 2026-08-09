@@ -1,5 +1,8 @@
-# Add `UserConditionDescriptor` for `user`
+# Update structure of project
 
-## Tasks 01 - Add component
-
--
+- Re-structure, moving file to correct scope of feature
+- Scope:
+  Hooks
+  components
+  Features
+  libs

@@ -5,7 +5,7 @@ import { parseExpression } from "cron-parser";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { isCronExpression } from "@/lib/validators/cron-expression";
+import { isCronExpression } from "@/features/job/lib/validators/cron-expression";
 
 export type CronExpressionBuilderProps = {
   value: string;

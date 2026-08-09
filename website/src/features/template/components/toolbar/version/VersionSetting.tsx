@@ -6,7 +6,7 @@ import {
   useTemplateId,
   useTemplateVersions,
 } from "@/features/template/components/provider/TemplateProvider";
-import { usePublishTemplateVersion } from "@/hooks/useTemplates";
+import { usePublishTemplateVersion } from "@/features/template/hooks/useTemplates";
 import type { TemplateVersion } from "@/types/template";
 import { Loader2 } from "lucide-react";
 import * as semver from "semver";

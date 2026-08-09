@@ -2,8 +2,11 @@
 
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import SubmissionItem from "@/features/board/components/submission/SubmissionItem";
-import { useDeleteSubmission, useSubmissions } from "@/hooks/useSubmissions";
-import { useTemplates } from "@/hooks/useTemplates";
+import {
+  useDeleteSubmission,
+  useSubmissions,
+} from "@/features/board/hooks/useSubmissions";
+import { useTemplates } from "@/features/template";
 import { FileText, Loader2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";

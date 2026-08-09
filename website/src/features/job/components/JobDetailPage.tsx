@@ -10,8 +10,8 @@ import {
   useJobExecutions,
   useUpdateJob,
 } from "@/features/job/hooks/useJobs";
-import { useBoard } from "@/hooks/useBoards";
-import { useTemplate } from "@/hooks/useTemplates";
+import { useBoard } from "@/features/board";
+import { useTemplate } from "@/features/template";
 import { useUserStore } from "@/store/user.store";
 import {
   ACTION_TYPE_SEND_MAIL,

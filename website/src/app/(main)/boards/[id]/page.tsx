@@ -1,7 +1,6 @@
 "use client";
 
-import { BoardHeader, BoardProvider, BoardTab } from "@/features/board";
-import { useBoard } from "@/hooks/useBoards";
+import { BoardHeader, BoardProvider, BoardTab, useBoard } from "@/features/board";
 import { Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { use } from "react";

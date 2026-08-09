@@ -2,8 +2,8 @@
 
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { useBoards } from "@/hooks/useBoards";
-import { useTemplates } from "@/hooks/useTemplates";
+import { useBoards } from "@/features/board";
+import { useTemplates } from "@/features/template";
 import { SubmissionCreationAction } from "@/types/job";
 
 export type SubmissionCreationActionCardProps = {

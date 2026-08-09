@@ -1,6 +1,6 @@
-import ItemLayout from "@/components/grid/ItemLayout";
-import { GridDndType } from "@/components/grid/type";
-import { COLUMN_WIDTH, GRID_COLUMNS } from "@/lib/grid/constants";
+import ItemLayout from "@/components/ui/grid/ItemLayout";
+import { GridDndType } from "@/components/ui/grid/types";
+import { COLUMN_WIDTH, GRID_COLUMNS } from "@/components/ui/grid/constants";
 import {
   AbsoluteLayoutUtils,
   getColumn,
@@ -8,7 +8,7 @@ import {
   GridLayoutRect,
   LayoutRect,
   setMaxHeight,
-} from "@/lib/grid/utils";
+} from "@/components/ui/grid/utils";
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";
 import { generateKeyBetween } from "fractional-indexing";

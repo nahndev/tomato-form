@@ -1,4 +1,8 @@
-import { LayoutRect } from "@/lib/grid/utils";
+import { LayoutRect } from "@/components/ui/grid/utils";
+
+export enum GridDndType {
+  WIDGET = "@grid/widget",
+}
 
 export interface AbsoluteLayout extends LayoutRect {
   id: string;

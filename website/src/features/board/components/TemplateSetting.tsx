@@ -4,8 +4,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
-import { useTemplates } from "@/hooks/useTemplates";
-import { useUpdateBoard } from "@/hooks/useBoards";
+import { useTemplates } from "@/features/template";
+import { useUpdateBoard } from "@/features/board/hooks/useBoards";
 import { Loader2 } from "lucide-react";
 
 const TemplateSetting: React.FC = () => {

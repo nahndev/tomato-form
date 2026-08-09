@@ -24,8 +24,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useBoards, useCreateBoard, useDeleteBoard } from "@/hooks/useBoards";
-import { useTemplates } from "@/hooks/useTemplates";
+import { useBoards, useCreateBoard, useDeleteBoard } from "@/features/board";
+import { useTemplates } from "@/features/template";
 
 const createSchema = Yup.object({
   name: Yup.string().required("Board name is required").min(1),
