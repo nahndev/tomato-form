@@ -1,4 +1,5 @@
 import ItemLayout from "@/components/grid/ItemLayout";
+import { GridDndType } from "@/components/grid/type";
 import { COLUMN_WIDTH, GRID_COLUMNS } from "@/lib/grid/constants";
 import {
   AbsoluteLayoutUtils,
@@ -34,7 +35,10 @@ export function ContainerLayout({
   disabled,
 }: ContainerLayoutProps) {
   const [heightMap, { set: setHeight }] = useMap<string, number>();
-  const { ref, isDropTarget } = useDroppable({ id });
+  const { ref, isDropTarget } = useDroppable({
+    id,
+    accept: GridDndType.WIDGET,
+  });
   const [version, setVersion] = useState<number>(0);
   const [moving, setMoving] = useState<MovingLayout | null>(null);
   const [hidden, setHidden] = useState<string | null>(null);
