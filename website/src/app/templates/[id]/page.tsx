@@ -1,6 +1,7 @@
 "use client";
 
 import { TemplateBuilder } from "@/features/template";
+import { TemplateBuilderProvider } from "@/features/template/components/provider/TemplateBuilderProvider";
 import { TemplateProvider } from "@/features/template/components/provider/TemplateProvider";
 import TemplateHeader from "@/features/template/components/template/TemplateHeader";
 import { useTemplate } from "@/hooks/useTemplates";
@@ -34,11 +35,13 @@ export default function TemplatePage({ params, searchParams }: PageProps) {
 
   return (
     <DragDropProvider>
-      <TemplateProvider template={template} mode={mode as TemplateMode}>
-        <div className="h-screen grid grid-rows-[auto_1fr] overflow-hidden">
-          <TemplateHeader />
-          <TemplateBuilder />
-        </div>
+      <TemplateProvider template={template}>
+        <TemplateBuilderProvider mode={mode as TemplateMode}>
+          <div className="h-screen grid grid-rows-[auto_1fr] overflow-hidden">
+            <TemplateHeader />
+            <TemplateBuilder />
+          </div>
+        </TemplateBuilderProvider>
       </TemplateProvider>
     </DragDropProvider>
   );

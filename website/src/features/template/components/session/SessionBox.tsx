@@ -1,5 +1,5 @@
-import { SessionProvider } from "@/features/template/components/provider/SessionProvider";
 import SessionCanvas from "@/features/template/components/session/SessionCanvas";
+import { SessionProvider } from "@/features/template/components/session/SessionProvider";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";
 
 export type SessionBuilderProps = {

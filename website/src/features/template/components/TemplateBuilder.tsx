@@ -1,6 +1,6 @@
 "use client";
 
-import { useTemplateMode } from "@/features/template/components/provider/TemplateProvider";
+import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
 import TemplateCanvas from "@/features/template/components/template/TemplateCanvas";
 import ToolbarPanel from "@/features/template/components/toolbar/ToolbarPanel";
 import { TemplateMode } from "@/types/template";

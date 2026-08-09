@@ -1,6 +1,6 @@
-import { ContainerLayout } from "@/features/template/components/grid/ContainerLayout";
-import { useSessionId } from "@/features/template/components/provider/SessionProvider";
-import { useTemplateMode } from "@/features/template/components/provider/TemplateProvider";
+import { ContainerLayout } from "@/components/grid/ContainerLayout";
+import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
+import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { WidgetItem } from "@/features/template/components/widget/WidgetItem";
 import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";
@@ -27,7 +27,7 @@ const SessionCanvas: React.FC = () => {
       onMoving={onMoving}
       disabled={mode === TemplateMode.VIEW}
     >
-      {(id) => <WidgetItem key={id} widget={widgets[id]} />}
+      {(id: string) => <WidgetItem key={id} widget={widgets[id]} />}
     </ContainerLayout>
   );
 };

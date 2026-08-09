@@ -7,36 +7,34 @@ import {
 } from "@/features/template/hooks/state/useTemplateMeta";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { useSelection } from "@/features/template/hooks/useSelection";
-import type { Template, TemplateMode, Widget } from "@/types/template";
+import { useCurrentVersion } from "@/features/template/hooks/useTemplateVersion";
+import type { Template, TemplateVersion, Widget } from "@/types/template";
 import { createContext, useContext } from "react";
 import { values } from "remeda";
 
 export interface TemplateProviderProps {
-  mode: TemplateMode;
   template: Template;
-  /** When set, connects to a published snapshot instead of the live draft. */
-  version?: string;
   children: React.ReactNode;
 }
 
 /**
  * Public composition root for the template feature: wires up the yjs doc
- * connection, the (non-yjs) mode/initial-data context, and widget selection.
+ * connection, the (non-yjs) id/version meta context, and widget selection.
+ * Builder-only concerns (mode) live in `TemplateBuilderProvider`.
  */
 export const TemplateProvider: React.FC<TemplateProviderProps> = ({
-  mode,
   template,
-  version,
   children,
-}) => (
-  <TemplateDocProvider templateId={template.id} version={version}>
-    <TemplateMetaContext.Provider
-      value={{ id: template.id, mode, initial: template }}
-    >
-      <WidgetSelectionProvider>{children}</WidgetSelectionProvider>
-    </TemplateMetaContext.Provider>
-  </TemplateDocProvider>
-);
+}) => {
+  const version = useCurrentVersion(template);
+  return (
+    <TemplateDocProvider uuid={template.id} version={version}>
+      <TemplateMetaContext.Provider value={{ id: template.id, version, template }}>
+        <WidgetSelectionProvider>{children}</WidgetSelectionProvider>
+      </TemplateMetaContext.Provider>
+    </TemplateDocProvider>
+  );
+};
 
 type WidgetSelection = ReturnType<typeof useSelection<Widget, "id">>;
 const WidgetSelectionContext = createContext<WidgetSelection | null>(null);
@@ -58,8 +56,12 @@ export function useTemplateId(): string {
   return useTemplateMeta().id;
 }
 
-export function useTemplateMode(): TemplateMode {
-  return useTemplateMeta().mode;
+export function useTemplateVersion(): string | undefined {
+  return useTemplateMeta().version;
+}
+
+export function useTemplateVersions(): TemplateVersion[] {
+  return useTemplateMeta().template.templateVersions ?? [];
 }
 
 export function useWidgetSelection(): WidgetSelection {

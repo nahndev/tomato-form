@@ -3,7 +3,7 @@
 import { useTemplateDoc } from "@/features/template/components/provider/TemplateDocProvider";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import { getOrCreateDefaultSessionId } from "@/features/template/hooks/internal/templateStateReader";
-import { LayoutIdx } from "@/features/template/libs/grid/utils";
+import { LayoutIdx } from "@/lib/grid/utils";
 import type { GridLayout, Widget, WidgetProperties } from "@/types/template";
 import { useCallback } from "react";
 

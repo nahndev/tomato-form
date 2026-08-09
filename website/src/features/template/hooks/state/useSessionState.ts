@@ -1,6 +1,6 @@
 "use client";
 
-import { useSessionId } from "@/features/template/components/provider/SessionProvider";
+import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import type { GridLayout, Session, Widget } from "@/types/template";
 import { useMemo } from "react";
@@ -30,5 +30,9 @@ export function useSessionState(): SessionState {
     [widgets, sessionLayouts],
   );
 
-  return { session: sessions[id], widgets: sessionWidgets, layouts: sessionLayouts };
+  return {
+    session: sessions[id],
+    widgets: sessionWidgets,
+    layouts: sessionLayouts,
+  };
 }

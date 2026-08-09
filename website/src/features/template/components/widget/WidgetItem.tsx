@@ -1,11 +1,9 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import {
-  useTemplateMode,
-  useWidgetSelection,
-} from "@/features/template/components/provider/TemplateProvider";
-import { WidgetProvider } from "@/features/template/components/provider/WidgetProvider";
+import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
+import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
+import { WidgetProvider } from "@/features/template/components/widget/WidgetProvider";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import { useWidgetState } from "@/features/template/hooks/state/useWidgetState";
 import { TemplateMode, type Widget } from "@/types/template";

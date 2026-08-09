@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
-import {
-  useTemplateId,
-  useTemplateMode,
-} from "@/features/template/components/provider/TemplateProvider";
+import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
+import { useTemplateId } from "@/features/template/components/provider/TemplateProvider";
 import TemplateConnection from "@/features/template/components/template/TemplateConnection";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { TemplateMode } from "@/types/template";

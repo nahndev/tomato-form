@@ -2,8 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useTemplateId } from "@/features/template/components/provider/TemplateProvider";
-import { useTemplate, usePublishTemplateVersion } from "@/hooks/useTemplates";
+import {
+  useTemplateId,
+  useTemplateVersions,
+} from "@/features/template/components/provider/TemplateProvider";
+import { usePublishTemplateVersion } from "@/hooks/useTemplates";
 import type { TemplateVersion } from "@/types/template";
 import { Loader2 } from "lucide-react";
 import * as semver from "semver";
@@ -13,11 +16,11 @@ export type VersionSettingProps = {};
 
 const VersionSetting: React.FC<VersionSettingProps> = () => {
   const templateId = useTemplateId();
-  const { data: template, isLoading, error, refetch } = useTemplate(templateId);
+  const templateVersions = useTemplateVersions();
   const { mutateAsync: publishVersion, isPending } =
     usePublishTemplateVersion(templateId);
 
-  const versions = [...(template?.templateVersions ?? [])].sort((a, b) =>
+  const versions = [...templateVersions].sort((a, b) =>
     semver.rcompare(a.version, b.version),
   );
 
@@ -41,47 +44,15 @@ const VersionSetting: React.FC<VersionSettingProps> = () => {
         )}
       </Button>
 
-      <VersionList
-        versions={versions}
-        isLoading={isLoading}
-        error={error}
-        onRetry={refetch}
-      />
+      <VersionList versions={versions} />
     </div>
   );
 };
 
 interface VersionListProps {
   versions: TemplateVersion[];
-  isLoading: boolean;
-  error: Error | null;
-  onRetry: () => void;
 }
-const VersionList: React.FC<VersionListProps> = ({
-  versions,
-  isLoading,
-  error,
-  onRetry,
-}) => {
-  if (error && versions.length === 0) {
-    return (
-      <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-muted-foreground">
-        <p>Failed to load versions.</p>
-        <Button variant="outline" size="sm" onClick={onRetry}>
-          Try again
-        </Button>
-      </div>
-    );
-  }
-
-  if (isLoading && versions.length === 0) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
-
+const VersionList: React.FC<VersionListProps> = ({ versions }) => {
   if (versions.length === 0) {
     return (
       <p className="py-8 text-center text-sm text-muted-foreground">

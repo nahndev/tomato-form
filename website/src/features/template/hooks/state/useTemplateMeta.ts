@@ -1,11 +1,11 @@
-import type { Template, TemplateMode } from "@/types/template";
+import type { Template } from "@/types/template";
 import { createContext, useContext } from "react";
 
 export interface TemplateMetaValue {
   id: string;
-  mode: TemplateMode;
+  version?: string;
   /** Server-fetched snapshot, used as a fallback until the yjs doc connects/syncs. */
-  initial: Template;
+  template: Template;
 }
 
 export const TemplateMetaContext = createContext<TemplateMetaValue | null>(null);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useWidgetId } from "@/features/template/components/provider/WidgetProvider";
+import { useWidgetId } from "@/features/template/components/widget/WidgetProvider";
 import { DEFAULT_SETTINGS } from "@/features/template/components/widget/config/settings";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import type { GridLayout, Widget, WidgetProperties } from "@/types/template";

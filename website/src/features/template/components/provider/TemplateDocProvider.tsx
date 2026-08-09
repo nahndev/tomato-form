@@ -10,8 +10,7 @@ const TemplateDocContext = createContext<Y.Doc | null>(null);
 const TemplateConnectionContext = createContext<boolean>(false);
 
 export interface TemplateDocProviderProps {
-  templateId: string;
-  /** When set, connects to a published snapshot instead of the live draft. */
+  uuid: string;
   version?: string;
   children: React.ReactNode;
 }
@@ -23,7 +22,7 @@ export interface TemplateDocProviderProps {
  * `useTemplateDoc()` is safe to call unconditionally.
  */
 export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
-  templateId,
+  uuid,
   version,
   children,
 }) => {
@@ -34,7 +33,7 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
     const nextDoc = new Y.Doc();
     const provider = new HocuspocusProvider({
       url: YJS_SERVER_URL,
-      name: `${templateId}${version ? `:${version}` : ""}`,
+      name: `${uuid}${version ? `:${version}` : ""}`,
       document: nextDoc,
     });
 
@@ -50,7 +49,7 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
       setDoc(null);
       setIsConnected(false);
     };
-  }, [templateId, version]);
+  }, [uuid, version]);
 
   if (!doc) return null;
 
