@@ -1,5 +1,5 @@
-import { WidgetType } from "@/types/template";
 import type { GridLayout } from "@/types/template";
+import { WidgetType } from "@/types/template";
 
 /**
  * Default grid placement applied when a widget is inserted. `idx` is
@@ -19,7 +19,7 @@ export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
   [WidgetType.RADIO]: { column: 0, span: 2 },
   [WidgetType.LABEL]: { column: 0, span: 4, isFullWidth: true },
   [WidgetType.SIGNATURE]: { column: 0, span: 4, isFullWidth: true },
-  [WidgetType.BUTTON]: { column: 0, span: 2 },
+  [WidgetType.BUTTON]: { column: 0, span: 1 },
   [WidgetType.IMAGE_UPLOADER]: { column: 0, span: 2 },
   [WidgetType.FILE_UPLOADER]: { column: 0, span: 2 },
   [WidgetType.BREAK]: {

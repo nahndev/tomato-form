@@ -1,5 +1,5 @@
-import { CSSProperties } from "react";
 import type { SerializedEditorState } from "lexical";
+import { CSSProperties } from "react";
 
 export enum WidgetType {
   TEXT = "text",
@@ -38,6 +38,23 @@ export enum TemplateMode {
   EDIT = "edit",
 }
 
+/**
+ * Fixed color palette tokens available across the design system.
+ * Values are Tailwind's default `-500` shade (see `tailwindcss/theme.css`),
+ * so they can be dropped straight into a `CSSProperties` value.
+ */
+export enum ColorEnum {
+  RED = "#ef4444",
+  ORANGE = "#f97316",
+  YELLOW = "#eab308",
+  GREEN = "#22c55e",
+  BLUE = "#3b82f6",
+  PURPLE = "#a855f7",
+  PINK = "#ec4899",
+  GRAY = "#6b7280",
+  WHITE = "#ffffff",
+}
+
 export interface Widget {
   id: string;
   type: WidgetType;
@@ -67,11 +84,14 @@ export interface WidgetProperties {
   url?: string;
   compact?: boolean;
   labelStyle?: CSSProperties;
+  containerStyle?: CSSProperties;
 }
 
 export interface Session {
   id: string;
   name: string;
+  /** Key into `ICON_REGISTRY` (see `components/ui/icon-picker`). */
+  icon?: string;
 }
 
 export interface TemplateVersion {

@@ -9,6 +9,7 @@ import { useCallback } from "react";
 
 export interface SessionActions {
   addSession: (session: Session) => void;
+  updateSession: (sessionId: string, patch: Partial<Omit<Session, "id">>) => void;
   updateLayout: (
     widgetId: string,
     sessionId: string,
@@ -33,6 +34,18 @@ export function useSessionActions(): SessionActions {
     [doc],
   );
 
+  const updateSession = useCallback(
+    (sessionId: string, patch: Partial<Omit<Session, "id">>) => {
+      const sessions = doc.getMap<Session>("sessions");
+      const current = sessions.get(sessionId);
+      if (!current) return;
+      doc.transact(() => {
+        sessions.set(sessionId, { ...current, ...patch });
+      });
+    },
+    [doc],
+  );
+
   const updateLayout = useCallback(
     (widgetId: string, sessionId: string, patch: Partial<GridLayout>) => {
       const layouts = doc.getMap<GridLayout>("layouts");
@@ -45,5 +58,5 @@ export function useSessionActions(): SessionActions {
     [doc],
   );
 
-  return { addSession, updateLayout };
+  return { addSession, updateSession, updateLayout };
 }

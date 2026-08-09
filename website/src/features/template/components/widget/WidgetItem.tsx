@@ -28,8 +28,8 @@ export function WidgetItem({ widget }: WidgetItemProps) {
           )}
           onClick={() => toggle(widget)}
         >
-          <div className="min-w-0 flex-1 bg-white rounded-md p-4">
-            <WidgetItemHeader widget={widget} />
+          <div className="min-w-0 flex-1 bg-white rounded-md p-1">
+            {/* <WidgetItemHeader widget={widget} /> */}
             <WidgetPreview widget={widget} />
           </div>
         </div>

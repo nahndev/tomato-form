@@ -1,6 +1,6 @@
 import SessionCanvas from "@/features/template/components/session/SessionCanvas";
+import SessionHeader from "@/features/template/components/session/SessionHeader";
 import { SessionProvider } from "@/features/template/components/session/SessionProvider";
-import { useSessionState } from "@/features/template/hooks/state/useSessionState";
 
 export type SessionBuilderProps = {
   sessionId: string;
@@ -15,15 +15,6 @@ const SessionBox: React.FC<SessionBuilderProps> = ({ sessionId }) => {
           <SessionCanvas />
         </SessionProvider>
       </div>
-    </div>
-  );
-};
-
-const SessionHeader: React.FC = () => {
-  const { session } = useSessionState();
-  return (
-    <div className="border-b border-slate-200 p-2">
-      <h3>{session?.name}</h3>
     </div>
   );
 };

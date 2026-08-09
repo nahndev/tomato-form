@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
 /** A clickable action button. Never collects a value. */
-export function ButtonWidgetItem({ properties, mode }: FieldComponentProps<unknown>) {
+export function ButtonWidgetItem({
+  properties,
+  mode,
+}: FieldComponentProps<unknown>) {
   function handleClick() {
     if (properties.url) {
       window.open(properties.url, "_blank", "noopener,noreferrer");
@@ -14,10 +17,10 @@ export function ButtonWidgetItem({ properties, mode }: FieldComponentProps<unkno
   return (
     <Button
       type="button"
-      variant="outline"
       disabled={mode === "preview"}
       onClick={handleClick}
-      className="mt-2"
+      className="w-full p-4"
+      style={{}}
     >
       {properties.label || "Click me"}
     </Button>

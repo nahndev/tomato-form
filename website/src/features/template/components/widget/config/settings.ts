@@ -1,5 +1,5 @@
-import { WidgetType } from "@/types/template";
 import type { WidgetProperties } from "@/types/template";
+import { ColorEnum, WidgetType } from "@/types/template";
 
 /**
  * Default `WidgetProperties` applied when a widget is inserted, before any
@@ -29,7 +29,11 @@ export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   },
   [WidgetType.LABEL]: { label: "Label" },
   [WidgetType.SIGNATURE]: { label: "Signature" },
-  [WidgetType.BUTTON]: { label: "Click me" },
+  [WidgetType.BUTTON]: {
+    label: "Click me",
+    containerStyle: { background: ColorEnum.GRAY },
+    labelStyle: { color: ColorEnum.WHITE },
+  },
   [WidgetType.IMAGE_UPLOADER]: { label: "Image upload field" },
   [WidgetType.FILE_UPLOADER]: { label: "File upload field" },
   [WidgetType.BREAK]: { label: "Break", compact: true },
