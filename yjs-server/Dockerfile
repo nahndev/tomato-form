@@ -2,6 +2,8 @@ FROM node:20-alpine
 WORKDIR /app
 COPY package.json ./
 RUN npm install
-COPY server.js ./
+COPY tsconfig.json ./
+COPY server.ts ./
+COPY proto ./proto
 EXPOSE 3028
-CMD ["node", "server.js"]
+CMD ["npx", "tsx", "server.ts"]

@@ -61,6 +61,14 @@ export interface Session {
   name: string;
 }
 
+export interface TemplateVersion {
+  id: string;
+  templateId: string;
+  /** Semantic version string (e.g. "1.0.0"). */
+  version: string;
+  createdAt: string;
+}
+
 export interface Template {
   id: string;
   name: string;
@@ -69,6 +77,7 @@ export interface Template {
   sessions: Record<string, Session>;
   layouts: Record<string, GridLayout>;
   widgetToSession: Record<string, string>;
+  templateVersions?: TemplateVersion[];
   createdAt?: string;
   updatedAt?: string;
 }

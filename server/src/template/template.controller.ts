@@ -16,6 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { TemplateVersionService } from "../template-version/template-version.service";
 import { TemplateService } from "./template.service";
 import { CreateTemplateDto } from "./dto/create-template.dto";
 import { UpdateTemplateDto } from "./dto/update-template.dto";
@@ -23,7 +24,10 @@ import { UpdateTemplateDto } from "./dto/update-template.dto";
 @ApiTags("Templates")
 @Controller("templates")
 export class TemplateController {
-  constructor(private readonly templateService: TemplateService) {}
+  constructor(
+    private readonly templateService: TemplateService,
+    private readonly templateVersionService: TemplateVersionService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: "Create a new template" })
@@ -67,5 +71,18 @@ export class TemplateController {
   @ApiResponse({ status: 404, description: "Template not found" })
   async remove(@Param("id") id: string) {
     await this.templateService.remove(id);
+  }
+
+  @Post(":id/versions")
+  @ApiOperation({
+    summary: "Publish the current draft as a new template version",
+  })
+  @ApiParam({ name: "id", type: String })
+  @ApiResponse({ status: 201, description: "Template version published" })
+  @ApiResponse({ status: 404, description: "Template not found" })
+  @ApiResponse({ status: 422, description: "No draft to publish" })
+  @ApiResponse({ status: 503, description: "yjs-server unavailable" })
+  publishVersion(@Param("id") id: string) {
+    return this.templateVersionService.publish(id);
   }
 }

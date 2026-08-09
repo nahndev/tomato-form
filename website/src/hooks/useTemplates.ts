@@ -46,3 +46,11 @@ export function useDeleteTemplate() {
     onSuccess: () => qc.invalidateQueries({ queryKey: TEMPLATES_KEY }),
   });
 }
+
+export function usePublishTemplateVersion(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => templateApi.publishVersion(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: templateKey(id) }),
+  });
+}

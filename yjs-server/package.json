@@ -3,15 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "_dev": "node server.js",
-    "start": "node server.js"
+    "_dev": "tsx watch server.ts",
+    "start": "tsx server.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.14.4",
+    "@grpc/proto-loader": "^0.8.1",
     "@hocuspocus/extension-database": "^4.3.0",
     "@hocuspocus/server": "^4.2.0",
     "dotenv": "^17.4.2",
     "mongodb": "^7.3.0",
+    "tsx": "^4.23.11",
     "yjs": "^13.6.31"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "typescript": "^5.4.2"
+  }
 }

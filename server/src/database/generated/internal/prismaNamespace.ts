@@ -399,6 +399,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Board: 'Board',
   Template: 'Template',
+  TemplateVersion: 'TemplateVersion',
   Submission: 'Submission',
   User: 'User',
   Job: 'Job',
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "board" | "template" | "submission" | "user" | "job" | "action" | "jobExecution" | "cron"
+    modelProps: "board" | "template" | "templateVersion" | "submission" | "user" | "job" | "action" | "jobExecution" | "cron"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -569,6 +570,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.TemplateCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.TemplateCountAggregateOutputType> | number
+        }
+      }
+    }
+    TemplateVersion: {
+      payload: Prisma.$TemplateVersionPayload<ExtArgs>
+      fields: Prisma.TemplateVersionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TemplateVersionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TemplateVersionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+        }
+        findFirst: {
+          args: Prisma.TemplateVersionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TemplateVersionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+        }
+        findMany: {
+          args: Prisma.TemplateVersionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>[]
+        }
+        create: {
+          args: Prisma.TemplateVersionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+        }
+        createMany: {
+          args: Prisma.TemplateVersionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TemplateVersionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>[]
+        }
+        delete: {
+          args: Prisma.TemplateVersionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+        }
+        update: {
+          args: Prisma.TemplateVersionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+        }
+        deleteMany: {
+          args: Prisma.TemplateVersionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TemplateVersionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TemplateVersionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>[]
+        }
+        upsert: {
+          args: Prisma.TemplateVersionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+        }
+        aggregate: {
+          args: Prisma.TemplateVersionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTemplateVersion>
+        }
+        groupBy: {
+          args: Prisma.TemplateVersionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateVersionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TemplateVersionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateVersionCountAggregateOutputType> | number
         }
       }
     }
@@ -1079,6 +1154,16 @@ export const TemplateScalarFieldEnum = {
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
 
 
+export const TemplateVersionScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  version: 'version',
+  createdAt: 'createdAt'
+} as const
+
+export type TemplateVersionScalarFieldEnum = (typeof TemplateVersionScalarFieldEnum)[keyof typeof TemplateVersionScalarFieldEnum]
+
+
 export const SubmissionScalarFieldEnum = {
   id: 'id',
   boardId: 'boardId',
@@ -1464,6 +1549,7 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   board?: Prisma.BoardOmit
   template?: Prisma.TemplateOmit
+  templateVersion?: Prisma.TemplateVersionOmit
   submission?: Prisma.SubmissionOmit
   user?: Prisma.UserOmit
   job?: Prisma.JobOmit

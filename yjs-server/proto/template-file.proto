@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package template;
+
+service TemplateFile {
+  rpc MakeVersionFile (MakeVersionFileRequest) returns (MakeVersionFileResponse);
+}
+
+message MakeVersionFileRequest {
+  string template_id = 1;
+  string version = 2;
+}
+
+message MakeVersionFileResponse {
+  string path = 1;
+}

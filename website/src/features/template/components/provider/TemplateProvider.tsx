@@ -14,6 +14,8 @@ import { values } from "remeda";
 export interface TemplateProviderProps {
   mode: TemplateMode;
   template: Template;
+  /** When set, connects to a published snapshot instead of the live draft. */
+  version?: string;
   children: React.ReactNode;
 }
 
@@ -24,9 +26,10 @@ export interface TemplateProviderProps {
 export const TemplateProvider: React.FC<TemplateProviderProps> = ({
   mode,
   template,
+  version,
   children,
 }) => (
-  <TemplateDocProvider templateId={template.id}>
+  <TemplateDocProvider templateId={template.id} version={version}>
     <TemplateMetaContext.Provider
       value={{ id: template.id, mode, initial: template }}
     >

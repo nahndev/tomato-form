@@ -31,6 +31,9 @@ export class EnvironmentVariables {
 
   @IsEmail()
   MAIL_FROM!: string;
+
+  @IsString()
+  YJS_RPC_URL!: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

@@ -1,6 +1,7 @@
 import type {
   CreateTemplateInput,
   Template,
+  TemplateVersion,
   UpdateTemplateInput,
 } from "@/types/template";
 import axios from "axios";
@@ -42,5 +43,11 @@ export const templateApi = {
 
   remove(id: string): Promise<void> {
     return api.delete(`/templates/${id}`).then(() => undefined);
+  },
+
+  publishVersion(id: string): Promise<TemplateVersion> {
+    return api
+      .post<ApiResponse<TemplateVersion>>(`/templates/${id}/versions`)
+      .then((r) => r.data.data);
   },
 };

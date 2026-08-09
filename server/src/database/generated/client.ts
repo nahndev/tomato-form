@@ -50,6 +50,11 @@ export type Board = Prisma.BoardModel
  */
 export type Template = Prisma.TemplateModel
 /**
+ * Model TemplateVersion
+ * 
+ */
+export type TemplateVersion = Prisma.TemplateVersionModel
+/**
  * Model Submission
  * 
  */

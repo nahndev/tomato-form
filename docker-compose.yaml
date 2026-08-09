@@ -42,8 +42,10 @@ services:
       PORT: "3022"
       DATABASE_URL: postgresql://tomato:tomato@postgres:5432/tomato_form
       CORS_ORIGIN: http://localhost:3021
+      YJS_RPC_URL: yjs-server:3030
     depends_on:
       - postgres
+      - yjs-server
 
 volumes:
   postgres_data:

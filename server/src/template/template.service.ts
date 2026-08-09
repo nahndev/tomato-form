@@ -26,11 +26,16 @@ export class TemplateService {
   }
 
   async findAll(): Promise<Template[]> {
-    return this.prisma.template.findMany();
+    return this.prisma.template.findMany({
+      include: { templateVersions: true },
+    });
   }
 
   async findOne(id: string): Promise<Template> {
-    const doc = await this.prisma.template.findUnique({ where: { id } });
+    const doc = await this.prisma.template.findUnique({
+      where: { id },
+      include: { templateVersions: true },
+    });
     if (!doc) throw new NotFoundException(`Template ${id} not found`);
     return doc;
   }

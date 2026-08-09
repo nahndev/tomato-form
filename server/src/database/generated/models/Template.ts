@@ -193,6 +193,7 @@ export type TemplateWhereInput = {
   boards?: Prisma.BoardListRelationFilter
   submissions?: Prisma.SubmissionListRelationFilter
   actions?: Prisma.ActionListRelationFilter
+  templateVersions?: Prisma.TemplateVersionListRelationFilter
 }
 
 export type TemplateOrderByWithRelationInput = {
@@ -207,6 +208,7 @@ export type TemplateOrderByWithRelationInput = {
   boards?: Prisma.BoardOrderByRelationAggregateInput
   submissions?: Prisma.SubmissionOrderByRelationAggregateInput
   actions?: Prisma.ActionOrderByRelationAggregateInput
+  templateVersions?: Prisma.TemplateVersionOrderByRelationAggregateInput
 }
 
 export type TemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -224,6 +226,7 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   boards?: Prisma.BoardListRelationFilter
   submissions?: Prisma.SubmissionListRelationFilter
   actions?: Prisma.ActionListRelationFilter
+  templateVersions?: Prisma.TemplateVersionListRelationFilter
 }, "id">
 
 export type TemplateOrderByWithAggregationInput = {
@@ -266,6 +269,7 @@ export type TemplateCreateInput = {
   boards?: Prisma.BoardCreateNestedManyWithoutTemplatesInput
   submissions?: Prisma.SubmissionCreateNestedManyWithoutTemplateInput
   actions?: Prisma.ActionCreateNestedManyWithoutTemplateInput
+  templateVersions?: Prisma.TemplateVersionCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateInput = {
@@ -280,6 +284,7 @@ export type TemplateUncheckedCreateInput = {
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutTemplatesInput
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutTemplateInput
   actions?: Prisma.ActionUncheckedCreateNestedManyWithoutTemplateInput
+  templateVersions?: Prisma.TemplateVersionUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUpdateInput = {
@@ -294,6 +299,7 @@ export type TemplateUpdateInput = {
   boards?: Prisma.BoardUpdateManyWithoutTemplatesNestedInput
   submissions?: Prisma.SubmissionUpdateManyWithoutTemplateNestedInput
   actions?: Prisma.ActionUpdateManyWithoutTemplateNestedInput
+  templateVersions?: Prisma.TemplateVersionUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateInput = {
@@ -308,6 +314,7 @@ export type TemplateUncheckedUpdateInput = {
   boards?: Prisma.BoardUncheckedUpdateManyWithoutTemplatesNestedInput
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutTemplateNestedInput
   actions?: Prisma.ActionUncheckedUpdateManyWithoutTemplateNestedInput
+  templateVersions?: Prisma.TemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateCreateManyInput = {
@@ -426,6 +433,20 @@ export type TemplateUncheckedUpdateManyWithoutBoardsNestedInput = {
   deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
 }
 
+export type TemplateCreateNestedOneWithoutTemplateVersionsInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateVersionsInput, Prisma.TemplateUncheckedCreateWithoutTemplateVersionsInput>
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutTemplateVersionsInput
+  connect?: Prisma.TemplateWhereUniqueInput
+}
+
+export type TemplateUpdateOneRequiredWithoutTemplateVersionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateVersionsInput, Prisma.TemplateUncheckedCreateWithoutTemplateVersionsInput>
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutTemplateVersionsInput
+  upsert?: Prisma.TemplateUpsertWithoutTemplateVersionsInput
+  connect?: Prisma.TemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TemplateUpdateToOneWithWhereWithoutTemplateVersionsInput, Prisma.TemplateUpdateWithoutTemplateVersionsInput>, Prisma.TemplateUncheckedUpdateWithoutTemplateVersionsInput>
+}
+
 export type TemplateCreateNestedOneWithoutSubmissionsInput = {
   create?: Prisma.XOR<Prisma.TemplateCreateWithoutSubmissionsInput, Prisma.TemplateUncheckedCreateWithoutSubmissionsInput>
   connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutSubmissionsInput
@@ -467,6 +488,7 @@ export type TemplateCreateWithoutBoardsInput = {
   updatedAt?: Date | string
   submissions?: Prisma.SubmissionCreateNestedManyWithoutTemplateInput
   actions?: Prisma.ActionCreateNestedManyWithoutTemplateInput
+  templateVersions?: Prisma.TemplateVersionCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateWithoutBoardsInput = {
@@ -480,6 +502,7 @@ export type TemplateUncheckedCreateWithoutBoardsInput = {
   updatedAt?: Date | string
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutTemplateInput
   actions?: Prisma.ActionUncheckedCreateNestedManyWithoutTemplateInput
+  templateVersions?: Prisma.TemplateVersionUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateCreateOrConnectWithoutBoardsInput = {
@@ -517,6 +540,78 @@ export type TemplateScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
 }
 
+export type TemplateCreateWithoutTemplateVersionsInput = {
+  id?: string
+  name: string
+  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardCreateNestedManyWithoutTemplatesInput
+  submissions?: Prisma.SubmissionCreateNestedManyWithoutTemplateInput
+  actions?: Prisma.ActionCreateNestedManyWithoutTemplateInput
+}
+
+export type TemplateUncheckedCreateWithoutTemplateVersionsInput = {
+  id?: string
+  name: string
+  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutTemplatesInput
+  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutTemplateInput
+  actions?: Prisma.ActionUncheckedCreateNestedManyWithoutTemplateInput
+}
+
+export type TemplateCreateOrConnectWithoutTemplateVersionsInput = {
+  where: Prisma.TemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateVersionsInput, Prisma.TemplateUncheckedCreateWithoutTemplateVersionsInput>
+}
+
+export type TemplateUpsertWithoutTemplateVersionsInput = {
+  update: Prisma.XOR<Prisma.TemplateUpdateWithoutTemplateVersionsInput, Prisma.TemplateUncheckedUpdateWithoutTemplateVersionsInput>
+  create: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateVersionsInput, Prisma.TemplateUncheckedCreateWithoutTemplateVersionsInput>
+  where?: Prisma.TemplateWhereInput
+}
+
+export type TemplateUpdateToOneWithWhereWithoutTemplateVersionsInput = {
+  where?: Prisma.TemplateWhereInput
+  data: Prisma.XOR<Prisma.TemplateUpdateWithoutTemplateVersionsInput, Prisma.TemplateUncheckedUpdateWithoutTemplateVersionsInput>
+}
+
+export type TemplateUpdateWithoutTemplateVersionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUpdateManyWithoutTemplatesNestedInput
+  submissions?: Prisma.SubmissionUpdateManyWithoutTemplateNestedInput
+  actions?: Prisma.ActionUpdateManyWithoutTemplateNestedInput
+}
+
+export type TemplateUncheckedUpdateWithoutTemplateVersionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutTemplatesNestedInput
+  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutTemplateNestedInput
+  actions?: Prisma.ActionUncheckedUpdateManyWithoutTemplateNestedInput
+}
+
 export type TemplateCreateWithoutSubmissionsInput = {
   id?: string
   name: string
@@ -528,6 +623,7 @@ export type TemplateCreateWithoutSubmissionsInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardCreateNestedManyWithoutTemplatesInput
   actions?: Prisma.ActionCreateNestedManyWithoutTemplateInput
+  templateVersions?: Prisma.TemplateVersionCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateWithoutSubmissionsInput = {
@@ -541,6 +637,7 @@ export type TemplateUncheckedCreateWithoutSubmissionsInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutTemplatesInput
   actions?: Prisma.ActionUncheckedCreateNestedManyWithoutTemplateInput
+  templateVersions?: Prisma.TemplateVersionUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateCreateOrConnectWithoutSubmissionsInput = {
@@ -570,6 +667,7 @@ export type TemplateUpdateWithoutSubmissionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUpdateManyWithoutTemplatesNestedInput
   actions?: Prisma.ActionUpdateManyWithoutTemplateNestedInput
+  templateVersions?: Prisma.TemplateVersionUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutSubmissionsInput = {
@@ -583,6 +681,7 @@ export type TemplateUncheckedUpdateWithoutSubmissionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUncheckedUpdateManyWithoutTemplatesNestedInput
   actions?: Prisma.ActionUncheckedUpdateManyWithoutTemplateNestedInput
+  templateVersions?: Prisma.TemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateCreateWithoutActionsInput = {
@@ -596,6 +695,7 @@ export type TemplateCreateWithoutActionsInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardCreateNestedManyWithoutTemplatesInput
   submissions?: Prisma.SubmissionCreateNestedManyWithoutTemplateInput
+  templateVersions?: Prisma.TemplateVersionCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateWithoutActionsInput = {
@@ -609,6 +709,7 @@ export type TemplateUncheckedCreateWithoutActionsInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutTemplatesInput
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutTemplateInput
+  templateVersions?: Prisma.TemplateVersionUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateCreateOrConnectWithoutActionsInput = {
@@ -638,6 +739,7 @@ export type TemplateUpdateWithoutActionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUpdateManyWithoutTemplatesNestedInput
   submissions?: Prisma.SubmissionUpdateManyWithoutTemplateNestedInput
+  templateVersions?: Prisma.TemplateVersionUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutActionsInput = {
@@ -651,6 +753,7 @@ export type TemplateUncheckedUpdateWithoutActionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUncheckedUpdateManyWithoutTemplatesNestedInput
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutTemplateNestedInput
+  templateVersions?: Prisma.TemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUpdateWithoutBoardsInput = {
@@ -664,6 +767,7 @@ export type TemplateUpdateWithoutBoardsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submissions?: Prisma.SubmissionUpdateManyWithoutTemplateNestedInput
   actions?: Prisma.ActionUpdateManyWithoutTemplateNestedInput
+  templateVersions?: Prisma.TemplateVersionUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutBoardsInput = {
@@ -677,6 +781,7 @@ export type TemplateUncheckedUpdateWithoutBoardsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutTemplateNestedInput
   actions?: Prisma.ActionUncheckedUpdateManyWithoutTemplateNestedInput
+  templateVersions?: Prisma.TemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateManyWithoutBoardsInput = {
@@ -699,12 +804,14 @@ export type TemplateCountOutputType = {
   boards: number
   submissions: number
   actions: number
+  templateVersions: number
 }
 
 export type TemplateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   boards?: boolean | TemplateCountOutputTypeCountBoardsArgs
   submissions?: boolean | TemplateCountOutputTypeCountSubmissionsArgs
   actions?: boolean | TemplateCountOutputTypeCountActionsArgs
+  templateVersions?: boolean | TemplateCountOutputTypeCountTemplateVersionsArgs
 }
 
 /**
@@ -738,6 +845,13 @@ export type TemplateCountOutputTypeCountActionsArgs<ExtArgs extends runtime.Type
   where?: Prisma.ActionWhereInput
 }
 
+/**
+ * TemplateCountOutputType without action
+ */
+export type TemplateCountOutputTypeCountTemplateVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TemplateVersionWhereInput
+}
+
 
 export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -751,6 +865,7 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   boards?: boolean | Prisma.Template$boardsArgs<ExtArgs>
   submissions?: boolean | Prisma.Template$submissionsArgs<ExtArgs>
   actions?: boolean | Prisma.Template$actionsArgs<ExtArgs>
+  templateVersions?: boolean | Prisma.Template$templateVersionsArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["template"]>
 
@@ -792,6 +907,7 @@ export type TemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   boards?: boolean | Prisma.Template$boardsArgs<ExtArgs>
   submissions?: boolean | Prisma.Template$submissionsArgs<ExtArgs>
   actions?: boolean | Prisma.Template$actionsArgs<ExtArgs>
+  templateVersions?: boolean | Prisma.Template$templateVersionsArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TemplateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -803,6 +919,7 @@ export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     boards: Prisma.$BoardPayload<ExtArgs>[]
     submissions: Prisma.$SubmissionPayload<ExtArgs>[]
     actions: Prisma.$ActionPayload<ExtArgs>[]
+    templateVersions: Prisma.$TemplateVersionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1210,6 +1327,7 @@ export interface Prisma__TemplateClient<T, Null = never, ExtArgs extends runtime
   boards<T extends Prisma.Template$boardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$boardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   submissions<T extends Prisma.Template$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   actions<T extends Prisma.Template$actionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  templateVersions<T extends Prisma.Template$templateVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$templateVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplateVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1709,6 +1827,30 @@ export type Template$actionsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ActionScalarFieldEnum | Prisma.ActionScalarFieldEnum[]
+}
+
+/**
+ * Template.templateVersions
+ */
+export type Template$templateVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TemplateVersion
+   */
+  select?: Prisma.TemplateVersionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TemplateVersion
+   */
+  omit?: Prisma.TemplateVersionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TemplateVersionInclude<ExtArgs> | null
+  where?: Prisma.TemplateVersionWhereInput
+  orderBy?: Prisma.TemplateVersionOrderByWithRelationInput | Prisma.TemplateVersionOrderByWithRelationInput[]
+  cursor?: Prisma.TemplateVersionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TemplateVersionScalarFieldEnum | Prisma.TemplateVersionScalarFieldEnum[]
 }
 
 /**

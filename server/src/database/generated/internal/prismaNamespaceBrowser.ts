@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Board: 'Board',
   Template: 'Template',
+  TemplateVersion: 'TemplateVersion',
   Submission: 'Submission',
   User: 'User',
   Job: 'Job',
@@ -99,6 +100,16 @@ export const TemplateScalarFieldEnum = {
 } as const
 
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
+
+
+export const TemplateVersionScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  version: 'version',
+  createdAt: 'createdAt'
+} as const
+
+export type TemplateVersionScalarFieldEnum = (typeof TemplateVersionScalarFieldEnum)[keyof typeof TemplateVersionScalarFieldEnum]
 
 
 export const SubmissionScalarFieldEnum = {
