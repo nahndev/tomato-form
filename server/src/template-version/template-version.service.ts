@@ -5,25 +5,17 @@ import {
   ServiceUnavailableException,
   UnprocessableEntityException,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import * as semver from "semver";
 import { TemplateVersion } from "@/database/prisma-client";
-import { EnvironmentVariables } from "../config/env.schema";
 import { PrismaService } from "../database/prisma.service";
-import { TemplateClientVersion } from "./template-file.client";
+import { TemplateFileClient } from "./template-file.client";
 
 @Injectable()
 export class TemplateVersionService {
-  private readonly templateClientVersion: TemplateClientVersion;
-
   constructor(
     private readonly prisma: PrismaService,
-    configService: ConfigService<EnvironmentVariables, true>,
-  ) {
-    this.templateClientVersion = new TemplateClientVersion(
-      configService.get("YJS_RPC_URL", { infer: true }),
-    );
-  }
+    private readonly templateFileClient: TemplateFileClient,
+  ) {}
 
   async publish(templateId: string): Promise<TemplateVersion> {
     const template = await this.prisma.template.findUnique({
@@ -56,7 +48,7 @@ export class TemplateVersionService {
     version: string,
   ): Promise<string> {
     try {
-      return await this.templateClientVersion.makeVersionFile(
+      return await this.templateFileClient.makeVersionFile(
         templateId,
         version,
       );

@@ -5,7 +5,7 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "tsConfigPath": "tsconfig.json",
-    "assets": ["template-version/proto/**/*.proto"],
+    "assets": ["proto/**/*.proto"],
     "watchAssets": true
   }
 }
