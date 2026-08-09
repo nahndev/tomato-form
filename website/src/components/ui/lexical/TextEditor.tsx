@@ -1,12 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   TEXT_EDITOR_NAMESPACE,
   TEXT_EDITOR_THEME,
   onTextEditorError,
   serializeEditorState,
 } from "@/components/ui/lexical/config";
+import { FloatingToolbarPlugin } from "@/components/ui/lexical/FloatingToolbarPlugin";
+import { Toolbar } from "@/components/ui/lexical/Toolbar";
 import { useSyncEditorState } from "@/components/ui/lexical/useSyncEditorState";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -15,84 +16,11 @@ import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import {
-  $getSelection,
-  $isRangeSelection,
   BLUR_COMMAND,
   COMMAND_PRIORITY_LOW,
-  FORMAT_TEXT_COMMAND,
-  SELECTION_CHANGE_COMMAND,
   type SerializedEditorState,
 } from "lexical";
-import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-
-/** Tracks active text formats at the current selection, to highlight toolbar buttons. */
-function useActiveFormats() {
-  const [editor] = useLexicalComposerContext();
-  const [formats, setFormats] = useState({
-    bold: false,
-    italic: false,
-    underline: false,
-  });
-
-  useEffect(() => {
-    return editor.registerCommand(
-      SELECTION_CHANGE_COMMAND,
-      () => {
-        editor.getEditorState().read(() => {
-          const selection = $getSelection();
-          if (!$isRangeSelection(selection)) return;
-          setFormats({
-            bold: selection.hasFormat("bold"),
-            italic: selection.hasFormat("italic"),
-            underline: selection.hasFormat("underline"),
-          });
-        });
-        return false;
-      },
-      COMMAND_PRIORITY_LOW,
-    );
-  }, [editor]);
-
-  return formats;
-}
-
-function Toolbar() {
-  const [editor] = useLexicalComposerContext();
-  const { bold, italic, underline } = useActiveFormats();
-
-  return (
-    <div className="flex gap-1 border-b border-input p-1">
-      <Button
-        type="button"
-        variant={bold ? "default" : "ghost"}
-        className="size-8"
-        onMouseDown={(e) => e.preventDefault()}
-        onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")}
-      >
-        <BoldIcon className="size-4" />
-      </Button>
-      <Button
-        type="button"
-        variant={italic ? "default" : "ghost"}
-        className="size-8"
-        onMouseDown={(e) => e.preventDefault()}
-        onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")}
-      >
-        <ItalicIcon className="size-4" />
-      </Button>
-      <Button
-        type="button"
-        variant={underline ? "default" : "ghost"}
-        className="size-8"
-        onMouseDown={(e) => e.preventDefault()}
-        onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")}
-      >
-        <UnderlineIcon className="size-4" />
-      </Button>
-    </div>
-  );
-}
+import { useEffect, useRef } from "react";
 
 /**
  * Commits the serialized editor state via `onCommit` on blur, and also on
@@ -167,13 +95,18 @@ export function TextEditor({
     >
       {editable ? (
         <div className="rounded-md border border-input bg-transparent shadow-sm focus-within:ring-1 focus-within:ring-ring">
-          <Toolbar />
+          <FloatingToolbarPlugin>
+            <Toolbar />
+          </FloatingToolbarPlugin>
           <div className="relative">
             <RichTextPlugin
               contentEditable={
                 <ContentEditable
                   id={id}
-                  className={className ?? "min-h-24 w-full px-3 py-2 text-sm focus-visible:outline-none"}
+                  className={
+                    className ??
+                    "min-h-24 w-full px-3 py-2 text-sm focus-visible:outline-none"
+                  }
                 />
               }
               placeholder={

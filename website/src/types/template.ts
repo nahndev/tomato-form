@@ -90,6 +90,7 @@ export interface Session {
   name: string;
   /** Key into `ICON_REGISTRY` (see `components/ui/icon-picker`). */
   icon?: string;
+  description?: SerializedEditorState;
 }
 
 export interface TemplateVersion {

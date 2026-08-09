@@ -1,4 +1,7 @@
-# feat: Enhance property of widget-item
+# feat: Add `TextEditor` as description for `session`
 
-- [x] Create folder `./website/src/features/template/components/property`
-- [x] Move `registry` and `types` to `property` folder.
+## Tasks
+
+- [x] Add `description` for `session`
+- [x] Add `TextEditor` for modify `session`
+- [x] TextEditor:toolbar should be `absolute` when click
