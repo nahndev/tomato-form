@@ -22,7 +22,7 @@ const SessionBox: React.FC<SessionBuilderProps> = ({ sessionId }) => {
 const SessionHeader: React.FC = () => {
   const { session } = useSessionState();
   return (
-    <div className="bg-gray-200 p-2">
+    <div className="border-b border-slate-200 p-2">
       <h3>{session?.name}</h3>
     </div>
   );

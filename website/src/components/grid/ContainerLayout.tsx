@@ -13,7 +13,7 @@ import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";
 import { generateKeyBetween } from "fractional-indexing";
 import { useMemo, useState } from "react";
-import { useMap } from "usehooks-ts";
+import { useDebounceValue, useMap } from "usehooks-ts";
 
 export interface MovingLayout extends LayoutRect {
   id: string;
@@ -92,6 +92,7 @@ export function ContainerLayout({
 
     return Math.max(maxBottom, movingBottom, 200);
   }, [computedLayouts, moving, hidden]);
+  const [containerHeightDebounced] = useDebounceValue(containerHeight, 20);
 
   useDragDropMonitor({
     onDragMove({ operation: { source, target } }) {
@@ -140,7 +141,10 @@ export function ContainerLayout({
     <div
       ref={ref}
       className={clsx("relative", hidden && "duration-300")}
-      style={{ width: GRID_COLUMNS * COLUMN_WIDTH, height: containerHeight }}
+      style={{
+        width: GRID_COLUMNS * COLUMN_WIDTH,
+        height: containerHeightDebounced,
+      }}
     >
       {computedLayouts.map((layout) => (
         <ItemLayout

@@ -16,8 +16,7 @@ const TemplateBuilder: React.FC<TemplateBuilderProps> = () => {
       <div className="flex-1">
         <TemplateCanvas />
       </div>
-
-      {!viewOnly && <ToolbarPanel />}
+      <ToolbarPanel />
     </div>
   );
 };
