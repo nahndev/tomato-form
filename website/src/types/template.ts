@@ -78,9 +78,7 @@ export interface WidgetProperties {
   placeholder?: string;
   required?: boolean;
   options?: string[];
-  /** Static display text for the `label` widget, as a serialized lexical editor state. */
   content?: SerializedEditorState;
-  /** Target URL the `button` widget opens on click. */
   url?: string;
   compact?: boolean;
   labelStyle?: CSSProperties;

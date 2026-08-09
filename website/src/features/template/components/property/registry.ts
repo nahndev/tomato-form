@@ -9,7 +9,7 @@ import { UrlDescriptor } from "@/features/template/components/toolbar/property/d
 import type {
   WidgetPropertyDescriptor,
   WidgetPropertyRegistry,
-} from "@/features/template/components/toolbar/property/types";
+} from "@/features/template/components/property/types";
 
 const LABEL: WidgetPropertyDescriptor = {
   key: "label",

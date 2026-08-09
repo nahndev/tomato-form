@@ -12,7 +12,7 @@ const SessionHeader: React.FC = () => {
   const { updateSession } = useSessionActions();
 
   return (
-    <div className="relative flex items-center gap-2 border-b border-slate-200 p-2 pl-11">
+    <div className="relative flex items-center gap-2 border-b border-slate-200 p-2">
       <IconPicker
         value={session?.icon}
         onChange={(icon) => updateSession(sessionId, { icon })}

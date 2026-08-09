@@ -1,6 +1,6 @@
 "use client";
 
-import { WIDGET_PROPERTY_REGISTRY } from "@/features/template/components/toolbar/property/registry";
+import { WIDGET_PROPERTY_REGISTRY } from "@/features/template/components/property/registry";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";

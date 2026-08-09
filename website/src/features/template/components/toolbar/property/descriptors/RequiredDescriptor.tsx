@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "@/components/ui/label";
-import type { WidgetPropertyFieldProps } from "@/features/template/components/toolbar/property/types";
+import type { WidgetPropertyFieldProps } from "@/features/template/components/property/types";
 
 /** Whether the field must be filled in before submission. */
 export function RequiredDescriptor({ value, onChange }: WidgetPropertyFieldProps) {

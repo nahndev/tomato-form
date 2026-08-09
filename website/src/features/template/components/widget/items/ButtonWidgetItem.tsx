@@ -8,6 +8,8 @@ export function ButtonWidgetItem({
   properties,
   mode,
 }: FieldComponentProps<unknown>) {
+  const containerStyle = properties.containerStyle ?? {};
+
   function handleClick() {
     if (properties.url) {
       window.open(properties.url, "_blank", "noopener,noreferrer");
@@ -20,7 +22,7 @@ export function ButtonWidgetItem({
       disabled={mode === "preview"}
       onClick={handleClick}
       className="w-full p-4"
-      style={{}}
+      style={containerStyle}
     >
       {properties.label || "Click me"}
     </Button>

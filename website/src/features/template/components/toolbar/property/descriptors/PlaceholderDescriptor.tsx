@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { WidgetPropertyFieldProps } from "@/features/template/components/toolbar/property/types";
+import type { WidgetPropertyFieldProps } from "@/features/template/components/property/types";
 import { useState } from "react";
 
 /** Placeholder text shown inside the empty input. */

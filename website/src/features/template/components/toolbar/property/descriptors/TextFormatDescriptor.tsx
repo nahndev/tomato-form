@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import type { WidgetPropertyFieldProps } from "@/features/template/components/toolbar/property/types";
+import type { WidgetPropertyFieldProps } from "@/features/template/components/property/types";
 import { useToggleProperty } from "@/features/template/hooks/useConditionValue";
 import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-react";
 import { CSSProperties } from "react";

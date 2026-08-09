@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "@/components/ui/label";
-import type { WidgetPropertyFieldProps } from "@/features/template/components/toolbar/property/types";
+import type { WidgetPropertyFieldProps } from "@/features/template/components/property/types";
 import { useState } from "react";
 
 /** Options editor (one per line) shared by select, checkbox, and radio. */
