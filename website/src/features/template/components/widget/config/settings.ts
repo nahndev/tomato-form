@@ -34,4 +34,5 @@ export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   [WidgetType.FILE_UPLOADER]: { label: "File upload field" },
   [WidgetType.BREAK]: { label: "Break", compact: true },
   [WidgetType.SESSION]: { label: "Session" },
+  [WidgetType.USERS]: { label: "User field" },
 };

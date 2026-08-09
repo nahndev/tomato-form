@@ -7,19 +7,51 @@ import { WidgetDefinition } from "@/features/template/components/widget/types";
 import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { cn } from "@/lib/utils";
+import { WidgetGroup } from "@/types/template";
 import { useDragDropMonitor, useDraggable } from "@dnd-kit/react";
 import React, { useMemo, useState } from "react";
 import { v4 } from "uuid";
 
 interface WidgetPickerProps {}
 
+const GROUP_LABELS: Record<WidgetGroup, string> = {
+  [WidgetGroup.COMMON]: "Common",
+  [WidgetGroup.MEDIA]: "Media",
+  [WidgetGroup.ADVANCE]: "Advance",
+  [WidgetGroup.SYSTEM]: "System",
+};
+
+const GROUP_ORDER = [
+  WidgetGroup.COMMON,
+  WidgetGroup.MEDIA,
+  WidgetGroup.ADVANCE,
+  WidgetGroup.SYSTEM,
+];
+
 export function WidgetPicker({}: WidgetPickerProps) {
   const { widgets } = useTemplateState();
   const version = useMemo(() => Object.keys(widgets).length, [widgets]);
+
+  const groups = useMemo(
+    () =>
+      GROUP_ORDER.map((group) => ({
+        group,
+        defs: WIDGET_LIST.filter((def) => def.group === group),
+      })).filter(({ defs }) => defs.length > 0),
+    [],
+  );
+
   return (
     <ScrollArea className="size-full flex flex-col">
-      {WIDGET_LIST.map((def) => (
-        <WidgetCreationButton key={def.type + version} def={def} />
+      {groups.map(({ group, defs }) => (
+        <div key={group} className="flex flex-col gap-1 py-2">
+          <h6 className="px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            {GROUP_LABELS[group]}
+          </h6>
+          {defs.map((def) => (
+            <WidgetCreationButton key={def.type + version} def={def} />
+          ))}
+        </div>
       ))}
     </ScrollArea>
   );

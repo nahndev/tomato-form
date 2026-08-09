@@ -18,6 +18,19 @@ export enum WidgetType {
   FILE_UPLOADER = "file-uploader",
   BREAK = "break",
   SESSION = "session",
+  USERS = "users",
+}
+
+/**
+ * Category a widget type is filed under in the "ADD WIDGET" picker.
+ * `SYSTEM` is reserved for widgets backed by platform data (e.g. `users`)
+ * rather than author-entered content.
+ */
+export enum WidgetGroup {
+  COMMON = "common",
+  MEDIA = "media",
+  ADVANCE = "advance",
+  SYSTEM = "system",
 }
 
 export enum TemplateMode {

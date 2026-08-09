@@ -15,8 +15,9 @@ import {
   PenTool,
   Timer,
   Type,
+  Users as UsersIcon,
 } from "lucide-react";
-import { WidgetType } from "@/types/template";
+import { WidgetGroup, WidgetType } from "@/types/template";
 import { DEFAULT_LAYOUTS } from "./config/layouts";
 import { DEFAULT_SETTINGS } from "./config/settings";
 import type { WidgetDefinition, WidgetRegistry } from "./types";
@@ -37,6 +38,7 @@ import { SignatureField } from "./items/SignatureField";
 import { TextField } from "./items/TextField";
 import { TextAreaField } from "./items/TextAreaField";
 import { TimeField } from "./items/TimeField";
+import { UsersField } from "./items/UsersField";
 
 export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.TEXT]: {
@@ -45,6 +47,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: Type,
     description: "Single-line text",
     isDataField: true,
+    group: WidgetGroup.COMMON,
     Field: TextField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.TEXT],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.TEXT],
@@ -55,6 +58,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: AlignLeft,
     description: "Multi-line text with auto-growing rows",
     isDataField: true,
+    group: WidgetGroup.COMMON,
     Field: TextAreaField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.TEXT_AREA],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.TEXT_AREA],
@@ -65,6 +69,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: Hash,
     description: "Numeric input",
     isDataField: true,
+    group: WidgetGroup.COMMON,
     Field: NumberField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.NUMBER],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.NUMBER],
@@ -75,6 +80,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: Calendar,
     description: "Date only",
     isDataField: true,
+    group: WidgetGroup.COMMON,
     Field: DateField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.DATE],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.DATE],
@@ -85,6 +91,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: CalendarClock,
     description: "Date and time (stored as epoch ms)",
     isDataField: true,
+    group: WidgetGroup.COMMON,
     Field: DatetimeField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.DATETIME],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.DATETIME],
@@ -95,6 +102,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: Timer,
     description: "Time only",
     isDataField: true,
+    group: WidgetGroup.COMMON,
     Field: TimeField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.TIME],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.TIME],
@@ -105,6 +113,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: List,
     description: "Dropdown select",
     isDataField: true,
+    group: WidgetGroup.COMMON,
     Field: SelectField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.SELECT],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.SELECT],
@@ -115,6 +124,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: CheckSquare,
     description: "A list of checkboxes (multi-select)",
     isDataField: true,
+    group: WidgetGroup.COMMON,
     Field: CheckboxField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.CHECKBOX],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.CHECKBOX],
@@ -125,6 +135,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: CircleDot,
     description: "A list of radio buttons (single-select)",
     isDataField: true,
+    group: WidgetGroup.COMMON,
     Field: RadioField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.RADIO],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.RADIO],
@@ -135,6 +146,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: FileText,
     description: "Readonly display content",
     isDataField: false,
+    group: WidgetGroup.COMMON,
     Field: LabelField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.LABEL],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.LABEL],
@@ -145,6 +157,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: PenTool,
     description: "Lets the person sign with their pointer",
     isDataField: true,
+    group: WidgetGroup.ADVANCE,
     Field: SignatureField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.SIGNATURE],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.SIGNATURE],
@@ -155,6 +168,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: MousePointerClick,
     description: "A clickable button, optionally linking to a URL",
     isDataField: false,
+    group: WidgetGroup.ADVANCE,
     Field: ButtonField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.BUTTON],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.BUTTON],
@@ -165,6 +179,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: ImageIcon,
     description: "Upload and preview an image",
     isDataField: true,
+    group: WidgetGroup.MEDIA,
     Field: ImageUploaderField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.IMAGE_UPLOADER],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.IMAGE_UPLOADER],
@@ -175,6 +190,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: Paperclip,
     description: "Upload files and show them as a list",
     isDataField: true,
+    group: WidgetGroup.MEDIA,
     Field: FileUploaderField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.FILE_UPLOADER],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.FILE_UPLOADER],
@@ -185,6 +201,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: Minus,
     description: "A full-width divider line",
     isDataField: false,
+    group: WidgetGroup.ADVANCE,
     Field: BreakField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.BREAK],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.BREAK],
@@ -195,9 +212,21 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     icon: Clock,
     description: "Full-width, fixed block",
     isDataField: false,
+    group: WidgetGroup.ADVANCE,
     Field: SessionField as WidgetDefinition["Field"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.SESSION],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.SESSION],
+  },
+  [WidgetType.USERS]: {
+    type: WidgetType.USERS,
+    label: "Users",
+    icon: UsersIcon,
+    description: "Select a user from the workspace",
+    isDataField: true,
+    group: WidgetGroup.SYSTEM,
+    Field: UsersField as WidgetDefinition["Field"],
+    defaultSettings: DEFAULT_SETTINGS[WidgetType.USERS],
+    defaultLayout: DEFAULT_LAYOUTS[WidgetType.USERS],
   },
 };
 

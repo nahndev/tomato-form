@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
-import { useTemplateId } from "@/features/template/components/provider/TemplateProvider";
+import {
+  useTemplateId,
+  useTemplateVersion,
+} from "@/features/template/components/provider/TemplateProvider";
 import TemplateConnection from "@/features/template/components/template/TemplateConnection";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { TemplateMode } from "@/types/template";
@@ -13,6 +16,7 @@ const TemplateHeader: React.FC<TemplateHeaderProps> = () => {
   const id = useTemplateId();
   const { name } = useTemplateState();
   const mode = useTemplateMode();
+  const version = useTemplateVersion();
   return (
     <div className="flex items-center gap-2 border-b px-4 py-2">
       <Link href="/templates">
@@ -24,6 +28,7 @@ const TemplateHeader: React.FC<TemplateHeaderProps> = () => {
         <span>{name}</span>
       </div>
       <div className="flex-1" />
+      <div className="ml-auto">{version ?? "0.0.0"}</div>
       <div className="ml-auto">
         {mode === TemplateMode.VIEW ? (
           <Link href={`/templates/${id}?mode=edit`}>

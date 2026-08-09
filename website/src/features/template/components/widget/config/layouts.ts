@@ -34,4 +34,5 @@ export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
     isFullWidth: true,
     isStatic: false,
   },
+  [WidgetType.USERS]: { column: 0, span: 2 },
 };

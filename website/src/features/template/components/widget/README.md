@@ -77,6 +77,14 @@ export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
 insertion time from sibling widgets via `generateKeyBetween` (see
 `TemplateBuilder.handleAddWidget`).
 
+## Widget groups
+
+Each `WidgetDefinition` carries a `group: WidgetGroup` (`common`, `media`,
+`advance`, or `system`), which the widget picker sidebar (`WidgetPicker.tsx`)
+uses to render widgets under a section heading instead of one flat list.
+`system` is reserved for widgets backed by platform data rather than
+author-entered content (e.g. `users`).
+
 ## Registering a new widget
 
 1. Add the new member to the `WidgetType` enum in `src/types/template.ts`.
@@ -84,7 +92,7 @@ insertion time from sibling widgets via `generateKeyBetween` (see
    `<Type>Field` (e.g. `RatingField`).
 3. Add the new type's entries to `config/settings.ts` and `config/layouts.ts`.
 4. In `registry.ts`, import the Field component and add one entry to
-   `WIDGET_REGISTRY`:
+   `WIDGET_REGISTRY`, including a `group`:
 
 ```ts
 import { RatingField } from "./items/RatingField";
@@ -96,6 +104,7 @@ import { RatingField } from "./items/RatingField";
   icon: Star,
   description: "1-5 star rating",
   isDataField: true,
+  group: WidgetGroup.COMMON,
   Field: RatingField as WidgetDefinition["Field"],
   defaultSettings: DEFAULT_SETTINGS[WidgetType.RATING],
   defaultLayout: DEFAULT_LAYOUTS[WidgetType.RATING],

@@ -76,4 +76,5 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   [WidgetType.FILE_UPLOADER]: [LABEL, REQUIRED],
   [WidgetType.BREAK]: [],
   [WidgetType.SESSION]: [LABEL],
+  [WidgetType.USERS]: [LABEL, REQUIRED],
 };
