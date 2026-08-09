@@ -14,7 +14,7 @@ export interface UploadedFileMeta {
 // server/src). Only file metadata (name/size/type) is kept - no file
 // content is persisted - for demo purposes only. A future task must add a
 // real upload endpoint.
-export function FileUploaderField({
+export function FileUploaderWidgetItem({
   widgetId,
   mode,
   value,

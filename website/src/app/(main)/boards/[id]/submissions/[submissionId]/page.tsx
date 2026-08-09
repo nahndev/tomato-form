@@ -1,15 +1,15 @@
 "use client";
 
-import { use, useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
-import { useTemplate } from "@/features/template";
 import { useSubmission, useUpdateSubmission } from "@/features/board";
+import { useTemplate } from "@/features/template";
+import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { use, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 interface PageProps {
   params: Promise<{ id: string; submissionId: string }>;
@@ -88,9 +88,7 @@ export default function SubmissionPage({ params }: PageProps) {
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">
-          {template?.name ?? "Submission"}
-        </h1>
+        <h1 className="text-2xl font-bold">{template?.name ?? "Submission"}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {submission.createdAt
             ? `Submitted ${new Date(submission.createdAt).toLocaleString()}`
@@ -112,7 +110,7 @@ export default function SubmissionPage({ params }: PageProps) {
             const widget = template.widgets[widgetId];
             const props = template.properties[widgetId];
             const def = WIDGET_REGISTRY[widget.type];
-            const Field = def.Field;
+            const Field = def.component;
 
             return (
               <div key={widgetId} className="flex flex-col gap-1.5">

@@ -19,7 +19,7 @@ function localInputValueToEpoch(inputValue: string): number | undefined {
   return Number.isNaN(time) ? undefined : time;
 }
 
-export function DatetimeField({
+export function DatetimeWidgetItem({
   widgetId,
   mode,
   value,

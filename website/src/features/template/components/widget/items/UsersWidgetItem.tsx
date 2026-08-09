@@ -5,7 +5,7 @@ import { Select } from "@/components/ui/select";
 import { useUserStore } from "@/store/user.store";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
-export function UsersField({
+export function UsersWidgetItem({
   widgetId,
   mode,
   value,

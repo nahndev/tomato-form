@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
 /** Value is a "YYYY-MM-DD" date-only string. */
-export function DateField({
+export function DateWidgetItem({
   widgetId,
   mode,
   value,

@@ -27,9 +27,8 @@ export interface WidgetDefinition<TValue = unknown> {
   icon: LucideIcon;
   description: string;
   isDataField: boolean;
-  /** Category this widget is filed under in the "ADD WIDGET" picker. */
   group: WidgetGroup;
-  Field: ComponentType<FieldComponentProps<TValue>>;
+  component: ComponentType<FieldComponentProps<TValue>>;
   defaultSettings: WidgetProperties;
   defaultLayout: Omit<GridLayout, "idx">;
 }

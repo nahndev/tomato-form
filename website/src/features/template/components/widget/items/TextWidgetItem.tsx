@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
-export function TextField({
+export function TextWidgetItem({
   widgetId,
   properties,
   mode,

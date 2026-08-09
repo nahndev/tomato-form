@@ -3,7 +3,7 @@
 import { Select } from "@/components/ui/select";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
-export function SelectField({
+export function SelectWidgetItem({
   widgetId,
   properties,
   mode,

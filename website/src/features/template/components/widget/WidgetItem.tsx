@@ -71,9 +71,9 @@ function WidgetItemHeader({ widget }: { widget: Widget }) {
 function WidgetPreview({ widget }: { widget: Widget }) {
   const { properties } = useWidgetState();
   const def = WIDGET_REGISTRY[widget.type];
-  const Field = def.Field;
+  const WidgetItemComponent = def.component;
   return (
-    <Field
+    <WidgetItemComponent
       widgetId={widget.id}
       properties={properties ?? def.defaultSettings}
       mode="preview"
