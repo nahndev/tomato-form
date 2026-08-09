@@ -15,6 +15,7 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import clsx from "clsx";
 import {
   BLUR_COMMAND,
   COMMAND_PRIORITY_LOW,
@@ -94,7 +95,7 @@ export function TextEditor({
       }}
     >
       {editable ? (
-        <div className="rounded-md border border-input bg-transparent shadow-sm focus-within:ring-1 focus-within:ring-ring">
+        <div className="rounded-md border border-input bg-transparent shadow-sm">
           <FloatingToolbarPlugin>
             <Toolbar />
           </FloatingToolbarPlugin>
@@ -111,8 +112,19 @@ export function TextEditor({
               }
               placeholder={
                 placeholder ? (
-                  <div className="pointer-events-none absolute left-3 top-2 text-sm text-muted-foreground">
-                    {placeholder}
+                  <div
+                    className={clsx(
+                      "pointer-events-none absolute text-muted-foreground top-2 leading-0",
+                    )}
+                  >
+                    <span
+                      className={clsx(
+                        className ??
+                          "min-h-24 w-full px-3 py-2 text-sm focus-visible:outline-none",
+                      )}
+                    >
+                      {placeholder}
+                    </span>
                   </div>
                 ) : null
               }

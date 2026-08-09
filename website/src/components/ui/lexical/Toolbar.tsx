@@ -47,7 +47,7 @@ export function Toolbar() {
   const { bold, italic, underline } = useActiveFormats();
 
   return (
-    <div className="flex gap-1 border-b border-input p-1">
+    <div className="flex gap-1 rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10">
       <Button
         type="button"
         variant={bold ? "default" : "ghost"}

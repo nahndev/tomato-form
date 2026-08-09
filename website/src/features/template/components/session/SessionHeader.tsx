@@ -18,7 +18,7 @@ const SessionHeader: React.FC = () => {
         <IconPicker
           value={session?.icon}
           onChange={(icon) => updateSession(sessionId, { icon })}
-          className="absolute right-full size-10 mr-2"
+          className="absolute right-full size-10 mr-4"
         />
         <SessionNameInput />
       </div>

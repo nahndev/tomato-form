@@ -17,7 +17,7 @@ export function SessionDescriptionInput() {
       value={session?.description}
       onChange={(description) => updateSession(sessionId, { description })}
       placeholder="Add a description…"
-      className="min-h-12 w-full px-1.5 py-1 text-sm focus-visible:outline-none"
+      className="p-2 text-sm"
     />
   );
 }
