@@ -50,7 +50,7 @@ const LINK_URL: WidgetPropertyDescriptor = {
   Component: UrlDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
-const TextStyle: WidgetPropertyDescriptor = {
+const TEXT_STYLE: WidgetPropertyDescriptor = {
   key: "textStyle",
   label: "",
   Component: TextStyleDescriptor as ComponentType<WidgetPropertyFieldProps>,
@@ -79,9 +79,9 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   [WidgetType.SELECT]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
   [WidgetType.CHECKBOX]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
   [WidgetType.RADIO]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
-  [WidgetType.LABEL]: [LABEL, CONTENT, TextStyle],
+  [WidgetType.LABEL]: [LABEL, CONTENT],
   [WidgetType.SIGNATURE]: [LABEL, REQUIRED],
-  [WidgetType.BUTTON]: [LABEL, LINK_URL, TextStyle, CONTAINER_STYLE],
+  [WidgetType.BUTTON]: [LABEL, LINK_URL, TEXT_STYLE, CONTAINER_STYLE],
   [WidgetType.IMAGE_UPLOADER]: [LABEL, REQUIRED],
   [WidgetType.FILE_UPLOADER]: [LABEL, REQUIRED],
   [WidgetType.BREAK]: [],

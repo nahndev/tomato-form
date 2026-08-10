@@ -1,7 +1,10 @@
-# feat: Add `TextEditor` as description for `session`
+# feat: support resize for `grid`
+
+## Scope
+
+- [GRID](./website/src/components/ui/grid/)
 
 ## Tasks
 
-- [x] Add `description` for `session`
-- [x] Add `TextEditor` for modify `session`
-- [x] TextEditor:toolbar should be `absolute` when click
+- [x] Install package support resizable for react
+- [x] Mark `grid` resizable (span only)

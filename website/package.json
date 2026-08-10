@@ -33,6 +33,7 @@
     "motion": "^12.40.0",
     "next": "^15.1.0",
     "radix-ui": "^1.4.3",
+    "re-resizable": "^6.11.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-use": "^17.6.1",

@@ -5,6 +5,7 @@ import {
   AbsoluteLayoutUtils,
   getColumn,
   getMaxHeight,
+  getSpan,
   GridLayoutRect,
   LayoutRect,
   setMaxHeight,
@@ -12,7 +13,7 @@ import {
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";
 import { generateKeyBetween } from "fractional-indexing";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useDebounceValue, useMap } from "usehooks-ts";
 
 export interface MovingLayout extends LayoutRect {
@@ -24,6 +25,7 @@ export interface ContainerLayoutProps {
   layouts: Record<string, GridLayoutRect>;
   children: (id: string) => React.ReactNode;
   onMoving: (id: string, column: number, idx: string) => void;
+  onResize: (id: string, span: number) => void;
   disabled?: boolean;
 }
 
@@ -32,6 +34,7 @@ export function ContainerLayout({
   children,
   layouts,
   onMoving,
+  onResize,
   disabled,
 }: ContainerLayoutProps) {
   const [heightMap, { set: setHeight }] = useMap<string, number>();
@@ -42,6 +45,13 @@ export function ContainerLayout({
   const [version, setVersion] = useState<number>(0);
   const [moving, setMoving] = useState<MovingLayout | null>(null);
   const [hidden, setHidden] = useState<string | null>(null);
+
+  const handleResize = useCallback(
+    (widgetId: string, left: number, width: number) => {
+      onResize(widgetId, getSpan({ left, top: 0, width, height: 0 }));
+    },
+    [onResize],
+  );
 
   // Lay widgets out top-to-bottom by idx, then make room for the widget
   // currently being dragged ("moving") by reserving its height at the slot
@@ -152,6 +162,7 @@ export function ContainerLayout({
           setHeight={setHeight}
           computedLayout={layout}
           disabled={disabled}
+          onResize={handleResize}
         >
           {children(layout.id)}
         </ItemLayout>

@@ -20,11 +20,19 @@ const SessionCanvas: React.FC = () => {
     [updateLayout, sessionId],
   );
 
+  const onResize = useCallback(
+    (id: string, span: number) => {
+      updateLayout(id, sessionId, { span });
+    },
+    [updateLayout, sessionId],
+  );
+
   return (
     <ContainerLayout
       layouts={layouts}
       id={sessionId}
       onMoving={onMoving}
+      onResize={onResize}
       disabled={mode === TemplateMode.VIEW}
     >
       {(id: string) => <WidgetItem key={id} widget={widgets[id]} />}
