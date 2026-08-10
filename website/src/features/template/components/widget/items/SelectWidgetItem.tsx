@@ -6,20 +6,10 @@ import type { FieldComponentProps } from "@/features/template/components/widget/
 export function SelectWidgetItem({
   widgetId,
   properties,
-  mode,
   value,
   onChange,
 }: FieldComponentProps<string>) {
   const options = properties.options ?? [];
-
-  if (mode === "preview") {
-    return (
-      <div className="mt-2 flex h-7 w-full items-center justify-between rounded-md border border-input bg-muted/30 px-2 text-xs text-muted-foreground">
-        <span>{options[0] ?? "Select…"}</span>
-        <span>▾</span>
-      </div>
-    );
-  }
 
   return (
     <Select

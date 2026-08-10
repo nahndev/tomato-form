@@ -73,6 +73,7 @@ export interface TextEditorProps {
   editable?: boolean;
   placeholder?: string;
   className?: string;
+  containerClassName?: string;
 }
 
 /** Rich-text editor built on Lexical. Supports bold/italic/underline, and can render editable (with a formatting toolbar) or read-only. */
@@ -83,6 +84,7 @@ export function TextEditor({
   editable = true,
   placeholder,
   className,
+  containerClassName,
 }: TextEditorProps) {
   return (
     <LexicalComposer
@@ -95,7 +97,12 @@ export function TextEditor({
       }}
     >
       {editable ? (
-        <div className="rounded-md border border-input bg-transparent shadow-sm">
+        <div
+          className={clsx(
+            containerClassName,
+            "rounded-md border border-input bg-transparent shadow-sm",
+          )}
+        >
           <FloatingToolbarPlugin>
             <Toolbar />
           </FloatingToolbarPlugin>

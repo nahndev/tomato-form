@@ -1,56 +1,66 @@
-import { WidgetType } from "@/types/template";
-import { ContentDescriptor } from "@/features/template/components/toolbar/property/descriptors/ContentDescriptor";
-import { LabelDescriptor } from "@/features/template/components/toolbar/property/descriptors/LabelDescriptor";
-import { OptionsDescriptor } from "@/features/template/components/toolbar/property/descriptors/OptionsDescriptor";
-import { PlaceholderDescriptor } from "@/features/template/components/toolbar/property/descriptors/PlaceholderDescriptor";
-import { RequiredDescriptor } from "@/features/template/components/toolbar/property/descriptors/RequiredDescriptor";
-import { TextFormatDescriptor } from "@/features/template/components/toolbar/property/descriptors/TextFormatDescriptor";
-import { UrlDescriptor } from "@/features/template/components/toolbar/property/descriptors/UrlDescriptor";
+import { ContainerStyleDescriptor } from "@/features/template/components/property/descriptors/ContainerStyleDescriptor";
+import { ContentDescriptor } from "@/features/template/components/property/descriptors/ContentDescriptor";
+import { LabelDescriptor } from "@/features/template/components/property/descriptors/LabelDescriptor";
+import { OptionsDescriptor } from "@/features/template/components/property/descriptors/OptionsDescriptor";
+import { PlaceholderDescriptor } from "@/features/template/components/property/descriptors/PlaceholderDescriptor";
+import { RequiredDescriptor } from "@/features/template/components/property/descriptors/RequiredDescriptor";
+import { TextStyleDescriptor } from "@/features/template/components/property/descriptors/TextStyleDescriptor";
+import { UrlDescriptor } from "@/features/template/components/property/descriptors/UrlDescriptor";
 import type {
   WidgetPropertyDescriptor,
+  WidgetPropertyFieldProps,
   WidgetPropertyRegistry,
 } from "@/features/template/components/property/types";
+import { WidgetType } from "@/types/template";
+import type { ComponentType } from "react";
 
 const LABEL: WidgetPropertyDescriptor = {
   key: "label",
   label: "Label",
-  Component: LabelDescriptor,
+  Component: LabelDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
 const PLACEHOLDER: WidgetPropertyDescriptor = {
   key: "placeholder",
   label: "Placeholder",
-  Component: PlaceholderDescriptor,
+  Component: PlaceholderDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
 const REQUIRED: WidgetPropertyDescriptor = {
   key: "required",
   label: "Required",
-  Component: RequiredDescriptor,
+  Component: RequiredDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
 const OPTIONS: WidgetPropertyDescriptor = {
   key: "options",
   label: "Options",
-  Component: OptionsDescriptor,
+  Component: OptionsDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
 const CONTENT: WidgetPropertyDescriptor = {
   key: "content",
   label: "Content",
-  Component: ContentDescriptor,
+  Component: ContentDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
 const LINK_URL: WidgetPropertyDescriptor = {
   key: "url",
   label: "Link URL",
-  Component: UrlDescriptor,
+  Component: UrlDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
-const LABEL_FORMAT: WidgetPropertyDescriptor = {
-  key: "labelStyle",
+const TextStyle: WidgetPropertyDescriptor = {
+  key: "textStyle",
   label: "",
-  Component: TextFormatDescriptor,
+  Component: TextStyleDescriptor as ComponentType<WidgetPropertyFieldProps>,
+};
+
+const CONTAINER_STYLE: WidgetPropertyDescriptor = {
+  key: "containerStyle",
+  label: "Style",
+  Component:
+    ContainerStyleDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
 /**
@@ -69,9 +79,9 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   [WidgetType.SELECT]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
   [WidgetType.CHECKBOX]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
   [WidgetType.RADIO]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
-  [WidgetType.LABEL]: [LABEL, CONTENT],
+  [WidgetType.LABEL]: [LABEL, CONTENT, TextStyle],
   [WidgetType.SIGNATURE]: [LABEL, REQUIRED],
-  [WidgetType.BUTTON]: [LABEL, LINK_URL],
+  [WidgetType.BUTTON]: [LABEL, LINK_URL, TextStyle, CONTAINER_STYLE],
   [WidgetType.IMAGE_UPLOADER]: [LABEL, REQUIRED],
   [WidgetType.FILE_UPLOADER]: [LABEL, REQUIRED],
   [WidgetType.BREAK]: [],

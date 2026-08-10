@@ -6,7 +6,6 @@ import type { FieldComponentProps } from "@/features/template/components/widget/
 export function RadioWidgetItem({
   widgetId,
   properties,
-  mode,
   value,
   onChange,
 }: FieldComponentProps<string>) {
@@ -23,8 +22,7 @@ export function RadioWidgetItem({
             id={idx === 0 ? widgetId : undefined}
             type="radio"
             name={widgetId}
-            checked={mode === "fill" ? value === option : false}
-            disabled={mode === "preview"}
+            checked={value === option}
             onChange={() => onChange?.(option)}
             className="size-4 rounded-full border-input accent-primary"
           />

@@ -32,7 +32,7 @@ export function WidgetPropertyContent({ widget }: WidgetPropertyContentProps) {
         <descriptor.Component
           key={descriptor.key}
           widgetType={widget.type}
-          value={widgetProperties}
+          value={widgetProperties[descriptor.key]}
           onChange={(value) => setProperty(widget.id, descriptor.key, value)}
         />
       ))}

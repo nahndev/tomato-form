@@ -123,7 +123,6 @@ export default function SubmissionPage({ params }: PageProps) {
                 <Field
                   widgetId={widgetId}
                   properties={props}
-                  mode="fill"
                   value={values[widgetId]}
                   onChange={(value) => setValue(widgetId, value)}
                 />

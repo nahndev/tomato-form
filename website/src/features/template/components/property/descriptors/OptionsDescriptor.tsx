@@ -5,8 +5,11 @@ import type { WidgetPropertyFieldProps } from "@/features/template/components/pr
 import { useState } from "react";
 
 /** Options editor (one per line) shared by select, checkbox, and radio. */
-export function OptionsDescriptor({ value, onChange }: WidgetPropertyFieldProps) {
-  const [text, setText] = useState((value.options ?? []).join("\n"));
+export function OptionsDescriptor({
+  value,
+  onChange,
+}: WidgetPropertyFieldProps<"options">) {
+  const [text, setText] = useState((value ?? []).join("\n"));
 
   return (
     <div className="flex flex-col gap-1.5">

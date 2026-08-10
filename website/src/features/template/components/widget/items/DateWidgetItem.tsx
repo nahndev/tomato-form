@@ -6,18 +6,9 @@ import type { FieldComponentProps } from "@/features/template/components/widget/
 /** Value is a "YYYY-MM-DD" date-only string. */
 export function DateWidgetItem({
   widgetId,
-  mode,
   value,
   onChange,
 }: FieldComponentProps<string>) {
-  if (mode === "preview") {
-    return (
-      <div className="mt-2 h-7 w-full rounded-md border border-input bg-muted/30 px-2 py-1 text-xs text-muted-foreground">
-        Select date…
-      </div>
-    );
-  }
-
   return (
     <Input
       id={widgetId}

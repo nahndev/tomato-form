@@ -7,7 +7,6 @@ import type { FieldComponentProps } from "@/features/template/components/widget/
 
 export function UsersWidgetItem({
   widgetId,
-  mode,
   value,
   onChange,
 }: FieldComponentProps<string>) {
@@ -16,15 +15,6 @@ export function UsersWidgetItem({
   useEffect(() => {
     init();
   }, [init]);
-
-  if (mode === "preview") {
-    return (
-      <div className="mt-2 flex h-7 w-full items-center justify-between rounded-md border border-input bg-muted/30 px-2 text-xs text-muted-foreground">
-        <span>Select a user…</span>
-        <span>▾</span>
-      </div>
-    );
-  }
 
   if (isError) {
     return (

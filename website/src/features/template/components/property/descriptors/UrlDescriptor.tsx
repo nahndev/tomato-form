@@ -6,8 +6,11 @@ import type { WidgetPropertyFieldProps } from "@/features/template/components/pr
 import { useState } from "react";
 
 /** Target URL editor for the `button` widget. */
-export function UrlDescriptor({ value, onChange }: WidgetPropertyFieldProps) {
-  const [text, setText] = useState(value.url ?? "");
+export function UrlDescriptor({
+  value,
+  onChange,
+}: WidgetPropertyFieldProps<"url">) {
+  const [text, setText] = useState(value ?? "");
 
   return (
     <div className="flex flex-col gap-1.5">

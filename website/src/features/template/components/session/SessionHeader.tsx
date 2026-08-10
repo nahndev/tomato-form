@@ -1,7 +1,6 @@
 "use client";
 
 import { IconPicker } from "@/components/ui/icon-picker";
-import { SessionDescriptionInput } from "@/features/template/components/session/SessionDescriptionInput";
 import { SessionNameInput } from "@/features/template/components/session/SessionNameInput";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
@@ -18,11 +17,11 @@ const SessionHeader: React.FC = () => {
         <IconPicker
           value={session?.icon}
           onChange={(icon) => updateSession(sessionId, { icon })}
-          className="absolute right-full size-10 mr-4"
+          className="absolute right-full size-10 mr-8"
         />
         <SessionNameInput />
       </div>
-      <SessionDescriptionInput />
+      {/* <SessionDescriptionInput /> */}
     </div>
   );
 };

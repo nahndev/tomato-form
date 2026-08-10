@@ -3,10 +3,12 @@ import type { ComponentType } from "react";
 
 export type WidgetPropertyKey = keyof WidgetProperties;
 
-export interface WidgetPropertyFieldProps {
+export interface WidgetPropertyFieldProps<
+  K extends WidgetPropertyKey = WidgetPropertyKey,
+> {
   widgetType: WidgetType;
-  value: WidgetProperties;
-  onChange: (value: WidgetProperties[WidgetPropertyKey]) => void;
+  value: WidgetProperties[K];
+  onChange: (value: WidgetProperties[K]) => void;
 }
 
 export interface WidgetPropertyDescriptor {

@@ -2,13 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
+import { useMemo } from "react";
 
 /** A clickable action button. Never collects a value. */
-export function ButtonWidgetItem({
-  properties,
-  mode,
-}: FieldComponentProps<unknown>) {
-  const containerStyle = properties.containerStyle ?? {};
+export function ButtonWidgetItem({ properties }: FieldComponentProps<unknown>) {
+  const containerStyle = useMemo(
+    () => properties.containerStyle ?? {},
+    [properties],
+  );
+  const labelStyle = useMemo(() => properties.textStyle ?? {}, [properties]);
+  console;
 
   function handleClick() {
     if (properties.url) {
@@ -19,12 +22,11 @@ export function ButtonWidgetItem({
   return (
     <Button
       type="button"
-      disabled={mode === "preview"}
       onClick={handleClick}
       className="w-full p-4"
       style={containerStyle}
     >
-      {properties.label || "Click me"}
+      <span style={labelStyle}>{properties.label || "Click me"}</span>
     </Button>
   );
 }

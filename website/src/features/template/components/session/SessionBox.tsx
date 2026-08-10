@@ -9,7 +9,7 @@ export type SessionBuilderProps = {
 const SessionBox: React.FC<SessionBuilderProps> = ({ sessionId }) => {
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-white shadow-md rounded-md">
+      <div className="bg-white shadow-md rounded-md p-4">
         <SessionProvider sessionId={sessionId}>
           <SessionHeader />
           <SessionCanvas />

@@ -10,20 +10,11 @@ const FIELD_CLASS =
 export function TextAreaWidgetItem({
   widgetId,
   properties,
-  mode,
   value,
   onChange,
 }: FieldComponentProps<string>) {
   const placeholder = properties.placeholder ?? "Enter text…";
   const ref = useRef<HTMLTextAreaElement>(null);
-
-  if (mode === "preview") {
-    return (
-      <div className="mt-2 w-full rounded-md border border-input bg-muted/30 px-2 py-1.5 text-xs text-muted-foreground">
-        <div className="h-14" />
-      </div>
-    );
-  }
 
   function autoGrow(el: HTMLTextAreaElement) {
     el.style.height = "auto";

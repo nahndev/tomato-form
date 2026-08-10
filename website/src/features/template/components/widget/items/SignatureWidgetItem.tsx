@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { PenTool } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
@@ -9,30 +8,21 @@ const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 160;
 
 /** Value is a PNG data URL produced by canvas.toDataURL(). */
-export function SignatureWidgetItem({ mode, value, onChange }: FieldComponentProps<string>) {
+export function SignatureWidgetItem({ value, onChange }: FieldComponentProps<string>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
 
   // Redraw a previously saved signature when this widget mounts.
   useEffect(() => {
-    if (mode !== "fill" || !value) return;
+    if (!value) return;
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
     const img = new Image();
     img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     img.src = value;
-  }, [mode, value]);
-
-  if (mode === "preview") {
-    return (
-      <div className="mt-2 flex h-24 w-full flex-col items-center justify-center gap-1 rounded-md border border-dashed border-input bg-muted/30 text-muted-foreground">
-        <PenTool className="size-4" />
-        <span className="text-xs">Signature area</span>
-      </div>
-    );
-  }
+  }, [value]);
 
   function getPoint(e: React.PointerEvent<HTMLCanvasElement>) {
     const canvas = canvasRef.current!;

@@ -6,8 +6,11 @@ import type { WidgetPropertyFieldProps } from "@/features/template/components/pr
 import { useState } from "react";
 
 /** Placeholder text shown inside the empty input. */
-export function PlaceholderDescriptor({ value, onChange }: WidgetPropertyFieldProps) {
-  const [text, setText] = useState(value.placeholder ?? "");
+export function PlaceholderDescriptor({
+  value,
+  onChange,
+}: WidgetPropertyFieldProps<"placeholder">) {
+  const [text, setText] = useState(value ?? "");
 
   return (
     <div className="flex flex-col gap-1.5">

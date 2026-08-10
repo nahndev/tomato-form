@@ -81,7 +81,7 @@ export interface WidgetProperties {
   content?: SerializedEditorState;
   url?: string;
   compact?: boolean;
-  labelStyle?: CSSProperties;
+  textStyle?: CSSProperties;
   containerStyle?: CSSProperties;
 }
 

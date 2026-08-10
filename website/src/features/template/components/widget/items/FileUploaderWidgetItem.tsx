@@ -1,6 +1,6 @@
 "use client";
 
-import { Paperclip, X } from "lucide-react";
+import { X } from "lucide-react";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 import { formatBytes } from "@/lib/format";
 
@@ -16,20 +16,10 @@ export interface UploadedFileMeta {
 // real upload endpoint.
 export function FileUploaderWidgetItem({
   widgetId,
-  mode,
   value,
   onChange,
 }: FieldComponentProps<UploadedFileMeta[]>) {
   const files = value ?? [];
-
-  if (mode === "preview") {
-    return (
-      <div className="mt-2 flex h-20 w-full flex-col items-center justify-center gap-1 rounded-md border border-input bg-muted/30 text-muted-foreground">
-        <Paperclip className="size-4" />
-        <span className="text-xs">No files attached</span>
-      </div>
-    );
-  }
 
   function handleSelect(fileList: FileList | null) {
     if (!fileList) return;

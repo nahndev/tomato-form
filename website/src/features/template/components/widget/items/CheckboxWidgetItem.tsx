@@ -6,7 +6,6 @@ import type { FieldComponentProps } from "@/features/template/components/widget/
 export function CheckboxWidgetItem({
   widgetId,
   properties,
-  mode,
   value,
   onChange,
 }: FieldComponentProps<string[]>) {
@@ -30,8 +29,7 @@ export function CheckboxWidgetItem({
           <input
             id={idx === 0 ? widgetId : undefined}
             type="checkbox"
-            checked={mode === "fill" ? selected.includes(option) : false}
-            disabled={mode === "preview"}
+            checked={selected.includes(option)}
             onChange={() => toggle(option)}
             className="size-4 rounded border-input accent-primary"
           />

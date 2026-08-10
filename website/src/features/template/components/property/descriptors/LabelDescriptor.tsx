@@ -11,9 +11,12 @@ const schema = Yup.object({
 });
 
 /** Field label, shown for every widget type. */
-export function LabelDescriptor({ value, onChange }: WidgetPropertyFieldProps) {
+export function LabelDescriptor({
+  value,
+  onChange,
+}: WidgetPropertyFieldProps<"label">) {
   const formik = useFormik({
-    initialValues: { label: value.label ?? "" },
+    initialValues: { label: value ?? "" },
     enableReinitialize: true,
     validationSchema: schema,
     onSubmit: (values) => onChange(values.label),

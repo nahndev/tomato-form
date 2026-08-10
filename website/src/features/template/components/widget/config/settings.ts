@@ -32,7 +32,7 @@ export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   [WidgetType.BUTTON]: {
     label: "Click me",
     containerStyle: { background: ColorEnum.GRAY },
-    labelStyle: { color: ColorEnum.WHITE },
+    textStyle: { color: ColorEnum.WHITE },
   },
   [WidgetType.IMAGE_UPLOADER]: { label: "Image upload field" },
   [WidgetType.FILE_UPLOADER]: { label: "File upload field" },

@@ -21,18 +21,9 @@ function localInputValueToEpoch(inputValue: string): number | undefined {
 
 export function DatetimeWidgetItem({
   widgetId,
-  mode,
   value,
   onChange,
 }: FieldComponentProps<number>) {
-  if (mode === "preview") {
-    return (
-      <div className="mt-2 h-7 w-full rounded-md border border-input bg-muted/30 px-2 py-1 text-xs text-muted-foreground">
-        Select date & time…
-      </div>
-    );
-  }
-
   return (
     <input
       id={widgetId}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Image as ImageIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
@@ -17,19 +17,9 @@ export interface UploadedImage {
 // and switch this to upload-then-store-URL instead.
 export function ImageUploaderWidgetItem({
   widgetId,
-  mode,
   value,
   onChange,
 }: FieldComponentProps<UploadedImage | undefined>) {
-  if (mode === "preview") {
-    return (
-      <div className="mt-2 flex h-20 w-full flex-col items-center justify-center gap-1 rounded-md border border-input bg-muted/30 text-muted-foreground">
-        <ImageIcon className="size-4" />
-        <span className="text-xs">No image</span>
-      </div>
-    );
-  }
-
   function handleSelect(file: File | undefined) {
     if (!file) return;
     const reader = new FileReader();
