@@ -9,7 +9,7 @@ import { WidgetType } from "@/types/template";
  */
 export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
   [WidgetType.TEXT]: { column: 0, span: 2 },
-  [WidgetType.TEXT_AREA]: { column: 0, span: 4, isFullWidth: true },
+  [WidgetType.TEXT_AREA]: { column: 0, span: 4 },
   [WidgetType.NUMBER]: { column: 0, span: 2 },
   [WidgetType.DATE]: { column: 0, span: 2 },
   [WidgetType.DATETIME]: { column: 0, span: 2 },
@@ -17,8 +17,8 @@ export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
   [WidgetType.SELECT]: { column: 0, span: 2 },
   [WidgetType.CHECKBOX]: { column: 0, span: 2 },
   [WidgetType.RADIO]: { column: 0, span: 2 },
-  [WidgetType.LABEL]: { column: 0, span: 4, isFullWidth: true },
-  [WidgetType.SIGNATURE]: { column: 0, span: 4, isFullWidth: true },
+  [WidgetType.LABEL]: { column: 0, span: 4 },
+  [WidgetType.SIGNATURE]: { column: 0, span: 4 },
   [WidgetType.BUTTON]: { column: 0, span: 1 },
   [WidgetType.IMAGE_UPLOADER]: { column: 0, span: 2 },
   [WidgetType.FILE_UPLOADER]: { column: 0, span: 2 },

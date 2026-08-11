@@ -1,11 +1,12 @@
-import ItemLayout from "@/components/ui/grid/ItemLayout";
-import { GridDndType } from "@/components/ui/grid/types";
 import { COLUMN_WIDTH, GRID_COLUMNS } from "@/components/ui/grid/constants";
+import ContainerGrid from "@/components/ui/grid/ContainerGrid";
+import ItemLayout from "@/components/ui/grid/ItemLayout";
+import { ResizableBox } from "@/components/ui/grid/ResizableBox";
+import { GridDndType } from "@/components/ui/grid/types";
 import {
   AbsoluteLayoutUtils,
   getColumn,
   getMaxHeight,
-  getSpan,
   GridLayoutRect,
   LayoutRect,
   setMaxHeight,
@@ -13,13 +14,12 @@ import {
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";
 import { generateKeyBetween } from "fractional-indexing";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useDebounceValue, useMap } from "usehooks-ts";
 
 export interface MovingLayout extends LayoutRect {
   id: string;
 }
-
 export interface ContainerLayoutProps {
   id: string;
   layouts: Record<string, GridLayoutRect>;
@@ -45,13 +45,6 @@ export function ContainerLayout({
   const [version, setVersion] = useState<number>(0);
   const [moving, setMoving] = useState<MovingLayout | null>(null);
   const [hidden, setHidden] = useState<string | null>(null);
-
-  const handleResize = useCallback(
-    (widgetId: string, left: number, width: number) => {
-      onResize(widgetId, getSpan({ left, top: 0, width, height: 0 }));
-    },
-    [onResize],
-  );
 
   // Lay widgets out top-to-bottom by idx, then make room for the widget
   // currently being dragged ("moving") by reserving its height at the slot
@@ -156,16 +149,24 @@ export function ContainerLayout({
         height: containerHeightDebounced,
       }}
     >
+      <ContainerGrid />
       {computedLayouts.map((layout) => (
-        <ItemLayout
-          key={layout.id}
-          setHeight={setHeight}
-          computedLayout={layout}
-          disabled={disabled}
-          onResize={handleResize}
-        >
-          {children(layout.id)}
-        </ItemLayout>
+        <div className="absolute" style={{ ...layout }}>
+          <ResizableBox
+            key={layout.id}
+            value={layout}
+            disabled={disabled}
+            onChange={(span) => onResize(layout.id, span)}
+          >
+            <ItemLayout
+              setHeight={setHeight}
+              computedLayout={layout}
+              disabled={disabled}
+            >
+              {children(layout.id)}
+            </ItemLayout>
+          </ResizableBox>
+        </div>
       ))}
     </div>
   );

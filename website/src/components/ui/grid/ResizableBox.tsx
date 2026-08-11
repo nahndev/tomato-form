@@ -1,13 +1,14 @@
-import { COLUMN_WIDTH } from "@/components/ui/grid/constants";
+import { COLUMN_WIDTH, GRID_COLUMNS } from "@/components/ui/grid/constants";
 import { AbsoluteLayout } from "@/components/ui/grid/types";
+import { getResizeSpan } from "@/components/ui/grid/utils";
 import clsx from "clsx";
-import { Resizable } from "re-resizable";
+import { Resizable, ResizeCallback } from "re-resizable";
+import { useState } from "react";
 
 export interface ResizableBoxProps {
   value: AbsoluteLayout;
   disabled?: boolean;
-  onChange: (width: number) => void;
-  onResizingChange: (resizing: boolean) => void;
+  onChange: (span: number) => void;
   children: React.ReactNode;
 }
 
@@ -15,40 +16,63 @@ export function ResizableBox({
   value,
   disabled,
   onChange,
-  onResizingChange,
   children,
 }: ResizableBoxProps) {
+  const [isResizing, setIsResizing] = useState(false);
+  const [initialWidth, setInitialWidth] = useState(0);
+
+  const handleResizeStart = () => {
+    setIsResizing(true);
+    setInitialWidth(value.width);
+  };
+
+  const handleResizeStop: ResizeCallback = (_e, _d, _el, delta) => {
+    setIsResizing(false);
+    setInitialWidth(0);
+  };
+
+  const handleResize: ResizeCallback = (_e, _d, _el, delta) => {
+    if (delta.width !== 0) {
+      const width = initialWidth + delta.width;
+      const span = getResizeSpan({ ...value, width });
+      onChange(span);
+    }
+  };
+
   return (
     <Resizable
+      className="relative"
       size={{ width: value.width, height: "auto" }}
       enable={{ right: !disabled }}
       grid={[COLUMN_WIDTH, 1]}
-      handleStyles={{ right: { right: -4, width: 8 } }}
+      maxWidth={COLUMN_WIDTH * GRID_COLUMNS - value.left}
+      minWidth={COLUMN_WIDTH}
+      handleStyles={{ right: { width: 4 } }}
       handleClasses={{
-        right: clsx(
-          "!h-full transition-colors",
-          !disabled && "cursor-ew-resize hover:bg-primary/40",
-        ),
+        right: clsx("my-auto transition-colors flex flex-col group"),
       }}
       handleComponent={{
         right: (
-          <button
-            type="button"
-            tabIndex={-1}
-            aria-hidden
-            className="h-full w-full cursor-[inherit] border-0 p-0"
-          />
+          <>
+            <div className="flex-1" />
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-hidden
+              className={clsx(
+                "h-8 w-1 cursor-[inherit]",
+                !disabled && "cursor-ew-resize group-hover:bg-primary/40",
+              )}
+            />
+            <div className="flex-1" />
+          </>
         ),
       }}
-      onResizeStart={() => onResizingChange(true)}
-      onResizeStop={(_event, _direction, _elementRef, delta) => {
-        if (delta.width !== 0) {
-          onChange(value.width + delta.width);
-        }
-        onResizingChange(false);
-      }}
+      onResizeStop={handleResizeStop}
+      onResizeStart={handleResizeStart}
+      onResize={handleResize}
     >
-      {children}
+      <div inert={isResizing}>{children}</div>
     </Resizable>
   );
 }

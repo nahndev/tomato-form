@@ -112,6 +112,18 @@ export function getSpan(layout: LayoutRect): number {
   );
 }
 
+export function getResizeColumn(layout: LayoutRect): number {
+  return Math.max(0, Math.floor(layout.left / COLUMN_WIDTH));
+}
+
+export function getResizeSpan(layout: LayoutRect): number {
+  const col = getResizeColumn(layout);
+  return Math.max(
+    1,
+    Math.min(Math.round(layout.width / COLUMN_WIDTH), GRID_COLUMNS - col),
+  );
+}
+
 export function setMaxHeight(
   maxHeights: number[],
   layout: LayoutRect,
