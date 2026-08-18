@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma, Template } from "@/database/prisma-client";
+import { Template } from "@/database/prisma-client";
 import {
   isPrismaForeignKeyError,
   isPrismaNotFoundError,
@@ -16,11 +16,6 @@ export class TemplateService {
     return this.prisma.template.create({
       data: {
         name: dto.name,
-        widgets: (dto.widgets ?? {}) as unknown as Prisma.InputJsonValue,
-        layouts: (dto.layouts ?? {}) as unknown as Prisma.InputJsonValue,
-        widgetToSession: (dto.widgetToSession ??
-          {}) as unknown as Prisma.InputJsonValue,
-        properties: (dto.properties ?? {}) as unknown as Prisma.InputJsonValue,
       },
     });
   }
@@ -46,22 +41,6 @@ export class TemplateService {
         where: { id },
         data: {
           ...(dto.name !== undefined ? { name: dto.name } : {}),
-          ...(dto.widgets !== undefined
-            ? { widgets: dto.widgets as unknown as Prisma.InputJsonValue }
-            : {}),
-          ...(dto.layouts !== undefined
-            ? { layouts: dto.layouts as unknown as Prisma.InputJsonValue }
-            : {}),
-          ...(dto.widgetToSession !== undefined
-            ? {
-                widgetToSession: dto.widgetToSession as unknown as Prisma.InputJsonValue,
-              }
-            : {}),
-          ...(dto.properties !== undefined
-            ? {
-                properties: dto.properties as unknown as Prisma.InputJsonValue,
-              }
-            : {}),
         },
       });
     } catch (err) {

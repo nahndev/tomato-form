@@ -6,9 +6,12 @@ import {
   UnprocessableEntityException,
 } from "@nestjs/common";
 import * as semver from "semver";
-import { TemplateVersion } from "@/database/prisma-client";
+import { Prisma, TemplateVersion } from "@/database/prisma-client";
 import { PrismaService } from "../database/prisma.service";
-import { TemplateFileClient } from "./template-file.client";
+import {
+  TemplateFileClient,
+  TemplateVersionSnapshot,
+} from "./template-file.client";
 
 @Injectable()
 export class TemplateVersionService {
@@ -16,6 +19,32 @@ export class TemplateVersionService {
     private readonly prisma: PrismaService,
     private readonly templateFileClient: TemplateFileClient,
   ) {}
+
+  async findOne(id: string) {
+    const doc = await this.prisma.templateVersion.findUnique({
+      where: { id },
+      include: { template: { select: { id: true, name: true } } },
+    });
+    if (!doc) throw new NotFoundException(`TemplateVersion ${id} not found`);
+    return doc;
+  }
+
+  /** Latest published version for a template, ordered by semver. */
+  async findLatestByTemplateId(templateId: string): Promise<TemplateVersion> {
+    const existing = await this.prisma.templateVersion.findMany({
+      where: { templateId },
+    });
+    const latest = existing.reduce<TemplateVersion | null>(
+      (max, v) => (!max || semver.gt(v.version, max.version) ? v : max),
+      null,
+    );
+    if (!latest) {
+      throw new NotFoundException(
+        `Template ${templateId} has no published version`,
+      );
+    }
+    return latest;
+  }
 
   async publish(templateId: string): Promise<TemplateVersion> {
     const template = await this.prisma.template.findUnique({
@@ -36,17 +65,26 @@ export class TemplateVersionService {
     );
     const version = latest ? (semver.inc(latest, "patch") ?? "1.0.0") : "1.0.0";
 
-    await this.makeVersionFile(templateId, version);
+    const { widgets, layouts, widgetToSession, properties, sessions } =
+      await this.makeVersionFile(templateId, version);
 
     return this.prisma.templateVersion.create({
-      data: { templateId, version },
+      data: {
+        templateId,
+        version,
+        widgets: widgets as unknown as Prisma.InputJsonValue,
+        layouts: layouts as unknown as Prisma.InputJsonValue,
+        widgetToSession: widgetToSession as unknown as Prisma.InputJsonValue,
+        properties: properties as unknown as Prisma.InputJsonValue,
+        sessions: sessions as unknown as Prisma.InputJsonValue,
+      },
     });
   }
 
   private async makeVersionFile(
     templateId: string,
     version: string,
-  ): Promise<string> {
+  ): Promise<TemplateVersionSnapshot> {
     try {
       return await this.templateFileClient.makeVersionFile(
         templateId,

@@ -64,6 +64,11 @@ interface MakeVersionFileRequest {
 
 interface MakeVersionFileResponse {
   path: string;
+  widgets: Record<string, unknown>;
+  layouts: Record<string, unknown>;
+  widgetToSession: Record<string, unknown>;
+  properties: Record<string, unknown>;
+  sessions: Record<string, unknown>;
 }
 
 interface TemplateFilePackage {
@@ -113,7 +118,15 @@ function startRpcServer(): void {
       fs.mkdirSync(path.dirname(dest), { recursive: true });
       fs.copyFileSync(source, dest);
 
-      callback(null, { path: relativePath });
+      const doc = YDocHelper.fromFile(dest);
+      callback(null, {
+        path: relativePath,
+        widgets: Object.fromEntries(doc.getMap("widgets").entries()),
+        layouts: Object.fromEntries(doc.getMap("layouts").entries()),
+        widgetToSession: Object.fromEntries(doc.getMap("widgetToSession").entries()),
+        properties: Object.fromEntries(doc.getMap("properties").entries()),
+        sessions: Object.fromEntries(doc.getMap("sessions").entries()),
+      });
     },
   });
 

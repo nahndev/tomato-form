@@ -1,65 +1,23 @@
-# Add feature `Submission` for project
+# Adjust Submission
 
-## Scope
+## Tasks 01 - Convert Submission using TemplateVersion
 
-- Add `./website/src/features/submission`
-- URL: `./submission/{uuid}`
+[server]
 
-## Purpose and rules
+### schema.prisma
 
-- We have `template` allow design form. This feature is show form and allow fill value.
-- Every `submission` will using `template` with `version` and `data`
+- [x] `Template` remove `widgets`, `layouts`, `properties`, `widgetToSession`
+- [x] `TemplateVersion` add `widgets`, `layouts`, `sessions`, `properties`, `widgetToSession`
+- [x] `Submission` add `templateVersionId`
+- [x] Add api `/template-versions/{id}`
 
-## Tasks 01 - Add connected user
+[yjs-server]
 
-- [x] Add new type `Principal`
+- [x] When `makeVersionFile` return those records (using `google.protobuf.Struct`)
+- [x] On success -> `makeVersionFile` set to `TemplateVersion`
 
-```typescript
-export interface Principal {
-  sub: string;
-  email: string;
-  tenantId: string;
-  name: string;
-  roles: string[];
-}
-```
+[website]
 
-- [x] Add zustand store for it
-- [x] Make `mock` for `principal`
-
-## Tasks 02 - Implement submission
-
-- [x] Move `WidgetType` from `./website/src/types/template.ts` -> `./website/src/types/widget.ts`
-- [x] Add new `yjs` type is `submission`
-- [x] The form should same template, but UI can't edit. Only interaction with content of `Widget`
-- [x] The form save in `submission` of `yjs`.
-- [x] The `submission` using last version of `template` (don't using default)
-
-## Widget behaviors
-
-TEXT - input a text
-TEXT_AREA - input a text-area
-NUMBER - input a number
-DATE - input a date picker
-DATETIME input a datetime picker
-TIME input a time picker
-SELECT - select a value of list
-CHECKBOX - check a value of list (multiple active)
-RADIO - check a value of list (a only)
-LABEL - Shown only
-SIGNATURE - allow user click,
-BUTTON - a button with action (implement after)
-IMAGE_UPLOADER - allow upload a image and show it
-FILE_UPLOADER - allow upload files, show list
-BREAK : show only
-SESSION: show only
-USERS : allow pick users
-
-## Tasks 03 - Build action menu
-
-- The `BUTTON` include multiple `actions`
-  - Mail actions - Send mail with `recipient setup`, `subject`, `content`
-  - Submit actions - default, all session hidden (first session should show). Submit action include `to-session` (default is next session). When click `submit` -> open `to-session`
-  - Return action - `to-session` will to `previous` session.
-  - `Flow` of session appear save in flow
-  - .... suggest and add more actions.
+- [x] `SubmissionPage` -> add hooks `useTemplateVersion`
+- [x] `SubmissionPage` -> using `ContainerLayout` to render UI
+- [x] `ContainerLayout` -> adjust `onMove` and `onResize` to optional

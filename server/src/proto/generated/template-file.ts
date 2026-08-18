@@ -18,6 +18,7 @@ import {
   type ServiceError,
   type UntypedServiceImplementation,
 } from "@grpc/grpc-js";
+import { Struct } from "./google/protobuf/struct";
 
 export const protobufPackage = "template";
 
@@ -28,6 +29,24 @@ export interface MakeVersionFileRequest {
 
 export interface MakeVersionFileResponse {
   path: string;
+  /** Snapshot of the doc's `widgets` Y.Map. */
+  widgets:
+    | { [key: string]: any }
+    | undefined;
+  /** Snapshot of the doc's `layouts` Y.Map. */
+  layouts:
+    | { [key: string]: any }
+    | undefined;
+  /** Snapshot of the doc's `widgetToSession` Y.Map. */
+  widgetToSession:
+    | { [key: string]: any }
+    | undefined;
+  /** Snapshot of the doc's `properties` Y.Map. */
+  properties:
+    | { [key: string]: any }
+    | undefined;
+  /** Snapshot of the doc's `sessions` Y.Map. */
+  sessions: { [key: string]: any } | undefined;
 }
 
 function createBaseMakeVersionFileRequest(): MakeVersionFileRequest {
@@ -35,10 +54,7 @@ function createBaseMakeVersionFileRequest(): MakeVersionFileRequest {
 }
 
 export const MakeVersionFileRequest: MessageFns<MakeVersionFileRequest> = {
-  encode(
-    message: MakeVersionFileRequest,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
+  encode(message: MakeVersionFileRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.templateId !== "") {
       writer.uint32(10).string(message.templateId);
     }
@@ -48,12 +64,8 @@ export const MakeVersionFileRequest: MessageFns<MakeVersionFileRequest> = {
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): MakeVersionFileRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MakeVersionFileRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMakeVersionFileRequest();
     while (reader.pos < end) {
@@ -89,8 +101,8 @@ export const MakeVersionFileRequest: MessageFns<MakeVersionFileRequest> = {
       templateId: isSet(object.templateId)
         ? globalThis.String(object.templateId)
         : isSet(object.template_id)
-          ? globalThis.String(object.template_id)
-          : "",
+        ? globalThis.String(object.template_id)
+        : "",
       version: isSet(object.version) ? globalThis.String(object.version) : "",
     };
   },
@@ -106,14 +118,10 @@ export const MakeVersionFileRequest: MessageFns<MakeVersionFileRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MakeVersionFileRequest>, I>>(
-    base?: I,
-  ): MakeVersionFileRequest {
+  create<I extends Exact<DeepPartial<MakeVersionFileRequest>, I>>(base?: I): MakeVersionFileRequest {
     return MakeVersionFileRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MakeVersionFileRequest>, I>>(
-    object: I,
-  ): MakeVersionFileRequest {
+  fromPartial<I extends Exact<DeepPartial<MakeVersionFileRequest>, I>>(object: I): MakeVersionFileRequest {
     const message = createBaseMakeVersionFileRequest();
     message.templateId = object.templateId ?? "";
     message.version = object.version ?? "";
@@ -122,26 +130,41 @@ export const MakeVersionFileRequest: MessageFns<MakeVersionFileRequest> = {
 };
 
 function createBaseMakeVersionFileResponse(): MakeVersionFileResponse {
-  return { path: "" };
+  return {
+    path: "",
+    widgets: undefined,
+    layouts: undefined,
+    widgetToSession: undefined,
+    properties: undefined,
+    sessions: undefined,
+  };
 }
 
 export const MakeVersionFileResponse: MessageFns<MakeVersionFileResponse> = {
-  encode(
-    message: MakeVersionFileResponse,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
+  encode(message: MakeVersionFileResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.path !== "") {
       writer.uint32(10).string(message.path);
+    }
+    if (message.widgets !== undefined) {
+      Struct.encode(Struct.wrap(message.widgets), writer.uint32(18).fork()).join();
+    }
+    if (message.layouts !== undefined) {
+      Struct.encode(Struct.wrap(message.layouts), writer.uint32(26).fork()).join();
+    }
+    if (message.widgetToSession !== undefined) {
+      Struct.encode(Struct.wrap(message.widgetToSession), writer.uint32(34).fork()).join();
+    }
+    if (message.properties !== undefined) {
+      Struct.encode(Struct.wrap(message.properties), writer.uint32(42).fork()).join();
+    }
+    if (message.sessions !== undefined) {
+      Struct.encode(Struct.wrap(message.sessions), writer.uint32(50).fork()).join();
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): MakeVersionFileResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MakeVersionFileResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMakeVersionFileResponse();
     while (reader.pos < end) {
@@ -155,6 +178,46 @@ export const MakeVersionFileResponse: MessageFns<MakeVersionFileResponse> = {
           message.path = reader.string();
           continue;
         }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.widgets = Struct.unwrap(Struct.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.layouts = Struct.unwrap(Struct.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.widgetToSession = Struct.unwrap(Struct.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.properties = Struct.unwrap(Struct.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 6: {
+          if (tag !== 50) {
+            break;
+          }
+
+          message.sessions = Struct.unwrap(Struct.decode(reader, reader.uint32()));
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -165,7 +228,18 @@ export const MakeVersionFileResponse: MessageFns<MakeVersionFileResponse> = {
   },
 
   fromJSON(object: any): MakeVersionFileResponse {
-    return { path: isSet(object.path) ? globalThis.String(object.path) : "" };
+    return {
+      path: isSet(object.path) ? globalThis.String(object.path) : "",
+      widgets: isObject(object.widgets) ? object.widgets : undefined,
+      layouts: isObject(object.layouts) ? object.layouts : undefined,
+      widgetToSession: isObject(object.widgetToSession)
+        ? object.widgetToSession
+        : isObject(object.widget_to_session)
+        ? object.widget_to_session
+        : undefined,
+      properties: isObject(object.properties) ? object.properties : undefined,
+      sessions: isObject(object.sessions) ? object.sessions : undefined,
+    };
   },
 
   toJSON(message: MakeVersionFileResponse): unknown {
@@ -173,19 +247,35 @@ export const MakeVersionFileResponse: MessageFns<MakeVersionFileResponse> = {
     if (message.path !== "") {
       obj.path = message.path;
     }
+    if (message.widgets !== undefined) {
+      obj.widgets = message.widgets;
+    }
+    if (message.layouts !== undefined) {
+      obj.layouts = message.layouts;
+    }
+    if (message.widgetToSession !== undefined) {
+      obj.widgetToSession = message.widgetToSession;
+    }
+    if (message.properties !== undefined) {
+      obj.properties = message.properties;
+    }
+    if (message.sessions !== undefined) {
+      obj.sessions = message.sessions;
+    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MakeVersionFileResponse>, I>>(
-    base?: I,
-  ): MakeVersionFileResponse {
+  create<I extends Exact<DeepPartial<MakeVersionFileResponse>, I>>(base?: I): MakeVersionFileResponse {
     return MakeVersionFileResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MakeVersionFileResponse>, I>>(
-    object: I,
-  ): MakeVersionFileResponse {
+  fromPartial<I extends Exact<DeepPartial<MakeVersionFileResponse>, I>>(object: I): MakeVersionFileResponse {
     const message = createBaseMakeVersionFileResponse();
     message.path = object.path ?? "";
+    message.widgets = object.widgets ?? undefined;
+    message.layouts = object.layouts ?? undefined;
+    message.widgetToSession = object.widgetToSession ?? undefined;
+    message.properties = object.properties ?? undefined;
+    message.sessions = object.sessions ?? undefined;
     return message;
   },
 };
@@ -198,46 +288,32 @@ export const TemplateFileService = {
     responseStream: false as const,
     requestSerialize: (value: MakeVersionFileRequest): Buffer =>
       Buffer.from(MakeVersionFileRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): MakeVersionFileRequest =>
-      MakeVersionFileRequest.decode(value),
+    requestDeserialize: (value: Buffer): MakeVersionFileRequest => MakeVersionFileRequest.decode(value),
     responseSerialize: (value: MakeVersionFileResponse): Buffer =>
       Buffer.from(MakeVersionFileResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): MakeVersionFileResponse =>
-      MakeVersionFileResponse.decode(value),
+    responseDeserialize: (value: Buffer): MakeVersionFileResponse => MakeVersionFileResponse.decode(value),
   },
 } as const;
 
 export interface TemplateFileServer extends UntypedServiceImplementation {
-  makeVersionFile: handleUnaryCall<
-    MakeVersionFileRequest,
-    MakeVersionFileResponse
-  >;
+  makeVersionFile: handleUnaryCall<MakeVersionFileRequest, MakeVersionFileResponse>;
 }
 
 export interface TemplateFileClient extends Client {
   makeVersionFile(
     request: MakeVersionFileRequest,
-    callback: (
-      error: ServiceError | null,
-      response: MakeVersionFileResponse,
-    ) => void,
+    callback: (error: ServiceError | null, response: MakeVersionFileResponse) => void,
   ): ClientUnaryCall;
   makeVersionFile(
     request: MakeVersionFileRequest,
     metadata: Metadata,
-    callback: (
-      error: ServiceError | null,
-      response: MakeVersionFileResponse,
-    ) => void,
+    callback: (error: ServiceError | null, response: MakeVersionFileResponse) => void,
   ): ClientUnaryCall;
   makeVersionFile(
     request: MakeVersionFileRequest,
     metadata: Metadata,
     options: Partial<CallOptions>,
-    callback: (
-      error: ServiceError | null,
-      response: MakeVersionFileResponse,
-    ) => void,
+    callback: (error: ServiceError | null, response: MakeVersionFileResponse) => void,
   ): ClientUnaryCall;
 }
 
@@ -245,40 +321,26 @@ export const TemplateFileClient = makeGenericClientConstructor(
   TemplateFileService,
   "template.TemplateFile",
 ) as unknown as {
-  new (
-    address: string,
-    credentials: ChannelCredentials,
-    options?: Partial<ClientOptions>,
-  ): TemplateFileClient;
+  new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): TemplateFileClient;
   service: typeof TemplateFileService;
   serviceName: string;
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends globalThis.Array<infer U>
-    ? globalThis.Array<DeepPartial<U>>
-    : T extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : T extends {}
-        ? { [K in keyof T]?: DeepPartial<T[K]> }
-        : Partial<T>;
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isObject(value: any): boolean {
+  return typeof value === "object" && value !== null;
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

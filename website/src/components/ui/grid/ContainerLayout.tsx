@@ -24,8 +24,8 @@ export interface ContainerLayoutProps {
   id: string;
   layouts: Record<string, GridLayoutRect>;
   children: (id: string) => React.ReactNode;
-  onMoving: (id: string, column: number, idx: string) => void;
-  onResize: (id: string, span: number) => void;
+  onMoving?: (id: string, column: number, idx: string) => void;
+  onResize?: (id: string, span: number) => void;
   disabled?: boolean;
 }
 
@@ -117,7 +117,7 @@ export function ContainerLayout({
       }
     },
     onDragEnd({ operation: { source } }) {
-      if (isDropTarget && moving && source) {
+      if (isDropTarget && moving && source && onMoving) {
         const collisionIdx = computedLayouts.findIndex(
           (layout) => layout.top > moving.top,
         );
@@ -151,12 +151,11 @@ export function ContainerLayout({
     >
       <ContainerGrid />
       {computedLayouts.map((layout) => (
-        <div className="absolute" style={{ ...layout }}>
+        <div className="absolute" key={layout.id} style={{ ...layout }}>
           <ResizableBox
-            key={layout.id}
             value={layout}
             disabled={disabled}
-            onChange={(span) => onResize(layout.id, span)}
+            onChange={onResize && ((span) => onResize(layout.id, span))}
           >
             <ItemLayout
               setHeight={setHeight}

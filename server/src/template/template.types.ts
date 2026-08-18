@@ -17,3 +17,10 @@ export interface WidgetProperties {
   required?: boolean;
   options?: string[];
 }
+
+export interface Session {
+  id: string;
+  name: string;
+  icon?: string;
+  description?: unknown;
+}

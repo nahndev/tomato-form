@@ -1,14 +1,14 @@
 import { BackButton } from "@/components/ui/back-button";
 import SubmissionConnection from "@/features/submission/components/SubmissionConnection";
 import { useCurrentSubmission } from "@/features/submission/components/provider/SubmissionProvider";
-import { useTemplateVersion } from "@/features/template/components/provider/TemplateProvider";
+import { useCurrentTemplateVersion } from "@/features/submission/components/provider/TemplateVersionStateProvider";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { usePrincipalStore } from "@/store/principal.store";
 
 const SubmissionHeader: React.FC = () => {
   const submission = useCurrentSubmission();
   const { name } = useTemplateState();
-  const version = useTemplateVersion();
+  const { version } = useCurrentTemplateVersion();
   const principal = usePrincipalStore((s) => s.principal);
 
   return (

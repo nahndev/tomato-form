@@ -8,7 +8,7 @@ import { useState } from "react";
 export interface ResizableBoxProps {
   value: AbsoluteLayout;
   disabled?: boolean;
-  onChange: (span: number) => void;
+  onChange?: (span: number) => void;
   children: React.ReactNode;
 }
 
@@ -35,7 +35,7 @@ export function ResizableBox({
     if (delta.width !== 0) {
       const width = initialWidth + delta.width;
       const span = getResizeSpan({ ...value, width });
-      onChange(span);
+      onChange?.(span);
     }
   };
 

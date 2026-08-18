@@ -82,17 +82,19 @@ export interface TemplateVersion {
   templateId: string;
   /** Semantic version string (e.g. "1.0.0"). */
   version: string;
+  widgets: Record<string, Widget>;
+  properties: Record<string, WidgetProperties>;
+  layouts: Record<string, GridLayout>;
+  widgetToSession: Record<string, string>;
+  sessions: Record<string, Session>;
   createdAt: string;
+  /** Only present when fetched via `/template-versions/{id}`. */
+  template?: { id: string; name: string };
 }
 
 export interface Template {
   id: string;
   name: string;
-  widgets: Record<string, Widget>;
-  properties: Record<string, WidgetProperties>;
-  sessions: Record<string, Session>;
-  layouts: Record<string, GridLayout>;
-  widgetToSession: Record<string, string>;
   templateVersions?: TemplateVersion[];
   createdAt?: string;
   updatedAt?: string;
@@ -100,11 +102,6 @@ export interface Template {
 
 export interface CreateTemplateInput {
   name: string;
-  widgets?: Record<string, Widget>;
-  properties?: Record<string, WidgetProperties>;
-  sessions?: Record<string, Session>;
-  layouts?: Record<string, GridLayout>;
-  widgetToSession?: Record<string, string>;
 }
 
 export type UpdateTemplateInput = Partial<CreateTemplateInput>;

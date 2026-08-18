@@ -3,7 +3,7 @@ import type { Recipient } from "@/types/button-action";
 export interface Submission {
   id: string;
   boardId: string;
-  templateId: string;
+  templateVersionId: string;
   data: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
@@ -11,7 +11,7 @@ export interface Submission {
 
 export interface CreateSubmissionInput {
   boardId: string;
-  templateId: string;
+  templateVersionId: string;
   data?: Record<string, unknown>;
 }
 

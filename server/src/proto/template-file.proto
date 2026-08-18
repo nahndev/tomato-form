@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package template;
 
+import "google/protobuf/struct.proto";
+
 service TemplateFile {
   rpc MakeVersionFile (MakeVersionFileRequest) returns (MakeVersionFileResponse);
 }
@@ -13,4 +15,14 @@ message MakeVersionFileRequest {
 
 message MakeVersionFileResponse {
   string path = 1;
+  /** Snapshot of the doc's `widgets` Y.Map. */
+  google.protobuf.Struct widgets = 2;
+  /** Snapshot of the doc's `layouts` Y.Map. */
+  google.protobuf.Struct layouts = 3;
+  /** Snapshot of the doc's `widgetToSession` Y.Map. */
+  google.protobuf.Struct widget_to_session = 4;
+  /** Snapshot of the doc's `properties` Y.Map. */
+  google.protobuf.Struct properties = 5;
+  /** Snapshot of the doc's `sessions` Y.Map. */
+  google.protobuf.Struct sessions = 6;
 }

@@ -7,8 +7,8 @@ import {
   SubmissionProvider,
   useSubmission,
 } from "@/features/submission";
-import { useTemplate } from "@/features/template";
-import { TemplateProvider } from "@/features/template/components/provider/TemplateProvider";
+import { TemplateVersionStateProvider } from "@/features/submission/components/provider/TemplateVersionStateProvider";
+import { useTemplateVersion } from "@/features/submission/hooks/useTemplateVersion";
 import { DragDropProvider } from "@dnd-kit/react";
 import { Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -23,12 +23,12 @@ export default function SubmissionPage({ params }: PageProps) {
 
   const { data: submission, isLoading, isError } = useSubmission(uuid);
   const {
-    data: template,
-    isLoading: isLoadingTemplate,
-    isError: isTemplateError,
-  } = useTemplate(submission?.templateId ?? "");
+    data: templateVersion,
+    isLoading: isLoadingVersion,
+    isError: isVersionError,
+  } = useTemplateVersion(submission?.templateVersionId ?? "");
 
-  if (isLoading || (submission && isLoadingTemplate)) {
+  if (isLoading || (submission && isLoadingVersion)) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader2 className="size-6 animate-spin text-muted-foreground" />
@@ -37,22 +37,11 @@ export default function SubmissionPage({ params }: PageProps) {
   }
 
   if (isError || !submission) notFound();
-  if (isTemplateError || !template) notFound();
-
-  const versionEntries = template.templateVersions ?? [];
-  const version = versionEntries[versionEntries.length - 1]?.version;
-  if (!version) {
-    return (
-      <div className="flex h-screen items-center justify-center px-6 text-center text-sm text-muted-foreground">
-        This template has no published version yet - it can&apos;t be filled
-        in until one is published.
-      </div>
-    );
-  }
+  if (isVersionError || !templateVersion) notFound();
 
   return (
     <DragDropProvider>
-      <TemplateProvider template={template}>
+      <TemplateVersionStateProvider templateVersion={templateVersion}>
         <SubmissionProvider submission={submission}>
           <SubmissionButtonActionProvider>
             <div className="h-screen grid grid-rows-[auto_1fr] overflow-hidden">
@@ -61,7 +50,7 @@ export default function SubmissionPage({ params }: PageProps) {
             </div>
           </SubmissionButtonActionProvider>
         </SubmissionProvider>
-      </TemplateProvider>
+      </TemplateVersionStateProvider>
     </DragDropProvider>
   );
 }

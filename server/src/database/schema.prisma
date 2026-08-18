@@ -23,18 +23,13 @@ model Board {
 }
 
 model Template {
-  id              String   @id @default(uuid())
-  name            String
-  widgets         Json     @default("{}")
-  layouts         Json     @default("{}")
-  widgetToSession Json     @default("{}") @map("widget_to_session")
-  properties      Json     @default("{}")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  boards      Board[]      @relation("BoardTemplates")
-  submissions Submission[]
-  actions     Action[]
+  boards  Board[]  @relation("BoardTemplates")
+  actions Action[]
 
   templateVersions TemplateVersion[]
 
@@ -42,13 +37,19 @@ model Template {
 }
 
 model TemplateVersion {
-  id         String   @id @default(uuid())
-  templateId String   @map("template_id")
+  id              String   @id @default(uuid())
+  templateId      String   @map("template_id")
   /** Semantic version string (e.g. "1.0.0"), managed via the `semver` library. */
-  version    String
-  createdAt  DateTime @default(now()) @map("created_at")
+  version         String
+  widgets         Json     @default("{}")
+  layouts         Json     @default("{}")
+  widgetToSession Json     @default("{}") @map("widget_to_session")
+  properties      Json     @default("{}")
+  sessions        Json     @default("{}")
+  createdAt       DateTime @default(now()) @map("created_at")
 
-  template Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  template    Template     @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  submissions Submission[]
 
   @@unique([templateId, version])
   @@index([templateId])
@@ -56,18 +57,18 @@ model TemplateVersion {
 }
 
 model Submission {
-  id         String   @id @default(uuid())
-  boardId    String   @map("board_id")
-  templateId String   @map("template_id")
-  data       Json     @default("{}")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  id                String   @id @default(uuid())
+  boardId           String   @map("board_id")
+  templateVersionId String   @map("template_version_id")
+  data              Json     @default("{}")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
-  board    Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  template Template @relation(fields: [templateId], references: [id], onDelete: Restrict)
+  board           Board           @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  templateVersion TemplateVersion @relation(fields: [templateVersionId], references: [id], onDelete: Restrict)
 
   @@index([boardId])
-  @@index([templateId])
+  @@index([templateVersionId])
   @@map("submissions")
 }
 

@@ -1,23 +1,23 @@
 "use client";
 
-import { useTemplateDoc } from "@/features/template/components/provider/TemplateDocProvider";
-import {
-  readTemplateState,
-  type TemplateState,
-} from "@/features/template/hooks/internal/templateStateReader";
-import { useEffect, useState } from "react";
+import type { TemplateState } from "@/features/template/hooks/internal/templateStateReader";
+import { createContext, useContext } from "react";
 
-/** Reads live state off the doc from the nearest `<TemplateDocProvider>`. */
+/**
+ * Holds the current `TemplateState`, however it's sourced - a live yjs doc
+ * (`TemplateLiveStateProvider`, template builder/edit) or a static published
+ * snapshot (`TemplateVersionStateProvider`, submission fill-out). Every
+ * doc-independent consumer (`useSessionState`, `useWidgetState`, `SessionCanvas`,
+ * `WidgetItem`, ...) only ever reads through `useTemplateState()`.
+ */
+export const TemplateStateContext = createContext<TemplateState | null>(null);
+
 export function useTemplateState(): TemplateState {
-  const doc = useTemplateDoc();
-  const [state, setState] = useState<TemplateState>(() => readTemplateState(doc));
-
-  useEffect(() => {
-    setState(readTemplateState(doc));
-    const onUpdate = () => setState(readTemplateState(doc));
-    doc.on("update", onUpdate);
-    return () => doc.off("update", onUpdate);
-  }, [doc]);
-
+  const state = useContext(TemplateStateContext);
+  if (!state) {
+    throw new Error(
+      "useTemplateState must be used inside a template-state provider (TemplateProvider or TemplateVersionStateProvider)",
+    );
+  }
   return state;
 }

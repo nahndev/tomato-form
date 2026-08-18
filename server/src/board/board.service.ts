@@ -29,7 +29,7 @@ export class BoardService {
           : undefined,
       },
       include: {
-        templates: true,
+        templates: { include: { templateVersions: true } },
         jobs: true,
       },
     });
@@ -37,14 +37,14 @@ export class BoardService {
 
   async findAll(): Promise<Board[]> {
     return this.prisma.board.findMany({
-      include: { templates: true, jobs: true },
+      include: { templates: { include: { templateVersions: true } }, jobs: true },
     });
   }
 
   async findOne(id: string): Promise<Board> {
     const doc = await this.prisma.board.findUnique({
       where: { id },
-      include: { templates: true, jobs: true },
+      include: { templates: { include: { templateVersions: true } }, jobs: true },
     });
     if (!doc) throw new NotFoundException(`Board ${id} not found`);
     return doc;
@@ -67,7 +67,7 @@ export class BoardService {
             : {}),
         },
         include: {
-          templates: true,
+          templates: { include: { templateVersions: true } },
           jobs: true,
         },
       });

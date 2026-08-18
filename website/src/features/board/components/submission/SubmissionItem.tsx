@@ -13,18 +13,22 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
   const board = useBoardContext();
 
   const { data: templates = [] } = useTemplates();
-  const template = templates.find((t) => t.id === submission.templateId)!;
+  const template = templates.find((t) =>
+    t.templateVersions?.some((v) => v.id === submission.templateVersionId),
+  );
   const { mutateAsync: deleteSubmission, isPending } = useDeleteSubmission(
     board.id,
   );
   return (
     <Link
       key={submission.id}
-      href={`/boards/${board.id}/submissions/${submission.id}`}
+      href={`/submission/${submission.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
     >
       <div className="flex flex-row items-center p-2 group hover:bg-accent">
         <div className="flex items-start justify-between gap-2">
-          <div className="text-base">{template.name}</div>
+          <div className="text-base">{template?.name ?? "Unknown template"}</div>
         </div>
         <div>
           {submission.createdAt

@@ -28,7 +28,7 @@ export class SubmissionService {
       return await this.prisma.submission.create({
         data: {
           boardId: dto.boardId,
-          templateId: dto.templateId,
+          templateVersionId: dto.templateVersionId,
           data: (dto.data ?? {}) as Prisma.InputJsonValue,
         },
       });

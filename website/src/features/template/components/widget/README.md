@@ -7,7 +7,7 @@ plugin. `registry.ts` is the single source of truth consumed by:
 - the builder canvas preview (`WidgetItem.tsx`)
 - the properties panel (`toolbar/property/WidgetPropertyContent.tsx`, driven
   by `toolbar/property/registry.ts` - see below)
-- the submission fill-out page (`app/(main)/boards/[id]/submissions/[submissionId]/page.tsx`)
+- the submission fill-out page (`app/submission/[uuid]/page.tsx`)
 - the "add widget" handler (`template/TemplateBuilder.tsx`)
 
 Setting-related components (the fields shown in the properties panel) are

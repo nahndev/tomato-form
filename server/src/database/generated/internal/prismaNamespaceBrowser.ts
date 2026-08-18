@@ -91,10 +91,6 @@ export type BoardScalarFieldEnum = (typeof BoardScalarFieldEnum)[keyof typeof Bo
 export const TemplateScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  widgets: 'widgets',
-  layouts: 'layouts',
-  widgetToSession: 'widgetToSession',
-  properties: 'properties',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -106,6 +102,11 @@ export const TemplateVersionScalarFieldEnum = {
   id: 'id',
   templateId: 'templateId',
   version: 'version',
+  widgets: 'widgets',
+  layouts: 'layouts',
+  widgetToSession: 'widgetToSession',
+  properties: 'properties',
+  sessions: 'sessions',
   createdAt: 'createdAt'
 } as const
 
@@ -115,7 +116,7 @@ export type TemplateVersionScalarFieldEnum = (typeof TemplateVersionScalarFieldE
 export const SubmissionScalarFieldEnum = {
   id: 'id',
   boardId: 'boardId',
-  templateId: 'templateId',
+  templateVersionId: 'templateVersionId',
   data: 'data',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

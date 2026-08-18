@@ -1,6 +1,7 @@
 "use client";
 
 import { TemplateDocProvider } from "@/features/template/components/provider/TemplateDocProvider";
+import { TemplateLiveStateProvider } from "@/features/template/components/provider/TemplateLiveStateProvider";
 import {
   TemplateMetaContext,
   useTemplateMeta,
@@ -29,9 +30,11 @@ export const TemplateProvider: React.FC<TemplateProviderProps> = ({
   const version = useCurrentVersion(template);
   return (
     <TemplateDocProvider uuid={template.id} version={version}>
-      <TemplateMetaContext.Provider value={{ id: template.id, version, template }}>
-        <WidgetSelectionProvider>{children}</WidgetSelectionProvider>
-      </TemplateMetaContext.Provider>
+      <TemplateLiveStateProvider>
+        <TemplateMetaContext.Provider value={{ id: template.id, version, template }}>
+          <WidgetSelectionProvider>{children}</WidgetSelectionProvider>
+        </TemplateMetaContext.Provider>
+      </TemplateLiveStateProvider>
     </TemplateDocProvider>
   );
 };

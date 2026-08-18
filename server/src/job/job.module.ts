@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { EmitterModule } from "../emitter/emitter.module";
 import { SubmissionModule } from "../submission/submission.module";
+import { TemplateVersionModule } from "../template-version/template-version.module";
 import { UserModule } from "../user/user.module";
 import { MailModule } from "../mail/mail.module";
 import { ActionRunnerRegistry } from "./action/action-runner-registry.service";
@@ -11,7 +12,13 @@ import { JobHandler } from "./job.handler";
 import { JobService } from "./job.service";
 
 @Module({
-  imports: [SubmissionModule, UserModule, MailModule, EmitterModule],
+  imports: [
+    SubmissionModule,
+    TemplateVersionModule,
+    UserModule,
+    MailModule,
+    EmitterModule,
+  ],
   controllers: [JobController],
   providers: [
     JobService,
