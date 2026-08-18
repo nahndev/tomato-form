@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
+import type { FieldComponentProps } from "@/types/widget";
+import { useEffect, useRef } from "react";
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 160;
 
 /** Value is a PNG data URL produced by canvas.toDataURL(). */
-export function SignatureWidgetItem({ value, onChange }: FieldComponentProps<string>) {
+export function SignatureWidgetItem({
+  value,
+  onChange,
+}: FieldComponentProps<string>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);

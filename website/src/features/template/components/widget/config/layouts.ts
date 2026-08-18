@@ -1,5 +1,5 @@
 import type { GridLayout } from "@/types/template";
-import { WidgetType } from "@/types/template";
+import { WidgetType } from "@/types/widget";
 
 /**
  * Default grid placement applied when a widget is inserted. `idx` is

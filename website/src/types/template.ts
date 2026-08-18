@@ -1,25 +1,7 @@
 import type { SerializedEditorState } from "lexical";
 import { CSSProperties } from "react";
-
-export enum WidgetType {
-  TEXT = "text",
-  TEXT_AREA = "text-area",
-  NUMBER = "number",
-  DATE = "date",
-  DATETIME = "datetime",
-  TIME = "time",
-  SELECT = "select",
-  CHECKBOX = "checkbox",
-  RADIO = "radio",
-  LABEL = "label",
-  SIGNATURE = "signature",
-  BUTTON = "button",
-  IMAGE_UPLOADER = "image-uploader",
-  FILE_UPLOADER = "file-uploader",
-  BREAK = "break",
-  SESSION = "session",
-  USERS = "users",
-}
+import type { ButtonAction } from "@/types/button-action";
+import type { WidgetType } from "@/types/widget";
 
 /**
  * Category a widget type is filed under in the "ADD WIDGET" picker.
@@ -80,6 +62,8 @@ export interface WidgetProperties {
   options?: string[];
   content?: SerializedEditorState;
   url?: string;
+  /** BUTTON only - ordered list of actions run in sequence on click. */
+  actions?: ButtonAction[];
   compact?: boolean;
   textStyle?: CSSProperties;
   containerStyle?: CSSProperties;

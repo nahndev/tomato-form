@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
+import type { FieldComponentProps } from "@/types/widget";
 
 export function TextWidgetItem({
   widgetId,

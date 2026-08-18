@@ -1,7 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
+import { useRunButtonAction } from "@/features/template/components/widget/ButtonActionContext";
+import { ButtonActionType } from "@/types/button-action";
+import type { FieldComponentProps } from "@/types/widget";
 import { useMemo } from "react";
 
 /** A clickable action button. Never collects a value. */
@@ -11,11 +13,19 @@ export function ButtonWidgetItem({ properties }: FieldComponentProps<unknown>) {
     [properties],
   );
   const labelStyle = useMemo(() => properties.textStyle ?? {}, [properties]);
-  console;
+  const runAction = useRunButtonAction();
 
-  function handleClick() {
-    if (properties.url) {
-      window.open(properties.url, "_blank", "noopener,noreferrer");
+  // Legacy templates only ever had a single `url` field - treat that as an
+  // implicit single LINK action when no `actions` list has been configured.
+  const actions =
+    properties.actions ??
+    (properties.url
+      ? [{ type: ButtonActionType.LINK as const, url: properties.url }]
+      : []);
+
+  async function handleClick() {
+    for (const action of actions) {
+      await runAction(action);
     }
   }
 

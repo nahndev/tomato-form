@@ -1,5 +1,6 @@
 import type { WidgetProperties } from "@/types/template";
-import { ColorEnum, WidgetType } from "@/types/template";
+import { ColorEnum } from "@/types/template";
+import { WidgetType } from "@/types/widget";
 
 /**
  * Default `WidgetProperties` applied when a widget is inserted, before any

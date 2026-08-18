@@ -31,7 +31,7 @@ import {
   useCreateTemplate,
   useDeleteTemplate,
 } from "@/features/template";
-import type { WidgetType } from "@/types/template";
+import type { WidgetType } from "@/types/widget";
 
 const WIDGET_TYPES: { label: string; value: WidgetType }[] = WIDGET_LIST.map((def) => ({
   label: def.label,

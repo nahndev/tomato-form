@@ -1,7 +1,7 @@
 "use client";
 
+import type { FieldComponentProps } from "@/types/widget";
 import { Clock } from "lucide-react";
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
 
 /** A full-width, fixed block marking a session boundary. Never collects a value. */
 export function SessionWidgetItem(_props: FieldComponentProps<unknown>) {

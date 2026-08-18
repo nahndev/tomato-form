@@ -1,4 +1,5 @@
-import type { WidgetProperties, WidgetType } from "@/types/template";
+import type { WidgetProperties } from "@/types/template";
+import type { WidgetType } from "@/types/widget";
 import type { ComponentType } from "react";
 
 export type WidgetPropertyKey = keyof WidgetProperties;

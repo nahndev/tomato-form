@@ -20,6 +20,7 @@ import {
 } from "@nestjs/swagger";
 import { SubmissionService } from "./submission.service";
 import { CreateSubmissionDto } from "./dto/create-submission.dto";
+import { SendMailActionDto } from "./dto/send-mail-action.dto";
 import { UpdateSubmissionDto } from "./dto/update-submission.dto";
 
 @ApiTags("Submissions")
@@ -70,5 +71,16 @@ export class SubmissionController {
   @ApiResponse({ status: 404, description: "Submission not found" })
   async remove(@Param("id") id: string) {
     await this.submissionService.remove(id);
+  }
+
+  @Post(":id/actions/send-mail")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: "Send mail on behalf of a button widget's mail action" })
+  @ApiParam({ name: "id", type: String })
+  @ApiBody({ type: SendMailActionDto })
+  @ApiResponse({ status: 204, description: "Mail sent" })
+  @ApiResponse({ status: 404, description: "Submission not found" })
+  async sendMail(@Param("id") id: string, @Body() dto: SendMailActionDto) {
+    await this.submissionService.sendMail(id, dto);
   }
 }

@@ -2,7 +2,7 @@
 
 import { TextEditor } from "@/components/ui/lexical/TextEditor";
 import { serializeEditorState } from "@/components/ui/lexical/config";
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
+import type { FieldComponentProps } from "@/types/widget";
 
 /** Read-only static content. Never collects a value. */
 export function LabelWidgetItem({ properties }: FieldComponentProps<unknown>) {

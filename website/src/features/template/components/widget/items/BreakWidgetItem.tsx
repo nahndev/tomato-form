@@ -1,6 +1,6 @@
 "use client";
 
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
+import type { FieldComponentProps } from "@/types/widget";
 
 /** A full-width divider line. Never collects a value. */
 export function BreakWidgetItem(_props: FieldComponentProps<unknown>) {

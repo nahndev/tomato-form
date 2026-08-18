@@ -1,7 +1,7 @@
 "use client";
 
 import { Select } from "@/components/ui/select";
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
+import type { FieldComponentProps } from "@/types/widget";
 
 export function SelectWidgetItem({
   widgetId,

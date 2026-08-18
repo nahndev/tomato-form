@@ -1,4 +1,5 @@
-import { WidgetGroup, WidgetType } from "@/types/template";
+import { WidgetGroup } from "@/types/template";
+import { WidgetType } from "@/types/widget";
 import {
   AlignLeft,
   Calendar,
@@ -18,9 +19,12 @@ import {
   Type,
   Users as UsersIcon,
 } from "lucide-react";
+import type {
+  WidgetDefinition,
+  WidgetRegistry,
+} from "../../../../types/widget";
 import { DEFAULT_LAYOUTS } from "./config/layouts";
 import { DEFAULT_SETTINGS } from "./config/settings";
-import type { WidgetDefinition, WidgetRegistry } from "./types";
 
 import { BreakWidgetItem } from "./items/BreakWidgetItem";
 import { ButtonWidgetItem } from "./items/ButtonWidgetItem";

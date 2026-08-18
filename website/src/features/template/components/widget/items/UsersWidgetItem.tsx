@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
 import { Select } from "@/components/ui/select";
 import { useUserStore } from "@/store/user.store";
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
+import type { FieldComponentProps } from "@/types/widget";
+import { useEffect } from "react";
 
 export function UsersWidgetItem({
   widgetId,
@@ -23,9 +23,7 @@ export function UsersWidgetItem({
   }
 
   if (isLoading && users.length === 0) {
-    return (
-      <p className="mt-2 text-xs text-muted-foreground">Loading users…</p>
-    );
+    return <p className="mt-2 text-xs text-muted-foreground">Loading users…</p>;
   }
 
   return (

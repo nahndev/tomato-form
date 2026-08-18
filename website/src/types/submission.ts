@@ -1,3 +1,5 @@
+import type { Recipient } from "@/types/button-action";
+
 export interface Submission {
   id: string;
   boardId: string;
@@ -15,4 +17,10 @@ export interface CreateSubmissionInput {
 
 export interface UpdateSubmissionInput {
   data?: Record<string, unknown>;
+}
+
+export interface SendMailInput {
+  recipients: Recipient[];
+  subject: string;
+  body: string;
 }

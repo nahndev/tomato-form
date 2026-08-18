@@ -1,8 +1,8 @@
 "use client";
 
-import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
+import type { FieldComponentProps } from "@/types/widget";
+import { X } from "lucide-react";
 
 export interface UploadedImage {
   name: string;

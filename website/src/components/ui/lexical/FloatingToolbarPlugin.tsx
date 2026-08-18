@@ -6,6 +6,7 @@ import {
 } from "lexical";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import clsx from "clsx";
 import { PropsWithChildren, useEffect, useState } from "react";
 
 const TOOLBAR_GAP = 8;
@@ -32,7 +33,10 @@ export function FloatingToolbarPlugin({ children }: PropsWithChildren) {
         setPosition(null);
         return;
       }
-      setPosition({ top: rect.top - TOOLBAR_GAP, left: rect.left + rect.width / 2 });
+      setPosition({
+        top: rect.top - TOOLBAR_GAP,
+        left: rect.left + rect.width / 2,
+      });
     };
 
     const removeCommand = editor.registerCommand(
@@ -64,9 +68,16 @@ export function FloatingToolbarPlugin({ children }: PropsWithChildren) {
 
   return (
     <div
-      className="fixed z-50 -translate-x-1/2 -translate-y-full"
-      style={{ top: position.top, left: position.left }}
+      // className="fixed z-50 -translate-x-1/2 -translate-y-full"
+      // style={{ top: position.top, left: position.left }}
+      className={clsx(
+        "fixed w-screen right-0 bottom-0",
+        "flex flex-row",
+        "bg-white",
+        "rounded-lg bg-popover shadow-md ring-1 ring-foreground/10",
+      )}
     >
+      <div className="flex-1" />
       {children}
     </div>
   );

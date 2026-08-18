@@ -24,7 +24,10 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const ALIGN_OPTIONS: { format: ElementFormatType; icon: typeof AlignLeftIcon }[] = [
+const ALIGN_OPTIONS: {
+  format: ElementFormatType;
+  icon: typeof AlignLeftIcon;
+}[] = [
   { format: "left", icon: AlignLeftIcon },
   { format: "center", icon: AlignCenterIcon },
   { format: "right", icon: AlignRightIcon },
@@ -53,14 +56,16 @@ function useActiveFormats() {
         const selection = $getSelection();
         if ($isRangeSelection(selection)) {
           const anchorNode = selection.anchor.getNode();
-          const element = anchorNode.getKey() === "root"
-            ? anchorNode
-            : anchorNode.getTopLevelElementOrThrow();
+          const element =
+            anchorNode.getKey() === "root"
+              ? anchorNode
+              : anchorNode.getTopLevelElementOrThrow();
           setFormats({
             bold: selection.hasFormat("bold"),
             italic: selection.hasFormat("italic"),
             underline: selection.hasFormat("underline"),
-            align: ($isElementNode(element) && element.getFormatType()) || "left",
+            align:
+              ($isElementNode(element) && element.getFormatType()) || "left",
           });
         }
         return false;
@@ -77,7 +82,7 @@ export function Toolbar() {
   const { bold, italic, underline, align } = useActiveFormats();
 
   return (
-    <div className="flex items-center gap-1 rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10">
+    <div className="flex items-center gap-1 p-1 text-popover-foreground">
       <Button
         type="button"
         variant={bold ? "default" : "ghost"}

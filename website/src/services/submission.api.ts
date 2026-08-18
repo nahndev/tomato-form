@@ -1,5 +1,6 @@
 import type {
   CreateSubmissionInput,
+  SendMailInput,
   Submission,
   UpdateSubmissionInput,
 } from "@/types/submission";
@@ -42,5 +43,11 @@ export const submissionApi = {
 
   remove(id: string): Promise<void> {
     return api.delete(`/submissions/${id}`).then(() => undefined);
+  },
+
+  sendMail(id: string, input: SendMailInput): Promise<void> {
+    return api
+      .post(`/submissions/${id}/actions/send-mail`, input)
+      .then(() => undefined);
   },
 };

@@ -1,8 +1,8 @@
 "use client";
 
-import { X } from "lucide-react";
-import type { FieldComponentProps } from "@/features/template/components/widget/types";
 import { formatBytes } from "@/lib/format";
+import type { FieldComponentProps } from "@/types/widget";
+import { X } from "lucide-react";
 
 export interface UploadedFileMeta {
   name: string;

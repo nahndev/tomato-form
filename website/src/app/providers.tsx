@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
+import { usePrincipalStore } from "@/store/principal.store";
 import { useUserStore } from "@/store/user.store";
 
 interface ProvidersProps {
@@ -24,6 +25,7 @@ export function Providers({ children }: ProvidersProps) {
 
   useEffect(() => {
     useUserStore.getState().init();
+    usePrincipalStore.getState().init();
   }, []);
 
   return (

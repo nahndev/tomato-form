@@ -1,3 +1,4 @@
+import { ActionsDescriptor } from "@/features/template/components/property/descriptors/ActionsDescriptor";
 import { ContainerStyleDescriptor } from "@/features/template/components/property/descriptors/ContainerStyleDescriptor";
 import { ContentDescriptor } from "@/features/template/components/property/descriptors/ContentDescriptor";
 import { LabelDescriptor } from "@/features/template/components/property/descriptors/LabelDescriptor";
@@ -5,13 +6,12 @@ import { OptionsDescriptor } from "@/features/template/components/property/descr
 import { PlaceholderDescriptor } from "@/features/template/components/property/descriptors/PlaceholderDescriptor";
 import { RequiredDescriptor } from "@/features/template/components/property/descriptors/RequiredDescriptor";
 import { TextStyleDescriptor } from "@/features/template/components/property/descriptors/TextStyleDescriptor";
-import { UrlDescriptor } from "@/features/template/components/property/descriptors/UrlDescriptor";
 import type {
   WidgetPropertyDescriptor,
   WidgetPropertyFieldProps,
   WidgetPropertyRegistry,
 } from "@/features/template/components/property/types";
-import { WidgetType } from "@/types/template";
+import { WidgetType } from "@/types/widget";
 import type { ComponentType } from "react";
 
 const LABEL: WidgetPropertyDescriptor = {
@@ -44,10 +44,10 @@ const CONTENT: WidgetPropertyDescriptor = {
   Component: ContentDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
-const LINK_URL: WidgetPropertyDescriptor = {
-  key: "url",
-  label: "Link URL",
-  Component: UrlDescriptor as ComponentType<WidgetPropertyFieldProps>,
+const ACTIONS: WidgetPropertyDescriptor = {
+  key: "actions",
+  label: "Actions",
+  Component: ActionsDescriptor as ComponentType<WidgetPropertyFieldProps>,
 };
 
 const TEXT_STYLE: WidgetPropertyDescriptor = {
@@ -81,7 +81,7 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   [WidgetType.RADIO]: [LABEL, PLACEHOLDER, REQUIRED, OPTIONS],
   [WidgetType.LABEL]: [LABEL, CONTENT],
   [WidgetType.SIGNATURE]: [LABEL, REQUIRED],
-  [WidgetType.BUTTON]: [LABEL, LINK_URL, TEXT_STYLE, CONTAINER_STYLE],
+  [WidgetType.BUTTON]: [LABEL, ACTIONS, TEXT_STYLE, CONTAINER_STYLE],
   [WidgetType.IMAGE_UPLOADER]: [LABEL, REQUIRED],
   [WidgetType.FILE_UPLOADER]: [LABEL, REQUIRED],
   [WidgetType.BREAK]: [],
