@@ -3,6 +3,7 @@
 import { useCurrentSubmission } from "@/features/submission/components/provider/SubmissionProvider";
 import { useSubmissionActions } from "@/features/submission/hooks/actions/useSubmissionActions";
 import { useCurrentSessionId } from "@/features/submission/hooks/state/useCurrentSessionId";
+import { useVisibleSessions } from "@/features/submission/hooks/state/useVisibleSessions";
 import {
   ButtonActionProvider,
   type RunButtonAction,
@@ -25,8 +26,8 @@ export const SubmissionButtonActionProvider: React.FC<
   SubmissionButtonActionProviderProps
 > = ({ children }) => {
   const submission = useCurrentSubmission();
-  const { sessions, widgetToSession } = useTemplateState();
-  const sessionList = Object.values(sessions);
+  const { widgetToSession } = useTemplateState();
+  const sessionList = useVisibleSessions();
   const currentSessionId = useCurrentSessionId();
   const { goToSession, resetValues } = useSubmissionActions();
 

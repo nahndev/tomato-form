@@ -40,12 +40,13 @@ server.listen();
 startRpcServer();
 
 /**
- * documentName is `{templateId}` for the live draft, or
- * `{templateId}:{version}` for a published snapshot.
+ * documentName is `{type}/{id}/{version}`, e.g. `template/{templateId}/default`
+ * for the live draft, `template/{templateId}/{version}` for a published
+ * snapshot, or `submission/{submissionId}/default`.
  */
 function resolveFile(documentName: string): string {
-  const [templateId, version] = documentName.split(":");
-  return `${DATA_DIR}/${templateId}/${version ?? "default"}.yjs`;
+  const [type, id, version] = documentName.split("/");
+  return `${DATA_DIR}/${type}/${id}/${version ?? "default"}.yjs`;
 }
 
 class YDocHelper {
@@ -102,8 +103,8 @@ function startRpcServer(): void {
     ) {
       const { templateId, version } = call.request;
 
-      const source = `${DATA_DIR}/${templateId}/default.yjs`;
-      const relativePath = `${templateId}/${version}.yjs`;
+      const source = `${DATA_DIR}/template/${templateId}/default.yjs`;
+      const relativePath = `template/${templateId}/${version}.yjs`;
       const dest = `${DATA_DIR}/${relativePath}`;
 
       if (!fs.existsSync(source)) {

@@ -3,16 +3,16 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import SubmissionSessionBox from "@/features/submission/components/session/SubmissionSessionBox";
 import { useCurrentSessionId } from "@/features/submission/hooks/state/useCurrentSessionId";
-import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
+import { useVisibleSessions } from "@/features/submission/hooks/state/useVisibleSessions";
 
 /**
- * Wizard view: only the current session is shown (defaults to the first),
- * navigated via a `button` widget's `submit`/`return` actions - unlike
- * `TemplateCanvas`, which always shows every session at once for editing.
+ * Wizard view: only the current session is shown (defaults to the first
+ * visible one), navigated via a `button` widget's `submit`/`return` actions -
+ * unlike `TemplateCanvas`, which always shows every session at once for
+ * editing regardless of visibility conditions.
  */
 const SubmissionCanvas: React.FC = () => {
-  const { sessions } = useTemplateState();
-  const sessionList = Object.values(sessions);
+  const sessionList = useVisibleSessions();
   const currentSessionId = useCurrentSessionId();
   const currentIndex = sessionList.findIndex((s) => s.id === currentSessionId);
 

@@ -6,8 +6,15 @@ import { ButtonActionType } from "@/types/button-action";
 import type { FieldComponentProps } from "@/types/widget";
 import { useMemo } from "react";
 
-/** A clickable action button. Never collects a value. */
-export function ButtonWidgetItem({ properties }: FieldComponentProps<unknown>) {
+/**
+ * A clickable action button. Doesn't collect a value itself, but records a
+ * truthy value on click (via `onChange`) so a session's `BUTTON_CLICKED`
+ * condition can read it back off `submission.data` (see `sessionCondition.ts`).
+ */
+export function ButtonWidgetItem({
+  properties,
+  onChange,
+}: FieldComponentProps<unknown>) {
   const containerStyle = useMemo(
     () => properties.containerStyle ?? {},
     [properties],
@@ -24,6 +31,7 @@ export function ButtonWidgetItem({ properties }: FieldComponentProps<unknown>) {
       : []);
 
   async function handleClick() {
+    onChange?.(true);
     for (const action of actions) {
       await runAction(action);
     }

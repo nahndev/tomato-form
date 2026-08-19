@@ -69,12 +69,40 @@ export interface WidgetProperties {
   containerStyle?: CSSProperties;
 }
 
+export enum SessionConditionType {
+  ALWAYS = "always",
+  BUTTON_CLICKED = "button-clicked",
+  WIDGET_HAS_VALUE = "widget-has-value",
+}
+
+export interface AlwaysCondition {
+  type: SessionConditionType.ALWAYS;
+}
+
+export interface ButtonClickedCondition {
+  type: SessionConditionType.BUTTON_CLICKED;
+  widgetId: string;
+}
+
+export interface WidgetHasValueCondition {
+  type: SessionConditionType.WIDGET_HAS_VALUE;
+  widgetId: string;
+}
+
+/** Gates whether a session is shown in the submission fill wizard. */
+export type SessionCondition =
+  | AlwaysCondition
+  | ButtonClickedCondition
+  | WidgetHasValueCondition;
+
 export interface Session {
   id: string;
   name: string;
   /** Key into `ICON_REGISTRY` (see `components/ui/icon-picker`). */
   icon?: string;
   description?: SerializedEditorState;
+  /** Unset = always shown (see `SessionConditionType.ALWAYS`). */
+  condition?: SessionCondition;
 }
 
 export interface TemplateVersion {

@@ -33,7 +33,7 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
     const nextDoc = new Y.Doc();
     const provider = new HocuspocusProvider({
       url: YJS_SERVER_URL,
-      name: `${uuid}${version ? `:${version}` : ""}`,
+      name: `template/${uuid}/${version ?? "default"}`,
       document: nextDoc,
     });
 

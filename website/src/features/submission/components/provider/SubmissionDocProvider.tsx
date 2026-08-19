@@ -18,9 +18,9 @@ export interface SubmissionDocProviderProps {
 /**
  * Owns the submission's `Y.Doc` + realtime connection, separate from the
  * template's structural doc - mirrors `TemplateDocProvider`. Uses a
- * `submission:` prefixed document name so every submission lands under its
- * own file on the (shared, unmodified) yjs-server, never colliding with a
- * template id.
+ * `submission/{uuid}/default` document name so every submission lands under
+ * its own file on the (shared, unmodified) yjs-server, never colliding with
+ * a template id.
  */
 export const SubmissionDocProvider: React.FC<SubmissionDocProviderProps> = ({
   uuid,
@@ -35,7 +35,7 @@ export const SubmissionDocProvider: React.FC<SubmissionDocProviderProps> = ({
     const nextDoc = new Y.Doc();
     const nextProvider = new HocuspocusProvider({
       url: YJS_SERVER_URL,
-      name: `submission:${uuid}`,
+      name: `submission/${uuid}/default`,
       document: nextDoc,
     });
 
