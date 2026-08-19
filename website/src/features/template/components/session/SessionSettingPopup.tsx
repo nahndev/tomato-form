@@ -40,13 +40,14 @@ function defaultConditionFor(
 /** Settings popup for a session - currently just its visibility condition. */
 const SessionSettingPopup: React.FC = () => {
   const sessionId = useSessionId();
-  const { session } = useSessionState();
+  const { properties: sessionProperties } = useSessionState();
   const { updateSession } = useSessionActions();
-  const { widgets, properties, sessions, widgetToSession } = useTemplateState();
+  const { widgets, properties, sessionProperties: allSessionProperties, widgetToSession } =
+    useTemplateState();
   const [open, setOpen] = useState(false);
 
   const condition: SessionCondition =
-    session?.condition ?? { type: SessionConditionType.ALWAYS };
+    sessionProperties?.condition ?? { type: SessionConditionType.ALWAYS };
 
   // Widgets eligible as the condition's target: right kind for the current
   // condition type, and not one of this session's own widgets (a session
@@ -66,7 +67,7 @@ const SessionSettingPopup: React.FC = () => {
     const label = properties[widgetId]?.label || "(no label)";
     const owningSessionId = widgetToSession[widgetId];
     const sessionName = owningSessionId
-      ? (sessions[owningSessionId]?.name ?? "")
+      ? (allSessionProperties[owningSessionId]?.name ?? "")
       : "";
     return sessionName ? `${sessionName} · ${label}` : label;
   }

@@ -3,7 +3,7 @@ import { useWidgetSelection } from "@/features/template/components/provider/Temp
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { cn } from "@/lib/utils";
-import { Session, Widget, WidgetProperties } from "@/types/template";
+import { Session, SessionProperties, Widget, WidgetProperties } from "@/types/template";
 import { useMemo } from "react";
 import * as R from "remeda";
 
@@ -16,12 +16,12 @@ interface WidgetThumbnail {
 }
 interface SessionThumbnail {
   id: Session["id"];
-  name: Session["name"];
+  name: SessionProperties["name"];
   widgets: WidgetThumbnail[];
 }
 
 const StructureToolbarBox: React.FC<StructureToolbarBoxProps> = () => {
-  const { sessions, widgets, properties, widgetToSession, layouts } =
+  const { sessions, sessionProperties, widgets, properties, widgetToSession, layouts } =
     useTemplateState();
 
   const tree = useMemo<SessionThumbnail[]>(
@@ -30,7 +30,7 @@ const StructureToolbarBox: React.FC<StructureToolbarBoxProps> = () => {
         R.values(sessions),
         R.map((session) => ({
           id: session.id,
-          name: session.name,
+          name: sessionProperties[session.id]?.name ?? "",
           widgets: R.pipe(
             widgetToSession,
             R.entries(),
@@ -44,7 +44,7 @@ const StructureToolbarBox: React.FC<StructureToolbarBoxProps> = () => {
           ),
         })),
       ),
-    [sessions, widgets, properties, widgetToSession],
+    [sessions, sessionProperties, widgets, properties, widgetToSession],
   );
 
   return (

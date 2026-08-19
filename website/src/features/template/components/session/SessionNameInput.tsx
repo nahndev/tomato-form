@@ -14,11 +14,11 @@ const schema = Yup.object({
 /** Inline-editable session name, backed directly by the yjs doc. */
 export function SessionNameInput() {
   const sessionId = useSessionId();
-  const { session } = useSessionState();
+  const { properties } = useSessionState();
   const { updateSession } = useSessionActions();
 
   const formik = useFormik({
-    initialValues: { name: session?.name ?? "" },
+    initialValues: { name: properties?.name ?? "" },
     enableReinitialize: true,
     validationSchema: schema,
     onSubmit: (values) => updateSession(sessionId, { name: values.name }),

@@ -7,10 +7,11 @@ import {
 } from "@nestjs/common";
 import * as semver from "semver";
 import { Prisma, TemplateVersion } from "@/database/prisma-client";
+import type { TemplateVersionSnapshot } from "@/template/template.types";
 import { PrismaService } from "../database/prisma.service";
 import {
+  MakeVersionFileResult,
   TemplateFileClient,
-  TemplateVersionSnapshot,
 } from "./template-file.client";
 
 @Injectable()
@@ -65,18 +66,28 @@ export class TemplateVersionService {
     );
     const version = latest ? (semver.inc(latest, "patch") ?? "1.0.0") : "1.0.0";
 
-    const { widgets, layouts, widgetToSession, properties, sessions } =
-      await this.makeVersionFile(templateId, version);
+    const {
+      widgets,
+      layouts,
+      widgetToSession,
+      properties,
+      sessions,
+      sessionProperties,
+    } = await this.makeVersionFile(templateId, version);
+    const snapshot: TemplateVersionSnapshot = {
+      widgets,
+      layouts,
+      widgetToSession,
+      properties,
+      sessions,
+      sessionProperties,
+    };
 
     return this.prisma.templateVersion.create({
       data: {
         templateId,
         version,
-        widgets: widgets as unknown as Prisma.InputJsonValue,
-        layouts: layouts as unknown as Prisma.InputJsonValue,
-        widgetToSession: widgetToSession as unknown as Prisma.InputJsonValue,
-        properties: properties as unknown as Prisma.InputJsonValue,
-        sessions: sessions as unknown as Prisma.InputJsonValue,
+        snapshot: snapshot as unknown as Prisma.InputJsonValue,
       },
     });
   }
@@ -84,7 +95,7 @@ export class TemplateVersionService {
   private async makeVersionFile(
     templateId: string,
     version: string,
-  ): Promise<TemplateVersionSnapshot> {
+  ): Promise<MakeVersionFileResult> {
     try {
       return await this.templateFileClient.makeVersionFile(
         templateId,

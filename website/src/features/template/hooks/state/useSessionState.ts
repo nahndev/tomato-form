@@ -2,12 +2,18 @@
 
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
-import type { GridLayout, Session, Widget } from "@/types/template";
+import type {
+  GridLayout,
+  Session,
+  SessionProperties,
+  Widget,
+} from "@/types/template";
 import { useMemo } from "react";
 import { pickBy } from "remeda";
 
 export interface SessionState {
   session: Session | undefined;
+  properties: SessionProperties | undefined;
   widgets: Record<string, Widget>;
   layouts: Record<string, GridLayout>;
 }
@@ -18,7 +24,8 @@ export interface SessionState {
  */
 export function useSessionState(): SessionState {
   const id = useSessionId();
-  const { sessions, widgets, layouts, widgetToSession } = useTemplateState();
+  const { sessions, sessionProperties, widgets, layouts, widgetToSession } =
+    useTemplateState();
 
   const sessionLayouts = useMemo(
     () => pickBy(layouts, (_, widgetId) => widgetToSession[widgetId] === id),
@@ -32,6 +39,7 @@ export function useSessionState(): SessionState {
 
   return {
     session: sessions[id],
+    properties: sessionProperties[id],
     widgets: sessionWidgets,
     layouts: sessionLayouts,
   };

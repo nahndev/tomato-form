@@ -8,14 +8,17 @@ import { useMemo } from "react";
 
 /** Sessions whose visibility condition currently evaluates true, in declared order. */
 export function useVisibleSessions(): Session[] {
-  const { sessions } = useTemplateState();
+  const { sessions, sessionProperties } = useTemplateState();
   const values = useSubmissionValues();
 
   return useMemo(
     () =>
       Object.values(sessions).filter((session) =>
-        evaluateSessionCondition(session.condition, values),
+        evaluateSessionCondition(
+          sessionProperties[session.id]?.condition,
+          values,
+        ),
       ),
-    [sessions, values],
+    [sessions, sessionProperties, values],
   );
 }

@@ -20,7 +20,20 @@ export interface WidgetProperties {
 
 export interface Session {
   id: string;
+}
+
+export interface SessionProperties {
   name: string;
   icon?: string;
   description?: unknown;
+}
+
+/** Shape of `TemplateVersion.snapshot` - everything loaded from the yjs doc at publish time. */
+export interface TemplateVersionSnapshot {
+  widgets: Record<string, Widget>;
+  layouts: Record<string, GridLayout>;
+  widgetToSession: Record<string, string>;
+  properties: Record<string, WidgetProperties>;
+  sessions: Record<string, Session>;
+  sessionProperties: Record<string, SessionProperties>;
 }

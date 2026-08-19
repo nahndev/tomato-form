@@ -4,12 +4,12 @@ import { useTemplateDoc } from "@/features/template/components/provider/Template
 import {
   DEFAULT_LAYOUT,
 } from "@/features/template/hooks/internal/templateStateReader";
-import type { GridLayout, Session } from "@/types/template";
+import type { GridLayout, Session, SessionProperties } from "@/types/template";
 import { useCallback } from "react";
 
 export interface SessionActions {
-  addSession: (session: Session) => void;
-  updateSession: (sessionId: string, patch: Partial<Omit<Session, "id">>) => void;
+  addSession: (id: string, properties: SessionProperties) => void;
+  updateSession: (sessionId: string, patch: Partial<SessionProperties>) => void;
   updateLayout: (
     widgetId: string,
     sessionId: string,
@@ -26,21 +26,22 @@ export function useSessionActions(): SessionActions {
   const doc = useTemplateDoc();
 
   const addSession = useCallback(
-    (session: Session) => {
+    (id: string, properties: SessionProperties) => {
       doc.transact(() => {
-        doc.getMap<Session>("sessions").set(session.id, session);
+        doc.getMap<Session>("sessions").set(id, { id });
+        doc.getMap<SessionProperties>("sessionProperties").set(id, properties);
       });
     },
     [doc],
   );
 
   const updateSession = useCallback(
-    (sessionId: string, patch: Partial<Omit<Session, "id">>) => {
-      const sessions = doc.getMap<Session>("sessions");
-      const current = sessions.get(sessionId);
-      if (!current) return;
+    (sessionId: string, patch: Partial<SessionProperties>) => {
+      if (!doc.getMap<Session>("sessions").has(sessionId)) return;
+      const sessionProperties = doc.getMap<SessionProperties>("sessionProperties");
+      const current = sessionProperties.get(sessionId) ?? { name: "" };
       doc.transact(() => {
-        sessions.set(sessionId, { ...current, ...patch });
+        sessionProperties.set(sessionId, { ...current, ...patch });
       });
     },
     [doc],

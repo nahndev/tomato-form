@@ -42,11 +42,7 @@ export type TemplateVersionCountAggregateOutputType = {
   id: number
   templateId: number
   version: number
-  widgets: number
-  layouts: number
-  widgetToSession: number
-  properties: number
-  sessions: number
+  snapshot: number
   createdAt: number
   _all: number
 }
@@ -70,11 +66,7 @@ export type TemplateVersionCountAggregateInputType = {
   id?: true
   templateId?: true
   version?: true
-  widgets?: true
-  layouts?: true
-  widgetToSession?: true
-  properties?: true
-  sessions?: true
+  snapshot?: true
   createdAt?: true
   _all?: true
 }
@@ -155,11 +147,7 @@ export type TemplateVersionGroupByOutputType = {
   id: string
   templateId: string
   version: string
-  widgets: runtime.JsonValue
-  layouts: runtime.JsonValue
-  widgetToSession: runtime.JsonValue
-  properties: runtime.JsonValue
-  sessions: runtime.JsonValue
+  snapshot: runtime.JsonValue
   createdAt: Date
   _count: TemplateVersionCountAggregateOutputType | null
   _min: TemplateVersionMinAggregateOutputType | null
@@ -188,11 +176,7 @@ export type TemplateVersionWhereInput = {
   id?: Prisma.StringFilter<"TemplateVersion"> | string
   templateId?: Prisma.StringFilter<"TemplateVersion"> | string
   version?: Prisma.StringFilter<"TemplateVersion"> | string
-  widgets?: Prisma.JsonFilter<"TemplateVersion">
-  layouts?: Prisma.JsonFilter<"TemplateVersion">
-  widgetToSession?: Prisma.JsonFilter<"TemplateVersion">
-  properties?: Prisma.JsonFilter<"TemplateVersion">
-  sessions?: Prisma.JsonFilter<"TemplateVersion">
+  snapshot?: Prisma.JsonFilter<"TemplateVersion">
   createdAt?: Prisma.DateTimeFilter<"TemplateVersion"> | Date | string
   template?: Prisma.XOR<Prisma.TemplateScalarRelationFilter, Prisma.TemplateWhereInput>
   submissions?: Prisma.SubmissionListRelationFilter
@@ -202,11 +186,7 @@ export type TemplateVersionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   templateId?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  widgets?: Prisma.SortOrder
-  layouts?: Prisma.SortOrder
-  widgetToSession?: Prisma.SortOrder
-  properties?: Prisma.SortOrder
-  sessions?: Prisma.SortOrder
+  snapshot?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   template?: Prisma.TemplateOrderByWithRelationInput
   submissions?: Prisma.SubmissionOrderByRelationAggregateInput
@@ -220,11 +200,7 @@ export type TemplateVersionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.TemplateVersionWhereInput | Prisma.TemplateVersionWhereInput[]
   templateId?: Prisma.StringFilter<"TemplateVersion"> | string
   version?: Prisma.StringFilter<"TemplateVersion"> | string
-  widgets?: Prisma.JsonFilter<"TemplateVersion">
-  layouts?: Prisma.JsonFilter<"TemplateVersion">
-  widgetToSession?: Prisma.JsonFilter<"TemplateVersion">
-  properties?: Prisma.JsonFilter<"TemplateVersion">
-  sessions?: Prisma.JsonFilter<"TemplateVersion">
+  snapshot?: Prisma.JsonFilter<"TemplateVersion">
   createdAt?: Prisma.DateTimeFilter<"TemplateVersion"> | Date | string
   template?: Prisma.XOR<Prisma.TemplateScalarRelationFilter, Prisma.TemplateWhereInput>
   submissions?: Prisma.SubmissionListRelationFilter
@@ -234,11 +210,7 @@ export type TemplateVersionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   templateId?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  widgets?: Prisma.SortOrder
-  layouts?: Prisma.SortOrder
-  widgetToSession?: Prisma.SortOrder
-  properties?: Prisma.SortOrder
-  sessions?: Prisma.SortOrder
+  snapshot?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TemplateVersionCountOrderByAggregateInput
   _max?: Prisma.TemplateVersionMaxOrderByAggregateInput
@@ -252,22 +224,14 @@ export type TemplateVersionScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"TemplateVersion"> | string
   templateId?: Prisma.StringWithAggregatesFilter<"TemplateVersion"> | string
   version?: Prisma.StringWithAggregatesFilter<"TemplateVersion"> | string
-  widgets?: Prisma.JsonWithAggregatesFilter<"TemplateVersion">
-  layouts?: Prisma.JsonWithAggregatesFilter<"TemplateVersion">
-  widgetToSession?: Prisma.JsonWithAggregatesFilter<"TemplateVersion">
-  properties?: Prisma.JsonWithAggregatesFilter<"TemplateVersion">
-  sessions?: Prisma.JsonWithAggregatesFilter<"TemplateVersion">
+  snapshot?: Prisma.JsonWithAggregatesFilter<"TemplateVersion">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TemplateVersion"> | Date | string
 }
 
 export type TemplateVersionCreateInput = {
   id?: string
   version: string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   template: Prisma.TemplateCreateNestedOneWithoutTemplateVersionsInput
   submissions?: Prisma.SubmissionCreateNestedManyWithoutTemplateVersionInput
@@ -277,11 +241,7 @@ export type TemplateVersionUncheckedCreateInput = {
   id?: string
   templateId: string
   version: string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutTemplateVersionInput
 }
@@ -289,11 +249,7 @@ export type TemplateVersionUncheckedCreateInput = {
 export type TemplateVersionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.StringFieldUpdateOperationsInput | string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   template?: Prisma.TemplateUpdateOneRequiredWithoutTemplateVersionsNestedInput
   submissions?: Prisma.SubmissionUpdateManyWithoutTemplateVersionNestedInput
@@ -303,11 +259,7 @@ export type TemplateVersionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   templateId?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.StringFieldUpdateOperationsInput | string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutTemplateVersionNestedInput
 }
@@ -316,22 +268,14 @@ export type TemplateVersionCreateManyInput = {
   id?: string
   templateId: string
   version: string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type TemplateVersionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.StringFieldUpdateOperationsInput | string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -339,11 +283,7 @@ export type TemplateVersionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   templateId?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.StringFieldUpdateOperationsInput | string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -366,11 +306,7 @@ export type TemplateVersionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   templateId?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  widgets?: Prisma.SortOrder
-  layouts?: Prisma.SortOrder
-  widgetToSession?: Prisma.SortOrder
-  properties?: Prisma.SortOrder
-  sessions?: Prisma.SortOrder
+  snapshot?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -452,11 +388,7 @@ export type TemplateVersionUpdateOneRequiredWithoutSubmissionsNestedInput = {
 export type TemplateVersionCreateWithoutTemplateInput = {
   id?: string
   version: string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   submissions?: Prisma.SubmissionCreateNestedManyWithoutTemplateVersionInput
 }
@@ -464,11 +396,7 @@ export type TemplateVersionCreateWithoutTemplateInput = {
 export type TemplateVersionUncheckedCreateWithoutTemplateInput = {
   id?: string
   version: string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutTemplateVersionInput
 }
@@ -506,22 +434,14 @@ export type TemplateVersionScalarWhereInput = {
   id?: Prisma.StringFilter<"TemplateVersion"> | string
   templateId?: Prisma.StringFilter<"TemplateVersion"> | string
   version?: Prisma.StringFilter<"TemplateVersion"> | string
-  widgets?: Prisma.JsonFilter<"TemplateVersion">
-  layouts?: Prisma.JsonFilter<"TemplateVersion">
-  widgetToSession?: Prisma.JsonFilter<"TemplateVersion">
-  properties?: Prisma.JsonFilter<"TemplateVersion">
-  sessions?: Prisma.JsonFilter<"TemplateVersion">
+  snapshot?: Prisma.JsonFilter<"TemplateVersion">
   createdAt?: Prisma.DateTimeFilter<"TemplateVersion"> | Date | string
 }
 
 export type TemplateVersionCreateWithoutSubmissionsInput = {
   id?: string
   version: string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   template: Prisma.TemplateCreateNestedOneWithoutTemplateVersionsInput
 }
@@ -530,11 +450,7 @@ export type TemplateVersionUncheckedCreateWithoutSubmissionsInput = {
   id?: string
   templateId: string
   version: string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -557,11 +473,7 @@ export type TemplateVersionUpdateToOneWithWhereWithoutSubmissionsInput = {
 export type TemplateVersionUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.StringFieldUpdateOperationsInput | string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   template?: Prisma.TemplateUpdateOneRequiredWithoutTemplateVersionsNestedInput
 }
@@ -570,33 +482,21 @@ export type TemplateVersionUncheckedUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   templateId?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.StringFieldUpdateOperationsInput | string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TemplateVersionCreateManyTemplateInput = {
   id?: string
   version: string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type TemplateVersionUpdateWithoutTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.StringFieldUpdateOperationsInput | string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submissions?: Prisma.SubmissionUpdateManyWithoutTemplateVersionNestedInput
 }
@@ -604,11 +504,7 @@ export type TemplateVersionUpdateWithoutTemplateInput = {
 export type TemplateVersionUncheckedUpdateWithoutTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.StringFieldUpdateOperationsInput | string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutTemplateVersionNestedInput
 }
@@ -616,11 +512,7 @@ export type TemplateVersionUncheckedUpdateWithoutTemplateInput = {
 export type TemplateVersionUncheckedUpdateManyWithoutTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.StringFieldUpdateOperationsInput | string
-  widgets?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  layouts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  widgetToSession?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  properties?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  sessions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  snapshot?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -659,11 +551,7 @@ export type TemplateVersionSelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   templateId?: boolean
   version?: boolean
-  widgets?: boolean
-  layouts?: boolean
-  widgetToSession?: boolean
-  properties?: boolean
-  sessions?: boolean
+  snapshot?: boolean
   createdAt?: boolean
   template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
   submissions?: boolean | Prisma.TemplateVersion$submissionsArgs<ExtArgs>
@@ -674,11 +562,7 @@ export type TemplateVersionSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   templateId?: boolean
   version?: boolean
-  widgets?: boolean
-  layouts?: boolean
-  widgetToSession?: boolean
-  properties?: boolean
-  sessions?: boolean
+  snapshot?: boolean
   createdAt?: boolean
   template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["templateVersion"]>
@@ -687,11 +571,7 @@ export type TemplateVersionSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   templateId?: boolean
   version?: boolean
-  widgets?: boolean
-  layouts?: boolean
-  widgetToSession?: boolean
-  properties?: boolean
-  sessions?: boolean
+  snapshot?: boolean
   createdAt?: boolean
   template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["templateVersion"]>
@@ -700,15 +580,11 @@ export type TemplateVersionSelectScalar = {
   id?: boolean
   templateId?: boolean
   version?: boolean
-  widgets?: boolean
-  layouts?: boolean
-  widgetToSession?: boolean
-  properties?: boolean
-  sessions?: boolean
+  snapshot?: boolean
   createdAt?: boolean
 }
 
-export type TemplateVersionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "templateId" | "version" | "widgets" | "layouts" | "widgetToSession" | "properties" | "sessions" | "createdAt", ExtArgs["result"]["templateVersion"]>
+export type TemplateVersionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "templateId" | "version" | "snapshot" | "createdAt", ExtArgs["result"]["templateVersion"]>
 export type TemplateVersionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
   submissions?: boolean | Prisma.TemplateVersion$submissionsArgs<ExtArgs>
@@ -734,11 +610,14 @@ export type $TemplateVersionPayload<ExtArgs extends runtime.Types.Extensions.Int
      * * Semantic version string (e.g. "1.0.0"), managed via the `semver` library.
      */
     version: string
-    widgets: runtime.JsonValue
-    layouts: runtime.JsonValue
-    widgetToSession: runtime.JsonValue
-    properties: runtime.JsonValue
-    sessions: runtime.JsonValue
+    /**
+     * *
+     *    * Frozen copy of the yjs doc at publish time - `widgets`, `layouts`,
+     *    * `widgetToSession`, `properties`, `sessions`, and whatever gets added later
+     *    * (e.g. `sessionProperties`) - as one schemaless blob, so new record kinds
+     *    * don't need a migration.
+     */
+    snapshot: runtime.JsonValue
     createdAt: Date
   }, ExtArgs["result"]["templateVersion"]>
   composites: {}
@@ -1168,11 +1047,7 @@ export interface TemplateVersionFieldRefs {
   readonly id: Prisma.FieldRef<"TemplateVersion", 'String'>
   readonly templateId: Prisma.FieldRef<"TemplateVersion", 'String'>
   readonly version: Prisma.FieldRef<"TemplateVersion", 'String'>
-  readonly widgets: Prisma.FieldRef<"TemplateVersion", 'Json'>
-  readonly layouts: Prisma.FieldRef<"TemplateVersion", 'Json'>
-  readonly widgetToSession: Prisma.FieldRef<"TemplateVersion", 'Json'>
-  readonly properties: Prisma.FieldRef<"TemplateVersion", 'Json'>
-  readonly sessions: Prisma.FieldRef<"TemplateVersion", 'Json'>
+  readonly snapshot: Prisma.FieldRef<"TemplateVersion", 'Json'>
   readonly createdAt: Prisma.FieldRef<"TemplateVersion", 'DateTime'>
 }
     

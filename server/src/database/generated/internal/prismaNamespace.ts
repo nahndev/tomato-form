@@ -1154,11 +1154,7 @@ export const TemplateVersionScalarFieldEnum = {
   id: 'id',
   templateId: 'templateId',
   version: 'version',
-  widgets: 'widgets',
-  layouts: 'layouts',
-  widgetToSession: 'widgetToSession',
-  properties: 'properties',
-  sessions: 'sessions',
+  snapshot: 'snapshot',
   createdAt: 'createdAt'
 } as const
 

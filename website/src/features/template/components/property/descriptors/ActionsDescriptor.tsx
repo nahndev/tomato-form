@@ -187,7 +187,7 @@ function SessionPicker({
   value: string | undefined;
   onChange: (sessionId: string | undefined) => void;
 }) {
-  const { sessions } = useTemplateState();
+  const { sessions, sessionProperties } = useTemplateState();
 
   return (
     <Select
@@ -197,7 +197,7 @@ function SessionPicker({
       <option value="">(next session)</option>
       {Object.values(sessions).map((session) => (
         <option key={session.id} value={session.id}>
-          {session.name}
+          {sessionProperties[session.id]?.name}
         </option>
       ))}
     </Select>

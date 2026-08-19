@@ -8,13 +8,13 @@ import { useSessionState } from "@/features/template/hooks/state/useSessionState
 /** Inline-editable session description, backed directly by the yjs doc. */
 export function SessionDescriptionInput() {
   const sessionId = useSessionId();
-  const { session } = useSessionState();
+  const { properties } = useSessionState();
   const { updateSession } = useSessionActions();
 
   return (
     <TextEditor
       id="session-description"
-      value={session?.description}
+      value={properties?.description}
       onChange={(description) => updateSession(sessionId, { description })}
       placeholder="Add a description…"
       className="p-2 text-sm"

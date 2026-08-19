@@ -25,11 +25,12 @@ export const TemplateVersionStateProvider: React.FC<TemplateVersionStateProvider
   const state = useMemo<TemplateState>(
     () => ({
       name: templateVersion.template?.name ?? "",
-      widgets: templateVersion.widgets,
-      properties: templateVersion.properties,
-      sessions: templateVersion.sessions,
-      layouts: templateVersion.layouts,
-      widgetToSession: templateVersion.widgetToSession,
+      widgets: templateVersion.snapshot.widgets,
+      properties: templateVersion.snapshot.properties,
+      sessions: templateVersion.snapshot.sessions,
+      sessionProperties: templateVersion.snapshot.sessionProperties,
+      layouts: templateVersion.snapshot.layouts,
+      widgetToSession: templateVersion.snapshot.widgetToSession,
     }),
     [templateVersion],
   );

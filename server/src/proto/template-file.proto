@@ -25,4 +25,6 @@ message MakeVersionFileResponse {
   google.protobuf.Struct properties = 5;
   /** Snapshot of the doc's `sessions` Y.Map. */
   google.protobuf.Struct sessions = 6;
+  /** Snapshot of the doc's `sessionProperties` Y.Map. */
+  google.protobuf.Struct session_properties = 7;
 }

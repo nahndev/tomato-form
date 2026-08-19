@@ -70,6 +70,7 @@ interface MakeVersionFileResponse {
   widgetToSession: Record<string, unknown>;
   properties: Record<string, unknown>;
   sessions: Record<string, unknown>;
+  sessionProperties: Record<string, unknown>;
 }
 
 interface TemplateFilePackage {
@@ -127,6 +128,9 @@ function startRpcServer(): void {
         widgetToSession: Object.fromEntries(doc.getMap("widgetToSession").entries()),
         properties: Object.fromEntries(doc.getMap("properties").entries()),
         sessions: Object.fromEntries(doc.getMap("sessions").entries()),
+        sessionProperties: Object.fromEntries(
+          doc.getMap("sessionProperties").entries(),
+        ),
       });
     },
   });

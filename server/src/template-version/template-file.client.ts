@@ -4,19 +4,21 @@ import { TemplateFileClient as TemplateFileGrpcClient } from "@/proto/generated/
 import type {
   GridLayout,
   Session,
+  SessionProperties,
   Widget,
   WidgetProperties,
 } from "@/template/template.types";
 import { Injectable, OnModuleDestroy } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-export interface TemplateVersionSnapshot {
+export interface MakeVersionFileResult {
   path: string;
   widgets: Record<string, Widget>;
   layouts: Record<string, GridLayout>;
   widgetToSession: Record<string, string>;
   properties: Record<string, WidgetProperties>;
   sessions: Record<string, Session>;
+  sessionProperties: Record<string, SessionProperties>;
 }
 
 @Injectable()
@@ -34,7 +36,7 @@ export class TemplateFileClient implements OnModuleDestroy {
   async makeVersionFile(
     id: string,
     version: string,
-  ): Promise<TemplateVersionSnapshot> {
+  ): Promise<MakeVersionFileResult> {
     const response = await callUnary(
       this.client.makeVersionFile.bind(this.client),
       {
@@ -49,6 +51,10 @@ export class TemplateFileClient implements OnModuleDestroy {
       widgetToSession: (response.widgetToSession ?? {}) as Record<string, string>,
       properties: (response.properties ?? {}) as Record<string, WidgetProperties>,
       sessions: (response.sessions ?? {}) as Record<string, Session>,
+      sessionProperties: (response.sessionProperties ?? {}) as Record<
+        string,
+        SessionProperties
+      >,
     };
   }
 

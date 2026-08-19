@@ -1,6 +1,7 @@
 import type {
   GridLayout,
   Session,
+  SessionProperties,
   Widget,
   WidgetProperties,
 } from "@/types/template";
@@ -11,6 +12,7 @@ export interface TemplateState {
   widgets: Record<string, Widget>;
   properties: Record<string, WidgetProperties>;
   sessions: Record<string, Session>;
+  sessionProperties: Record<string, SessionProperties>;
   layouts: Record<string, GridLayout>;
   widgetToSession: Record<string, string>;
 }
@@ -23,6 +25,9 @@ export function readTemplateState(doc: Y.Doc): TemplateState {
       doc.getMap<WidgetProperties>("properties").entries(),
     ),
     sessions: Object.fromEntries(doc.getMap<Session>("sessions").entries()),
+    sessionProperties: Object.fromEntries(
+      doc.getMap<SessionProperties>("sessionProperties").entries(),
+    ),
     layouts: Object.fromEntries(doc.getMap<GridLayout>("layouts").entries()),
     widgetToSession: Object.fromEntries(
       doc.getMap<string>("widgetToSession").entries(),
@@ -39,10 +44,10 @@ export function getOrCreateDefaultSessionId(doc: Y.Doc): string {
   const ySessions = doc.getMap<Session>("sessions");
   const existing = ySessions.values().next().value as Session | undefined;
   if (existing) return existing.id;
-  ySessions.set(DEFAULT_SESSION_ID, {
-    id: DEFAULT_SESSION_ID,
-    name: DEFAULT_SESSION_NAME,
-  });
+  ySessions.set(DEFAULT_SESSION_ID, { id: DEFAULT_SESSION_ID });
+  doc
+    .getMap<SessionProperties>("sessionProperties")
+    .set(DEFAULT_SESSION_ID, { name: DEFAULT_SESSION_NAME });
   return DEFAULT_SESSION_ID;
 }
 

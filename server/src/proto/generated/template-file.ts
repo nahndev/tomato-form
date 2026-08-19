@@ -46,7 +46,11 @@ export interface MakeVersionFileResponse {
     | { [key: string]: any }
     | undefined;
   /** Snapshot of the doc's `sessions` Y.Map. */
-  sessions: { [key: string]: any } | undefined;
+  sessions:
+    | { [key: string]: any }
+    | undefined;
+  /** Snapshot of the doc's `sessionProperties` Y.Map. */
+  sessionProperties: { [key: string]: any } | undefined;
 }
 
 function createBaseMakeVersionFileRequest(): MakeVersionFileRequest {
@@ -137,6 +141,7 @@ function createBaseMakeVersionFileResponse(): MakeVersionFileResponse {
     widgetToSession: undefined,
     properties: undefined,
     sessions: undefined,
+    sessionProperties: undefined,
   };
 }
 
@@ -159,6 +164,9 @@ export const MakeVersionFileResponse: MessageFns<MakeVersionFileResponse> = {
     }
     if (message.sessions !== undefined) {
       Struct.encode(Struct.wrap(message.sessions), writer.uint32(50).fork()).join();
+    }
+    if (message.sessionProperties !== undefined) {
+      Struct.encode(Struct.wrap(message.sessionProperties), writer.uint32(58).fork()).join();
     }
     return writer;
   },
@@ -218,6 +226,14 @@ export const MakeVersionFileResponse: MessageFns<MakeVersionFileResponse> = {
           message.sessions = Struct.unwrap(Struct.decode(reader, reader.uint32()));
           continue;
         }
+        case 7: {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.sessionProperties = Struct.unwrap(Struct.decode(reader, reader.uint32()));
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -239,6 +255,11 @@ export const MakeVersionFileResponse: MessageFns<MakeVersionFileResponse> = {
         : undefined,
       properties: isObject(object.properties) ? object.properties : undefined,
       sessions: isObject(object.sessions) ? object.sessions : undefined,
+      sessionProperties: isObject(object.sessionProperties)
+        ? object.sessionProperties
+        : isObject(object.session_properties)
+        ? object.session_properties
+        : undefined,
     };
   },
 
@@ -262,6 +283,9 @@ export const MakeVersionFileResponse: MessageFns<MakeVersionFileResponse> = {
     if (message.sessions !== undefined) {
       obj.sessions = message.sessions;
     }
+    if (message.sessionProperties !== undefined) {
+      obj.sessionProperties = message.sessionProperties;
+    }
     return obj;
   },
 
@@ -276,6 +300,7 @@ export const MakeVersionFileResponse: MessageFns<MakeVersionFileResponse> = {
     message.widgetToSession = object.widgetToSession ?? undefined;
     message.properties = object.properties ?? undefined;
     message.sessions = object.sessions ?? undefined;
+    message.sessionProperties = object.sessionProperties ?? undefined;
     return message;
   },
 };

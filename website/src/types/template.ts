@@ -97,6 +97,9 @@ export type SessionCondition =
 
 export interface Session {
   id: string;
+}
+
+export interface SessionProperties {
   name: string;
   /** Key into `ICON_REGISTRY` (see `components/ui/icon-picker`). */
   icon?: string;
@@ -105,16 +108,25 @@ export interface Session {
   condition?: SessionCondition;
 }
 
-export interface TemplateVersion {
-  id: string;
-  templateId: string;
-  /** Semantic version string (e.g. "1.0.0"). */
-  version: string;
+/**
+ * Frozen copy of the yjs doc at publish time, as one schemaless blob so new
+ * record kinds don't need a migration.
+ */
+export interface TemplateVersionSnapshot {
   widgets: Record<string, Widget>;
   properties: Record<string, WidgetProperties>;
   layouts: Record<string, GridLayout>;
   widgetToSession: Record<string, string>;
   sessions: Record<string, Session>;
+  sessionProperties: Record<string, SessionProperties>;
+}
+
+export interface TemplateVersion {
+  id: string;
+  templateId: string;
+  /** Semantic version string (e.g. "1.0.0"). */
+  version: string;
+  snapshot: TemplateVersionSnapshot;
   createdAt: string;
   /** Only present when fetched via `/template-versions/{id}`. */
   template?: { id: string; name: string };

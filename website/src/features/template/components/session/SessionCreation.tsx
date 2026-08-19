@@ -14,7 +14,7 @@ const SessionCreation: React.FC<SessionCreationProps> = () => {
         variant="outline"
         size="sm"
         className="w-full justify-start"
-        onClick={() => addSession({ id: v4(), name: "New session" })}
+        onClick={() => addSession(v4(), { name: "New session" })}
       >
         <Plus className="mr-1.5 size-4" />
         Add Session
