@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import * as semver from "semver";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";

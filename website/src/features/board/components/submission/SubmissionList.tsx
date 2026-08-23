@@ -9,7 +9,7 @@ import {
 import { useTemplates } from "@/features/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { useMemo, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 const SubmissionList: React.FC = () => {
   const board = useBoardContext();

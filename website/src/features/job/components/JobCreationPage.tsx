@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import JobForm, { JobFormValues } from "@/features/job/components/JobForm";
 import { createDefaultAction } from "@/features/job/components/actions/create-default-action";
 import { useCreateJob } from "@/features/job/hooks/useJobs";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import CreateUserDialog from "@/features/user/components/CreateUserDialog";
 import UserManagerHeader from "@/features/user/components/header/UserManagerHeader";
 import UserPagination from "@/features/user/components/table/UserPagination";

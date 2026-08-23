@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

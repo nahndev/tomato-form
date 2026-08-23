@@ -26,7 +26,7 @@ import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 enum JobDetailTab {
   SETUP = "setup",

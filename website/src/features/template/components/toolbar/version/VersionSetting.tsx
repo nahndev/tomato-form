@@ -10,7 +10,7 @@ import { usePublishTemplateVersion } from "@/features/template/hooks/useTemplate
 import type { TemplateVersion } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import * as semver from "semver";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 export type VersionSettingProps = {};
 

@@ -7,7 +7,7 @@ import { Job } from "@/types/job";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 export type JobItemProps = {
   job: Job;
@@ -73,7 +73,10 @@ const JobItem: React.FC<JobItemProps> = ({ job }) => {
           aria-label="Delete job"
         >
           {isPending ? (
-            <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
+            <TomatoIcon
+              icon={TomatoIconKey.Loader}
+              className="size-4 animate-spin"
+            />
           ) : (
             <TomatoIcon icon={TomatoIconKey.Trash} className="size-4" />
           )}

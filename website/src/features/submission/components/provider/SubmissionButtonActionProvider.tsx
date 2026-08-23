@@ -11,7 +11,7 @@ import {
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { submissionApi } from "@/services/submission.api";
 import { ButtonActionType } from "@/types/button-action";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 export interface SubmissionButtonActionProviderProps {
   children: React.ReactNode;
