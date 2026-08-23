@@ -6,6 +6,7 @@ import { validateEnv } from "./config/env.schema";
 import { DatabaseModule } from "./database/database.module";
 import { HealthModule } from "./health/health.module";
 import { JobModule } from "./job/job.module";
+import { RabbitmqModule } from "./rabbitmq/rabbitmq.module";
 import { TemplateModule } from "./template/template.module";
 import { UserModule } from "./user/user.module";
 import { BoardModule } from "./board/board.module";
@@ -22,6 +23,7 @@ import { SubmissionModule } from "./submission/submission.module";
     ScheduleModule.forRoot(),
     DatabaseModule,
     HealthModule,
+    RabbitmqModule,
     TemplateModule,
     UserModule,
     BoardModule,

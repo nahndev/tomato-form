@@ -13,39 +13,18 @@ services:
       POSTGRES_USER: tomato
       POSTGRES_PASSWORD: tomato
 
-  yjs-server:
-    build:
-      context: ./yjs-server
+  rabbitmq:
+    image: rabbitmq:3-management
     restart: unless-stopped
     ports:
-      - "3028:3028"
+      - "5672:5672"
+      - "15672:15672"
     environment:
-      HOST: "0.0.0.0"
-      PORT: "3028"
-      BACKEND_URL: http://server:3022
-    depends_on:
-      - server
-  mail:
-    image: axllent/mailpit
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-
-  server:
-    build:
-      context: ./server
-    restart: unless-stopped
-    ports:
-      - "3022:3022"
-    environment:
-      NODE_ENV: production
-      PORT: "3022"
-      DATABASE_URL: postgresql://tomato:tomato@postgres:5432/tomato_form
-      CORS_ORIGIN: http://localhost:3021
-      YJS_RPC_URL: yjs-server:3030
-    depends_on:
-      - postgres
-      - yjs-server
+      RABBITMQ_DEFAULT_USER: tomato
+      RABBITMQ_DEFAULT_PASS: tomato
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
 
 volumes:
   postgres_data:
+  rabbitmq_data:

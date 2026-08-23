@@ -34,6 +34,9 @@ export class EnvironmentVariables {
 
   @IsString()
   YJS_RPC_URL!: string;
+
+  @IsString()
+  RABBITMQ_URL!: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

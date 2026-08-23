@@ -101,7 +101,7 @@ export interface Session {
 
 export interface SessionProperties {
   name: string;
-  /** Key into `ICON_REGISTRY` (see `components/ui/icon-picker`). */
+  /** `TomatoIconKey` from `@tomato/icon`. */
   icon?: string;
   description?: SerializedEditorState;
   /** Unset = always shown (see `SessionConditionType.ALWAYS`). */

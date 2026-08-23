@@ -1,47 +1,31 @@
-# Add SessionSettingPopup for UI
+# Migration gRpc to RabbitMQ
 
-## Tasks 01 - Implement submission UI
+## Tasks 01 - Add docker composer [x]
 
-[yjs-server]
+- [x] On `./docker-compose.yaml`
+- [x] Add docker for rabbitQR
+- [x] Add module for [server]
 
-- [x] Standardize `documentName` for all `yjs` with format `<type>/<id>/version` -> save to folder `type` - folder `id` - folder `version`
-- [x] Update for `./yjs-server/server.ts`
-- [x] Update for `TemplateDocProvider`
-- [x] Update for `SubmissionProvider`
+## Tasks 02 - Add `@tomato/icon` for project [x]
 
-## Tasks 02 - Implement condition for session
+- [x] Using `turbo`, create package `@tomato/icon`
+- [x] Add <TomatoIcon icon="<name>"/>
+- [x] Add `TomatoIconKey` is list all icons, which my system support it.
+- [x] Add `TomatoIcon` is react composer, allow using this icon.
 
-[website] - `./website/src/features/template`
+-> Why: The system current using `lexical`, but it don't save on backend is good and decouple with library.
 
-- [x] In SessionBox - Add setting popup when click icon in SessionHeader
-- [x] Add Condition - condition allow show item
+<!--
+## Tasks 02 - Migration [yjs-server] to Nestjs
 
-  - Default: always
-  - When click BUTTON
-  - When has value in a WIDGET
+- Convert `yjs-server` using `Nestjs` with `createMicroservice`
+- `hocuspocus/server` as gateway
 
-- [x] Base on `data` of `submission` - parse `conditions` to `result`
+## Tasks 03 - Convert `gRpc` to `RabbitMQ`
 
-## Tasks 03 - Adjust `TemplateVersion`
+- For `server` convert `makeVersionFile` to using `RabbitMQ`
+- For `yjs-server` convert `makeVersionFile` to using `RabbitMQ`
 
-Note: Suggest and apply name for record `<design>` -> applied as `snapshot` (matches the codebase's existing vocabulary for this exact concept - `TemplateVersionSnapshot`, "published (static) snapshot", "structure is frozen" - a frozen copy of the yjs doc at publish time: widgets/layouts/sessions/properties/widgetToSession, extensible without a migration).
+## Tasks 04 - Shared code
 
-[server]
-[schema.prisma]
-
-- Currently, `TemplateVersion` include `widgets`, `session`, `properties`, ....
-- But, every add new record (ex: `sessionProperties`), I must add new record to database
-- [x] In `TemplateVersion` add new record `<design>` is `jsonb`
-- [x] In `makeVersionFile` move `widgets`, `session`, `properties`, ... (which load from `yjs`) into `<design>`
-
-[website]
-
-- [x] Adjust UI same with changes in [server]
-
-## Tasks 04 - Add new properties for
-
-[website]
-
-- Currently, the `condition` and other properties of `session` save within itself. It don't helpful with `yjs`
-- [x] `yjs` add new record `sessionProperties`
-- [x] Move all `properties` of `session` to `sessionProperties`
+- -->

@@ -18,10 +18,6 @@ CREATE TABLE "boards" (
 CREATE TABLE "templates" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "widgets" JSONB NOT NULL DEFAULT '{}',
-    "layouts" JSONB NOT NULL DEFAULT '{}',
-    "widget_to_session" JSONB NOT NULL DEFAULT '{}',
-    "properties" JSONB NOT NULL DEFAULT '{}',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -29,10 +25,21 @@ CREATE TABLE "templates" (
 );
 
 -- CreateTable
+CREATE TABLE "template_versions" (
+    "id" TEXT NOT NULL,
+    "template_id" TEXT NOT NULL,
+    "version" TEXT NOT NULL,
+    "snapshot" JSONB NOT NULL DEFAULT '{}',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "template_versions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "submissions" (
     "id" TEXT NOT NULL,
     "board_id" TEXT NOT NULL,
-    "template_id" TEXT NOT NULL,
+    "template_version_id" TEXT NOT NULL,
     "data" JSONB NOT NULL DEFAULT '{}',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -111,10 +118,16 @@ CREATE TABLE "_BoardTemplates" (
 );
 
 -- CreateIndex
+CREATE INDEX "template_versions_template_id_idx" ON "template_versions"("template_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "template_versions_template_id_version_key" ON "template_versions"("template_id", "version");
+
+-- CreateIndex
 CREATE INDEX "submissions_board_id_idx" ON "submissions"("board_id");
 
 -- CreateIndex
-CREATE INDEX "submissions_template_id_idx" ON "submissions"("template_id");
+CREATE INDEX "submissions_template_version_id_idx" ON "submissions"("template_version_id");
 
 -- CreateIndex
 CREATE INDEX "jobs_board_id_idx" ON "jobs"("board_id");
@@ -135,10 +148,13 @@ CREATE UNIQUE INDEX "cron_registrations_key_key" ON "cron_registrations"("key");
 CREATE INDEX "_BoardTemplates_B_index" ON "_BoardTemplates"("B");
 
 -- AddForeignKey
+ALTER TABLE "template_versions" ADD CONSTRAINT "template_versions_template_id_fkey" FOREIGN KEY ("template_id") REFERENCES "templates"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "submissions" ADD CONSTRAINT "submissions_board_id_fkey" FOREIGN KEY ("board_id") REFERENCES "boards"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "submissions" ADD CONSTRAINT "submissions_template_id_fkey" FOREIGN KEY ("template_id") REFERENCES "templates"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "submissions" ADD CONSTRAINT "submissions_template_version_id_fkey" FOREIGN KEY ("template_version_id") REFERENCES "template_versions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_board_id_fkey" FOREIGN KEY ("board_id") REFERENCES "boards"("id") ON DELETE CASCADE ON UPDATE CASCADE;
