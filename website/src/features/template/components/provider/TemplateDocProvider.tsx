@@ -1,6 +1,6 @@
 "use client";
 
-import { initTemplateDoc } from "@/features/template/hooks/internal/templateStateReader";
+import { initTemplateDoc } from "@/features/template/hooks/internal/templateDocInit";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { createContext, useContext, useEffect, useState } from "react";
 import * as Y from "yjs";
