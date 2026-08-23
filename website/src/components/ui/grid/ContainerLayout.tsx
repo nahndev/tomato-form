@@ -151,7 +151,11 @@ export function ContainerLayout({
     >
       <ContainerGrid />
       {computedLayouts.map((layout) => (
-        <div className="absolute" key={layout.id} style={{ ...layout }}>
+        <div
+          className="absolute group/grid-item"
+          key={layout.id}
+          style={{ ...layout }}
+        >
           <ResizableBox
             value={layout}
             disabled={disabled}

@@ -23,12 +23,13 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
     <Link
       key={submission.id}
       href={`/submission/${submission.id}`}
-      target="_blank"
       rel="noopener noreferrer"
     >
       <div className="flex flex-row items-center p-2 group hover:bg-accent">
         <div className="flex items-start justify-between gap-2">
-          <div className="text-base">{template?.name ?? "Unknown template"}</div>
+          <div className="text-base">
+            {template?.name ?? "Unknown template"}
+          </div>
         </div>
         <div>
           {submission.createdAt

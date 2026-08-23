@@ -25,7 +25,10 @@ const SubmissionCanvas: React.FC = () => {
           </p>
         )}
         {currentSessionId && (
-          <SubmissionSessionBox key={currentSessionId} sessionId={currentSessionId} />
+          <SubmissionSessionBox
+            key={currentSessionId}
+            sessionId={currentSessionId}
+          />
         )}
       </div>
     </ScrollArea>

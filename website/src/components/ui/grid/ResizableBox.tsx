@@ -47,9 +47,9 @@ export function ResizableBox({
       grid={[COLUMN_WIDTH, 1]}
       maxWidth={COLUMN_WIDTH * GRID_COLUMNS - value.left}
       minWidth={COLUMN_WIDTH}
-      handleStyles={{ right: { width: 4 } }}
+      handleStyles={{ right: { width: 4, right: 4 } }}
       handleClasses={{
-        right: clsx("my-auto transition-colors flex flex-col group"),
+        right: clsx("my-auto transition-colors flex flex-col"),
       }}
       handleComponent={{
         right: (
@@ -60,8 +60,9 @@ export function ResizableBox({
               tabIndex={-1}
               aria-hidden
               className={clsx(
-                "h-8 w-1 cursor-[inherit]",
-                !disabled && "cursor-ew-resize group-hover:bg-primary/40",
+                "h-4 w-1 cursor-[inherit]",
+                !disabled &&
+                  "cursor-ew-resize group-hover/grid-item:bg-primary/60",
               )}
             />
             <div className="flex-1" />
