@@ -4,7 +4,7 @@ import {
   useTemplateId,
   useTemplateVersion,
 } from "@/features/template/components/provider/TemplateProvider";
-import { BackButton } from "@/components/ui/back-button";
+import { NavigationButton } from "@/components/ui/navigation-button";
 import TemplateConnection from "@/features/template/components/template/TemplateConnection";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { TemplateMode } from "@/types/template";
@@ -20,7 +20,7 @@ const TemplateHeader: React.FC<TemplateHeaderProps> = () => {
   const version = useTemplateVersion();
   return (
     <div className="flex items-center gap-2 border-b px-4 py-2">
-      <BackButton href="/templates" />
+      <NavigationButton href="/templates" />
       <div>
         <span>{name}</span>
       </div>

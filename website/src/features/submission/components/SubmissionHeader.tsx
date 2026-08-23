@@ -1,19 +1,17 @@
 import { BackButton } from "@/components/ui/back-button";
 import SubmissionConnection from "@/features/submission/components/SubmissionConnection";
-import { useCurrentSubmission } from "@/features/submission/components/provider/SubmissionProvider";
 import { useCurrentTemplateVersion } from "@/features/submission/components/provider/TemplateVersionStateProvider";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { usePrincipalStore } from "@/store/principal.store";
 
 const SubmissionHeader: React.FC = () => {
-  const submission = useCurrentSubmission();
   const { name } = useTemplateState();
   const { version } = useCurrentTemplateVersion();
   const principal = usePrincipalStore((s) => s.principal);
 
   return (
     <div className="flex items-center gap-2 border-b px-4 py-2">
-      <BackButton href={`/boards/${submission.boardId}`} />
+      <BackButton />
       <div>
         <span>{name}</span>
       </div>

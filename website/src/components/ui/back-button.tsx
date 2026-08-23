@@ -1,19 +1,25 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface BackButtonProps {
-  href: string;
   "aria-label"?: string;
 }
 
-function BackButton({ href, "aria-label": ariaLabel = "Back" }: BackButtonProps) {
+function BackButton({ "aria-label": ariaLabel = "Back" }: BackButtonProps) {
+  const router = useRouter();
+
   return (
-    <Link href={href}>
-      <Button variant="ghost" className="size-10" aria-label={ariaLabel}>
-        <TomatoIcon icon={TomatoIconKey.ArrowLeft} />
-      </Button>
-    </Link>
+    <Button
+      variant="ghost"
+      className="size-10"
+      aria-label={ariaLabel}
+      onClick={() => router.back()}
+    >
+      <TomatoIcon icon={TomatoIconKey.ArrowLeft} />
+    </Button>
   );
 }
 
