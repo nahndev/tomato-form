@@ -34,14 +34,16 @@ const MoreSubmissionButton: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [pickedTemplateId, setPickedTemplateId] = useState("");
 
+  const templates = board.templates ?? [];
+
   function openDialog() {
-    setPickedTemplateId(board.templates[0]?.id ?? "");
+    setPickedTemplateId(templates[0]?.id ?? "");
     setOpen(true);
   }
 
   async function handleCreate() {
     if (!pickedTemplateId) return;
-    const template = board.templates.find((t) => t.id === pickedTemplateId);
+    const template = templates.find((t) => t.id === pickedTemplateId);
     const latestVersion = findLatestVersion(template?.templateVersions ?? []);
     if (!latestVersion) {
       toast.error("This template has no published version yet");
@@ -66,7 +68,7 @@ const MoreSubmissionButton: React.FC = () => {
         <Button
           size="sm"
           onClick={openDialog}
-          disabled={board.templates.length === 0}
+          disabled={templates.length === 0}
         >
           <TomatoIcon icon={TomatoIconKey.Plus} className="mr-1.5 size-4" />
           New Submission
@@ -87,7 +89,7 @@ const MoreSubmissionButton: React.FC = () => {
             value={pickedTemplateId}
             onChange={(e) => setPickedTemplateId(e.target.value)}
           >
-            {board.templates.map((t) => (
+            {templates.map((t) => (
               <option key={t.id} value={t.id}>
                 {t.name}
               </option>
