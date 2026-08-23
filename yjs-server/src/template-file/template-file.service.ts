@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 import { EnvironmentVariables } from "@/config/env.schema";
 import { readDocFromFile } from "@/collaboration/document-file.util";
 import { VersionFileMadeEvent } from "@/template-file/template-file.contract";

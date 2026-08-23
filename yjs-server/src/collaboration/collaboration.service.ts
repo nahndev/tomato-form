@@ -1,8 +1,8 @@
 import { Server } from "@hocuspocus/server";
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 import * as Y from "yjs";
 import { EnvironmentVariables } from "@/config/env.schema";
 import { resolveDocumentFile, readDocFromFile } from "@/collaboration/document-file.util";
