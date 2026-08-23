@@ -67,22 +67,36 @@ const DEFAULT_SYSTEM_WIDGET_TYPES: WidgetType[] = [
   WidgetType.SUBMITTED_BY,
 ];
 
-/**
- * Seeds the read-only system widgets (Created At, Template, By) into a
- * brand-new template's doc, so board columns have sensible defaults out of
- * the box. No-ops once the doc already has any widgets, so it never touches
- * a template a user has started building or intentionally emptied out.
- *
- * Deliberately left out of `widgetToSession` - these are board-only
- * metadata columns, not part of the fill-form session flow, so they must
- * not show up inside any session's grid.
- */
-export function getOrCreateDefaultSystemWidgets(doc: Y.Doc): void {
-  const yWidgets = doc.getMap<Widget>("widgets");
-  if (yWidgets.size > 0) return;
+const READY_KEY = "ready";
 
+/**
+ * True once `initTemplateDoc` has run for this doc. Backed by a timestamp
+ * (ms since epoch) rather than a plain boolean so it also records *when*
+ * init happened, in case that's ever useful for debugging/migration.
+ */
+export function isTemplateReady(doc: Y.Doc): boolean {
+  return typeof doc.getMap<number>("meta").get(READY_KEY) === "number";
+}
+
+/**
+ * Runs once per template doc - seeds the read-only system widgets (Created
+ * At, Template, By) so board columns have sensible defaults out of the box,
+ * then marks the doc `ready`. Guarded by the `ready` flag rather than "no
+ * widgets yet" so it never re-seeds a template a user has since emptied
+ * out, and fixed widget ids mean two concurrent clients racing to init the
+ * same brand-new doc converge instead of duplicating.
+ *
+ * Seeded widgets are deliberately left out of `widgetToSession` - they're
+ * board-only metadata columns, not part of the fill-form session flow, so
+ * they must not show up inside any session's grid.
+ */
+export function initTemplateDoc(doc: Y.Doc): void {
+  if (isTemplateReady(doc)) return;
+
+  const yWidgets = doc.getMap<Widget>("widgets");
   const layouts = doc.getMap<GridLayout>("layouts");
   const properties = doc.getMap<WidgetProperties>("properties");
+  const meta = doc.getMap<number>("meta");
 
   doc.transact(() => {
     for (const type of DEFAULT_SYSTEM_WIDGET_TYPES) {
@@ -95,5 +109,6 @@ export function getOrCreateDefaultSystemWidgets(doc: Y.Doc): void {
       });
       properties.set(id, def.defaultSettings);
     }
+    meta.set(READY_KEY, Date.now());
   });
 }
