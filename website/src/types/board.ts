@@ -2,7 +2,6 @@ import type { Template } from "./template";
 import type { Job } from "./job";
 
 export enum BoardTabValue {
-  SUBMISSIONS = "submissions",
   TEMPLATE = "template",
   JOBS = "jobs",
   SETTING = "setting",

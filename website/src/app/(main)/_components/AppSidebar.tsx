@@ -16,6 +16,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Home", icon: TomatoIconKey.Home },
   { href: "/templates", label: "Templates", icon: TomatoIconKey.Document },
   { href: "/boards", label: "Boards", icon: TomatoIconKey.LayoutGrid },
+  { href: "/workspace", label: "Workspace", icon: TomatoIconKey.LayoutDashboard },
   { href: "/users", label: "Users", icon: TomatoIconKey.Users },
 ];
 
