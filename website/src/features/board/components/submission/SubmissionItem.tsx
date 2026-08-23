@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/sonner";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useDeleteSubmission } from "@/features/board/hooks/useSubmissions";
 import { useTemplates } from "@/features/template";
@@ -39,11 +40,18 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
         <div className="ml-2 flex-1" />
         <div>
           <button
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
               e.stopPropagation();
-              deleteSubmission(submission.id);
+              try {
+                await deleteSubmission(submission.id);
+                toast.success("Submission deleted");
+              } catch (err) {
+                console.error("Failed to delete submission:", err);
+                toast.error("Failed to delete submission");
+              }
             }}
+            disabled={isPending}
             className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100 disabled:opacity-50"
             aria-label="Delete submission"
           >

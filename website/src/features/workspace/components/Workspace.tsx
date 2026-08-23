@@ -51,7 +51,7 @@ const Workspace: React.FC = () => {
         onSelect={setSelectedBoardId}
       />
       <main className="flex-1 overflow-hidden">
-        <WorkspaceContent board={selectedBoard} />
+        <WorkspaceContent key={selectedBoard?.id} board={selectedBoard} />
       </main>
     </div>
   );

@@ -7,6 +7,19 @@ Scope: `./website/src/features/workspace`
 
 ## Tasks 01 - Spit layout
 
-- [ ] Move `workspace` out `(main)` group
-- [ ] The `WorkspaceBoardHeader` is design <title> <filter> ---- <list-pages><button>
-- [ ] The `WorkspaceBoardContent` show list of `submissions`
+- [x] Move `workspace` out `(main)` group
+- [x] The `WorkspaceBoardHeader` is design <title> <filter> ---- <list-pages><button>
+- [x] The `WorkspaceBoardContent` show list of `submissions`
+
+## Tasks 02 - Add custom column for board
+
+- [ ] The board include custom column, which will should on layout
+- [ ] Add available display types for every `widget`, ex:
+  - The `WidgetType.DATE` can display as `text`, `date`,
+  - The `WidgetType.DATETIME` can display as `text`, `time`, `date-time`
+  - The `WidgetType.SIGNATURE is not display -> return empty
+  - ...
+- [ ] Add library allow get value of widget, every display-type will has a getter. accept `widget` and `json` -> return same type
+- [ ] Every `column` in board, all `widget` my same type.
+- [ ] When create template, add default `widget` is `Created At`, `Template`, `By`,.... (add new types and registry)
+- [ ] In the

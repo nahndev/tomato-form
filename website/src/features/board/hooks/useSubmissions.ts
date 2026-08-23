@@ -13,6 +13,7 @@ export function useSubmissions(boardId?: string) {
   return useQuery({
     queryKey: submissionsKey(boardId),
     queryFn: () => submissionApi.list(boardId),
+    enabled: Boolean(boardId),
   });
 }
 
