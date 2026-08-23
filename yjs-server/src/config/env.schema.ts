@@ -1,36 +1,13 @@
 import { plainToInstance } from "class-transformer";
-import {
-  IsEmail,
-  IsIn,
-  IsNumber,
-  IsOptional,
-  IsString,
-  validateSync,
-} from "class-validator";
+import { IsNumber, IsOptional, IsString, validateSync } from "class-validator";
 
 export class EnvironmentVariables {
-  @IsIn(["development", "production", "test"])
-  NODE_ENV!: string;
-
   @IsNumber()
   @IsOptional()
-  PORT: number = 3022;
+  PORT: number = 3028;
 
   @IsString()
-  DATABASE_URL!: string;
-
-  @IsString()
-  CORS_ORIGIN!: string;
-
-  @IsString()
-  SMTP_HOST!: string;
-
-  @IsNumber()
-  @IsOptional()
-  SMTP_PORT: number = 1025;
-
-  @IsEmail()
-  MAIL_FROM!: string;
+  FILE_DIR!: string;
 
   @IsString()
   RABBITMQ_URL!: string;

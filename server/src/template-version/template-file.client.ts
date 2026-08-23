@@ -1,6 +1,4 @@
-import { callUnary, createGrpcClient } from "@/common/utils/grpc-client.util";
-import { EnvironmentVariables } from "@/config/env.schema";
-import { TemplateFileClient as TemplateFileGrpcClient } from "@/proto/generated/template-file";
+import { RABBITMQ_CLIENT } from "@/rabbitmq/rabbitmq.constants";
 import type {
   GridLayout,
   Session,
@@ -8,8 +6,20 @@ import type {
   Widget,
   WidgetProperties,
 } from "@/template/template.types";
-import { Injectable, OnModuleDestroy } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import {
+  Inject,
+  Injectable,
+  ServiceUnavailableException,
+  UnprocessableEntityException,
+} from "@nestjs/common";
+import { ClientProxy } from "@nestjs/microservices";
+import { firstValueFrom, timeout, TimeoutError } from "rxjs";
+import {
+  MAKE_VERSION_FILE_PATTERN,
+  MakeVersionFileReply,
+} from "./template-file.contract";
+
+export const MAKE_VERSION_FILE_TIMEOUT_MS = 30_000;
 
 export interface MakeVersionFileResult {
   path: string;
@@ -22,43 +32,44 @@ export interface MakeVersionFileResult {
 }
 
 @Injectable()
-export class TemplateFileClient implements OnModuleDestroy {
-  private readonly client: TemplateFileGrpcClient;
-
-  constructor(configService: ConfigService<EnvironmentVariables, true>) {
-    this.client = createGrpcClient(
-      TemplateFileGrpcClient,
-      configService.get("YJS_RPC_URL", { infer: true }),
-    );
-  }
+export class TemplateFileClient {
+  constructor(@Inject(RABBITMQ_CLIENT) private readonly client: ClientProxy) {}
 
   /** Publishes the template's live draft as `version`, returning the new snapshot's path and widget records. */
-  async makeVersionFile(
-    id: string,
-    version: string,
-  ): Promise<MakeVersionFileResult> {
-    const response = await callUnary(
-      this.client.makeVersionFile.bind(this.client),
-      {
-        templateId: id,
-        version,
-      },
-    );
-    return {
-      path: response.path,
-      widgets: (response.widgets ?? {}) as Record<string, Widget>,
-      layouts: (response.layouts ?? {}) as Record<string, GridLayout>,
-      widgetToSession: (response.widgetToSession ?? {}) as Record<string, string>,
-      properties: (response.properties ?? {}) as Record<string, WidgetProperties>,
-      sessions: (response.sessions ?? {}) as Record<string, Session>,
-      sessionProperties: (response.sessionProperties ?? {}) as Record<
-        string,
-        SessionProperties
-      >,
-    };
-  }
+  async makeVersionFile(id: string, version: string): Promise<MakeVersionFileResult> {
+    let reply: MakeVersionFileReply;
+    try {
+      reply = await firstValueFrom(
+        this.client
+          .send<MakeVersionFileReply>(MAKE_VERSION_FILE_PATTERN, {
+            templateId: id,
+            version,
+          })
+          .pipe(timeout(MAKE_VERSION_FILE_TIMEOUT_MS)),
+      );
+    } catch (err) {
+      if (err instanceof TimeoutError) {
+        throw new ServiceUnavailableException(
+          `Timed out waiting for yjs-server to publish template ${id}`,
+        );
+      }
+      throw new ServiceUnavailableException(
+        `Could not reach yjs-server to publish template ${id}: ${(err as Error).message}`,
+      );
+    }
 
-  onModuleDestroy(): void {
-    this.client.close();
+    if (!reply.ok) {
+      throw new UnprocessableEntityException(reply.message);
+    }
+
+    return {
+      path: reply.path,
+      widgets: reply.widgets as Record<string, Widget>,
+      layouts: reply.layouts as Record<string, GridLayout>,
+      widgetToSession: reply.widgetToSession as Record<string, string>,
+      properties: reply.properties as Record<string, WidgetProperties>,
+      sessions: reply.sessions as Record<string, Session>,
+      sessionProperties: reply.sessionProperties as Record<string, SessionProperties>,
+    };
   }
 }

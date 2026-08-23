@@ -1,18 +1,9 @@
-import * as grpc from "@grpc/grpc-js";
-import {
-  Injectable,
-  NotFoundException,
-  ServiceUnavailableException,
-  UnprocessableEntityException,
-} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import * as semver from "semver";
 import { Prisma, TemplateVersion } from "@/database/prisma-client";
 import type { TemplateVersionSnapshot } from "@/template/template.types";
 import { PrismaService } from "../database/prisma.service";
-import {
-  MakeVersionFileResult,
-  TemplateFileClient,
-} from "./template-file.client";
+import { TemplateFileClient } from "./template-file.client";
 
 @Injectable()
 export class TemplateVersionService {
@@ -73,7 +64,7 @@ export class TemplateVersionService {
       properties,
       sessions,
       sessionProperties,
-    } = await this.makeVersionFile(templateId, version);
+    } = await this.templateFileClient.makeVersionFile(templateId, version);
     const snapshot: TemplateVersionSnapshot = {
       widgets,
       layouts,
@@ -90,27 +81,5 @@ export class TemplateVersionService {
         snapshot: snapshot as unknown as Prisma.InputJsonValue,
       },
     });
-  }
-
-  private async makeVersionFile(
-    templateId: string,
-    version: string,
-  ): Promise<MakeVersionFileResult> {
-    try {
-      return await this.templateFileClient.makeVersionFile(
-        templateId,
-        version,
-      );
-    } catch (err) {
-      const error = err as grpc.ServiceError;
-
-      if (error.code === grpc.status.NOT_FOUND) {
-        throw new UnprocessableEntityException(error.message);
-      }
-
-      throw new ServiceUnavailableException(
-        `Could not reach yjs-server to publish template ${templateId}: ${error.message}`,
-      );
-    }
   }
 }

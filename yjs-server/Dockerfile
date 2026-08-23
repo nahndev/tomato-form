@@ -1,9 +1,13 @@
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json ./
 RUN npm install
-COPY tsconfig.json ./
-COPY server.ts ./
-COPY proto ./proto
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
 EXPOSE 3028
-CMD ["npx", "tsx", "server.ts"]
+CMD ["node", "dist/main"]
