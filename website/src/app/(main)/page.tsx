@@ -6,23 +6,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ClipboardList, Database, LayoutDashboard } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 const features = [
   {
-    icon: ClipboardList,
+    icon: TomatoIconKey.ClipboardList,
     title: "Form Builder",
     description:
       "Create multi-step forms with conditional logic, user assignments, and approval workflows for any business process.",
   },
   {
-    icon: Database,
+    icon: TomatoIconKey.Database,
     title: "Shared Data",
     description:
       "Manage centralized datasets — employees, departments, projects — reusable across all forms and workflows.",
   },
   {
-    icon: LayoutDashboard,
+    icon: TomatoIconKey.LayoutDashboard,
     title: "Management Boards",
     description:
       "Monitor all submissions through configurable boards with advanced search, filtering, and status tracking.",
@@ -60,12 +60,14 @@ export default function WelcomePage() {
         {/* Feature cards */}
         <div className="grid gap-6 sm:grid-cols-3">
           {features.map((feature) => {
-            const Icon = feature.icon;
             return (
               <Card key={feature.title}>
                 <CardHeader>
                   <div className="mb-2 flex size-10 items-center justify-center rounded-lg bg-primary/10">
-                    <Icon className="size-5 text-primary" />
+                    <TomatoIcon
+                      icon={feature.icon}
+                      className="size-5 text-primary"
+                    />
                   </div>
                   <CardTitle className="text-base">{feature.title}</CardTitle>
                   <CardDescription>{feature.description}</CardDescription>

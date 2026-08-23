@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { TOMATO_ICON_MAP, TomatoIcon, type TomatoIconKey } from "@tomato/icon";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 export interface IconPickerProps {
   value?: TomatoIconKey;
@@ -27,23 +27,23 @@ export function IconPicker({ value, onChange, className }: IconPickerProps) {
           className={cn("rounded-md", className)}
         >
           <TomatoIcon
-            icon={value ?? "clock"}
+            icon={value ?? TomatoIconKey.Clock}
             className={cn("size-3.5", !value && "text-muted-foreground")}
           />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-auto p-2">
         <div className="grid grid-cols-5 gap-1">
-          {Object.keys(TOMATO_ICON_MAP).map((key) => (
+          {Object.values(TomatoIconKey).map((key) => (
             <DropdownMenuItem
               key={key}
-              onClick={() => onChange(key as TomatoIconKey)}
+              onClick={() => onChange(key)}
               className={cn(
                 "flex size-8 items-center justify-center rounded-md p-0 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
                 value === key && "bg-primary/10 text-primary",
               )}
             >
-              <TomatoIcon icon={key as TomatoIconKey} className="size-4" />
+              <TomatoIcon icon={key} className="size-4" />
             </DropdownMenuItem>
           ))}
         </div>

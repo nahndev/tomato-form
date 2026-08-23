@@ -8,7 +8,7 @@ import { BackButton } from "@/components/ui/back-button";
 import TemplateConnection from "@/features/template/components/template/TemplateConnection";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { TemplateMode } from "@/types/template";
-import { Pencil } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
 
 export type TemplateHeaderProps = {};
@@ -30,7 +30,7 @@ const TemplateHeader: React.FC<TemplateHeaderProps> = () => {
         {mode === TemplateMode.VIEW ? (
           <Link href={`/templates/${id}?mode=edit`}>
             <Button size="sm">
-              <Pencil className="mr-1.5 size-4" />
+              <TomatoIcon icon={TomatoIconKey.Pencil} className="mr-1.5 size-4" />
               Edit
             </Button>
           </Link>

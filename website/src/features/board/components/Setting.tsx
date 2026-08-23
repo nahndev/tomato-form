@@ -1,9 +1,12 @@
-import { Settings } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 const Setting: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-16 text-center">
-      <Settings className="mb-4 size-10 text-muted-foreground/40" />
+      <TomatoIcon
+        icon={TomatoIconKey.Settings}
+        className="mb-4 size-10 text-muted-foreground/40"
+      />
       <h3 className="font-semibold text-muted-foreground">
         No settings yet
       </h3>

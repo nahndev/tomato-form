@@ -18,7 +18,7 @@ import {
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useCreateSubmission } from "@/features/board/hooks/useSubmissions";
 import type { TemplateVersion } from "@/types/template";
-import { Loader2, Plus } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 function findLatestVersion(versions: TemplateVersion[]): TemplateVersion | undefined {
   return versions.reduce<TemplateVersion | undefined>(
@@ -68,7 +68,7 @@ const MoreSubmissionButton: React.FC = () => {
           onClick={openDialog}
           disabled={board.templates.length === 0}
         >
-          <Plus className="mr-1.5 size-4" />
+          <TomatoIcon icon={TomatoIconKey.Plus} className="mr-1.5 size-4" />
           New Submission
         </Button>
       </DialogTrigger>
@@ -103,7 +103,11 @@ const MoreSubmissionButton: React.FC = () => {
             onClick={handleCreate}
             disabled={!pickedTemplateId || isPending}
           >
-            {isPending ? <Loader2 className="size-4 animate-spin" /> : "Create"}
+            {isPending ? (
+              <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
+            ) : (
+              "Create"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -2,7 +2,7 @@ import { useBoardContext } from "@/features/board/components/provider/BoardProvi
 import { useDeleteSubmission } from "@/features/board/hooks/useSubmissions";
 import { useTemplates } from "@/features/template";
 import { Submission } from "@/types/submission";
-import { Loader2, Trash2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
 
 export type SubmissionItemProps = {
@@ -48,9 +48,9 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
             aria-label="Delete submission"
           >
             {isPending ? (
-              <Loader2 className="size-4 animate-spin" />
+              <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
             ) : (
-              <Trash2 className="size-4" />
+              <TomatoIcon icon={TomatoIconKey.Trash} className="size-4" />
             )}
           </button>
         </div>

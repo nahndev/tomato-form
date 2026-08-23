@@ -4,6 +4,7 @@ import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry"
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { cn } from "@/lib/utils";
 import { Session, SessionProperties, Widget, WidgetProperties } from "@/types/template";
+import { TomatoIcon } from "@tomato/icon";
 import { useMemo } from "react";
 import * as R from "remeda";
 
@@ -92,7 +93,6 @@ interface WidgetRowProps {
 const WidgetRow: React.FC<WidgetRowProps> = ({ widget }) => {
   const { isSelected, select } = useWidgetSelection();
   const def = WIDGET_REGISTRY[widget.type];
-  const Icon = def.icon;
 
   return (
     <div
@@ -104,7 +104,10 @@ const WidgetRow: React.FC<WidgetRowProps> = ({ widget }) => {
       )}
       onClick={() => select(widget)}
     >
-      <Icon className="size-3.5 shrink-0 text-muted-foreground" />
+      <TomatoIcon
+        icon={def.icon}
+        className="size-3.5 shrink-0 text-muted-foreground"
+      />
       <span className="truncate">{widget.name || "(no label)"}</span>
     </div>
   );

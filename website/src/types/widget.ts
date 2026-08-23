@@ -3,7 +3,7 @@ import type {
   WidgetGroup,
   WidgetProperties,
 } from "@/types/template";
-import type { LucideIcon } from "lucide-react";
+import type { TomatoIconKey } from "@tomato/icon";
 import type { ComponentType } from "react";
 
 export enum WidgetType {
@@ -36,7 +36,7 @@ export interface FieldComponentProps<TValue = unknown> {
 export interface WidgetDefinition<TValue = unknown> {
   type: WidgetType;
   label: string;
-  icon: LucideIcon;
+  icon: TomatoIconKey;
   description: string;
   isDataField: boolean;
   group: WidgetGroup;

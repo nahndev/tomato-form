@@ -1,5 +1,5 @@
 import { useSubmissionConnection } from "@/features/submission/components/provider/SubmissionDocProvider";
-import { Wifi, WifiOff } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 const SubmissionConnection: React.FC = () => {
   const isConnected = useSubmissionConnection();
@@ -8,12 +8,12 @@ const SubmissionConnection: React.FC = () => {
       <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
         {isConnected ? (
           <span className="flex items-center gap-1 text-green-600">
-            <Wifi className="size-3" />
+            <TomatoIcon icon={TomatoIconKey.Wifi} className="size-3" />
             Live
           </span>
         ) : (
           <span className="flex items-center gap-1 text-muted-foreground/60">
-            <WifiOff className="size-3" />
+            <TomatoIcon icon={TomatoIconKey.WifiOff} className="size-3" />
             Offline
           </span>
         )}

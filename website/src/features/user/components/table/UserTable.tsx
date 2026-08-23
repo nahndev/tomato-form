@@ -1,4 +1,4 @@
-import { Loader2, Pencil, Trash2, UserRound } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,7 +53,7 @@ const UserTable: React.FC<UserTableProps> = ({
   if (isLoading && !hasAnyUsers) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <TomatoIcon icon={TomatoIconKey.Loader} className="size-6 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -61,7 +61,7 @@ const UserTable: React.FC<UserTableProps> = ({
   if (users.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-20 text-center">
-        <UserRound className="mb-4 size-12 text-muted-foreground/40" />
+        <TomatoIcon icon={TomatoIconKey.UserRound} className="mb-4 size-12 text-muted-foreground/40" />
         <h3 className="font-semibold text-muted-foreground">
           {hasAnyUsers ? "No users match your search" : "No users yet"}
         </h3>
@@ -110,7 +110,7 @@ const UserTable: React.FC<UserTableProps> = ({
                     aria-label="Edit user"
                     onClick={() => onEdit(u)}
                   >
-                    <Pencil />
+                    <TomatoIcon icon={TomatoIconKey.Pencil} />
                   </Button>
                   <Button
                     variant="ghost"
@@ -121,9 +121,9 @@ const UserTable: React.FC<UserTableProps> = ({
                     className="hover:text-destructive"
                   >
                     {deletingUuid === u.uuid ? (
-                      <Loader2 className="animate-spin" />
+                      <TomatoIcon icon={TomatoIconKey.Loader} className="animate-spin" />
                     ) : (
-                      <Trash2 />
+                      <TomatoIcon icon={TomatoIconKey.Trash} />
                     )}
                   </Button>
                 </div>

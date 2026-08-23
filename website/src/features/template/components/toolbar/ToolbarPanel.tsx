@@ -3,6 +3,7 @@ import {
   TOOLBAR_REGISTRY,
   ToolbarType,
 } from "@/features/template/components/toolbar/registry";
+import { TomatoIcon } from "@tomato/icon";
 import clsx from "clsx";
 import React, { useState } from "react";
 
@@ -57,7 +58,7 @@ const ToolbarMenuList: React.FC<ToolbarMenuListProps> = ({ type, setType }) => {
             )}
             onClick={() => setType(def.type)}
           >
-            <def.icon />
+            <TomatoIcon icon={def.icon} />
           </Button>
         ))}
       </div>

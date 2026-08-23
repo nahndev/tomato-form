@@ -10,7 +10,7 @@ import {
 import { TemplateVersionStateProvider } from "@/features/submission/components/provider/TemplateVersionStateProvider";
 import { useTemplateVersion } from "@/features/submission/hooks/useTemplateVersion";
 import { DragDropProvider } from "@dnd-kit/react";
-import { Loader2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { notFound } from "next/navigation";
 import { use } from "react";
 
@@ -31,7 +31,10 @@ export default function SubmissionPage({ params }: PageProps) {
   if (isLoading || (submission && isLoadingVersion)) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <TomatoIcon
+          icon={TomatoIconKey.Loader}
+          className="size-6 animate-spin text-muted-foreground"
+        />
       </div>
     );
   }

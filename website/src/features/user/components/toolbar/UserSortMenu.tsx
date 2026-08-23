@@ -1,4 +1,4 @@
-import { ListFilter } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -29,7 +29,7 @@ const UserSortMenu: React.FC<UserSortMenuProps> = ({ value, onChange }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          <ListFilter />
+          <TomatoIcon icon={TomatoIconKey.ListFilter} />
           Filter
         </Button>
       </DropdownMenuTrigger>

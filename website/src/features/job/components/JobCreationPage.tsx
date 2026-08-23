@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { toast } from "sonner";
 import JobForm, { JobFormValues } from "@/features/job/components/JobForm";
 import { createDefaultAction } from "@/features/job/components/actions/create-default-action";
@@ -39,7 +39,7 @@ const JobCreationPage: React.FC<JobCreationPageProps> = ({ boardId }) => {
         href={`/boards/${boardId}`}
         className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="size-4" />
+        <TomatoIcon icon={TomatoIconKey.ArrowLeft} className="size-4" />
         Board
       </Link>
 

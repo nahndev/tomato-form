@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Plus, LayoutGrid, Clock, Search, Trash2, Loader2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -110,7 +110,7 @@ export default function BoardsPage() {
         >
           <DialogTrigger asChild>
             <Button>
-              <Plus className="mr-2 size-4" />
+              <TomatoIcon icon={TomatoIconKey.Plus} className="mr-2 size-4" />
               New Board
             </Button>
           </DialogTrigger>
@@ -177,7 +177,10 @@ export default function BoardsPage() {
                 >
                   {formik.isSubmitting ? (
                     <>
-                      <Loader2 className="mr-2 size-4 animate-spin" />
+                      <TomatoIcon
+                        icon={TomatoIconKey.Loader}
+                        className="mr-2 size-4 animate-spin"
+                      />
                       Creating…
                     </>
                   ) : (
@@ -191,7 +194,10 @@ export default function BoardsPage() {
       </div>
 
       <div className="mb-6 relative max-w-sm">
-        <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <TomatoIcon
+          icon={TomatoIconKey.Search}
+          className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+        />
         <input
           type="text"
           placeholder="Search by name…"
@@ -203,7 +209,10 @@ export default function BoardsPage() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+          <TomatoIcon
+            icon={TomatoIconKey.Loader}
+            className="size-6 animate-spin text-muted-foreground"
+          />
         </div>
       ) : isError ? (
         <div className="flex flex-col items-center justify-center rounded-lg border border-destructive/30 bg-destructive/5 py-16 text-center">
@@ -214,7 +223,10 @@ export default function BoardsPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-20 text-center">
-          <LayoutGrid className="mb-4 size-12 text-muted-foreground/40" />
+          <TomatoIcon
+            icon={TomatoIconKey.LayoutGrid}
+            className="mb-4 size-12 text-muted-foreground/40"
+          />
           <h3 className="font-semibold text-muted-foreground">
             {boards.length === 0 ? "No boards yet" : "No boards match your search"}
           </h3>
@@ -225,7 +237,7 @@ export default function BoardsPage() {
           </p>
           {boards.length === 0 && (
             <Button size="sm" className="mt-4" onClick={() => setOpen(true)}>
-              <Plus className="mr-2 size-4" />
+              <TomatoIcon icon={TomatoIconKey.Plus} className="mr-2 size-4" />
               Create Board
             </Button>
           )}
@@ -237,7 +249,10 @@ export default function BoardsPage() {
               <Card className="group h-full transition-shadow hover:shadow-md">
                 <CardHeader>
                   <div className="mb-1 flex size-9 items-center justify-center rounded-lg bg-primary/10">
-                    <LayoutGrid className="size-4 text-primary" />
+                    <TomatoIcon
+                      icon={TomatoIconKey.LayoutGrid}
+                      className="size-4 text-primary"
+                    />
                   </div>
                   <div className="flex items-start justify-between gap-2">
                     <CardTitle className="text-base">{b.name}</CardTitle>
@@ -248,9 +263,12 @@ export default function BoardsPage() {
                       aria-label="Delete board"
                     >
                       {deletingId === b.id ? (
-                        <Loader2 className="size-4 animate-spin" />
+                        <TomatoIcon
+                          icon={TomatoIconKey.Loader}
+                          className="size-4 animate-spin"
+                        />
                       ) : (
-                        <Trash2 className="size-4" />
+                        <TomatoIcon icon={TomatoIconKey.Trash} className="size-4" />
                       )}
                     </button>
                   </div>
@@ -261,7 +279,7 @@ export default function BoardsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Clock className="size-3" />
+                    <TomatoIcon icon={TomatoIconKey.Clock} className="size-3" />
                     {b.createdAt
                       ? new Date(b.createdAt).toLocaleDateString()
                       : "—"}

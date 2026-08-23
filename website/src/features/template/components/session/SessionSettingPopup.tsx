@@ -20,7 +20,7 @@ import {
   type SessionCondition,
 } from "@/types/template";
 import { WidgetType } from "@/types/widget";
-import { Settings2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { useState } from "react";
 
 const CONDITION_LABELS: Record<SessionConditionType, string> = {
@@ -87,7 +87,7 @@ const SessionSettingPopup: React.FC = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" variant="ghost" size="icon" aria-label="Session settings">
-          <Settings2 className="size-4" />
+          <TomatoIcon icon={TomatoIconKey.Settings2} className="size-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>

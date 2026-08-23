@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -73,7 +73,7 @@ function PaginationPrevious({
       className={cn("pl-1.5!", className)}
       {...props}
     >
-      <ChevronLeft data-icon="inline-start" />
+      <TomatoIcon icon={TomatoIconKey.ChevronLeft} data-icon="inline-start" />
       <span className="hidden sm:block">{text}</span>
     </PaginationLink>
   );
@@ -92,7 +92,7 @@ function PaginationNext({
       {...props}
     >
       <span className="hidden sm:block">{text}</span>
-      <ChevronRight data-icon="inline-end" />
+      <TomatoIcon icon={TomatoIconKey.ChevronRight} data-icon="inline-end" />
     </PaginationLink>
   );
 }
@@ -111,7 +111,7 @@ function PaginationEllipsis({
       )}
       {...props}
     >
-      <MoreHorizontal />
+      <TomatoIcon icon={TomatoIconKey.MoreHorizontal} />
       <span className="sr-only">More pages</span>
     </span>
   );

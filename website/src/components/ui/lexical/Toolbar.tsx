@@ -13,25 +13,17 @@ import {
   FORMAT_TEXT_COMMAND,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
-import {
-  AlignCenterIcon,
-  AlignJustifyIcon,
-  AlignLeftIcon,
-  AlignRightIcon,
-  BoldIcon,
-  ItalicIcon,
-  UnderlineIcon,
-} from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { useEffect, useState } from "react";
 
 const ALIGN_OPTIONS: {
   format: ElementFormatType;
-  icon: typeof AlignLeftIcon;
+  icon: TomatoIconKey;
 }[] = [
-  { format: "left", icon: AlignLeftIcon },
-  { format: "center", icon: AlignCenterIcon },
-  { format: "right", icon: AlignRightIcon },
-  { format: "justify", icon: AlignJustifyIcon },
+  { format: "left", icon: TomatoIconKey.AlignLeft },
+  { format: "center", icon: TomatoIconKey.AlignCenter },
+  { format: "right", icon: TomatoIconKey.AlignRight },
+  { format: "justify", icon: TomatoIconKey.AlignJustify },
 ];
 
 /** Tracks active text formats at the current selection, to highlight toolbar buttons. */
@@ -90,7 +82,7 @@ export function Toolbar() {
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")}
       >
-        <BoldIcon className="size-4" />
+        <TomatoIcon icon={TomatoIconKey.Bold} className="size-4" />
       </Button>
       <Button
         type="button"
@@ -99,7 +91,7 @@ export function Toolbar() {
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")}
       >
-        <ItalicIcon className="size-4" />
+        <TomatoIcon icon={TomatoIconKey.Italic} className="size-4" />
       </Button>
       <Button
         type="button"
@@ -108,10 +100,10 @@ export function Toolbar() {
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")}
       >
-        <UnderlineIcon className="size-4" />
+        <TomatoIcon icon={TomatoIconKey.Underline} className="size-4" />
       </Button>
       <Separator orientation="vertical" className="mx-1 h-6" />
-      {ALIGN_OPTIONS.map(({ format, icon: Icon }) => (
+      {ALIGN_OPTIONS.map(({ format, icon }) => (
         <Button
           key={format}
           type="button"
@@ -120,7 +112,7 @@ export function Toolbar() {
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, format)}
         >
-          <Icon className="size-4" />
+          <TomatoIcon icon={icon} className="size-4" />
         </Button>
       ))}
     </div>

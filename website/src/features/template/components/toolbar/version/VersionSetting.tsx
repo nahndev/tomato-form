@@ -8,7 +8,7 @@ import {
 } from "@/features/template/components/provider/TemplateProvider";
 import { usePublishTemplateVersion } from "@/features/template/hooks/useTemplates";
 import type { TemplateVersion } from "@/types/template";
-import { Loader2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import * as semver from "semver";
 import { toast } from "sonner";
 
@@ -38,7 +38,7 @@ const VersionSetting: React.FC<VersionSettingProps> = () => {
     <div className="flex h-full flex-col gap-2 p-2">
       <Button onClick={handlePublish} disabled={isPending}>
         {isPending ? (
-          <Loader2 className="size-4 animate-spin" />
+          <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
         ) : (
           "Publish current version"
         )}

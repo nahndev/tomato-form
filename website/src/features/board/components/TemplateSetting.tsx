@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useTemplates } from "@/features/template";
 import { useUpdateBoard } from "@/features/board/hooks/useBoards";
-import { Loader2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 const TemplateSetting: React.FC = () => {
   const board = useBoardContext();
@@ -36,7 +36,10 @@ const TemplateSetting: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <TomatoIcon
+          icon={TomatoIconKey.Loader}
+          className="size-6 animate-spin text-muted-foreground"
+        />
       </div>
     );
   }
@@ -74,7 +77,11 @@ const TemplateSetting: React.FC = () => {
 
       <div className="flex justify-end">
         <Button onClick={handleSave} disabled={isPending}>
-          {isPending ? <Loader2 className="size-4 animate-spin" /> : "Save"}
+          {isPending ? (
+            <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
+          ) : (
+            "Save"
+          )}
         </Button>
       </div>
     </div>

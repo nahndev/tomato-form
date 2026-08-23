@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -59,7 +59,7 @@ const RecipientEditor: React.FC<RecipientEditorProps> = ({
       <div className="flex items-center justify-between">
         <Label>Recipients</Label>
         <Button type="button" variant="outline" size="sm" onClick={addRecipient}>
-          <Plus className="mr-1 size-3.5" />
+          <TomatoIcon icon={TomatoIconKey.Plus} className="mr-1 size-3.5" />
           Add Recipient
         </Button>
       </div>
@@ -123,7 +123,7 @@ const RecipientEditor: React.FC<RecipientEditorProps> = ({
             className="shrink-0 rounded p-1.5 text-muted-foreground hover:text-destructive disabled:opacity-40"
             aria-label="Remove recipient"
           >
-            <Trash2 className="size-3.5" />
+            <TomatoIcon icon={TomatoIconKey.Trash} className="size-3.5" />
           </button>
         </div>
       ))}

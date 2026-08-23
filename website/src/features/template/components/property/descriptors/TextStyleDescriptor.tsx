@@ -5,15 +5,7 @@ import { ColorPicker } from "@/components/ui/color-picker";
 import { Label } from "@/components/ui/label";
 import type { WidgetPropertyFieldProps } from "@/features/template/components/property/types";
 import { useToggleProperty } from "@/features/template/hooks/useConditionValue";
-import {
-  AlignCenterIcon,
-  AlignJustifyIcon,
-  AlignLeftIcon,
-  AlignRightIcon,
-  BoldIcon,
-  ItalicIcon,
-  UnderlineIcon,
-} from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { CSSProperties } from "react";
 
 export function useBold(
@@ -125,49 +117,49 @@ export function TextStyleDescriptor({
           variant={isBold ? "default" : "ghost"}
           onClick={toggleBold}
         >
-          <BoldIcon />
+          <TomatoIcon icon={TomatoIconKey.Bold} />
         </Button>
         <Button
           className="size-10"
           variant={isItalic ? "default" : "ghost"}
           onClick={toggleItalic}
         >
-          <ItalicIcon />
+          <TomatoIcon icon={TomatoIconKey.Italic} />
         </Button>
         <Button
           className="size-10"
           variant={isUnderline ? "default" : "ghost"}
           onClick={toggleUnderline}
         >
-          <UnderlineIcon />
+          <TomatoIcon icon={TomatoIconKey.Underline} />
         </Button>
         <Button
           className="size-10"
           variant={isAlignLeft ? "default" : "ghost"}
           onClick={toggleAlignLeft}
         >
-          <AlignLeftIcon />
+          <TomatoIcon icon={TomatoIconKey.AlignLeft} />
         </Button>
         <Button
           className="size-10"
           variant={isAlignCenter ? "default" : "ghost"}
           onClick={toggleAlignCenter}
         >
-          <AlignCenterIcon />
+          <TomatoIcon icon={TomatoIconKey.AlignCenter} />
         </Button>
         <Button
           className="size-10"
           variant={isAlignRight ? "default" : "ghost"}
           onClick={toggleAlignRight}
         >
-          <AlignRightIcon />
+          <TomatoIcon icon={TomatoIconKey.AlignRight} />
         </Button>
         <Button
           className="size-10"
           variant={isAlignJustify ? "default" : "ghost"}
           onClick={toggleAlignJustify}
         >
-          <AlignJustifyIcon />
+          <TomatoIcon icon={TomatoIconKey.AlignJustify} />
         </Button>
         <ColorPicker
           value={value?.color as string | undefined}

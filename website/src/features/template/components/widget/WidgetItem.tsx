@@ -8,8 +8,8 @@ import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry"
 import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
 import { useWidgetState } from "@/features/template/hooks/state/useWidgetState";
 import { TemplateMode, type Widget } from "@/types/template";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
-import { Trash2 } from "lucide-react";
 import { PropsWithChildren } from "react";
 
 interface WidgetItemProps {
@@ -68,7 +68,7 @@ function WidgetBox({
                 className="size-6 rounded-none"
                 onClick={() => removeWidget(widget.id)}
               >
-                <Trash2 />
+                <TomatoIcon icon={TomatoIconKey.Trash} />
               </Button>
             </div>
           </div>

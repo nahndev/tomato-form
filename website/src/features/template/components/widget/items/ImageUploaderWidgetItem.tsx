@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import type { FieldComponentProps } from "@/types/widget";
-import { X } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 export interface UploadedImage {
   name: string;
@@ -51,7 +51,7 @@ export function ImageUploaderWidgetItem({
             size="sm"
             onClick={() => onChange?.(undefined)}
           >
-            <X className="size-3.5" />
+            <TomatoIcon icon={TomatoIconKey.Close} className="size-3.5" />
             Remove
           </Button>
         </div>

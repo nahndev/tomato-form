@@ -1,4 +1,4 @@
-import { Plus, Search } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,10 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
 
       <div className="ml-auto flex flex-wrap items-center gap-2">
         <div className="relative w-56">
-          <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <TomatoIcon
+            icon={TomatoIconKey.Search}
+            className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+          />
           <Input
             placeholder="Search name…"
             value={search}
@@ -42,7 +45,7 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
         <UserSortMenu value={sort} onChange={onSortChange} />
 
         <Button onClick={onCreateClick}>
-          <Plus />
+          <TomatoIcon icon={TomatoIconKey.Plus} />
           Create
         </Button>
       </div>

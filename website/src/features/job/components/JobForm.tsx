@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { getIn, useFormik } from "formik";
 import * as Yup from "yup";
 import { cn } from "@/lib/utils";
@@ -171,7 +171,7 @@ const JobForm: React.FC<JobFormProps> = ({
         <div className="flex items-center justify-between">
           <Label>Steps</Label>
           <Button type="button" variant="outline" size="sm" onClick={addStep}>
-            <Plus className="mr-1 size-3.5" />
+            <TomatoIcon icon={TomatoIconKey.Plus} className="mr-1 size-3.5" />
             Add Step
           </Button>
         </div>
@@ -209,7 +209,7 @@ const JobForm: React.FC<JobFormProps> = ({
                 aria-label="Remove step"
                 className="rounded p-1 hover:text-destructive disabled:pointer-events-none disabled:opacity-40"
               >
-                <Trash2 className="size-3.5" />
+                <TomatoIcon icon={TomatoIconKey.Trash} className="size-3.5" />
               </button>
             </div>
           ))}
@@ -260,7 +260,10 @@ const JobForm: React.FC<JobFormProps> = ({
         <Button type="submit" disabled={!formik.isValid || formik.isSubmitting}>
           {formik.isSubmitting ? (
             <>
-              <Loader2 className="mr-2 size-4 animate-spin" />
+              <TomatoIcon
+                icon={TomatoIconKey.Loader}
+                className="mr-2 size-4 animate-spin"
+              />
               {submittingLabel}
             </>
           ) : (

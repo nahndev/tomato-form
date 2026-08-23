@@ -1,24 +1,6 @@
 import { WidgetGroup } from "@/types/template";
 import { WidgetType } from "@/types/widget";
-import {
-  AlignLeft,
-  Calendar,
-  CalendarClock,
-  CheckSquare,
-  CircleDot,
-  Clock,
-  FileText,
-  Hash,
-  Image as ImageIcon,
-  List,
-  Minus,
-  MousePointerClick,
-  Paperclip,
-  PenTool,
-  Timer,
-  Type,
-  Users as UsersIcon,
-} from "lucide-react";
+import { TomatoIconKey } from "@tomato/icon";
 import type {
   WidgetDefinition,
   WidgetRegistry,
@@ -48,7 +30,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.TEXT]: {
     type: WidgetType.TEXT,
     label: "Text",
-    icon: Type,
+    icon: TomatoIconKey.Type,
     description: "Single-line text",
     isDataField: true,
     group: WidgetGroup.COMMON,
@@ -59,7 +41,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.TEXT_AREA]: {
     type: WidgetType.TEXT_AREA,
     label: "Text Area",
-    icon: AlignLeft,
+    icon: TomatoIconKey.AlignLeft,
     description: "Multi-line text with auto-growing rows",
     isDataField: true,
     group: WidgetGroup.COMMON,
@@ -70,7 +52,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.NUMBER]: {
     type: WidgetType.NUMBER,
     label: "Number",
-    icon: Hash,
+    icon: TomatoIconKey.Hash,
     description: "Numeric input",
     isDataField: true,
     group: WidgetGroup.COMMON,
@@ -81,7 +63,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.DATE]: {
     type: WidgetType.DATE,
     label: "Date",
-    icon: Calendar,
+    icon: TomatoIconKey.Calendar,
     description: "Date only",
     isDataField: true,
     group: WidgetGroup.COMMON,
@@ -92,7 +74,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.DATETIME]: {
     type: WidgetType.DATETIME,
     label: "Date & Time",
-    icon: CalendarClock,
+    icon: TomatoIconKey.CalendarClock,
     description: "Date and time (stored as epoch ms)",
     isDataField: true,
     group: WidgetGroup.COMMON,
@@ -103,7 +85,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.TIME]: {
     type: WidgetType.TIME,
     label: "Time",
-    icon: Timer,
+    icon: TomatoIconKey.Timer,
     description: "Time only",
     isDataField: true,
     group: WidgetGroup.COMMON,
@@ -114,7 +96,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.SELECT]: {
     type: WidgetType.SELECT,
     label: "Select",
-    icon: List,
+    icon: TomatoIconKey.List,
     description: "Dropdown select",
     isDataField: true,
     group: WidgetGroup.COMMON,
@@ -125,7 +107,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.CHECKBOX]: {
     type: WidgetType.CHECKBOX,
     label: "Checkbox",
-    icon: CheckSquare,
+    icon: TomatoIconKey.CheckSquare,
     description: "A list of checkboxes (multi-select)",
     isDataField: true,
     group: WidgetGroup.COMMON,
@@ -136,7 +118,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.RADIO]: {
     type: WidgetType.RADIO,
     label: "Radio",
-    icon: CircleDot,
+    icon: TomatoIconKey.CircleDot,
     description: "A list of radio buttons (single-select)",
     isDataField: true,
     group: WidgetGroup.COMMON,
@@ -147,7 +129,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.LABEL]: {
     type: WidgetType.LABEL,
     label: "Label",
-    icon: FileText,
+    icon: TomatoIconKey.Document,
     description: "Readonly display content",
     isDataField: false,
     group: WidgetGroup.COMMON,
@@ -158,7 +140,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.SIGNATURE]: {
     type: WidgetType.SIGNATURE,
     label: "Signature",
-    icon: PenTool,
+    icon: TomatoIconKey.PenTool,
     description: "Lets the person sign with their pointer",
     isDataField: true,
     group: WidgetGroup.ADVANCE,
@@ -169,7 +151,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.BUTTON]: {
     type: WidgetType.BUTTON,
     label: "Button",
-    icon: MousePointerClick,
+    icon: TomatoIconKey.MousePointerClick,
     description: "A clickable button, optionally linking to a URL",
     isDataField: false,
     group: WidgetGroup.ADVANCE,
@@ -180,7 +162,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.IMAGE_UPLOADER]: {
     type: WidgetType.IMAGE_UPLOADER,
     label: "Image Upload",
-    icon: ImageIcon,
+    icon: TomatoIconKey.Image,
     description: "Upload and preview an image",
     isDataField: true,
     group: WidgetGroup.MEDIA,
@@ -191,7 +173,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.FILE_UPLOADER]: {
     type: WidgetType.FILE_UPLOADER,
     label: "File Upload",
-    icon: Paperclip,
+    icon: TomatoIconKey.Paperclip,
     description: "Upload files and show them as a list",
     isDataField: true,
     group: WidgetGroup.MEDIA,
@@ -202,7 +184,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.BREAK]: {
     type: WidgetType.BREAK,
     label: "Break",
-    icon: Minus,
+    icon: TomatoIconKey.Minus,
     description: "A full-width divider line",
     isDataField: false,
     group: WidgetGroup.ADVANCE,
@@ -213,7 +195,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.SESSION]: {
     type: WidgetType.SESSION,
     label: "Session",
-    icon: Clock,
+    icon: TomatoIconKey.Clock,
     description: "Full-width, fixed block",
     isDataField: false,
     group: WidgetGroup.ADVANCE,
@@ -224,7 +206,7 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
   [WidgetType.USERS]: {
     type: WidgetType.USERS,
     label: "Users",
-    icon: UsersIcon,
+    icon: TomatoIconKey.Users,
     description: "Select a user from the workspace",
     isDataField: true,
     group: WidgetGroup.SYSTEM,

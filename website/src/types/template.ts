@@ -2,6 +2,7 @@ import type { SerializedEditorState } from "lexical";
 import { CSSProperties } from "react";
 import type { ButtonAction } from "@/types/button-action";
 import type { WidgetType } from "@/types/widget";
+import type { TomatoIconKey } from "@tomato/icon";
 
 /**
  * Category a widget type is filed under in the "ADD WIDGET" picker.
@@ -101,8 +102,7 @@ export interface Session {
 
 export interface SessionProperties {
   name: string;
-  /** `TomatoIconKey` from `@tomato/icon`. */
-  icon?: string;
+  icon?: TomatoIconKey;
   description?: SerializedEditorState;
   /** Unset = always shown (see `SessionConditionType.ALWAYS`). */
   condition?: SessionCondition;

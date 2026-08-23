@@ -1,4 +1,4 @@
-export { type TomatoIconKey } from "./icons";
+export { TomatoIconKey } from "./icons";
 export {
   TomatoIcon,
   type TomatoIconProps as TomatoIconProps,

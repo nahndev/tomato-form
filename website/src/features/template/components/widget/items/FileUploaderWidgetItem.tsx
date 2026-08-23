@@ -2,7 +2,7 @@
 
 import { formatBytes } from "@/lib/format";
 import type { FieldComponentProps } from "@/types/widget";
-import { X } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 export interface UploadedFileMeta {
   name: string;
@@ -62,7 +62,7 @@ export function FileUploaderWidgetItem({
                 onClick={() => handleRemove(index)}
                 className="text-muted-foreground hover:text-foreground"
               >
-                <X className="size-3.5" />
+                <TomatoIcon icon={TomatoIconKey.Close} className="size-3.5" />
               </button>
             </li>
           ))}

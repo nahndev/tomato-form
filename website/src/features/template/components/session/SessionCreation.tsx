@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
-import { Plus } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { v4 } from "uuid";
 
 export type SessionCreationProps = {};
@@ -16,7 +16,7 @@ const SessionCreation: React.FC<SessionCreationProps> = () => {
         className="w-full justify-start"
         onClick={() => addSession(v4(), { name: "New session" })}
       >
-        <Plus className="mr-1.5 size-4" />
+        <TomatoIcon icon={TomatoIconKey.Plus} className="mr-1.5 size-4" />
         Add Session
       </Button>
     </div>

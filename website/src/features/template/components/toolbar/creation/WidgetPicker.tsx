@@ -8,6 +8,7 @@ import { useTemplateState } from "@/features/template/hooks/state/useTemplateSta
 import { cn } from "@/lib/utils";
 import { WidgetGroup } from "@/types/template";
 import { WidgetDefinition } from "@/types/widget";
+import { TomatoIcon } from "@tomato/icon";
 import { useDragDropMonitor, useDraggable } from "@dnd-kit/react";
 import React, { useMemo, useState } from "react";
 import { v4 } from "uuid";
@@ -94,7 +95,7 @@ const WidgetCreationButton: React.FC<WidgetCreationButtonProps> = ({ def }) => {
       )}
     >
       <div className="flex size-7 shrink-0 items-center justify-center rounded bg-primary/10">
-        <def.icon className="size-3.5 text-primary" />
+        <TomatoIcon icon={def.icon} className="size-3.5 text-primary" />
       </div>
       <div>
         <p className="font-medium leading-none">{def.label}</p>

@@ -6,7 +6,7 @@ import { TemplateProvider } from "@/features/template/components/provider/Templa
 import TemplateHeader from "@/features/template/components/template/TemplateHeader";
 import { TemplateMode } from "@/types/template";
 import { DragDropProvider } from "@dnd-kit/react";
-import { Loader2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { notFound } from "next/navigation";
 import { use } from "react";
 
@@ -25,7 +25,10 @@ export default function TemplatePage({ params, searchParams }: PageProps) {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <TomatoIcon
+          icon={TomatoIconKey.Loader}
+          className="size-6 animate-spin text-muted-foreground"
+        />
       </div>
     );
   }

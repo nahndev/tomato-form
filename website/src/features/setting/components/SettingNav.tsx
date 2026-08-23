@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { SearchIcon } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { useState } from "react";
 import { SETTING_TABS } from "../constants";
 
@@ -17,7 +17,10 @@ export function SettingNav() {
   return (
     <div className="flex w-1/4 shrink-0 flex-col gap-3">
       <div className="relative">
-        <SearchIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+        <TomatoIcon
+          icon={TomatoIconKey.Search}
+          className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground"
+        />
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -27,7 +30,7 @@ export function SettingNav() {
       </div>
       <ScrollArea className="flex-1">
         <TabsList className="h-auto w-full flex-col items-stretch gap-1 border-b-0">
-          {filteredTabs.map(({ value, label, icon: Icon }) => (
+          {filteredTabs.map(({ value, label, icon }) => (
             <TabsTrigger
               key={value}
               value={value}
@@ -37,7 +40,7 @@ export function SettingNav() {
                 "hover:bg-muted hover:text-foreground",
               )}
             >
-              <Icon className="size-4" />
+              <TomatoIcon icon={icon} className="size-4" />
               {label}
             </TabsTrigger>
           ))}

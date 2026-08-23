@@ -1,11 +1,4 @@
-import {
-  Info,
-  LanguagesIcon,
-  LucideIcon,
-  ShieldCheck,
-  SlidersHorizontal,
-  UserRound,
-} from "lucide-react";
+import { TomatoIconKey } from "@tomato/icon";
 import AccountSetting from "./components/content/AccountSetting";
 import GeneralSetting from "./components/content/GeneralSetting";
 import InformationSetting from "./components/content/InformationSetting";
@@ -14,7 +7,7 @@ import SecuritySetting from "./components/content/SecuritySetting";
 export interface SettingTab {
   value: string;
   label: string;
-  icon: LucideIcon;
+  icon: TomatoIconKey;
   content: React.ComponentType;
 }
 
@@ -22,31 +15,31 @@ export const SETTING_TABS: SettingTab[] = [
   {
     value: "general",
     label: "General",
-    icon: SlidersHorizontal,
+    icon: TomatoIconKey.SlidersHorizontal,
     content: GeneralSetting,
   },
   {
     value: "account",
     label: "Account",
-    icon: UserRound,
+    icon: TomatoIconKey.UserRound,
     content: AccountSetting,
   },
   {
     value: "security",
     label: "Security",
-    icon: ShieldCheck,
+    icon: TomatoIconKey.ShieldCheck,
     content: SecuritySetting,
   },
   {
     value: "language",
     label: "Language",
-    icon: LanguagesIcon,
+    icon: TomatoIconKey.Languages,
     content: InformationSetting,
   },
   {
     value: "information",
     label: "Information",
-    icon: Info,
+    icon: TomatoIconKey.Info,
     content: InformationSetting,
   },
 ];

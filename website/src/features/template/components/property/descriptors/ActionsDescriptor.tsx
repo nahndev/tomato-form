@@ -13,7 +13,7 @@ import {
   type ButtonAction,
   type Recipient,
 } from "@/types/button-action";
-import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { useEffect } from "react";
 
 const ACTION_LABELS: Record<ButtonActionType, string> = {
@@ -98,7 +98,7 @@ export function ActionsDescriptor({
                 disabled={index === 0}
                 onClick={() => move(index, -1)}
               >
-                <ChevronUp className="size-4" />
+                <TomatoIcon icon={TomatoIconKey.ChevronUp} className="size-4" />
               </Button>
               <Button
                 type="button"
@@ -107,7 +107,7 @@ export function ActionsDescriptor({
                 disabled={index === actions.length - 1}
                 onClick={() => move(index, 1)}
               >
-                <ChevronDown className="size-4" />
+                <TomatoIcon icon={TomatoIconKey.ChevronDown} className="size-4" />
               </Button>
               <Button
                 type="button"
@@ -115,7 +115,7 @@ export function ActionsDescriptor({
                 className="size-8 shrink-0"
                 onClick={() => remove(index)}
               >
-                <Trash2 className="size-4" />
+                <TomatoIcon icon={TomatoIconKey.Trash} className="size-4" />
               </Button>
             </div>
             <ActionFields action={action} onChange={(next) => update(index, next)} />
@@ -123,7 +123,7 @@ export function ActionsDescriptor({
         ))}
       </div>
       <Button type="button" variant="outline" size="sm" onClick={add}>
-        <Plus className="mr-1.5 size-4" />
+        <TomatoIcon icon={TomatoIconKey.Plus} className="mr-1.5 size-4" />
         Add action
       </Button>
     </div>
@@ -271,12 +271,12 @@ function RecipientsEditor({
             className="size-8 shrink-0"
             onClick={() => remove(index)}
           >
-            <Trash2 className="size-4" />
+            <TomatoIcon icon={TomatoIconKey.Trash} className="size-4" />
           </Button>
         </div>
       ))}
       <Button type="button" variant="outline" size="sm" onClick={add}>
-        <Plus className="mr-1.5 size-4" />
+        <TomatoIcon icon={TomatoIconKey.Plus} className="mr-1.5 size-4" />
         Add recipient
       </Button>
     </div>

@@ -22,7 +22,7 @@ import {
   SendMailAction,
   SubmissionCreationAction,
 } from "@/types/job";
-import { ArrowLeft, Loader2, Pencil, Trash2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -144,7 +144,10 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
   if (isLoading) {
     return (
       <div className="flex min-h-60 items-center justify-center">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <TomatoIcon
+          icon={TomatoIconKey.Loader}
+          className="size-6 animate-spin text-muted-foreground"
+        />
       </div>
     );
   }
@@ -181,7 +184,7 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
     <div className="container mx-auto px-6 py-10">
       <div className="flex flex-row items-center gap-2">
         <Link href={`/boards/${boardId}`}>
-          <ArrowLeft className="size-4" />
+          <TomatoIcon icon={TomatoIconKey.ArrowLeft} className="size-4" />
         </Link>
         <h1 className="text-xl font-bold">{job.name}</h1>
         <div className="flex-1" />
@@ -195,7 +198,7 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
               <>
                 <Button variant="outline" size="sm" asChild>
                   <Link href={`/jobs/${jobId}?boardId=${boardId}&mode=edit`}>
-                    <Pencil className="size-3.5" />
+                    <TomatoIcon icon={TomatoIconKey.Pencil} className="size-3.5" />
                     Edit
                   </Link>
                 </Button>
@@ -206,9 +209,12 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
                   disabled={isDeleting}
                 >
                   {isDeleting ? (
-                    <Loader2 className="size-3.5 animate-spin" />
+                    <TomatoIcon
+                      icon={TomatoIconKey.Loader}
+                      className="size-3.5 animate-spin"
+                    />
                   ) : (
-                    <Trash2 className="size-3.5" />
+                    <TomatoIcon icon={TomatoIconKey.Trash} className="size-3.5" />
                   )}
                   Delete
                 </Button>
@@ -253,7 +259,10 @@ const JobDetailPage: React.FC<JobDetailPageProps> = ({
           <div className="py-4">
             {isLoadingExecutions ? (
               <div className="flex items-center justify-center py-10">
-                <Loader2 className="size-5 animate-spin text-muted-foreground" />
+                <TomatoIcon
+                  icon={TomatoIconKey.Loader}
+                  className="size-5 animate-spin text-muted-foreground"
+                />
               </div>
             ) : executions.length === 0 ? (
               <p className="text-sm text-muted-foreground">

@@ -2,7 +2,7 @@
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { FileText, Home, LayoutGrid, LucideIcon, Users } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SettingPopup } from "./SettingPopup";
@@ -10,13 +10,13 @@ import { SettingPopup } from "./SettingPopup";
 interface NavItem {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: TomatoIconKey;
 }
 const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/templates", label: "Templates", icon: FileText },
-  { href: "/boards", label: "Boards", icon: LayoutGrid },
-  { href: "/users", label: "Users", icon: Users },
+  { href: "/", label: "Home", icon: TomatoIconKey.Home },
+  { href: "/templates", label: "Templates", icon: TomatoIconKey.Document },
+  { href: "/boards", label: "Boards", icon: TomatoIconKey.LayoutGrid },
+  { href: "/users", label: "Users", icon: TomatoIconKey.Users },
 ];
 
 export function AppSidebar() {
@@ -47,7 +47,6 @@ const NavItem: React.FC<NavItemProps> = ({ item }) => {
   const pathname = usePathname();
   const isActive =
     item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-  const Icon = item.icon;
   return (
     <Link
       key={item.href}
@@ -59,7 +58,7 @@ const NavItem: React.FC<NavItemProps> = ({ item }) => {
           : "text-muted-foreground hover:bg-muted hover:text-foreground",
       )}
     >
-      <Icon className="size-4" />
+      <TomatoIcon icon={item.icon} className="size-4" />
       {item.label}
     </Link>
   );

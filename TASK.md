@@ -15,17 +15,15 @@
 
 -> Why: The system current using `lexical`, but it don't save on backend is good and decouple with library.
 
-<!--
-## Tasks 02 - Migration [yjs-server] to Nestjs
+## Tasks 03 - Migration `lexical-react` to `@tomato/icon` [x]
 
-- Convert `yjs-server` using `Nestjs` with `createMicroservice`
-- `hocuspocus/server` as gateway
+- [x] Found all `lexical-react` in [website]
+- [x] Revert to using `@tomato/icon`
 
-## Tasks 03 - Convert `gRpc` to `RabbitMQ`
+-> Already done: all persisted icon-key usages (icon-picker, SessionHeader, SubmissionSessionHeader, template.ts types) were migrated to `@tomato/icon` as part of the Task 02 package extraction. Remaining `lucide-react` imports elsewhere are decorative, static icons unrelated to the persisted-icon-key concept `@tomato/icon` decouples.
 
-- For `server` convert `makeVersionFile` to using `RabbitMQ`
-- For `yjs-server` convert `makeVersionFile` to using `RabbitMQ`
+## Tasks 04 - Migration [yjs-sever] to `NestJs` and migration `gRpc` to `RabbitMQ`
 
-## Tasks 04 - Shared code
-
-- -->
+- [ ] Convert [yjs-server] to `NestJs`
+- [ ] Migration communicate with [server] by `RabbitMQ` instead of `gRpc`
+- [ ] Cleanup source code related.

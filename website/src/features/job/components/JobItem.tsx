@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useDeleteJob } from "@/features/job/hooks/useJobs";
 import { Job } from "@/types/job";
-import { Loader2, Pencil, Trash2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -61,7 +61,7 @@ const JobItem: React.FC<JobItemProps> = ({ job }) => {
           className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
           aria-label="Edit job"
         >
-          <Pencil className="size-4" />
+          <TomatoIcon icon={TomatoIconKey.Pencil} className="size-4" />
         </button>
         <button
           onClick={(e) => {
@@ -73,9 +73,9 @@ const JobItem: React.FC<JobItemProps> = ({ job }) => {
           aria-label="Delete job"
         >
           {isPending ? (
-            <Loader2 className="size-4 animate-spin" />
+            <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
           ) : (
-            <Trash2 className="size-4" />
+            <TomatoIcon icon={TomatoIconKey.Trash} className="size-4" />
           )}
         </button>
       </div>

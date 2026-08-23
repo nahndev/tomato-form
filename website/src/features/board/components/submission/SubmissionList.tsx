@@ -7,7 +7,7 @@ import {
   useSubmissions,
 } from "@/features/board/hooks/useSubmissions";
 import { useTemplates } from "@/features/template";
-import { FileText, Loader2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -40,7 +40,10 @@ const SubmissionList: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <TomatoIcon
+          icon={TomatoIconKey.Loader}
+          className="size-6 animate-spin text-muted-foreground"
+        />
       </div>
     );
   }
@@ -48,7 +51,10 @@ const SubmissionList: React.FC = () => {
   if (submissions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-16 text-center">
-        <FileText className="mb-4 size-10 text-muted-foreground/40" />
+        <TomatoIcon
+          icon={TomatoIconKey.Document}
+          className="mb-4 size-10 text-muted-foreground/40"
+        />
         <h3 className="font-semibold text-muted-foreground">
           No submissions yet
         </h3>

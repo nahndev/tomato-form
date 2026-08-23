@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Loader2 } from "lucide-react";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -121,7 +121,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({
             <Button type="submit" disabled={!formik.isValid || formik.isSubmitting}>
               {formik.isSubmitting ? (
                 <>
-                  <Loader2 className="animate-spin" />
+                  <TomatoIcon icon={TomatoIconKey.Loader} className="animate-spin" />
                   Saving…
                 </>
               ) : editing ? (

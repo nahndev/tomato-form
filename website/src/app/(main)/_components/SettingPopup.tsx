@@ -3,8 +3,8 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { SETTING_HASH, SettingContent } from "@/features/setting";
 import { useHashMatch } from "@/hooks/useHashEqual";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
-import { Settings2Icon } from "lucide-react";
 
 export function SettingPopup() {
   const [isMatch, toggle] = useHashMatch(SETTING_HASH);
@@ -18,7 +18,7 @@ export function SettingPopup() {
         )}
         onClick={toggle}
       >
-        <Settings2Icon className="size-4" />
+        <TomatoIcon icon={TomatoIconKey.Settings2} className="size-4" />
         Setting
       </div>
       <Dialog open={isMatch} onOpenChange={toggle}>
