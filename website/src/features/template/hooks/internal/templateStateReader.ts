@@ -1,3 +1,5 @@
+import { LayoutIdx } from "@/components/ui/grid";
+import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import type {
   GridLayout,
   Session,
@@ -5,6 +7,7 @@ import type {
   Widget,
   WidgetProperties,
 } from "@/types/template";
+import { WidgetType } from "@/types/widget";
 import * as Y from "yjs";
 
 export interface TemplateState {
@@ -54,3 +57,42 @@ export function getOrCreateDefaultSessionId(doc: Y.Doc): string {
 // Generic fallback for a missing layout entry - intentionally NOT full
 // width (GRID_COLUMNS) since most widgets are half-width by default.
 export const DEFAULT_LAYOUT: GridLayout = { column: 0, span: 2, idx: "a" };
+
+// Fixed ids so concurrent clients that both find a brand-new template
+// converge on the same default system widgets instead of creating
+// duplicates (mirrors DEFAULT_SESSION_ID above).
+const DEFAULT_SYSTEM_WIDGET_TYPES: WidgetType[] = [
+  WidgetType.CREATED_AT,
+  WidgetType.TEMPLATE,
+  WidgetType.SUBMITTED_BY,
+];
+
+/**
+ * Seeds the read-only system widgets (Created At, Template, By) into a
+ * brand-new template's doc, so board columns have sensible defaults out of
+ * the box. No-ops once the doc already has any widgets, so it never touches
+ * a template a user has started building or intentionally emptied out.
+ */
+export function getOrCreateDefaultSystemWidgets(doc: Y.Doc): void {
+  const yWidgets = doc.getMap<Widget>("widgets");
+  if (yWidgets.size > 0) return;
+
+  const layouts = doc.getMap<GridLayout>("layouts");
+  const properties = doc.getMap<WidgetProperties>("properties");
+  const widgetToSession = doc.getMap<string>("widgetToSession");
+
+  doc.transact(() => {
+    const sessionId = getOrCreateDefaultSessionId(doc);
+    for (const type of DEFAULT_SYSTEM_WIDGET_TYPES) {
+      const def = WIDGET_REGISTRY[type];
+      const id = `system-${type}`;
+      yWidgets.set(id, { id, type });
+      layouts.set(id, {
+        ...def.defaultLayout,
+        idx: LayoutIdx.getInsertIdx(Object.fromEntries(layouts.entries()), null),
+      });
+      properties.set(id, def.defaultSettings);
+      widgetToSession.set(id, sessionId);
+    }
+  });
+}

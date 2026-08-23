@@ -21,6 +21,7 @@ import { RadioWidgetItem } from "./items/RadioWidgetItem";
 import { SelectWidgetItem } from "./items/SelectWidgetItem";
 import { SessionWidgetItem } from "./items/SessionWidgetItem";
 import { SignatureWidgetItem } from "./items/SignatureWidgetItem";
+import { SystemFieldWidgetItem } from "./items/SystemFieldWidgetItem";
 import { TextAreaWidgetItem } from "./items/TextAreaWidgetItem";
 import { TextWidgetItem } from "./items/TextWidgetItem";
 import { TimeWidgetItem } from "./items/TimeWidgetItem";
@@ -213,6 +214,39 @@ export const WIDGET_REGISTRY: WidgetRegistry = {
     component: UsersWidgetItem as WidgetDefinition["component"],
     defaultSettings: DEFAULT_SETTINGS[WidgetType.USERS],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.USERS],
+  },
+  [WidgetType.CREATED_AT]: {
+    type: WidgetType.CREATED_AT,
+    label: "Created At",
+    icon: TomatoIconKey.History,
+    description: "When the submission was created",
+    isDataField: false,
+    group: WidgetGroup.SYSTEM,
+    component: SystemFieldWidgetItem as WidgetDefinition["component"],
+    defaultSettings: DEFAULT_SETTINGS[WidgetType.CREATED_AT],
+    defaultLayout: DEFAULT_LAYOUTS[WidgetType.CREATED_AT],
+  },
+  [WidgetType.TEMPLATE]: {
+    type: WidgetType.TEMPLATE,
+    label: "Template",
+    icon: TomatoIconKey.ClipboardList,
+    description: "The template the submission was filled from",
+    isDataField: false,
+    group: WidgetGroup.SYSTEM,
+    component: SystemFieldWidgetItem as WidgetDefinition["component"],
+    defaultSettings: DEFAULT_SETTINGS[WidgetType.TEMPLATE],
+    defaultLayout: DEFAULT_LAYOUTS[WidgetType.TEMPLATE],
+  },
+  [WidgetType.SUBMITTED_BY]: {
+    type: WidgetType.SUBMITTED_BY,
+    label: "By",
+    icon: TomatoIconKey.UserRound,
+    description: "Who submitted the entry",
+    isDataField: false,
+    group: WidgetGroup.SYSTEM,
+    component: SystemFieldWidgetItem as WidgetDefinition["component"],
+    defaultSettings: DEFAULT_SETTINGS[WidgetType.SUBMITTED_BY],
+    defaultLayout: DEFAULT_LAYOUTS[WidgetType.SUBMITTED_BY],
   },
 };
 

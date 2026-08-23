@@ -40,4 +40,7 @@ export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   [WidgetType.BREAK]: { label: "Break", compact: true },
   [WidgetType.SESSION]: { label: "Session" },
   [WidgetType.USERS]: { label: "User field" },
+  [WidgetType.CREATED_AT]: { label: "Created At" },
+  [WidgetType.TEMPLATE]: { label: "Template" },
+  [WidgetType.SUBMITTED_BY]: { label: "By" },
 };

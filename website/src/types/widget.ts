@@ -24,6 +24,9 @@ export enum WidgetType {
   BREAK = "break",
   SESSION = "session",
   USERS = "users",
+  CREATED_AT = "created-at",
+  TEMPLATE = "template",
+  SUBMITTED_BY = "submitted-by",
 }
 
 export interface FieldComponentProps<TValue = unknown> {

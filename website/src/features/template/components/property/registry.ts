@@ -87,4 +87,7 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   [WidgetType.BREAK]: [],
   [WidgetType.SESSION]: [LABEL],
   [WidgetType.USERS]: [LABEL, REQUIRED],
+  [WidgetType.CREATED_AT]: [LABEL],
+  [WidgetType.TEMPLATE]: [LABEL],
+  [WidgetType.SUBMITTED_BY]: [LABEL],
 };

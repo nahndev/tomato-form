@@ -1,5 +1,6 @@
 "use client";
 
+import { getOrCreateDefaultSystemWidgets } from "@/features/template/hooks/internal/templateStateReader";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { createContext, useContext, useEffect, useState } from "react";
 import * as Y from "yjs";
@@ -39,6 +40,10 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
 
     provider.on("status", ({ status }: { status: string }) => {
       setIsConnected(status === "connected");
+    });
+
+    provider.on("synced", () => {
+      getOrCreateDefaultSystemWidgets(nextDoc);
     });
 
     setDoc(nextDoc);

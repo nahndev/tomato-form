@@ -21,5 +21,6 @@ Scope: `./website/src/features/workspace`
   - ...
 - [ ] Add library allow get value of widget, every display-type will has a getter. accept `widget` and `json` -> return same type
 - [ ] Every `column` in board, all `widget` my same type.
-- [ ] When create template, add default `widget` is `Created At`, `Template`, `By`,.... (add new types and registry)
-- [ ] In the
+- [x] When create template, add default `widget` is `Created At`, `Template`, `By`,.... (add new types and registry)
+- [ ] In the `BoardPage`, add tabs allow update `columns`
+- [ ] In `WorkspaceBoardContent`, every submission include first column is name, the left is list of columns
