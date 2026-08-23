@@ -72,6 +72,10 @@ const DEFAULT_SYSTEM_WIDGET_TYPES: WidgetType[] = [
  * brand-new template's doc, so board columns have sensible defaults out of
  * the box. No-ops once the doc already has any widgets, so it never touches
  * a template a user has started building or intentionally emptied out.
+ *
+ * Deliberately left out of `widgetToSession` - these are board-only
+ * metadata columns, not part of the fill-form session flow, so they must
+ * not show up inside any session's grid.
  */
 export function getOrCreateDefaultSystemWidgets(doc: Y.Doc): void {
   const yWidgets = doc.getMap<Widget>("widgets");
@@ -79,10 +83,8 @@ export function getOrCreateDefaultSystemWidgets(doc: Y.Doc): void {
 
   const layouts = doc.getMap<GridLayout>("layouts");
   const properties = doc.getMap<WidgetProperties>("properties");
-  const widgetToSession = doc.getMap<string>("widgetToSession");
 
   doc.transact(() => {
-    const sessionId = getOrCreateDefaultSessionId(doc);
     for (const type of DEFAULT_SYSTEM_WIDGET_TYPES) {
       const def = WIDGET_REGISTRY[type];
       const id = `system-${type}`;
@@ -92,7 +94,6 @@ export function getOrCreateDefaultSystemWidgets(doc: Y.Doc): void {
         idx: LayoutIdx.getInsertIdx(Object.fromEntries(layouts.entries()), null),
       });
       properties.set(id, def.defaultSettings);
-      widgetToSession.set(id, sessionId);
     }
   });
 }
