@@ -1,18 +1,36 @@
-import { Controller } from "@nestjs/common";
-import { MessagePattern, Payload } from "@nestjs/microservices";
+import { SERVER_CLIENT } from "@/rabbitmq/rabbitmq.constants";
 import { TemplateFileService } from "@/template-file/template-file.service";
 import {
-  MAKE_VERSION_FILE_PATTERN,
-  MakeVersionFileMessage,
-  MakeVersionFileReply,
+  MAKE_VERSION_FILE_EVENT,
+  MakeVersionFileEvent,
+  VERSION_FILE_MADE_EVENT,
 } from "@/template-file/template-file.contract";
+import { Controller, Inject, Logger } from "@nestjs/common";
+import { ClientProxy, EventPattern, Payload } from "@nestjs/microservices";
 
 @Controller()
 export class TemplateFileController {
-  constructor(private readonly templateFileService: TemplateFileService) {}
+  private readonly logger = new Logger(TemplateFileController.name);
 
-  @MessagePattern(MAKE_VERSION_FILE_PATTERN)
-  makeVersionFile(@Payload() message: MakeVersionFileMessage): MakeVersionFileReply {
-    return this.templateFileService.makeVersionFile(message.templateId, message.version);
+  constructor(
+    private readonly templateFileService: TemplateFileService,
+    @Inject(SERVER_CLIENT) private readonly serverClient: ClientProxy,
+  ) {}
+
+  @EventPattern(MAKE_VERSION_FILE_EVENT)
+  makeVersionFile(@Payload() message: MakeVersionFileEvent): void {
+    const result = this.templateFileService.makeVersionFile(
+      message.templateId,
+      message.version,
+    );
+
+    if (!result.ok) {
+      this.logger.warn(
+        `Could not make version file for template ${message.templateId}: ${result.message}`,
+      );
+      return;
+    }
+
+    this.serverClient.emit(VERSION_FILE_MADE_EVENT, result.event);
   }
 }

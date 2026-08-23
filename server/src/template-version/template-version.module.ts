@@ -2,11 +2,12 @@ import { RabbitmqModule } from "@/rabbitmq/rabbitmq.module";
 import { Module } from "@nestjs/common";
 import { TemplateFileClient } from "./template-file.client";
 import { TemplateVersionController } from "./template-version.controller";
+import { TemplateVersionEventsController } from "./template-version-events.controller";
 import { TemplateVersionService } from "./template-version.service";
 
 @Module({
   imports: [RabbitmqModule],
-  controllers: [TemplateVersionController],
+  controllers: [TemplateVersionController, TemplateVersionEventsController],
   providers: [TemplateVersionService, TemplateFileClient],
   exports: [TemplateVersionService],
 })

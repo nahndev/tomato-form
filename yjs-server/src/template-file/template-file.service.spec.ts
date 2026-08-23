@@ -21,14 +21,13 @@ describe("TemplateFileService", () => {
     fs.rmSync(dataDir, { recursive: true, force: true });
   });
 
-  it("returns NOT_FOUND when there is no live draft", () => {
+  it("returns a not-ok result when there is no live draft", () => {
     const service = getService(dataDir);
 
     const result = service.makeVersionFile("template-1", "1.0.0");
 
     expect(result).toEqual({
       ok: false,
-      code: "NOT_FOUND",
       message: "No draft to publish",
     });
   });
@@ -49,9 +48,9 @@ describe("TemplateFileService", () => {
 
     expect(result.ok).toBe(true);
     if (!result.ok) throw new Error("expected ok result");
-    expect(result.path).toBe("template/template-1/1.0.0.yjs");
-    expect(result.widgets).toEqual({ w1: { label: "Text" } });
-    expect(result.sessions).toEqual({ s1: { id: "s1" } });
+    expect(result.event.path).toBe("template/template-1/1.0.0.yjs");
+    expect(result.event.widgets).toEqual({ w1: { label: "Text" } });
+    expect(result.event.sessions).toEqual({ s1: { id: "s1" } });
     expect(fs.existsSync(path.join(draftDir, "1.0.0.yjs"))).toBe(true);
   });
 });

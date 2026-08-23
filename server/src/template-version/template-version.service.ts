@@ -1,12 +1,15 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import * as semver from "semver";
 import { Prisma, TemplateVersion } from "@/database/prisma-client";
 import type { TemplateVersionSnapshot } from "@/template/template.types";
 import { PrismaService } from "../database/prisma.service";
 import { TemplateFileClient } from "./template-file.client";
+import { VersionFileMadeEvent } from "./template-file.contract";
 
 @Injectable()
 export class TemplateVersionService {
+  private readonly logger = new Logger(TemplateVersionService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly templateFileClient: TemplateFileClient,
@@ -38,7 +41,12 @@ export class TemplateVersionService {
     return latest;
   }
 
-  async publish(templateId: string): Promise<TemplateVersion> {
+  /**
+   * Fire-and-forget: asks yjs-server to make the version file. The
+   * `TemplateVersion` row is created later, when yjs-server's reply event
+   * lands (see `createFromVersionFileEvent`) - callers don't get it back here.
+   */
+  async publish(templateId: string): Promise<void> {
     const template = await this.prisma.template.findUnique({
       where: { id: templateId },
       select: { id: true },
@@ -57,14 +65,22 @@ export class TemplateVersionService {
     );
     const version = latest ? (semver.inc(latest, "patch") ?? "1.0.0") : "1.0.0";
 
+    this.templateFileClient.makeVersionFile(templateId, version);
+  }
+
+  /** Handles yjs-server's `VERSION_FILE_MADE_EVENT`, creating the `TemplateVersion` row it describes. */
+  async createFromVersionFileEvent(event: VersionFileMadeEvent): Promise<void> {
     const {
+      templateId,
+      version,
       widgets,
       layouts,
       widgetToSession,
       properties,
       sessions,
       sessionProperties,
-    } = await this.templateFileClient.makeVersionFile(templateId, version);
+    } = event;
+
     const snapshot: TemplateVersionSnapshot = {
       widgets,
       layouts,
@@ -72,14 +88,20 @@ export class TemplateVersionService {
       properties,
       sessions,
       sessionProperties,
-    };
+    } as unknown as TemplateVersionSnapshot;
 
-    return this.prisma.templateVersion.create({
-      data: {
-        templateId,
-        version,
-        snapshot: snapshot as unknown as Prisma.InputJsonValue,
-      },
-    });
+    try {
+      await this.prisma.templateVersion.create({
+        data: {
+          templateId,
+          version,
+          snapshot: snapshot as unknown as Prisma.InputJsonValue,
+        },
+      });
+    } catch (err) {
+      this.logger.error(
+        `Failed to create TemplateVersion ${templateId}@${version} from yjs-server event: ${(err as Error).message}`,
+      );
+    }
   }
 }

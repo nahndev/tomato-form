@@ -2,6 +2,7 @@ import { GlobalExceptionFilter } from "@/common/filters/http-exception.filter";
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
+import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { ResponseInterceptor } from "./common/interceptors/response.interceptor";
@@ -10,6 +11,16 @@ import { EnvironmentVariables } from "./config/env.schema";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService<EnvironmentVariables, true>);
+
+  const rabbitMqUrl: string = config.get("RABBITMQ_URL", { infer: true });
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.RMQ,
+    options: {
+      urls: [rabbitMqUrl],
+      queue: "server_queue",
+      queueOptions: { durable: true },
+    },
+  });
 
   app.enableShutdownHooks();
   app.setGlobalPrefix("api");
@@ -39,10 +50,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup("api/docs", app, document);
 
+  await app.startAllMicroservices();
+
   const port = config.get("PORT", { infer: true });
   await app.listen(port);
   console.log(`Server running on port ${port}`);
   console.log(`Swagger docs at http://localhost:${port}/api/docs`);
+  console.log("Listening on RabbitMQ queue server_queue");
 }
 
 bootstrap();

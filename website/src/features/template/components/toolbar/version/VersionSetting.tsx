@@ -26,8 +26,8 @@ const VersionSetting: React.FC<VersionSettingProps> = () => {
 
   async function handlePublish() {
     try {
-      const version = await publishVersion();
-      toast.success(`Published version ${version.version}`);
+      await publishVersion();
+      toast.success("Publish requested — the new version will appear here shortly");
     } catch (err) {
       console.error("Failed to publish template version:", err);
       toast.error("Failed to publish version");

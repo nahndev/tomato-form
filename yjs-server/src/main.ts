@@ -21,7 +21,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: [rabbitMqUrl],
-      queue: "tomato_form_queue",
+      queue: "yjs_server_queue",
       queueOptions: { durable: true },
     },
   });

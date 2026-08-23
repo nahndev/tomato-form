@@ -1,7 +1,6 @@
 import type {
   CreateTemplateInput,
   Template,
-  TemplateVersion,
   UpdateTemplateInput,
 } from "@/types/template";
 import axios from "axios";
@@ -45,9 +44,8 @@ export const templateApi = {
     return api.delete(`/templates/${id}`).then(() => undefined);
   },
 
-  publishVersion(id: string): Promise<TemplateVersion> {
-    return api
-      .post<ApiResponse<TemplateVersion>>(`/templates/${id}/versions`)
-      .then((r) => r.data.data);
+  /** Fire-and-forget: requests a publish. The new version is created asynchronously, not returned here. */
+  publishVersion(id: string): Promise<void> {
+    return api.post(`/templates/${id}/versions`).then(() => undefined);
   },
 };

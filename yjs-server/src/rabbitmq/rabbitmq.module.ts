@@ -2,14 +2,14 @@ import { EnvironmentVariables } from "@/config/env.schema";
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ClientsModule, RmqOptions, Transport } from "@nestjs/microservices";
-import { RABBITMQ_CLIENT } from "./rabbitmq.constants";
+import { SERVER_CLIENT } from "./rabbitmq.constants";
 
-/** Client for emitting events onto `yjs_server_queue`, the queue yjs-server's microservice listener consumes. */
+/** Client for emitting events onto `server_queue`, the queue `server`'s microservice listener consumes. */
 @Module({
   imports: [
     ClientsModule.registerAsync([
       {
-        name: RABBITMQ_CLIENT,
+        name: SERVER_CLIENT,
         useFactory: (
           configService: ConfigService<EnvironmentVariables, true>,
         ): RmqOptions => {
@@ -21,7 +21,7 @@ import { RABBITMQ_CLIENT } from "./rabbitmq.constants";
             transport: Transport.RMQ,
             options: {
               urls: [url],
-              queue: "yjs_server_queue",
+              queue: "server_queue",
               queueOptions: { durable: true },
             },
           };

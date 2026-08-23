@@ -74,15 +74,16 @@ export class TemplateController {
   }
 
   @Post(":id/versions")
+  @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({
-    summary: "Publish the current draft as a new template version",
+    summary:
+      "Request that the current draft be published as a new template version. " +
+      "Fire-and-forget: the version is created asynchronously once yjs-server confirms it, and isn't returned here.",
   })
   @ApiParam({ name: "id", type: String })
-  @ApiResponse({ status: 201, description: "Template version published" })
+  @ApiResponse({ status: 202, description: "Publish requested" })
   @ApiResponse({ status: 404, description: "Template not found" })
-  @ApiResponse({ status: 422, description: "No draft to publish" })
-  @ApiResponse({ status: 503, description: "yjs-server unavailable" })
-  publishVersion(@Param("id") id: string) {
-    return this.templateVersionService.publish(id);
+  async publishVersion(@Param("id") id: string): Promise<void> {
+    await this.templateVersionService.publish(id);
   }
 }
