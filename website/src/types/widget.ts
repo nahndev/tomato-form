@@ -1,5 +1,6 @@
 import type {
   GridLayout,
+  Widget,
   WidgetGroup,
   WidgetProperties,
 } from "@/types/template";
@@ -30,8 +31,7 @@ export enum WidgetType {
 }
 
 export interface FieldComponentProps<TValue = unknown> {
-  widgetId: string;
-  properties: WidgetProperties;
+  widget: Widget;
   value?: TValue;
   onChange?: (value: TValue) => void;
 }

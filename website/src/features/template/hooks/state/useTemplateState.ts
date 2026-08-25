@@ -7,7 +7,7 @@ import { createContext, useContext } from "react";
  * Holds the current `TemplateState`, however it's sourced - a live yjs doc
  * (`TemplateLiveStateProvider`, template builder/edit) or a static published
  * snapshot (`TemplateVersionStateProvider`, submission fill-out). Every
- * doc-independent consumer (`useSessionState`, `useWidgetState`, `SessionCanvas`,
+ * doc-independent consumer (`useSessionState`, `SessionCanvas`,
  * `WidgetItem`, ...) only ever reads through `useTemplateState()`.
  */
 export const TemplateStateContext = createContext<TemplateState | null>(null);

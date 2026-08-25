@@ -70,24 +70,14 @@ export class TemplateVersionService {
 
   /** Handles yjs-server's `VERSION_FILE_MADE_EVENT`, creating the `TemplateVersion` row it describes. */
   async createFromVersionFileEvent(event: VersionFileMadeEvent): Promise<void> {
-    const {
-      templateId,
-      version,
-      widgets,
-      layouts,
-      widgetToSession,
-      properties,
-      sessions,
-      sessionProperties,
-    } = event;
+    const { templateId, version, widgets, layouts, widgetToSession, sessions } =
+      event;
 
     const snapshot: TemplateVersionSnapshot = {
       widgets,
       layouts,
       widgetToSession,
-      properties,
       sessions,
-      sessionProperties,
     } as unknown as TemplateVersionSnapshot;
 
     try {

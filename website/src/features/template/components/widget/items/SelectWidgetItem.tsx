@@ -4,16 +4,15 @@ import { Select } from "@/components/ui/select";
 import type { FieldComponentProps } from "@/types/widget";
 
 export function SelectWidgetItem({
-  widgetId,
-  properties,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<string>) {
-  const options = properties.options ?? [];
+  const options = widget.options ?? [];
 
   return (
     <Select
-      id={widgetId}
+      id={widget.id}
       value={value ?? ""}
       onChange={(e) => onChange?.(e.target.value)}
     >

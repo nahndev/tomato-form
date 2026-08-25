@@ -6,7 +6,6 @@ import { useWidgetSelection } from "@/features/template/components/provider/Temp
 import { WidgetProvider } from "@/features/template/components/widget/WidgetProvider";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
-import { useWidgetState } from "@/features/template/hooks/state/useWidgetState";
 import { TemplateMode, type Widget } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
@@ -31,7 +30,6 @@ function WidgetBox({
   children,
 }: PropsWithChildren<{ widget: Widget }>) {
   const mode = useTemplateMode();
-  const { properties } = useWidgetState();
   const { removeWidget } = useWidgetActions();
   const { isSelected, toggle } = useWidgetSelection();
   const isShowSelectedBorder = mode === TemplateMode.EDIT && isSelected(widget);
@@ -59,7 +57,7 @@ function WidgetBox({
           >
             <div className="bg-orange-500 p-1">
               <p className="truncate text-xs text-white">
-                {properties?.label || "(no label)"}
+                {widget.label || "(no label)"}
               </p>
             </div>
             <div className="flex-1" />
@@ -79,13 +77,7 @@ function WidgetBox({
 }
 
 function WidgetPreview({ widget }: { widget: Widget }) {
-  const { properties } = useWidgetState();
   const def = WIDGET_REGISTRY[widget.type];
   const WidgetItemComponent = def.component;
-  return (
-    <WidgetItemComponent
-      widgetId={widget.id}
-      properties={properties ?? def.defaultSettings}
-    />
-  );
+  return <WidgetItemComponent widget={widget} />;
 }

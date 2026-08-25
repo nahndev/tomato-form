@@ -15,7 +15,7 @@ export interface UploadedFileMeta {
 // content is persisted - for demo purposes only. A future task must add a
 // real upload endpoint.
 export function FileUploaderWidgetItem({
-  widgetId,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<UploadedFileMeta[]>) {
@@ -41,7 +41,7 @@ export function FileUploaderWidgetItem({
   return (
     <div className="mt-2 flex flex-col gap-2">
       <input
-        id={widgetId}
+        id={widget.id}
         type="file"
         multiple
         onChange={(e) => handleSelect(e.target.files)}

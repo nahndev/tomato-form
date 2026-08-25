@@ -38,7 +38,7 @@ export enum ColorEnum {
   WHITE = "#ffffff",
 }
 
-export interface Widget {
+export interface Widget extends WidgetProperties {
   id: string;
   type: WidgetType;
 }
@@ -96,10 +96,6 @@ export type SessionCondition =
   | ButtonClickedCondition
   | WidgetHasValueCondition;
 
-export interface Session {
-  id: string;
-}
-
 export interface SessionProperties {
   name: string;
   icon?: TomatoIconKey;
@@ -108,17 +104,19 @@ export interface SessionProperties {
   condition?: SessionCondition;
 }
 
+export interface Session extends SessionProperties {
+  id: string;
+}
+
 /**
  * Frozen copy of the yjs doc at publish time, as one schemaless blob so new
  * record kinds don't need a migration.
  */
 export interface TemplateVersionSnapshot {
   widgets: Record<string, Widget>;
-  properties: Record<string, WidgetProperties>;
   layouts: Record<string, GridLayout>;
   widgetToSession: Record<string, string>;
   sessions: Record<string, Session>;
-  sessionProperties: Record<string, SessionProperties>;
 }
 
 export interface TemplateVersion {

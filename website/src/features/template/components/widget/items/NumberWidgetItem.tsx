@@ -4,16 +4,15 @@ import { Input } from "@/components/ui/input";
 import type { FieldComponentProps } from "@/types/widget";
 
 export function NumberWidgetItem({
-  widgetId,
-  properties,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<number>) {
-  const placeholder = properties.placeholder ?? "0";
+  const placeholder = widget.placeholder ?? "0";
 
   return (
     <Input
-      id={widgetId}
+      id={widget.id}
       type="number"
       value={value ?? ""}
       placeholder={placeholder}

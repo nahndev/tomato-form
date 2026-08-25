@@ -16,7 +16,7 @@ export interface UploadedImage {
 // for demo purposes only - a future task must add a real upload endpoint
 // and switch this to upload-then-store-URL instead.
 export function ImageUploaderWidgetItem({
-  widgetId,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<UploadedImage | undefined>) {
@@ -61,7 +61,7 @@ export function ImageUploaderWidgetItem({
 
   return (
     <input
-      id={widgetId}
+      id={widget.id}
       type="file"
       accept="image/*"
       onChange={(e) => handleSelect(e.target.files?.[0])}

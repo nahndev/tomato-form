@@ -26,9 +26,7 @@ export const TemplateVersionStateProvider: React.FC<TemplateVersionStateProvider
     () => ({
       name: templateVersion.template?.name ?? "",
       widgets: templateVersion.snapshot.widgets,
-      properties: templateVersion.snapshot.properties,
       sessions: templateVersion.snapshot.sessions,
-      sessionProperties: templateVersion.snapshot.sessionProperties,
       layouts: templateVersion.snapshot.layouts,
       widgetToSession: templateVersion.snapshot.widgetToSession,
     }),

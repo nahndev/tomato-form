@@ -41,9 +41,7 @@ export class TemplateFileService {
         widgets: Object.fromEntries(doc.getMap("widgets").entries()),
         layouts: Object.fromEntries(doc.getMap("layouts").entries()),
         widgetToSession: Object.fromEntries(doc.getMap("widgetToSession").entries()),
-        properties: Object.fromEntries(doc.getMap("properties").entries()),
         sessions: Object.fromEntries(doc.getMap("sessions").entries()),
-        sessionProperties: Object.fromEntries(doc.getMap("sessionProperties").entries()),
       },
     };
   }

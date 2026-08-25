@@ -8,12 +8,11 @@ const FIELD_CLASS =
   "flex w-full resize-none overflow-hidden rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
 
 export function TextAreaWidgetItem({
-  widgetId,
-  properties,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<string>) {
-  const placeholder = properties.placeholder ?? "Enter text…";
+  const placeholder = widget.placeholder ?? "Enter text…";
   const ref = useRef<HTMLTextAreaElement>(null);
 
   function autoGrow(el: HTMLTextAreaElement) {
@@ -23,7 +22,7 @@ export function TextAreaWidgetItem({
 
   return (
     <textarea
-      id={widgetId}
+      id={widget.id}
       ref={ref}
       rows={3}
       value={value ?? ""}

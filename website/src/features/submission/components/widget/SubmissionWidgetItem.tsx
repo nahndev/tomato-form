@@ -5,7 +5,6 @@ import { useSubmissionActions } from "@/features/submission/hooks/actions/useSub
 import { useSubmissionValues } from "@/features/submission/hooks/state/useSubmissionValues";
 import { WidgetProvider } from "@/features/template/components/widget/WidgetProvider";
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
-import { useWidgetState } from "@/features/template/hooks/state/useWidgetState";
 import type { Widget } from "@/types/template";
 
 interface SubmissionWidgetItemProps {
@@ -21,7 +20,6 @@ export function SubmissionWidgetItem({ widget }: SubmissionWidgetItemProps) {
 }
 
 function SubmissionWidgetField({ widget }: { widget: Widget }) {
-  const { properties } = useWidgetState();
   const values = useSubmissionValues();
   const { setValue } = useSubmissionActions();
   const def = WIDGET_REGISTRY[widget.type];
@@ -31,13 +29,12 @@ function SubmissionWidgetField({ widget }: { widget: Widget }) {
     <div className="p-2 flex flex-col gap-1.5">
       {def.isDataField && (
         <Label htmlFor={widget.id}>
-          {properties?.label || "(no label)"}
-          {properties?.required ? " *" : ""}
+          {widget.label || "(no label)"}
+          {widget.required ? " *" : ""}
         </Label>
       )}
       <Field
-        widgetId={widget.id}
-        properties={properties ?? def.defaultSettings}
+        widget={widget}
         value={values[widget.id]}
         onChange={(value) => setValue(widget.id, value)}
       />

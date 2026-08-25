@@ -5,13 +5,13 @@ import type { FieldComponentProps } from "@/types/widget";
 
 /** Value is an "HH:mm" time-only string. */
 export function TimeWidgetItem({
-  widgetId,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<string>) {
   return (
     <Input
-      id={widgetId}
+      id={widget.id}
       type="time"
       value={value ?? ""}
       onChange={(e) => onChange?.(e.target.value)}

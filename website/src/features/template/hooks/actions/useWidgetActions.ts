@@ -46,9 +46,8 @@ export function useWidgetActions(): WidgetActions {
 
       doc.transact(() => {
         const sessionId = beforeSessionId ?? getOrCreateDefaultSessionId(doc);
-        doc.getMap<Widget>("widgets").set(id, { id, type });
+        doc.getMap<Widget>("widgets").set(id, { id, type, ...def.defaultSettings });
         layouts.set(id, layout);
-        doc.getMap<WidgetProperties>("properties").set(id, def.defaultSettings);
         doc.getMap<string>("widgetToSession").set(id, sessionId);
       });
     },
@@ -59,7 +58,6 @@ export function useWidgetActions(): WidgetActions {
     (widgetId: string) => {
       doc.transact(() => {
         doc.getMap("widgets").delete(widgetId);
-        doc.getMap("properties").delete(widgetId);
         doc.getMap("layouts").delete(widgetId);
         doc.getMap("widgetToSession").delete(widgetId);
       });
@@ -73,9 +71,10 @@ export function useWidgetActions(): WidgetActions {
       key: K,
       value: WidgetProperties[K],
     ) => {
-      const yProps = doc.getMap<WidgetProperties>("properties");
-      const current = yProps.get(widgetId) ?? { label: "" };
-      yProps.set(widgetId, { ...current, [key]: value });
+      const yWidgets = doc.getMap<Widget>("widgets");
+      const current = yWidgets.get(widgetId);
+      if (!current) return;
+      yWidgets.set(widgetId, { ...current, [key]: value });
     },
     [doc],
   );

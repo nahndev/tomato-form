@@ -1,10 +1,5 @@
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
-import type {
-  Session,
-  SessionProperties,
-  Widget,
-  WidgetProperties,
-} from "@/types/template";
+import type { Session, Widget } from "@/types/template";
 import { WidgetType } from "@/types/widget";
 import * as Y from "yjs";
 
@@ -17,10 +12,10 @@ export function getOrCreateDefaultSessionId(doc: Y.Doc): string {
   const ySessions = doc.getMap<Session>("sessions");
   const existing = ySessions.values().next().value as Session | undefined;
   if (existing) return existing.id;
-  ySessions.set(DEFAULT_SESSION_ID, { id: DEFAULT_SESSION_ID });
-  doc
-    .getMap<SessionProperties>("sessionProperties")
-    .set(DEFAULT_SESSION_ID, { name: DEFAULT_SESSION_NAME });
+  ySessions.set(DEFAULT_SESSION_ID, {
+    id: DEFAULT_SESSION_ID,
+    name: DEFAULT_SESSION_NAME,
+  });
   return DEFAULT_SESSION_ID;
 }
 
@@ -61,15 +56,13 @@ export function initTemplateDoc(doc: Y.Doc): void {
   if (isTemplateReady(doc)) return;
 
   const yWidgets = doc.getMap<Widget>("widgets");
-  const properties = doc.getMap<WidgetProperties>("properties");
   const meta = doc.getMap<number>("meta");
 
   doc.transact(() => {
     for (const type of DEFAULT_SYSTEM_WIDGET_TYPES) {
       const def = WIDGET_REGISTRY[type];
       const id = `system-${type}`;
-      yWidgets.set(id, { id, type });
-      properties.set(id, def.defaultSettings);
+      yWidgets.set(id, { id, type, ...def.defaultSettings });
     }
     meta.set(READY_KEY, Date.now());
   });

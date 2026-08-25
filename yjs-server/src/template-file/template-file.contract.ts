@@ -24,7 +24,5 @@ export interface VersionFileMadeEvent {
   widgets: Record<string, unknown>;
   layouts: Record<string, unknown>;
   widgetToSession: Record<string, unknown>;
-  properties: Record<string, unknown>;
   sessions: Record<string, unknown>;
-  sessionProperties: Record<string, unknown>;
 }

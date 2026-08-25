@@ -3,49 +3,37 @@ import { useWidgetSelection } from "@/features/template/components/provider/Temp
 import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { cn } from "@/lib/utils";
-import { Session, SessionProperties, Widget, WidgetProperties } from "@/types/template";
+import { Session, Widget } from "@/types/template";
 import { TomatoIcon } from "@tomato/icon";
 import { useMemo } from "react";
 import * as R from "remeda";
 
 export type StructureToolbarBoxProps = {};
 
-interface WidgetThumbnail {
-  id: Widget["id"];
-  name: WidgetProperties["label"];
-  type: Widget["type"];
-}
 interface SessionThumbnail {
-  id: Session["id"];
-  name: SessionProperties["name"];
-  widgets: WidgetThumbnail[];
+  session: Session;
+  widgets: Widget[];
 }
 
 const StructureToolbarBox: React.FC<StructureToolbarBoxProps> = () => {
-  const { sessions, sessionProperties, widgets, properties, widgetToSession, layouts } =
-    useTemplateState();
+  const { sessions, widgets, widgetToSession, layouts } = useTemplateState();
 
   const tree = useMemo<SessionThumbnail[]>(
     () =>
       R.pipe(
         R.values(sessions),
         R.map((session) => ({
-          id: session.id,
-          name: sessionProperties[session.id]?.name ?? "",
+          session,
           widgets: R.pipe(
             widgetToSession,
             R.entries(),
             R.filter(([_, value]) => value === session.id),
             R.sortBy(([key, _]) => layouts[key].idx),
-            R.map(([key, _]) => ({
-              id: key,
-              name: properties[key]?.label,
-              type: widgets[key].type,
-            })),
+            R.map(([key, _]) => widgets[key]),
           ),
         })),
       ),
-    [sessions, sessionProperties, widgets, properties, widgetToSession],
+    [sessions, widgets, widgetToSession, layouts],
   );
 
   return (
@@ -56,8 +44,8 @@ const StructureToolbarBox: React.FC<StructureToolbarBoxProps> = () => {
         </p>
       ) : (
         <div className="flex flex-col gap-4">
-          {tree.map((session) => (
-            <SessionGroup key={session.id} session={session} />
+          {tree.map((entry) => (
+            <SessionGroup key={entry.session.id} entry={entry} />
           ))}
         </div>
       )}
@@ -66,19 +54,19 @@ const StructureToolbarBox: React.FC<StructureToolbarBoxProps> = () => {
 };
 
 interface SessionGroupProps {
-  session: SessionThumbnail;
+  entry: SessionThumbnail;
 }
-const SessionGroup: React.FC<SessionGroupProps> = ({ session }) => {
+const SessionGroup: React.FC<SessionGroupProps> = ({ entry }) => {
   return (
     <div className="flex flex-col gap-1">
-      <p className="truncate text-sm font-medium">{session.name}</p>
-      {session.widgets.length === 0 ? (
+      <p className="truncate text-sm font-medium">{entry.session.name}</p>
+      {entry.widgets.length === 0 ? (
         <p className="px-3 py-1 text-xs text-muted-foreground">
           No fields in this section
         </p>
       ) : (
         <div className="flex flex-col gap-1">
-          {session.widgets.map((widget) => (
+          {entry.widgets.map((widget) => (
             <WidgetRow key={widget.id} widget={widget} />
           ))}
         </div>
@@ -88,7 +76,7 @@ const SessionGroup: React.FC<SessionGroupProps> = ({ session }) => {
 };
 
 interface WidgetRowProps {
-  widget: WidgetThumbnail;
+  widget: Widget;
 }
 const WidgetRow: React.FC<WidgetRowProps> = ({ widget }) => {
   const { isSelected, select } = useWidgetSelection();
@@ -108,7 +96,7 @@ const WidgetRow: React.FC<WidgetRowProps> = ({ widget }) => {
         icon={def.icon}
         className="size-3.5 shrink-0 text-muted-foreground"
       />
-      <span className="truncate">{widget.name || "(no label)"}</span>
+      <span className="truncate">{widget.label || "(no label)"}</span>
     </div>
   );
 };

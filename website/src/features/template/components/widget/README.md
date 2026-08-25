@@ -15,7 +15,9 @@ Setting-related components (the fields shown in the properties panel) are
 `toolbar/property/registry.ts` (`WIDGET_PROPERTY_REGISTRY`), keyed by the
 same `WidgetType`. Each entry is a list of `WidgetPropertyDescriptor`s, one per
 key of `WidgetProperties` the type exposes for editing (e.g. `label`,
-`placeholder`, `options`) - see `toolbar/property/types.ts`.
+`placeholder`, `options`) - see `toolbar/property/types.ts`. `WidgetProperties`
+fields live directly on the `Widget` entity itself (`Widget extends
+WidgetProperties`) - there's no separate properties record to keep in sync.
 
 ## Folder layout
 
@@ -38,8 +40,7 @@ A single named-export component implementing:
 
 ```ts
 interface FieldComponentProps<TValue = unknown> {
-  widgetId: string;
-  properties: WidgetProperties;
+  widget: Widget; // merged entity - id, type, and all WidgetProperties fields
   mode: "fill" | "preview";
   value?: TValue;
   onChange?: (value: TValue) => void;

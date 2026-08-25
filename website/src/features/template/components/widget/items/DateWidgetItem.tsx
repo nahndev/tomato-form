@@ -5,13 +5,13 @@ import type { FieldComponentProps } from "@/types/widget";
 
 /** Value is a "YYYY-MM-DD" date-only string. */
 export function DateWidgetItem({
-  widgetId,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<string>) {
   return (
     <Input
-      id={widgetId}
+      id={widget.id}
       type="date"
       value={value ?? ""}
       onChange={(e) => onChange?.(e.target.value)}

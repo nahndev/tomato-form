@@ -20,13 +20,13 @@ function localInputValueToEpoch(inputValue: string): number | undefined {
 }
 
 export function DatetimeWidgetItem({
-  widgetId,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<number>) {
   return (
     <input
-      id={widgetId}
+      id={widget.id}
       type="datetime-local"
       value={value != null ? epochToLocalInputValue(value) : ""}
       onChange={(e) =>

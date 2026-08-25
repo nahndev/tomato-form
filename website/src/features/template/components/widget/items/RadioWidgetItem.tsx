@@ -4,12 +4,11 @@ import type { FieldComponentProps } from "@/types/widget";
 
 /** A single-select list of radio buttons. */
 export function RadioWidgetItem({
-  widgetId,
-  properties,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<string>) {
-  const options = properties.options ?? [];
+  const options = widget.options ?? [];
 
   return (
     <div className="mt-2 flex flex-col gap-1.5">
@@ -21,9 +20,9 @@ export function RadioWidgetItem({
       {options.map((option, idx) => (
         <label key={option} className="flex items-center gap-2 text-sm">
           <input
-            id={idx === 0 ? widgetId : undefined}
+            id={idx === 0 ? widget.id : undefined}
             type="radio"
-            name={widgetId}
+            name={widget.id}
             checked={value === option}
             onChange={() => onChange?.(option)}
             className="size-4 rounded-full border-input accent-primary"

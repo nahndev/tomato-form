@@ -27,22 +27,17 @@ export function useSessionActions(): SessionActions {
 
   const addSession = useCallback(
     (id: string, properties: SessionProperties) => {
-      doc.transact(() => {
-        doc.getMap<Session>("sessions").set(id, { id });
-        doc.getMap<SessionProperties>("sessionProperties").set(id, properties);
-      });
+      doc.getMap<Session>("sessions").set(id, { id, ...properties });
     },
     [doc],
   );
 
   const updateSession = useCallback(
     (sessionId: string, patch: Partial<SessionProperties>) => {
-      if (!doc.getMap<Session>("sessions").has(sessionId)) return;
-      const sessionProperties = doc.getMap<SessionProperties>("sessionProperties");
-      const current = sessionProperties.get(sessionId) ?? { name: "" };
-      doc.transact(() => {
-        sessionProperties.set(sessionId, { ...current, ...patch });
-      });
+      const sessions = doc.getMap<Session>("sessions");
+      const current = sessions.get(sessionId);
+      if (!current) return;
+      sessions.set(sessionId, { ...current, ...patch });
     },
     [doc],
   );

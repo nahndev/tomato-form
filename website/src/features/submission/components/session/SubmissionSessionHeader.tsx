@@ -9,16 +9,16 @@ function isTomatoIconKey(value: string): value is TomatoIconKey {
 
 /** Read-only session header: icon + name only, no rename/icon-pick affordance. */
 const SubmissionSessionHeader: React.FC = () => {
-  const { properties } = useSessionState();
+  const { session } = useSessionState();
   const icon =
-    properties?.icon && isTomatoIconKey(properties.icon)
-      ? properties.icon
+    session?.icon && isTomatoIconKey(session.icon)
+      ? session.icon
       : TomatoIconKey.Clock;
 
   return (
     <div className="flex items-center gap-2 border-b border-slate-200 p-2">
       <TomatoIcon icon={icon} className="size-4 text-muted-foreground" />
-      <p className="font-medium">{properties?.name}</p>
+      <p className="font-medium">{session?.name}</p>
     </div>
   );
 };

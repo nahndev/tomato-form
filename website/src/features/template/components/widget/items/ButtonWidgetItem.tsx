@@ -12,22 +12,22 @@ import { useMemo } from "react";
  * condition can read it back off `submission.data` (see `sessionCondition.ts`).
  */
 export function ButtonWidgetItem({
-  properties,
+  widget,
   onChange,
 }: FieldComponentProps<unknown>) {
   const containerStyle = useMemo(
-    () => properties.containerStyle ?? {},
-    [properties],
+    () => widget.containerStyle ?? {},
+    [widget.containerStyle],
   );
-  const labelStyle = useMemo(() => properties.textStyle ?? {}, [properties]);
+  const labelStyle = useMemo(() => widget.textStyle ?? {}, [widget.textStyle]);
   const runAction = useRunButtonAction();
 
   // Legacy templates only ever had a single `url` field - treat that as an
   // implicit single LINK action when no `actions` list has been configured.
   const actions =
-    properties.actions ??
-    (properties.url
-      ? [{ type: ButtonActionType.LINK as const, url: properties.url }]
+    widget.actions ??
+    (widget.url
+      ? [{ type: ButtonActionType.LINK as const, url: widget.url }]
       : []);
 
   async function handleClick() {
@@ -44,7 +44,7 @@ export function ButtonWidgetItem({
       className="w-full p-4"
       style={containerStyle}
     >
-      <span style={labelStyle}>{properties.label || "Click me"}</span>
+      <span style={labelStyle}>{widget.label || "Click me"}</span>
     </Button>
   );
 }

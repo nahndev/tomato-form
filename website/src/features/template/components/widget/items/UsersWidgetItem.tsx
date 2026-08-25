@@ -6,7 +6,7 @@ import type { FieldComponentProps } from "@/types/widget";
 import { useEffect } from "react";
 
 export function UsersWidgetItem({
-  widgetId,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<string>) {
@@ -28,7 +28,7 @@ export function UsersWidgetItem({
 
   return (
     <Select
-      id={widgetId}
+      id={widget.id}
       value={value ?? ""}
       onChange={(e) => onChange?.(e.target.value)}
       disabled={users.length === 0}

@@ -4,12 +4,11 @@ import type { FieldComponentProps } from "@/types/widget";
 
 /** A multi-select list of checkboxes. Value is the array of selected options. */
 export function CheckboxWidgetItem({
-  widgetId,
-  properties,
+  widget,
   value,
   onChange,
 }: FieldComponentProps<string[]>) {
-  const options = properties.options ?? [];
+  const options = widget.options ?? [];
   const selected = value ?? [];
 
   function toggle(option: string) {
@@ -29,7 +28,7 @@ export function CheckboxWidgetItem({
       {options.map((option, idx) => (
         <label key={option} className="flex items-center gap-2 text-sm">
           <input
-            id={idx === 0 ? widgetId : undefined}
+            id={idx === 0 ? widget.id : undefined}
             type="checkbox"
             checked={selected.includes(option)}
             onChange={() => toggle(option)}
