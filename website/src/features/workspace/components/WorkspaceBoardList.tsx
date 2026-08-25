@@ -1,7 +1,7 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { WorkspaceUserMenu } from "@/features/workspace/components/WorkspaceUserMenu";
+import { AccountMenu } from "@/features/setting";
 import { cn } from "@/lib/utils";
 import type { Board } from "@/types/board";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
@@ -53,7 +53,7 @@ const WorkspaceBoardList: React.FC<WorkspaceBoardListProps> = ({
           </nav>
         )}
       </ScrollArea>
-      <WorkspaceUserMenu />
+      <AccountMenu />
     </aside>
   );
 };

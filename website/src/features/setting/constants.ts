@@ -4,6 +4,8 @@ import GeneralSetting from "./components/content/GeneralSetting";
 import InformationSetting from "./components/content/InformationSetting";
 import SecuritySetting from "./components/content/SecuritySetting";
 
+export const SETTING_HASH = "#setting";
+
 export interface SettingTab {
   value: string;
   label: string;

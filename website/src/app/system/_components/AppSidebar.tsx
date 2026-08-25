@@ -1,11 +1,11 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { AccountMenu } from "@/features/setting";
 import { cn } from "@/lib/utils";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SettingPopup } from "./SettingPopup";
 
 interface NavItem {
   href: string;
@@ -16,7 +16,6 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/system", label: "Home", icon: TomatoIconKey.Home },
   { href: "/system/templates", label: "Templates", icon: TomatoIconKey.Document },
   { href: "/system/boards", label: "Boards", icon: TomatoIconKey.LayoutGrid },
-  { href: "/workspace", label: "Workspace", icon: TomatoIconKey.LayoutDashboard },
   { href: "/system/users", label: "Users", icon: TomatoIconKey.Users },
 ];
 
@@ -34,7 +33,7 @@ export function AppSidebar() {
         </nav>
       </ScrollArea>
       <nav className="flex flex-col gap-1">
-        <SettingPopup />
+        <AccountMenu />
       </nav>
     </aside>
   );
