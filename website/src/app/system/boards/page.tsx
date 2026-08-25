@@ -245,7 +245,7 @@ export default function BoardsPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((b) => (
-            <Link key={b.id} href={`/boards/${b.id}`}>
+            <Link key={b.id} href={`/system/boards/${b.id}`}>
               <Card className="group h-full transition-shadow hover:shadow-md">
                 <CardHeader>
                   <div className="mb-1 flex size-9 items-center justify-center rounded-lg bg-primary/10">

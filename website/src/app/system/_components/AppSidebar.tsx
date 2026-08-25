@@ -13,11 +13,11 @@ interface NavItem {
   icon: TomatoIconKey;
 }
 const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "Home", icon: TomatoIconKey.Home },
-  { href: "/templates", label: "Templates", icon: TomatoIconKey.Document },
-  { href: "/boards", label: "Boards", icon: TomatoIconKey.LayoutGrid },
+  { href: "/system", label: "Home", icon: TomatoIconKey.Home },
+  { href: "/system/templates", label: "Templates", icon: TomatoIconKey.Document },
+  { href: "/system/boards", label: "Boards", icon: TomatoIconKey.LayoutGrid },
   { href: "/workspace", label: "Workspace", icon: TomatoIconKey.LayoutDashboard },
-  { href: "/users", label: "Users", icon: TomatoIconKey.Users },
+  { href: "/system/users", label: "Users", icon: TomatoIconKey.Users },
 ];
 
 export function AppSidebar() {
@@ -47,7 +47,9 @@ export interface NavItemProps {
 const NavItem: React.FC<NavItemProps> = ({ item }) => {
   const pathname = usePathname();
   const isActive =
-    item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+    item.href === "/system"
+      ? pathname === "/system"
+      : pathname.startsWith(item.href);
   return (
     <Link
       key={item.href}

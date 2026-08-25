@@ -5,7 +5,7 @@ const UserManagerHeader: React.FC = () => {
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-3">
-        <NavigationButton href="/" aria-label="Back to home" />
+        <NavigationButton href="/system" aria-label="Back to home" />
         <div>
           <h1 className="text-2xl font-bold">User Management</h1>
           <p className="mt-1 text-sm text-muted-foreground">
