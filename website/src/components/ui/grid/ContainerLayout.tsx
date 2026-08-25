@@ -152,7 +152,10 @@ export function ContainerLayout({
       <ContainerGrid />
       {computedLayouts.map((layout) => (
         <div
-          className="absolute group/grid-item"
+          className={clsx(
+            "absolute group/grid-item",
+            moving && moving.id !== layout.id && "duration-300",
+          )}
           key={layout.id}
           style={{ ...layout }}
         >
