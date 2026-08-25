@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
+import BoardColumnsHeaderRow from "@/features/board/components/submission/BoardColumnsHeaderRow";
 import SubmissionItem from "@/features/board/components/submission/SubmissionItem";
 import type { Submission } from "@/types/submission";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
@@ -20,6 +22,8 @@ const WorkspaceBoardContent: React.FC<WorkspaceBoardContentProps> = ({
   isError,
   onRetry,
 }) => {
+  const board = useBoardContext();
+
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -68,6 +72,7 @@ const WorkspaceBoardContent: React.FC<WorkspaceBoardContentProps> = ({
 
   return (
     <div className="flex flex-col gap-4">
+      <BoardColumnsHeaderRow columns={board.columns} />
       {submissions.map((submission) => (
         <SubmissionItem key={submission.id} submission={submission} />
       ))}

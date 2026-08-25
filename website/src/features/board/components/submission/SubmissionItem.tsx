@@ -1,5 +1,6 @@
 import { toast } from "@/components/ui/sonner";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
+import BoardColumnMockCell from "@/features/board/components/submission/BoardColumnMockCell";
 import { useDeleteSubmission } from "@/features/board/hooks/useSubmissions";
 import { useTemplates } from "@/features/template";
 import { Submission } from "@/types/submission";
@@ -38,6 +39,11 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
             : "—"}
         </div>
         <div className="ml-2 flex-1" />
+        <div className="flex items-center gap-2">
+          {board.columns.map((column) => (
+            <BoardColumnMockCell key={column.id} type={column.type} />
+          ))}
+        </div>
         <div>
           <button
             onClick={async (e) => {

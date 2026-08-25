@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import * as semver from "semver";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -17,15 +16,8 @@ import {
 } from "@/components/ui/dialog";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useCreateSubmission } from "@/features/board/hooks/useSubmissions";
-import type { TemplateVersion } from "@/types/template";
+import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
-
-function findLatestVersion(versions: TemplateVersion[]): TemplateVersion | undefined {
-  return versions.reduce<TemplateVersion | undefined>(
-    (max, v) => (!max || semver.gt(v.version, max.version) ? v : max),
-    undefined,
-  );
-}
 
 const MoreSubmissionButton: React.FC = () => {
   const board = useBoardContext();
