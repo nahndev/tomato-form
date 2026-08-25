@@ -2,6 +2,7 @@
 
 import { initTemplateDoc } from "@/features/template/hooks/internal/templateDocInit";
 import { HocuspocusProvider } from "@hocuspocus/provider";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { createContext, useContext, useEffect, useState } from "react";
 import * as Y from "yjs";
 
@@ -19,8 +20,9 @@ export interface TemplateDocProviderProps {
 /**
  * The only piece of the template feature coupled to yjs/Hocuspocus - owns the
  * `Y.Doc` + realtime connection lifecycle and hands it down via context.
- * Renders nothing until the doc exists, so every descendant can assume
- * `useTemplateDoc()` is safe to call unconditionally.
+ * Renders a loading spinner instead of `children` until the doc exists *and*
+ * has synced, so every descendant can assume `useTemplateDoc()` is safe to
+ * call unconditionally and sees a fully-populated doc on first render.
  */
 export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
   uuid,
@@ -29,6 +31,7 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
 }) => {
   const [doc, setDoc] = useState<Y.Doc | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [isSynced, setIsSynced] = useState(false);
 
   useEffect(() => {
     const nextDoc = new Y.Doc();
@@ -44,6 +47,7 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
 
     provider.on("synced", () => {
       initTemplateDoc(nextDoc);
+      setIsSynced(true);
     });
 
     setDoc(nextDoc);
@@ -53,10 +57,20 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
       nextDoc.destroy();
       setDoc(null);
       setIsConnected(false);
+      setIsSynced(false);
     };
   }, [uuid, version]);
 
-  if (!doc) return null;
+  if (!doc || !isSynced) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <TomatoIcon
+          icon={TomatoIconKey.Loader}
+          className="size-6 animate-spin text-muted-foreground"
+        />
+      </div>
+    );
+  }
 
   return (
     <TemplateDocContext.Provider value={doc}>
