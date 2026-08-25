@@ -1,7 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Discussion from "@/features/board/components/Discussion";
 import History from "@/features/board/components/History";
-import { JobList } from "@/features/job";
 import Setting from "@/features/board/components/Setting";
 import TemplateSetting from "@/features/board/components/TemplateSetting";
 import { BoardTabValue } from "@/types/board";
@@ -11,7 +10,6 @@ const BoardTab: React.FC = () => {
     <Tabs defaultValue={BoardTabValue.TEMPLATE} className="px-4 py-4">
       <TabsList className="w-full">
         <TabsTrigger value={BoardTabValue.TEMPLATE}>Template</TabsTrigger>
-        <TabsTrigger value={BoardTabValue.JOBS}>Jobs</TabsTrigger>
         <TabsTrigger value={BoardTabValue.SETTING}>Setting</TabsTrigger>
         <TabsTrigger value={BoardTabValue.HISTORY}>History</TabsTrigger>
         <TabsTrigger value={BoardTabValue.DISCUSSION}>Discussion</TabsTrigger>
@@ -19,9 +17,6 @@ const BoardTab: React.FC = () => {
 
       <TabsContent value={BoardTabValue.TEMPLATE}>
         <TemplateSetting />
-      </TabsContent>
-      <TabsContent value={BoardTabValue.JOBS}>
-        <JobList />
       </TabsContent>
       <TabsContent value={BoardTabValue.SETTING}>
         <Setting />

@@ -6,7 +6,7 @@ export enum ButtonActionType {
   RESET = "reset",
 }
 
-/** Mirrors `server/src/job/action/send-mail/send-mail-action.types.ts`. */
+/** Mirrors `server/src/mail/recipient.types.ts`. */
 export enum RecipientType {
   MAIL = "mail",
   USER = "user",
