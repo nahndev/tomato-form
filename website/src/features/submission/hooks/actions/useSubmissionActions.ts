@@ -5,8 +5,6 @@ import { useCallback } from "react";
 
 export interface SubmissionActions {
   setValue: (widgetId: string, value: unknown) => void;
-  goToSession: (sessionId: string) => void;
-  resetValues: (widgetIds: string[]) => void;
 }
 
 /**
@@ -25,24 +23,5 @@ export function useSubmissionActions(): SubmissionActions {
     [doc],
   );
 
-  const goToSession = useCallback(
-    (sessionId: string) => {
-      doc.transact(() => {
-        doc.getMap<string>("meta").set("currentSessionId", sessionId);
-      });
-    },
-    [doc],
-  );
-
-  const resetValues = useCallback(
-    (widgetIds: string[]) => {
-      doc.transact(() => {
-        const values = doc.getMap<unknown>("values");
-        for (const widgetId of widgetIds) values.delete(widgetId);
-      });
-    },
-    [doc],
-  );
-
-  return { setValue, goToSession, resetValues };
+  return { setValue };
 }

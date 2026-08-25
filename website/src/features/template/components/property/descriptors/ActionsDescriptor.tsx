@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import type { WidgetPropertyFieldProps } from "@/features/template/components/property/types";
-import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { useUserStore } from "@/store/user.store";
 import {
   ButtonActionType,
@@ -19,9 +18,6 @@ import { useEffect } from "react";
 const ACTION_LABELS: Record<ButtonActionType, string> = {
   [ButtonActionType.LINK]: "Open link",
   [ButtonActionType.MAIL]: "Send mail",
-  [ButtonActionType.SUBMIT]: "Submit (go to session)",
-  [ButtonActionType.RETURN]: "Return (previous session)",
-  [ButtonActionType.RESET]: "Reset session",
 };
 
 function defaultActionFor(type: ButtonActionType): ButtonAction {
@@ -30,12 +26,6 @@ function defaultActionFor(type: ButtonActionType): ButtonAction {
       return { type, url: "" };
     case ButtonActionType.MAIL:
       return { type, recipients: [], subject: "", body: "" };
-    case ButtonActionType.SUBMIT:
-      return { type };
-    case ButtonActionType.RETURN:
-      return { type };
-    case ButtonActionType.RESET:
-      return { type };
   }
 }
 
@@ -167,41 +157,7 @@ function ActionFields({
           />
         </div>
       );
-    case ButtonActionType.SUBMIT:
-      return (
-        <SessionPicker
-          value={action.toSessionId}
-          onChange={(toSessionId) => onChange({ ...action, toSessionId })}
-        />
-      );
-    case ButtonActionType.RETURN:
-    case ButtonActionType.RESET:
-      return null;
   }
-}
-
-function SessionPicker({
-  value,
-  onChange,
-}: {
-  value: string | undefined;
-  onChange: (sessionId: string | undefined) => void;
-}) {
-  const { sessions } = useTemplateState();
-
-  return (
-    <Select
-      value={value ?? ""}
-      onChange={(e) => onChange(e.target.value || undefined)}
-    >
-      <option value="">(next session)</option>
-      {Object.values(sessions).map((session) => (
-        <option key={session.id} value={session.id}>
-          {session.name}
-        </option>
-      ))}
-    </Select>
-  );
 }
 
 function RecipientsEditor({

@@ -1,9 +1,6 @@
 export enum ButtonActionType {
   LINK = "link",
   MAIL = "mail",
-  SUBMIT = "submit",
-  RETURN = "return",
-  RESET = "reset",
 }
 
 /** Mirrors `server/src/mail/recipient.types.ts`. */
@@ -30,23 +27,4 @@ export interface MailAction {
   body: string;
 }
 
-export interface SubmitAction {
-  type: ButtonActionType.SUBMIT;
-  /** Explicit target session id. Unset = next session in declared order. */
-  toSessionId?: string;
-}
-
-export interface ReturnAction {
-  type: ButtonActionType.RETURN;
-}
-
-export interface ResetAction {
-  type: ButtonActionType.RESET;
-}
-
-export type ButtonAction =
-  | LinkAction
-  | MailAction
-  | SubmitAction
-  | ReturnAction
-  | ResetAction;
+export type ButtonAction = LinkAction | MailAction;

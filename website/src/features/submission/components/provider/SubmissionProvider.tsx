@@ -33,7 +33,9 @@ export const SubmissionProvider: React.FC<SubmissionProviderProps> = ({
 export function useCurrentSubmission(): Submission {
   const submission = useContext(SubmissionMetaContext);
   if (!submission) {
-    throw new Error("useCurrentSubmission must be used inside SubmissionProvider");
+    throw new Error(
+      "useCurrentSubmission must be used inside SubmissionProvider",
+    );
   }
   return submission;
 }
