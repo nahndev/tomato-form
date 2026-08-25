@@ -1,4 +1,4 @@
-import { Board } from "@/database/prisma-client";
+import { Board, Prisma } from "@/database/prisma-client";
 import {
   ConflictException,
   Injectable,
@@ -23,6 +23,7 @@ export class BoardService {
         templates: dto.templateIds
           ? { connect: dto.templateIds.map((id) => ({ id })) }
           : undefined,
+        columns: (dto.columns ?? []) as unknown as Prisma.InputJsonValue,
       },
       include: {
         templates: { include: { templateVersions: true } },
@@ -59,6 +60,9 @@ export class BoardService {
                   })),
                 },
               }
+            : {}),
+          ...(dto.columns !== undefined
+            ? { columns: dto.columns as unknown as Prisma.InputJsonValue }
             : {}),
         },
         include: {

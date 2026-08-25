@@ -77,6 +77,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const BoardScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  columns: 'columns',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

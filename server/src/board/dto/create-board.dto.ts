@@ -1,5 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsArray, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from "class-validator";
+import { BoardColumnDto } from "./board-column.dto";
 
 export class CreateBoardDto {
   @ApiProperty({ example: "Customer Feedback" })
@@ -12,4 +20,14 @@ export class CreateBoardDto {
   @IsString({ each: true })
   @IsOptional()
   templateIds?: string[];
+
+  @ApiPropertyOptional({
+    type: [BoardColumnDto],
+    description: "Board column configuration",
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => BoardColumnDto)
+  @IsOptional()
+  columns?: BoardColumnDto[];
 }
