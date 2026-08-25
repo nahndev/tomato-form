@@ -9,18 +9,7 @@
 * 🟢 You can import this file directly.
 */
 
-export const ActionType = {
-  SUBMISSION_CREATION: 'SUBMISSION_CREATION',
-  SEND_MAIL: 'SEND_MAIL'
-} as const
-
-export type ActionType = (typeof ActionType)[keyof typeof ActionType]
 
 
-export const JobExecutionStatus = {
-  running: 'running',
-  success: 'success',
-  failed: 'failed'
-} as const
-
-export type JobExecutionStatus = (typeof JobExecutionStatus)[keyof typeof JobExecutionStatus]
+// This file is empty because there are no enums in the schema.
+export {}

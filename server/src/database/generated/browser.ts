@@ -42,23 +42,3 @@ export type Submission = Prisma.SubmissionModel
  * 
  */
 export type User = Prisma.UserModel
-/**
- * Model Job
- * 
- */
-export type Job = Prisma.JobModel
-/**
- * Model Action
- * 
- */
-export type Action = Prisma.ActionModel
-/**
- * Model JobExecution
- * 
- */
-export type JobExecution = Prisma.JobExecutionModel
-/**
- * Model Cron
- * 
- */
-export type Cron = Prisma.CronModel

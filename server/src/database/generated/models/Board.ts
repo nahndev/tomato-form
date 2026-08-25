@@ -175,8 +175,6 @@ export type BoardWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   templates?: Prisma.TemplateListRelationFilter
-  jobs?: Prisma.JobListRelationFilter
-  actions?: Prisma.ActionListRelationFilter
   submissions?: Prisma.SubmissionListRelationFilter
 }
 
@@ -186,8 +184,6 @@ export type BoardOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   templates?: Prisma.TemplateOrderByRelationAggregateInput
-  jobs?: Prisma.JobOrderByRelationAggregateInput
-  actions?: Prisma.ActionOrderByRelationAggregateInput
   submissions?: Prisma.SubmissionOrderByRelationAggregateInput
 }
 
@@ -200,8 +196,6 @@ export type BoardWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   templates?: Prisma.TemplateListRelationFilter
-  jobs?: Prisma.JobListRelationFilter
-  actions?: Prisma.ActionListRelationFilter
   submissions?: Prisma.SubmissionListRelationFilter
 }, "id">
 
@@ -231,8 +225,6 @@ export type BoardCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   templates?: Prisma.TemplateCreateNestedManyWithoutBoardsInput
-  jobs?: Prisma.JobCreateNestedManyWithoutBoardInput
-  actions?: Prisma.ActionCreateNestedManyWithoutBoardInput
   submissions?: Prisma.SubmissionCreateNestedManyWithoutBoardInput
 }
 
@@ -242,8 +234,6 @@ export type BoardUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutBoardsInput
-  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBoardInput
-  actions?: Prisma.ActionUncheckedCreateNestedManyWithoutBoardInput
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutBoardInput
 }
 
@@ -253,8 +243,6 @@ export type BoardUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templates?: Prisma.TemplateUpdateManyWithoutBoardsNestedInput
-  jobs?: Prisma.JobUpdateManyWithoutBoardNestedInput
-  actions?: Prisma.ActionUpdateManyWithoutBoardNestedInput
   submissions?: Prisma.SubmissionUpdateManyWithoutBoardNestedInput
 }
 
@@ -264,8 +252,6 @@ export type BoardUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutBoardsNestedInput
-  jobs?: Prisma.JobUncheckedUpdateManyWithoutBoardNestedInput
-  actions?: Prisma.ActionUncheckedUpdateManyWithoutBoardNestedInput
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutBoardNestedInput
 }
 
@@ -324,11 +310,6 @@ export type BoardOrderByRelationAggregateInput = {
 export type BoardScalarRelationFilter = {
   is?: Prisma.BoardWhereInput
   isNot?: Prisma.BoardWhereInput
-}
-
-export type BoardNullableScalarRelationFilter = {
-  is?: Prisma.BoardWhereInput | null
-  isNot?: Prisma.BoardWhereInput | null
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -391,43 +372,11 @@ export type BoardUpdateOneRequiredWithoutSubmissionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BoardUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.BoardUpdateWithoutSubmissionsInput>, Prisma.BoardUncheckedUpdateWithoutSubmissionsInput>
 }
 
-export type BoardCreateNestedOneWithoutJobsInput = {
-  create?: Prisma.XOR<Prisma.BoardCreateWithoutJobsInput, Prisma.BoardUncheckedCreateWithoutJobsInput>
-  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutJobsInput
-  connect?: Prisma.BoardWhereUniqueInput
-}
-
-export type BoardUpdateOneRequiredWithoutJobsNestedInput = {
-  create?: Prisma.XOR<Prisma.BoardCreateWithoutJobsInput, Prisma.BoardUncheckedCreateWithoutJobsInput>
-  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutJobsInput
-  upsert?: Prisma.BoardUpsertWithoutJobsInput
-  connect?: Prisma.BoardWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BoardUpdateToOneWithWhereWithoutJobsInput, Prisma.BoardUpdateWithoutJobsInput>, Prisma.BoardUncheckedUpdateWithoutJobsInput>
-}
-
-export type BoardCreateNestedOneWithoutActionsInput = {
-  create?: Prisma.XOR<Prisma.BoardCreateWithoutActionsInput, Prisma.BoardUncheckedCreateWithoutActionsInput>
-  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutActionsInput
-  connect?: Prisma.BoardWhereUniqueInput
-}
-
-export type BoardUpdateOneWithoutActionsNestedInput = {
-  create?: Prisma.XOR<Prisma.BoardCreateWithoutActionsInput, Prisma.BoardUncheckedCreateWithoutActionsInput>
-  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutActionsInput
-  upsert?: Prisma.BoardUpsertWithoutActionsInput
-  disconnect?: Prisma.BoardWhereInput | boolean
-  delete?: Prisma.BoardWhereInput | boolean
-  connect?: Prisma.BoardWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BoardUpdateToOneWithWhereWithoutActionsInput, Prisma.BoardUpdateWithoutActionsInput>, Prisma.BoardUncheckedUpdateWithoutActionsInput>
-}
-
 export type BoardCreateWithoutTemplatesInput = {
   id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  jobs?: Prisma.JobCreateNestedManyWithoutBoardInput
-  actions?: Prisma.ActionCreateNestedManyWithoutBoardInput
   submissions?: Prisma.SubmissionCreateNestedManyWithoutBoardInput
 }
 
@@ -436,8 +385,6 @@ export type BoardUncheckedCreateWithoutTemplatesInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBoardInput
-  actions?: Prisma.ActionUncheckedCreateNestedManyWithoutBoardInput
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutBoardInput
 }
 
@@ -478,8 +425,6 @@ export type BoardCreateWithoutSubmissionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   templates?: Prisma.TemplateCreateNestedManyWithoutBoardsInput
-  jobs?: Prisma.JobCreateNestedManyWithoutBoardInput
-  actions?: Prisma.ActionCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutSubmissionsInput = {
@@ -488,8 +433,6 @@ export type BoardUncheckedCreateWithoutSubmissionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutBoardsInput
-  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBoardInput
-  actions?: Prisma.ActionUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutSubmissionsInput = {
@@ -514,8 +457,6 @@ export type BoardUpdateWithoutSubmissionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templates?: Prisma.TemplateUpdateManyWithoutBoardsNestedInput
-  jobs?: Prisma.JobUpdateManyWithoutBoardNestedInput
-  actions?: Prisma.ActionUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutSubmissionsInput = {
@@ -524,120 +465,6 @@ export type BoardUncheckedUpdateWithoutSubmissionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutBoardsNestedInput
-  jobs?: Prisma.JobUncheckedUpdateManyWithoutBoardNestedInput
-  actions?: Prisma.ActionUncheckedUpdateManyWithoutBoardNestedInput
-}
-
-export type BoardCreateWithoutJobsInput = {
-  id?: string
-  name: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  templates?: Prisma.TemplateCreateNestedManyWithoutBoardsInput
-  actions?: Prisma.ActionCreateNestedManyWithoutBoardInput
-  submissions?: Prisma.SubmissionCreateNestedManyWithoutBoardInput
-}
-
-export type BoardUncheckedCreateWithoutJobsInput = {
-  id?: string
-  name: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutBoardsInput
-  actions?: Prisma.ActionUncheckedCreateNestedManyWithoutBoardInput
-  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutBoardInput
-}
-
-export type BoardCreateOrConnectWithoutJobsInput = {
-  where: Prisma.BoardWhereUniqueInput
-  create: Prisma.XOR<Prisma.BoardCreateWithoutJobsInput, Prisma.BoardUncheckedCreateWithoutJobsInput>
-}
-
-export type BoardUpsertWithoutJobsInput = {
-  update: Prisma.XOR<Prisma.BoardUpdateWithoutJobsInput, Prisma.BoardUncheckedUpdateWithoutJobsInput>
-  create: Prisma.XOR<Prisma.BoardCreateWithoutJobsInput, Prisma.BoardUncheckedCreateWithoutJobsInput>
-  where?: Prisma.BoardWhereInput
-}
-
-export type BoardUpdateToOneWithWhereWithoutJobsInput = {
-  where?: Prisma.BoardWhereInput
-  data: Prisma.XOR<Prisma.BoardUpdateWithoutJobsInput, Prisma.BoardUncheckedUpdateWithoutJobsInput>
-}
-
-export type BoardUpdateWithoutJobsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  templates?: Prisma.TemplateUpdateManyWithoutBoardsNestedInput
-  actions?: Prisma.ActionUpdateManyWithoutBoardNestedInput
-  submissions?: Prisma.SubmissionUpdateManyWithoutBoardNestedInput
-}
-
-export type BoardUncheckedUpdateWithoutJobsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  templates?: Prisma.TemplateUncheckedUpdateManyWithoutBoardsNestedInput
-  actions?: Prisma.ActionUncheckedUpdateManyWithoutBoardNestedInput
-  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutBoardNestedInput
-}
-
-export type BoardCreateWithoutActionsInput = {
-  id?: string
-  name: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  templates?: Prisma.TemplateCreateNestedManyWithoutBoardsInput
-  jobs?: Prisma.JobCreateNestedManyWithoutBoardInput
-  submissions?: Prisma.SubmissionCreateNestedManyWithoutBoardInput
-}
-
-export type BoardUncheckedCreateWithoutActionsInput = {
-  id?: string
-  name: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutBoardsInput
-  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBoardInput
-  submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutBoardInput
-}
-
-export type BoardCreateOrConnectWithoutActionsInput = {
-  where: Prisma.BoardWhereUniqueInput
-  create: Prisma.XOR<Prisma.BoardCreateWithoutActionsInput, Prisma.BoardUncheckedCreateWithoutActionsInput>
-}
-
-export type BoardUpsertWithoutActionsInput = {
-  update: Prisma.XOR<Prisma.BoardUpdateWithoutActionsInput, Prisma.BoardUncheckedUpdateWithoutActionsInput>
-  create: Prisma.XOR<Prisma.BoardCreateWithoutActionsInput, Prisma.BoardUncheckedCreateWithoutActionsInput>
-  where?: Prisma.BoardWhereInput
-}
-
-export type BoardUpdateToOneWithWhereWithoutActionsInput = {
-  where?: Prisma.BoardWhereInput
-  data: Prisma.XOR<Prisma.BoardUpdateWithoutActionsInput, Prisma.BoardUncheckedUpdateWithoutActionsInput>
-}
-
-export type BoardUpdateWithoutActionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  templates?: Prisma.TemplateUpdateManyWithoutBoardsNestedInput
-  jobs?: Prisma.JobUpdateManyWithoutBoardNestedInput
-  submissions?: Prisma.SubmissionUpdateManyWithoutBoardNestedInput
-}
-
-export type BoardUncheckedUpdateWithoutActionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  templates?: Prisma.TemplateUncheckedUpdateManyWithoutBoardsNestedInput
-  jobs?: Prisma.JobUncheckedUpdateManyWithoutBoardNestedInput
-  submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUpdateWithoutTemplatesInput = {
@@ -645,8 +472,6 @@ export type BoardUpdateWithoutTemplatesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobs?: Prisma.JobUpdateManyWithoutBoardNestedInput
-  actions?: Prisma.ActionUpdateManyWithoutBoardNestedInput
   submissions?: Prisma.SubmissionUpdateManyWithoutBoardNestedInput
 }
 
@@ -655,8 +480,6 @@ export type BoardUncheckedUpdateWithoutTemplatesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobs?: Prisma.JobUncheckedUpdateManyWithoutBoardNestedInput
-  actions?: Prisma.ActionUncheckedUpdateManyWithoutBoardNestedInput
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutBoardNestedInput
 }
 
@@ -674,15 +497,11 @@ export type BoardUncheckedUpdateManyWithoutTemplatesInput = {
 
 export type BoardCountOutputType = {
   templates: number
-  jobs: number
-  actions: number
   submissions: number
 }
 
 export type BoardCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   templates?: boolean | BoardCountOutputTypeCountTemplatesArgs
-  jobs?: boolean | BoardCountOutputTypeCountJobsArgs
-  actions?: boolean | BoardCountOutputTypeCountActionsArgs
   submissions?: boolean | BoardCountOutputTypeCountSubmissionsArgs
 }
 
@@ -706,20 +525,6 @@ export type BoardCountOutputTypeCountTemplatesArgs<ExtArgs extends runtime.Types
 /**
  * BoardCountOutputType without action
  */
-export type BoardCountOutputTypeCountJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.JobWhereInput
-}
-
-/**
- * BoardCountOutputType without action
- */
-export type BoardCountOutputTypeCountActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ActionWhereInput
-}
-
-/**
- * BoardCountOutputType without action
- */
 export type BoardCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SubmissionWhereInput
 }
@@ -731,8 +536,6 @@ export type BoardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdAt?: boolean
   updatedAt?: boolean
   templates?: boolean | Prisma.Board$templatesArgs<ExtArgs>
-  jobs?: boolean | Prisma.Board$jobsArgs<ExtArgs>
-  actions?: boolean | Prisma.Board$actionsArgs<ExtArgs>
   submissions?: boolean | Prisma.Board$submissionsArgs<ExtArgs>
   _count?: boolean | Prisma.BoardCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["board"]>
@@ -761,8 +564,6 @@ export type BoardSelectScalar = {
 export type BoardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["board"]>
 export type BoardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   templates?: boolean | Prisma.Board$templatesArgs<ExtArgs>
-  jobs?: boolean | Prisma.Board$jobsArgs<ExtArgs>
-  actions?: boolean | Prisma.Board$actionsArgs<ExtArgs>
   submissions?: boolean | Prisma.Board$submissionsArgs<ExtArgs>
   _count?: boolean | Prisma.BoardCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -773,8 +574,6 @@ export type $BoardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Board"
   objects: {
     templates: Prisma.$TemplatePayload<ExtArgs>[]
-    jobs: Prisma.$JobPayload<ExtArgs>[]
-    actions: Prisma.$ActionPayload<ExtArgs>[]
     submissions: Prisma.$SubmissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1177,8 +976,6 @@ readonly fields: BoardFieldRefs;
 export interface Prisma__BoardClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   templates<T extends Prisma.Board$templatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$templatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  jobs<T extends Prisma.Board$jobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  actions<T extends Prisma.Board$actionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   submissions<T extends Prisma.Board$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1627,54 +1424,6 @@ export type Board$templatesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.TemplateScalarFieldEnum | Prisma.TemplateScalarFieldEnum[]
-}
-
-/**
- * Board.jobs
- */
-export type Board$jobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Job
-   */
-  select?: Prisma.JobSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Job
-   */
-  omit?: Prisma.JobOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.JobInclude<ExtArgs> | null
-  where?: Prisma.JobWhereInput
-  orderBy?: Prisma.JobOrderByWithRelationInput | Prisma.JobOrderByWithRelationInput[]
-  cursor?: Prisma.JobWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
-}
-
-/**
- * Board.actions
- */
-export type Board$actionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Action
-   */
-  select?: Prisma.ActionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Action
-   */
-  omit?: Prisma.ActionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ActionInclude<ExtArgs> | null
-  where?: Prisma.ActionWhereInput
-  orderBy?: Prisma.ActionOrderByWithRelationInput | Prisma.ActionOrderByWithRelationInput[]
-  cursor?: Prisma.ActionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ActionScalarFieldEnum | Prisma.ActionScalarFieldEnum[]
 }
 
 /**

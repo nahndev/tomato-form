@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { RecipientType } from "@/job/action/send-mail/send-mail-action.types";
+import { RecipientType } from "@/mail/recipient.types";
 import { Type } from "class-transformer";
 import {
   ArrayMinSize,

@@ -401,11 +401,7 @@ export const ModelName = {
   Template: 'Template',
   TemplateVersion: 'TemplateVersion',
   Submission: 'Submission',
-  User: 'User',
-  Job: 'Job',
-  Action: 'Action',
-  JobExecution: 'JobExecution',
-  Cron: 'Cron'
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -421,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "board" | "template" | "templateVersion" | "submission" | "user" | "job" | "action" | "jobExecution" | "cron"
+    modelProps: "board" | "template" | "templateVersion" | "submission" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -795,302 +791,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Job: {
-      payload: Prisma.$JobPayload<ExtArgs>
-      fields: Prisma.JobFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.JobFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.JobFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
-        }
-        findFirst: {
-          args: Prisma.JobFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.JobFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
-        }
-        findMany: {
-          args: Prisma.JobFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>[]
-        }
-        create: {
-          args: Prisma.JobCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
-        }
-        createMany: {
-          args: Prisma.JobCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.JobCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>[]
-        }
-        delete: {
-          args: Prisma.JobDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
-        }
-        update: {
-          args: Prisma.JobUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
-        }
-        deleteMany: {
-          args: Prisma.JobDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.JobUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.JobUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>[]
-        }
-        upsert: {
-          args: Prisma.JobUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobPayload>
-        }
-        aggregate: {
-          args: Prisma.JobAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateJob>
-        }
-        groupBy: {
-          args: Prisma.JobGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.JobGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.JobCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.JobCountAggregateOutputType> | number
-        }
-      }
-    }
-    Action: {
-      payload: Prisma.$ActionPayload<ExtArgs>
-      fields: Prisma.ActionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.ActionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.ActionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        findFirst: {
-          args: Prisma.ActionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.ActionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        findMany: {
-          args: Prisma.ActionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>[]
-        }
-        create: {
-          args: Prisma.ActionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        createMany: {
-          args: Prisma.ActionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.ActionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>[]
-        }
-        delete: {
-          args: Prisma.ActionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        update: {
-          args: Prisma.ActionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        deleteMany: {
-          args: Prisma.ActionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.ActionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.ActionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>[]
-        }
-        upsert: {
-          args: Prisma.ActionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActionPayload>
-        }
-        aggregate: {
-          args: Prisma.ActionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAction>
-        }
-        groupBy: {
-          args: Prisma.ActionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ActionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.ActionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ActionCountAggregateOutputType> | number
-        }
-      }
-    }
-    JobExecution: {
-      payload: Prisma.$JobExecutionPayload<ExtArgs>
-      fields: Prisma.JobExecutionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.JobExecutionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.JobExecutionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload>
-        }
-        findFirst: {
-          args: Prisma.JobExecutionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.JobExecutionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload>
-        }
-        findMany: {
-          args: Prisma.JobExecutionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload>[]
-        }
-        create: {
-          args: Prisma.JobExecutionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload>
-        }
-        createMany: {
-          args: Prisma.JobExecutionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.JobExecutionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload>[]
-        }
-        delete: {
-          args: Prisma.JobExecutionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload>
-        }
-        update: {
-          args: Prisma.JobExecutionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload>
-        }
-        deleteMany: {
-          args: Prisma.JobExecutionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.JobExecutionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.JobExecutionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload>[]
-        }
-        upsert: {
-          args: Prisma.JobExecutionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobExecutionPayload>
-        }
-        aggregate: {
-          args: Prisma.JobExecutionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateJobExecution>
-        }
-        groupBy: {
-          args: Prisma.JobExecutionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.JobExecutionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.JobExecutionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.JobExecutionCountAggregateOutputType> | number
-        }
-      }
-    }
-    Cron: {
-      payload: Prisma.$CronPayload<ExtArgs>
-      fields: Prisma.CronFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.CronFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.CronFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload>
-        }
-        findFirst: {
-          args: Prisma.CronFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.CronFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload>
-        }
-        findMany: {
-          args: Prisma.CronFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload>[]
-        }
-        create: {
-          args: Prisma.CronCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload>
-        }
-        createMany: {
-          args: Prisma.CronCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.CronCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload>[]
-        }
-        delete: {
-          args: Prisma.CronDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload>
-        }
-        update: {
-          args: Prisma.CronUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload>
-        }
-        deleteMany: {
-          args: Prisma.CronDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.CronUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.CronUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload>[]
-        }
-        upsert: {
-          args: Prisma.CronUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CronPayload>
-        }
-        aggregate: {
-          args: Prisma.CronAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateCron>
-        }
-        groupBy: {
-          args: Prisma.CronGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CronGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.CronCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CronCountAggregateOutputType> | number
-        }
-      }
-    }
   }
 } & {
   other: {
@@ -1184,57 +884,6 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const JobScalarFieldEnum = {
-  id: 'id',
-  boardId: 'boardId',
-  name: 'name',
-  expression: 'expression',
-  enable: 'enable',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
-
-
-export const ActionScalarFieldEnum = {
-  id: 'id',
-  jobId: 'jobId',
-  type: 'type',
-  order: 'order',
-  templateId: 'templateId',
-  boardId: 'boardId',
-  payload: 'payload'
-} as const
-
-export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum]
-
-
-export const JobExecutionScalarFieldEnum = {
-  id: 'id',
-  jobId: 'jobId',
-  status: 'status',
-  startedAt: 'startedAt',
-  finishedAt: 'finishedAt',
-  error: 'error',
-  result: 'result'
-} as const
-
-export type JobExecutionScalarFieldEnum = (typeof JobExecutionScalarFieldEnum)[keyof typeof JobExecutionScalarFieldEnum]
-
-
-export const CronScalarFieldEnum = {
-  id: 'id',
-  key: 'key',
-  expression: 'expression',
-  event: 'event',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CronScalarFieldEnum = (typeof CronScalarFieldEnum)[keyof typeof CronScalarFieldEnum]
-
-
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1248,14 +897,6 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1332,27 +973,6 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
- * Reference to a field of type 'ActionType'
- */
-export type EnumActionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActionType'>
-    
-
-
-/**
- * Reference to a field of type 'ActionType[]'
- */
-export type ListEnumActionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActionType[]'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1363,34 +983,6 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'JobExecutionStatus'
- */
-export type EnumJobExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobExecutionStatus'>
-    
-
-
-/**
- * Reference to a field of type 'JobExecutionStatus[]'
- */
-export type ListEnumJobExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobExecutionStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -1549,10 +1141,6 @@ export type GlobalOmitConfig = {
   templateVersion?: Prisma.TemplateVersionOmit
   submission?: Prisma.SubmissionOmit
   user?: Prisma.UserOmit
-  job?: Prisma.JobOmit
-  action?: Prisma.ActionOmit
-  jobExecution?: Prisma.JobExecutionOmit
-  cron?: Prisma.CronOmit
 }
 
 /* Types for Logging */

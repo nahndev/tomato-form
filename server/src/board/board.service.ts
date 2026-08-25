@@ -9,16 +9,12 @@ import {
   isPrismaNotFoundError,
 } from "../common/utils/prisma.util";
 import { PrismaService } from "../database/prisma.service";
-import { JobService } from "../job/job.service";
 import { CreateBoardDto } from "./dto/create-board.dto";
 import { UpdateBoardDto } from "./dto/update-board.dto";
 
 @Injectable()
 export class BoardService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly jobService: JobService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateBoardDto): Promise<Board> {
     return this.prisma.board.create({
@@ -30,21 +26,20 @@ export class BoardService {
       },
       include: {
         templates: { include: { templateVersions: true } },
-        jobs: true,
       },
     });
   }
 
   async findAll(): Promise<Board[]> {
     return this.prisma.board.findMany({
-      include: { templates: { include: { templateVersions: true } }, jobs: true },
+      include: { templates: { include: { templateVersions: true } } },
     });
   }
 
   async findOne(id: string): Promise<Board> {
     const doc = await this.prisma.board.findUnique({
       where: { id },
-      include: { templates: { include: { templateVersions: true } }, jobs: true },
+      include: { templates: { include: { templateVersions: true } } },
     });
     if (!doc) throw new NotFoundException(`Board ${id} not found`);
     return doc;
@@ -68,7 +63,6 @@ export class BoardService {
         },
         include: {
           templates: { include: { templateVersions: true } },
-          jobs: true,
         },
       });
     } catch (err) {
@@ -81,17 +75,12 @@ export class BoardService {
   async remove(id: string): Promise<void> {
     await this.findOne(id);
 
-    const jobs = await this.prisma.job.findMany({ where: { boardId: id } });
-    for (const job of jobs) {
-      await this.jobService.remove(job.id);
-    }
-
     try {
       await this.prisma.board.delete({ where: { id } });
     } catch (err) {
       if (isPrismaForeignKeyError(err)) {
         throw new ConflictException(
-          `Board ${id} cannot be deleted: still referenced by other jobs`,
+          `Board ${id} cannot be deleted: still referenced by other records`,
         );
       }
       throw err;

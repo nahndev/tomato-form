@@ -55,11 +55,7 @@ export const ModelName = {
   Template: 'Template',
   TemplateVersion: 'TemplateVersion',
   Submission: 'Submission',
-  User: 'User',
-  Job: 'Job',
-  Action: 'Action',
-  JobExecution: 'JobExecution',
-  Cron: 'Cron'
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -132,57 +128,6 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const JobScalarFieldEnum = {
-  id: 'id',
-  boardId: 'boardId',
-  name: 'name',
-  expression: 'expression',
-  enable: 'enable',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
-
-
-export const ActionScalarFieldEnum = {
-  id: 'id',
-  jobId: 'jobId',
-  type: 'type',
-  order: 'order',
-  templateId: 'templateId',
-  boardId: 'boardId',
-  payload: 'payload'
-} as const
-
-export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum]
-
-
-export const JobExecutionScalarFieldEnum = {
-  id: 'id',
-  jobId: 'jobId',
-  status: 'status',
-  startedAt: 'startedAt',
-  finishedAt: 'finishedAt',
-  error: 'error',
-  result: 'result'
-} as const
-
-export type JobExecutionScalarFieldEnum = (typeof JobExecutionScalarFieldEnum)[keyof typeof JobExecutionScalarFieldEnum]
-
-
-export const CronScalarFieldEnum = {
-  id: 'id',
-  key: 'key',
-  expression: 'expression',
-  event: 'event',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CronScalarFieldEnum = (typeof CronScalarFieldEnum)[keyof typeof CronScalarFieldEnum]
-
-
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -196,14 +141,6 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

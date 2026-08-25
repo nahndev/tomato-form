@@ -1,9 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, Submission } from "@/database/prisma-client";
-import {
-  Recipient,
-  RecipientType,
-} from "@/job/action/send-mail/send-mail-action.types";
+import { Recipient, RecipientType } from "@/mail/recipient.types";
 import { MailService } from "@/mail/mail.service";
 import { UserService } from "@/user/user.service";
 import {

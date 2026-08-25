@@ -58,7 +58,7 @@ export class TemplateService {
         throw new NotFoundException(`Template ${id} not found`);
       if (isPrismaForeignKeyError(err)) {
         throw new ConflictException(
-          `Template ${id} cannot be deleted: still referenced by submissions or job actions`,
+          `Template ${id} cannot be deleted: still referenced by submissions`,
         );
       }
       throw err;
