@@ -1,3 +1,4 @@
+import type { DisplayType } from "./display-type";
 import type { Template } from "./template";
 
 export enum BoardTabValue {
@@ -7,10 +8,25 @@ export enum BoardTabValue {
   DISCUSSION = "discussion",
 }
 
+export interface BoardColumnItem {
+  templateId: string;
+  widgetId: string;
+}
+
+export interface BoardColumn {
+  id: string;
+  /** null while the column has no widget picked yet (not saveable). */
+  type: DisplayType | null;
+  /** null until a size is set (not saveable). */
+  size: number | null;
+  items: BoardColumnItem[];
+}
+
 export interface Board {
   id: string;
   name: string;
   templates: Template[];
+  columns: BoardColumn[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -18,6 +34,7 @@ export interface Board {
 export interface CreateBoardInput {
   name: string;
   templateIds?: string[];
+  columns?: BoardColumn[];
 }
 
 export type UpdateBoardInput = Partial<CreateBoardInput>;
