@@ -613,9 +613,8 @@ export type $TemplateVersionPayload<ExtArgs extends runtime.Types.Extensions.Int
     /**
      * *
      *    * Frozen copy of the yjs doc at publish time - `widgets`, `layouts`,
-     *    * `widgetToSession`, `properties`, `sessions`, and whatever gets added later
-     *    * (e.g. `sessionProperties`) - as one schemaless blob, so new record kinds
-     *    * don't need a migration.
+     *    * `widgetToSession`, `sessions`, and whatever gets added later - as one
+     *    * schemaless blob, so new record kinds don't need a migration.
      */
     snapshot: runtime.JsonValue
     createdAt: Date
