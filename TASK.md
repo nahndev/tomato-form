@@ -7,6 +7,6 @@
 
 ## Tasks
 
--[ ] Remove `job` and `action` in [website]
+- [ ] Remove `job` and `action` in [website]
 
 - [ ] Remove `job` and `job-action` and `cron` in [server]
