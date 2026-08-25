@@ -8,8 +8,8 @@ import { useTemplateState } from "@/features/template/hooks/state/useTemplateSta
 import { cn } from "@/lib/utils";
 import { WidgetGroup } from "@/types/template";
 import { WidgetDefinition } from "@/types/widget";
-import { TomatoIcon } from "@tomato/icon";
 import { useDragDropMonitor, useDraggable } from "@dnd-kit/react";
+import { TomatoIcon } from "@tomato/icon";
 import React, { useMemo, useState } from "react";
 import { v4 } from "uuid";
 
@@ -26,7 +26,6 @@ const GROUP_ORDER = [
   WidgetGroup.COMMON,
   WidgetGroup.MEDIA,
   WidgetGroup.ADVANCE,
-  WidgetGroup.SYSTEM,
 ];
 
 export function WidgetPicker({}: WidgetPickerProps) {
