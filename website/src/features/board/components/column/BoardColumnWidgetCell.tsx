@@ -1,9 +1,9 @@
 import { Select } from "@/components/ui/select";
-import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import {
   getDataFieldWidgets,
   getWidgetOptionLabel,
 } from "@/features/board/utils/boardColumnWidgets";
+import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import type { BoardColumn } from "@/types/board";
 import type { TemplateVersion } from "@/types/template";
 
@@ -40,8 +40,7 @@ const BoardColumnWidgetCell: React.FC<BoardColumnWidgetCellProps> = ({
   );
 
   const selectedWidgetId =
-    column.items.find((item) => item.templateId === templateId)?.widgetId ??
-    "";
+    column.items.find((item) => item.templateId === templateId)?.widgetId ?? "";
 
   return (
     <Select

@@ -17,7 +17,9 @@ export function getWidgetOptionLabel(
   if (!widget) return "Unknown widget";
 
   const sessionId = snapshot.widgetToSession[widgetId];
-  const sessionName = sessionId ? snapshot.sessions[sessionId]?.name : undefined;
+  const sessionName = sessionId
+    ? snapshot.sessions[sessionId]?.name
+    : undefined;
 
   return sessionName ? `${sessionName}/${widget.label}` : widget.label;
 }

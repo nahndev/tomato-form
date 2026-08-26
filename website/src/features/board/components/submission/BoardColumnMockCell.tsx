@@ -1,5 +1,5 @@
-import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import { MOCK_VALUE } from "@/features/board/constants/column/mockValues";
+import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import { DisplayType } from "@/types/display-type";
 import { TomatoIcon } from "@tomato/icon";
 

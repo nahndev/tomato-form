@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/sonner";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useUpdateBoard } from "@/features/board/hooks/useBoards";
-import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
 import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
+import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
 import type { BoardColumn } from "@/types/board";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
+import { useState } from "react";
 import AddColumnButton from "./AddColumnButton";
 import BoardColumnHeaderCell from "./BoardColumnHeaderCell";
 import BoardColumnSizeInput from "./BoardColumnSizeInput";
@@ -41,7 +41,8 @@ const BoardColumnsSetting: React.FC = () => {
     board.columns,
   );
 
-  const isDirty = JSON.stringify(draftColumns) !== JSON.stringify(board.columns);
+  const isDirty =
+    JSON.stringify(draftColumns) !== JSON.stringify(board.columns);
 
   function updateColumn(columnId: string, patch: Partial<BoardColumn>) {
     setDraftColumns((prev) =>
@@ -73,7 +74,8 @@ const BoardColumnsSetting: React.FC = () => {
         const widget = latestVersion?.snapshot.widgets[widgetId];
 
         const type =
-          c.type ?? (widget ? WIDGET_DISPLAY_TYPE_REGISTRY[widget.type][0] : null);
+          c.type ??
+          (widget ? WIDGET_DISPLAY_TYPE_REGISTRY[widget.type][0] : null);
         const size = c.size ?? DEFAULT_COLUMN_SIZE;
 
         return {
@@ -190,7 +192,10 @@ const BoardColumnsSetting: React.FC = () => {
           aria-label="Save columns"
         >
           {isPending ? (
-            <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
+            <TomatoIcon
+              icon={TomatoIconKey.Loader}
+              className="size-4 animate-spin"
+            />
           ) : (
             "Save"
           )}
