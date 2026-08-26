@@ -1,10 +1,20 @@
-# Adjust name
+# Improve structure of system [website]
 
-## Scope
+## Tasks 01 - For `./website/src/features/template`
 
-- './website/src/features/template/components/ListTemplate`
+- Create folder system type with a module, should include `constants`, `component`, `hooks`, `utils`, .... [x]
+- Structure all file and constants, variable, .... in module [x]
 
-## Tasks
+Ex:
+Currently, `WidgetDefinition` mix between data and react component. It is ineffective, should separate
 
-- Rename to `dashboard` [x]
-- Rename all component in this folder start with `Dashboard.....` [x]
+- WIDGET_REGISTRY should move to constants and change name [x]
+- WIDGET_REGISTRY should move to `WidgetItems` [x]
+
+## Tasks 02 - Apply for all other modules
+
+- Apply for all other modules [x]
+  - `board`: extracted `MOCK_VALUE` into `constants/column/mockValues.ts`
+  - `setting`: split `SETTING_TABS` (data+component mix) into `constants/settingTabs.ts` (`SettingTabItems`) + `components/content/registry.ts` (`SettingTabComponents`)
+  - `user`: extracted `USER_SORT_OPTIONS`/`UserSortOption` into `constants/userSortOptions.ts`
+  - `submission`, `workspace`: reviewed, nothing warranted extraction (no data/component mixing, no scattered constants)

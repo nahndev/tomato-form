@@ -1,4 +1,4 @@
-import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
 import type { Session, Widget } from "@/types/template";
 import { WidgetType } from "@/types/widget";
 import * as Y from "yjs";
@@ -60,7 +60,7 @@ export function initTemplateDoc(doc: Y.Doc): void {
 
   doc.transact(() => {
     for (const type of DEFAULT_SYSTEM_WIDGET_TYPES) {
-      const def = WIDGET_REGISTRY[type];
+      const def = WidgetItems[type];
       const id = `system-${type}`;
       yWidgets.set(id, { id, type, ...def.defaultSettings });
     }

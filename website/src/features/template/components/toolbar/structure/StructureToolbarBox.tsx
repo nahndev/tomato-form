@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
-import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { cn } from "@/lib/utils";
 import { Session, Widget } from "@/types/template";
@@ -80,7 +80,7 @@ interface WidgetRowProps {
 }
 const WidgetRow: React.FC<WidgetRowProps> = ({ widget }) => {
   const { isSelected, select } = useWidgetSelection();
-  const def = WIDGET_REGISTRY[widget.type];
+  const def = WidgetItems[widget.type];
 
   return (
     <div

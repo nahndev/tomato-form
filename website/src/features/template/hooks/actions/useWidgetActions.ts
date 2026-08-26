@@ -1,7 +1,7 @@
 "use client";
 
 import { useTemplateDoc } from "@/features/template/components/provider/TemplateDocProvider";
-import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
 import { getOrCreateDefaultSessionId } from "@/features/template/hooks/internal/templateDocInit";
 import { LayoutIdx } from "@/components/ui/grid";
 import type { GridLayout, Widget, WidgetProperties } from "@/types/template";
@@ -32,7 +32,7 @@ export function useWidgetActions(): WidgetActions {
 
   const addWidget = useCallback(
     (id: Widget["id"], type: Widget["type"], before: Widget | null) => {
-      const def = WIDGET_REGISTRY[type];
+      const def = WidgetItems[type];
       const layouts = doc.getMap<GridLayout>("layouts");
       const layout = {
         ...def.defaultLayout,

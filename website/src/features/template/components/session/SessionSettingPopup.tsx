@@ -11,7 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
-import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
 import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
@@ -57,7 +57,7 @@ const SessionSettingPopup: React.FC = () => {
       return widget.type === WidgetType.BUTTON;
     }
     if (condition.type === SessionConditionType.WIDGET_HAS_VALUE) {
-      return WIDGET_REGISTRY[widget.type].isDataField;
+      return WidgetItems[widget.type].isDataField;
     }
     return false;
   });

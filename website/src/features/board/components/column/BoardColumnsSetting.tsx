@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useUpdateBoard } from "@/features/board/hooks/useBoards";
 import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
-import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/components/widget/display-type.registry";
+import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import type { BoardColumn } from "@/types/board";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import AddColumnButton from "./AddColumnButton";

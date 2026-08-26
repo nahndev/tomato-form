@@ -3,7 +3,7 @@
 import { Separator } from "@/components/ui/separator";
 import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import { WidgetPropertyContent } from "@/features/template/components/toolbar/property/WidgetPropertyContent";
-import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
 
 export type WidgetPropertyBoxProps = {};
 
@@ -19,7 +19,7 @@ export function WidgetPropertyBox({}: WidgetPropertyBoxProps) {
     );
   }
 
-  const def = WIDGET_REGISTRY[selected.type];
+  const def = WidgetItems[selected.type];
 
   return (
     <div className="flex flex-col gap-4 p-3">

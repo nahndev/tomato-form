@@ -1,12 +1,7 @@
-import { DISPLAY_TYPE_REGISTRY } from "@/features/template/components/widget/display-type.registry";
+import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
+import { MOCK_VALUE } from "@/features/board/constants/column/mockValues";
 import { DisplayType } from "@/types/display-type";
 import { TomatoIcon } from "@tomato/icon";
-
-const MOCK_VALUE: Record<DisplayType, string> = {
-  [DisplayType.TEXT]: "Sample text",
-  [DisplayType.DATE]: new Date().toLocaleDateString(),
-  [DisplayType.NUMBER]: "123",
-};
 
 export interface BoardColumnMockCellProps {
   type: DisplayType | null;

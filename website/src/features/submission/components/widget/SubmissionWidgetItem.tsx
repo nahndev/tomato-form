@@ -4,7 +4,8 @@ import { Label } from "@/components/ui/label";
 import { useSubmissionActions } from "@/features/submission/hooks/actions/useSubmissionActions";
 import { useSubmissionValues } from "@/features/submission/hooks/state/useSubmissionValues";
 import { WidgetProvider } from "@/features/template/components/widget/WidgetProvider";
-import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { WidgetComponents } from "@/features/template/components/widget/registry";
+import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
 import type { Widget } from "@/types/template";
 
 interface SubmissionWidgetItemProps {
@@ -22,8 +23,8 @@ export function SubmissionWidgetItem({ widget }: SubmissionWidgetItemProps) {
 function SubmissionWidgetField({ widget }: { widget: Widget }) {
   const values = useSubmissionValues();
   const { setValue } = useSubmissionActions();
-  const def = WIDGET_REGISTRY[widget.type];
-  const Field = def.component;
+  const def = WidgetItems[widget.type];
+  const Field = WidgetComponents[widget.type];
 
   return (
     <div className="p-2 flex flex-col gap-1.5">

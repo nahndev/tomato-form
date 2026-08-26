@@ -2,7 +2,8 @@ import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import UserSortMenu, { type UserSortOption } from "@/features/user/components/toolbar/UserSortMenu";
+import UserSortMenu from "@/features/user/components/toolbar/UserSortMenu";
+import type { UserSortOption } from "@/features/user/constants/userSortOptions";
 
 interface UserToolbarProps {
   total: number;

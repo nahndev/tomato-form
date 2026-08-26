@@ -1,7 +1,15 @@
 # Widgets
 
 This folder contains every form-field "widget" type as a self-contained
-plugin. `registry.ts` is the single source of truth consumed by:
+plugin, split across two halves:
+
+- **Data** - `constants/widget/widgetItems.ts` (`WidgetItems`): label, icon,
+  description, grouping, and defaults. No React involved.
+- **Rendering** - `components/widget/registry.ts` (`WidgetComponents`): the
+  React component for each type.
+
+Both are `Record<WidgetType, ...>`, keyed the same way, and together are the
+single source of truth consumed by:
 
 - the widget picker sidebar (`WidgetPicker.tsx`)
 - the builder canvas preview (`WidgetItem.tsx`)
@@ -21,20 +29,24 @@ WidgetProperties`) - there's no separate properties record to keep in sync.
 
 ## Folder layout
 
-```
-widget/
-  types.ts             # WidgetDefinition, FieldComponentProps, FieldMode
-  registry.ts           # WIDGET_REGISTRY: Record<WidgetType, WidgetDefinition>
-  config/
-    settings.ts           # DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties>
-    layouts.ts             # DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">>
+```text
+constants/widget/
+  widgetItems.ts         # WidgetItems: Record<WidgetType, WidgetItemDefinition>
+  settings.ts             # DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties>
+  layouts.ts               # DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">>
+
+components/widget/
+  registry.ts             # WidgetComponents: Record<WidgetType, WidgetComponent>
   items/
-    <Type>Field.tsx        # Field component for one widget type, e.g. TextField.tsx
+    <Type>WidgetItem.tsx    # Field component for one widget type, e.g. TextWidgetItem.tsx
 ```
+
+`WidgetItemDefinition`, `WidgetComponent`, and `FieldComponentProps` all live
+in `@/types/widget.ts`.
 
 ## Required exports
 
-### `items/<Type>Field.tsx`
+### `components/widget/items/<Type>WidgetItem.tsx`
 
 A single named-export component implementing:
 
@@ -56,18 +68,18 @@ interface FieldComponentProps<TValue = unknown> {
   e.g. `break`, `label`, `button`, `session`), never call `onChange` and
   ignore `value`.
 
-### `config/settings.ts` / `config/layouts.ts`
+### `constants/widget/settings.ts` / `constants/widget/layouts.ts`
 
 All widgets' defaults live in these two files, keyed by `WidgetType`:
 
 ```ts
-// config/settings.ts
+// constants/widget/settings.ts
 export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   ...
   [WidgetType.RATING]: { label: "Rating" },
 };
 
-// config/layouts.ts
+// constants/widget/layouts.ts
 export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
   ...
   [WidgetType.RATING]: { column: 0, span: 2 },
@@ -80,48 +92,56 @@ insertion time from sibling widgets via `generateKeyBetween` (see
 
 ## Widget groups
 
-Each `WidgetDefinition` carries a `group: WidgetGroup` (`common`, `media`,
-`advance`, or `system`), which the widget picker sidebar (`WidgetPicker.tsx`)
-uses to render widgets under a section heading instead of one flat list.
-`system` is reserved for widgets backed by platform data rather than
-author-entered content (e.g. `users`).
+Each `WidgetItemDefinition` carries a `group: WidgetGroup` (`common`,
+`media`, `advance`, or `system`), which the widget picker sidebar
+(`WidgetPicker.tsx`) uses to render widgets under a section heading instead
+of one flat list. `system` is reserved for widgets backed by platform data
+rather than author-entered content (e.g. `users`).
 
 ## Registering a new widget
 
-1. Add the new member to the `WidgetType` enum in `src/types/template.ts`.
-2. Create `widget/items/<Type>Field.tsx`, exporting a component named
-   `<Type>Field` (e.g. `RatingField`).
-3. Add the new type's entries to `config/settings.ts` and `config/layouts.ts`.
-4. In `registry.ts`, import the Field component and add one entry to
-   `WIDGET_REGISTRY`, including a `group`:
+1. Add the new member to the `WidgetType` enum in `src/types/widget.ts`.
+2. Create `components/widget/items/<Type>WidgetItem.tsx`, exporting a
+   component named `<Type>WidgetItem` (e.g. `RatingWidgetItem`).
+3. Add the new type's entries to `constants/widget/settings.ts` and
+   `constants/widget/layouts.ts`.
+4. In `constants/widget/widgetItems.ts`, add one entry to `WidgetItems`,
+   including a `group`:
 
 ```ts
-import { RatingField } from "./items/RatingField";
-
-// inside WIDGET_REGISTRY = { ... }
 [WidgetType.RATING]: {
   type: WidgetType.RATING,
   label: "Rating",
-  icon: Star,
+  icon: TomatoIconKey.Star,
   description: "1-5 star rating",
   isDataField: true,
   group: WidgetGroup.COMMON,
-  Field: RatingField as WidgetDefinition["Field"],
   defaultSettings: DEFAULT_SETTINGS[WidgetType.RATING],
   defaultLayout: DEFAULT_LAYOUTS[WidgetType.RATING],
 },
 ```
 
-5. In `toolbar/property/registry.ts`, add an entry to
+5. In `components/widget/registry.ts`, import the component and add one
+   entry to `WidgetComponents`:
+
+```ts
+import { RatingWidgetItem } from "./items/RatingWidgetItem";
+
+// inside WidgetComponents = { ... }
+[WidgetType.RATING]: RatingWidgetItem as WidgetComponent,
+```
+
+6. In `toolbar/property/registry.ts`, add an entry to
    `WIDGET_PROPERTY_REGISTRY` for the new type: a list of the
    `WidgetPropertyDescriptor`s to show, in display order (at minimum `[LABEL]`;
    add `PLACEHOLDER`/`REQUIRED`/`OPTIONS`/`CONTENT`/`LINK_URL` or a new
    bespoke field if the widget needs a property beyond the existing keys).
 
 That's it - the picker, canvas preview, properties panel, fill page, and
-"add widget" button all pick this up automatically. `WIDGET_REGISTRY` and
-`WIDGET_PROPERTY_REGISTRY` are both typed as `Record<WidgetType, ...>`, so
-forgetting a step is a TypeScript compile error, not a silent runtime gap.
+"add widget" button all pick this up automatically. `WidgetItems`,
+`WidgetComponents`, and `WIDGET_PROPERTY_REGISTRY` are all typed as
+`Record<WidgetType, ...>`, so forgetting a step is a TypeScript compile
+error, not a silent runtime gap.
 
 ## Notes / known limitations
 

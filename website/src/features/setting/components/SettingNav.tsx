@@ -6,11 +6,11 @@ import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { useState } from "react";
-import { SETTING_TABS } from "../constants";
+import { SettingTabItems } from "../constants/settingTabs";
 
 export function SettingNav() {
   const [search, setSearch] = useState("");
-  const filteredTabs = SETTING_TABS.filter((tab) =>
+  const filteredTabs = SettingTabItems.filter((tab) =>
     tab.label.toLowerCase().includes(search.trim().toLowerCase()),
   );
 

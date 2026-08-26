@@ -1,49 +1,44 @@
 import { TomatoIconKey } from "@tomato/icon";
-import AccountSetting from "./components/content/AccountSetting";
-import GeneralSetting from "./components/content/GeneralSetting";
-import InformationSetting from "./components/content/InformationSetting";
-import SecuritySetting from "./components/content/SecuritySetting";
 
 export const SETTING_HASH = "#setting";
 
-export interface SettingTab {
+/**
+ * Pure data describing every setting tab - value, label, and icon. Carries
+ * no React component; see `SettingTabComponents` in
+ * `components/content/registry.ts` for the rendering half.
+ */
+export interface SettingTabItem {
   value: string;
   label: string;
   icon: TomatoIconKey;
-  content: React.ComponentType;
 }
 
-export const SETTING_TABS: SettingTab[] = [
+export const SettingTabItems: SettingTabItem[] = [
   {
     value: "general",
     label: "General",
     icon: TomatoIconKey.SlidersHorizontal,
-    content: GeneralSetting,
   },
   {
     value: "account",
     label: "Account",
     icon: TomatoIconKey.UserRound,
-    content: AccountSetting,
   },
   {
     value: "security",
     label: "Security",
     icon: TomatoIconKey.ShieldCheck,
-    content: SecuritySetting,
   },
   {
     value: "language",
     label: "Language",
     icon: TomatoIconKey.Languages,
-    content: InformationSetting,
   },
   {
     value: "information",
     label: "Information",
     icon: TomatoIconKey.Info,
-    content: InformationSetting,
   },
 ];
 
-export const DEFAULT_SETTING_TAB = SETTING_TABS[0].value;
+export const DEFAULT_SETTING_TAB = SettingTabItems[0].value;

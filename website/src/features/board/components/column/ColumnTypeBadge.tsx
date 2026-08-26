@@ -1,4 +1,4 @@
-import { DISPLAY_TYPE_REGISTRY } from "@/features/template/components/widget/display-type.registry";
+import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import type { DisplayType } from "@/types/display-type";
 import { TomatoIcon } from "@tomato/icon";
 

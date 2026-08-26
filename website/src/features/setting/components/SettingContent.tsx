@@ -3,7 +3,8 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
-import { DEFAULT_SETTING_TAB, SETTING_TABS } from "../constants";
+import { DEFAULT_SETTING_TAB, SettingTabItems } from "../constants/settingTabs";
+import { SettingTabComponents } from "./content/registry";
 import { SettingNav } from "./SettingNav";
 
 const SettingContent: React.FC = () => {
@@ -18,11 +19,14 @@ const SettingContent: React.FC = () => {
     >
       <SettingNav />
       <ScrollArea className="flex-1 border-l border-border pl-4">
-        {SETTING_TABS.map(({ value, content: Content }) => (
-          <TabsContent key={value} value={value} className="mt-0">
-            <Content />
-          </TabsContent>
-        ))}
+        {SettingTabItems.map(({ value }) => {
+          const Content = SettingTabComponents[value];
+          return (
+            <TabsContent key={value} value={value} className="mt-0">
+              <Content />
+            </TabsContent>
+          );
+        })}
       </ScrollArea>
     </Tabs>
   );

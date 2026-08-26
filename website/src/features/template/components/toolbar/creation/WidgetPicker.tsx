@@ -2,12 +2,12 @@
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
-import { WIDGET_LIST } from "@/features/template/components/widget/registry";
+import { WidgetItemList } from "@/features/template/constants/widget/widgetItems";
 import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { cn } from "@/lib/utils";
 import { WidgetGroup } from "@/types/template";
-import { WidgetDefinition } from "@/types/widget";
+import { WidgetItemDefinition } from "@/types/widget";
 import { useDragDropMonitor, useDraggable } from "@dnd-kit/react";
 import { TomatoIcon } from "@tomato/icon";
 import React, { useMemo, useState } from "react";
@@ -36,7 +36,7 @@ export function WidgetPicker({}: WidgetPickerProps) {
     () =>
       GROUP_ORDER.map((group) => ({
         group,
-        defs: WIDGET_LIST.filter((def) => def.group === group),
+        defs: WidgetItemList.filter((def) => def.group === group),
       })).filter(({ defs }) => defs.length > 0),
     [],
   );
@@ -58,7 +58,7 @@ export function WidgetPicker({}: WidgetPickerProps) {
 }
 
 export type WidgetCreationButtonProps = {
-  def: WidgetDefinition;
+  def: WidgetItemDefinition;
 };
 const WidgetCreationButton: React.FC<WidgetCreationButtonProps> = ({ def }) => {
   const { selected, selectKey } = useWidgetSelection();

@@ -1,5 +1,5 @@
 import { Select } from "@/components/ui/select";
-import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/components/widget/display-type.registry";
+import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import {
   getDataFieldWidgets,
   getWidgetOptionLabel,

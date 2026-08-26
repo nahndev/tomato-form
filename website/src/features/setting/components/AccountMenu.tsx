@@ -16,7 +16,7 @@ import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { VisuallyHidden } from "radix-ui";
-import { SETTING_HASH } from "../constants";
+import { SETTING_HASH } from "../constants/settingTabs";
 import SettingContent from "./SettingContent";
 
 function initials(name: string): string {

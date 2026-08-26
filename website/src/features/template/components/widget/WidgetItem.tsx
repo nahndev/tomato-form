@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
 import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import { WidgetProvider } from "@/features/template/components/widget/WidgetProvider";
-import { WIDGET_REGISTRY } from "@/features/template/components/widget/registry";
+import { WidgetComponents } from "@/features/template/components/widget/registry";
 import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
 import { TemplateMode, type Widget } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
@@ -77,7 +77,6 @@ function WidgetBox({
 }
 
 function WidgetPreview({ widget }: { widget: Widget }) {
-  const def = WIDGET_REGISTRY[widget.type];
-  const WidgetItemComponent = def.component;
+  const WidgetItemComponent = WidgetComponents[widget.type];
   return <WidgetItemComponent widget={widget} />;
 }

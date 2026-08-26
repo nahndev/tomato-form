@@ -7,7 +7,7 @@ import UserManagerHeader from "@/features/user/components/header/UserManagerHead
 import UserPagination from "@/features/user/components/table/UserPagination";
 import UserTable from "@/features/user/components/table/UserTable";
 import UserToolbar from "@/features/user/components/toolbar/UserToolbar";
-import type { UserSortOption } from "@/features/user/components/toolbar/UserSortMenu";
+import type { UserSortOption } from "@/features/user/constants/userSortOptions";
 import { useUserStore } from "@/store/user.store";
 import type { User } from "@/types/user";
 

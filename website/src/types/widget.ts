@@ -36,16 +36,23 @@ export interface FieldComponentProps<TValue = unknown> {
   onChange?: (value: TValue) => void;
 }
 
-export interface WidgetDefinition<TValue = unknown> {
+/** Pure data describing a widget type - no React involved. */
+export interface WidgetItemDefinition {
   type: WidgetType;
   label: string;
   icon: TomatoIconKey;
   description: string;
   isDataField: boolean;
   group: WidgetGroup;
-  component: ComponentType<FieldComponentProps<TValue>>;
   defaultSettings: WidgetProperties;
   defaultLayout: Omit<GridLayout, "idx">;
 }
 
-export type WidgetRegistry = Record<WidgetType, WidgetDefinition>;
+export type WidgetItemRegistry = Record<WidgetType, WidgetItemDefinition>;
+
+/** The React component that renders a widget type's field. */
+export type WidgetComponent<TValue = unknown> = ComponentType<
+  FieldComponentProps<TValue>
+>;
+
+export type WidgetComponentRegistry = Record<WidgetType, WidgetComponent>;
