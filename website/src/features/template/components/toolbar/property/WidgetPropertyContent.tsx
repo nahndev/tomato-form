@@ -1,7 +1,7 @@
 "use client";
 
 import { WIDGET_PROPERTY_REGISTRY } from "@/features/template/components/property/registry";
-import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
+import { useWidgetActions } from "@/features/template/sync/hooks/useWidgetActions";
 import type { Widget } from "@/types/template";
 
 interface WidgetPropertyContentProps {

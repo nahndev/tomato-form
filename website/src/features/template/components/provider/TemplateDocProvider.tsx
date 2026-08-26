@@ -1,14 +1,14 @@
 "use client";
 
-import { initTemplateDoc } from "@/features/template/hooks/internal/templateDocInit";
+import { createSyncDoc } from "@/features/template/sync";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
+import { SyncDoc, SyncDocProvider, useSyncDoc } from "@tomato/sync";
 import { createContext, useContext, useEffect, useState } from "react";
-import * as Y from "yjs";
+import type * as Y from "yjs";
 
 const YJS_SERVER_URL = process.env.NEXT_PUBLIC_YJS_URL ?? "ws://localhost:3028";
 
-const TemplateDocContext = createContext<Y.Doc | null>(null);
 const TemplateConnectionContext = createContext<boolean>(false);
 
 export interface TemplateDocProviderProps {
@@ -19,26 +19,29 @@ export interface TemplateDocProviderProps {
 
 /**
  * The only piece of the template feature coupled to yjs/Hocuspocus - owns the
- * `Y.Doc` + realtime connection lifecycle and hands it down via context.
- * Renders a loading spinner instead of `children` until the doc exists *and*
- * has synced, so every descendant can assume `useTemplateDoc()` is safe to
- * call unconditionally and sees a fully-populated doc on first render.
+ * `SyncDoc` + realtime connection lifecycle, registers the feature's Handlers
+ * (`WidgetHandler`, `SessionHandler`, ...), and hands the doc down via
+ * `@tomato/sync`'s context. Renders a loading spinner instead of `children`
+ * until the doc exists *and* has synced, so every descendant can assume
+ * `useTemplateDoc()`/`useHandler()` are safe to call unconditionally and see
+ * a fully-populated doc on first render.
  */
 export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
   uuid,
   version,
   children,
 }) => {
-  const [doc, setDoc] = useState<Y.Doc | null>(null);
+  const [syncDoc, setSyncDoc] = useState<SyncDoc | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isSynced, setIsSynced] = useState(false);
 
   useEffect(() => {
-    const nextDoc = new Y.Doc();
+    const nextSyncDoc = createSyncDoc();
+
     const provider = new HocuspocusProvider({
       url: YJS_SERVER_URL,
       name: `template/${uuid}/${version ?? "default"}`,
-      document: nextDoc,
+      document: nextSyncDoc.doc,
     });
 
     provider.on("status", ({ status }: { status: string }) => {
@@ -46,22 +49,22 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
     });
 
     provider.on("synced", () => {
-      initTemplateDoc(nextDoc);
+      nextSyncDoc.synced();
       setIsSynced(true);
     });
 
-    setDoc(nextDoc);
+    setSyncDoc(nextSyncDoc);
 
     return () => {
       provider.destroy();
-      nextDoc.destroy();
-      setDoc(null);
+      nextSyncDoc.destroy();
+      setSyncDoc(null);
       setIsConnected(false);
       setIsSynced(false);
     };
   }, [uuid, version]);
 
-  if (!doc || !isSynced) {
+  if (!syncDoc || !isSynced) {
     return (
       <div className="flex h-screen items-center justify-center">
         <TomatoIcon
@@ -73,21 +76,17 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
   }
 
   return (
-    <TemplateDocContext.Provider value={doc}>
+    <SyncDocProvider value={syncDoc}>
       <TemplateConnectionContext.Provider value={isConnected}>
         {children}
       </TemplateConnectionContext.Provider>
-    </TemplateDocContext.Provider>
+    </SyncDocProvider>
   );
 };
 
 /** Safe to call unconditionally - `TemplateDocProvider` never renders children before the doc exists. */
 export function useTemplateDoc(): Y.Doc {
-  const doc = useContext(TemplateDocContext);
-  if (!doc) {
-    throw new Error("This hook must be used inside <TemplateDocProvider>");
-  }
-  return doc;
+  return useSyncDoc().doc;
 }
 
 export function useTemplateConnection(): boolean {

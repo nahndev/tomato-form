@@ -5,7 +5,7 @@ import { useTemplateMode } from "@/features/template/components/provider/Templat
 import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import { WidgetProvider } from "@/features/template/components/widget/WidgetProvider";
 import { WidgetComponents } from "@/features/template/components/widget/registry";
-import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
+import { useWidgetActions } from "@/features/template/sync/hooks/useWidgetActions";
 import { TemplateMode, type Widget } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";

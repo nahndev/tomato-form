@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
-import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
+import { useSessionActions } from "@/features/template/sync/hooks/useSessionActions";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import {

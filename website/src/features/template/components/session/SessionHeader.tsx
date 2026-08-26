@@ -4,7 +4,7 @@ import { IconPicker } from "@/components/ui/icon-picker";
 import { SessionNameInput } from "@/features/template/components/session/SessionNameInput";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import SessionSettingPopup from "@/features/template/components/session/SessionSettingPopup";
-import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
+import { useSessionActions } from "@/features/template/sync/hooks/useSessionActions";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";
 
 const SessionHeader: React.FC = () => {

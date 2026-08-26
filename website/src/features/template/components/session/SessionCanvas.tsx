@@ -2,7 +2,7 @@ import { ContainerLayout } from "@tomato/grid";
 import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { WidgetItem } from "@/features/template/components/widget/WidgetItem";
-import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
+import { useSessionActions } from "@/features/template/sync/hooks/useSessionActions";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";
 import { TemplateMode } from "@/types/template";
 import { useCallback } from "react";

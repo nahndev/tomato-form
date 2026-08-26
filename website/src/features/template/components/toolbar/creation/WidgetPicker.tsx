@@ -3,7 +3,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import { WidgetItemList } from "@/features/template/constants/widget/widgetItems";
-import { useWidgetActions } from "@/features/template/hooks/actions/useWidgetActions";
+import { useWidgetActions } from "@/features/template/sync/hooks/useWidgetActions";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { cn } from "@/lib/utils";
 import { WidgetGroup } from "@/types/template";

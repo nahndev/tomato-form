@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
+import { useSessionActions } from "@/features/template/sync/hooks/useSessionActions";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { v4 } from "uuid";
 

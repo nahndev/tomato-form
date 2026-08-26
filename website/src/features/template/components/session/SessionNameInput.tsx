@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
-import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
+import { useSessionActions } from "@/features/template/sync/hooks/useSessionActions";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";
 import { useFormik } from "formik";
 import * as Yup from "yup";

@@ -2,7 +2,7 @@
 
 import { TextEditor } from "@/components/lexical/TextEditor";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
-import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
+import { useSessionActions } from "@/features/template/sync/hooks/useSessionActions";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";
 
 /** Inline-editable session description, backed directly by the yjs doc. */
