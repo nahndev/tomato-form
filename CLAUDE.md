@@ -4,7 +4,7 @@
 
 - **Stack**: Next.js, NestJS, TypeScript, shadcn/ui, React Query, Formik, Zod
 - **Frontend**: Next.js with React Query, Formik, Zod, shadcn/ui
-- **Backend**: NestJS with Mongoose (MongoDB), REST API, class-validator
+- **Backend**: NestJS with Prisma (PostgreSQL), REST API, class-validator
 - **Package Manager**: pnpm
 - **Monorepo**: Turborepo (`server`, `web`)
 - **Test Command**: `pnpm test`
@@ -25,15 +25,19 @@
 
 ### Backend (`server/src/`)
 
-- `auth/` - JWT authentication, guards, strategies
-- `oauth/` - OAuth 2.0 IdP module
-- `enterprise/` - Enterprise management module
+- `board/` - Board management module
+- `submission/` - Submission management module
+- `template/` - Template management module
+- `template-version/` - Template versioning module
 - `user/` - User management module
-- `permission/` - RBAC permission module
-- `application/` - Application catalog module
+- `mail/` - Mail sending module
+- `rabbitmq/` - RabbitMQ messaging module
+- `health/` - Health check module
 - `common/` - Shared decorators, guards, filters, interceptors
-- `database/` - MongoDB connection config
+- `database/` - Prisma schema, migrations, generated client
 - `config/` - Environment configuration
+
+Note: there is currently no auth/RBAC module — endpoints are not guarded and there is no `enterpriseId`/tenant scoping on any model yet.
 
 ## API docs
 
