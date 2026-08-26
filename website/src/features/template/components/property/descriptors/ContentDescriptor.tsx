@@ -1,7 +1,7 @@
 "use client";
 
+import { TextEditor } from "@/components/lexical/TextEditor";
 import { Label } from "@/components/ui/label";
-import { TextEditor } from "@/components/ui/lexical/TextEditor";
 import type { WidgetPropertyFieldProps } from "@/features/template/components/property/types";
 
 /** Editable text editor for the `label` widget's `content` property. */

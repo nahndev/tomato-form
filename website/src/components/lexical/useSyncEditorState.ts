@@ -1,8 +1,12 @@
 "use client";
 
-import { serializeEditorState } from "@/components/ui/lexical/config";
+import { serializeEditorState } from "@/components/lexical/config";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $createParagraphNode, $getRoot, type SerializedEditorState } from "lexical";
+import {
+  $createParagraphNode,
+  $getRoot,
+  type SerializedEditorState,
+} from "lexical";
 import { useEffect, useRef } from "react";
 
 /**

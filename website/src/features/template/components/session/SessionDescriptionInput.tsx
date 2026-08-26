@@ -1,6 +1,6 @@
 "use client";
 
-import { TextEditor } from "@/components/ui/lexical/TextEditor";
+import { TextEditor } from "@/components/lexical/TextEditor";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { useSessionActions } from "@/features/template/hooks/actions/useSessionActions";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";

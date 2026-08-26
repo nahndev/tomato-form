@@ -5,10 +5,10 @@ import {
   TEXT_EDITOR_THEME,
   onTextEditorError,
   serializeEditorState,
-} from "@/components/ui/lexical/config";
-import { FloatingToolbarPlugin } from "@/components/ui/lexical/FloatingToolbarPlugin";
-import { Toolbar } from "@/components/ui/lexical/Toolbar";
-import { useSyncEditorState } from "@/components/ui/lexical/useSyncEditorState";
+} from "@/components/lexical/config";
+import { FloatingToolbarPlugin } from "@/components/lexical/FloatingToolbarPlugin";
+import { Toolbar } from "@/components/lexical/Toolbar";
+import { useSyncEditorState } from "@/components/lexical/useSyncEditorState";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
