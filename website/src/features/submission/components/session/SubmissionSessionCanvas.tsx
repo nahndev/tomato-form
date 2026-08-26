@@ -1,6 +1,6 @@
 "use client";
 
-import { ContainerLayout } from "@/components/ui/grid";
+import { ContainerLayout } from "@tomato/grid";
 import { SubmissionWidgetItem } from "@/features/submission/components/widget/SubmissionWidgetItem";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";

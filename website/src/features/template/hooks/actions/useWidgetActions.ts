@@ -3,7 +3,7 @@
 import { useTemplateDoc } from "@/features/template/components/provider/TemplateDocProvider";
 import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
 import { getOrCreateDefaultSessionId } from "@/features/template/hooks/internal/templateDocInit";
-import { LayoutIdx } from "@/components/ui/grid";
+import { LayoutIdx } from "@tomato/grid";
 import type { GridLayout, Widget, WidgetProperties } from "@/types/template";
 import { useCallback } from "react";
 
