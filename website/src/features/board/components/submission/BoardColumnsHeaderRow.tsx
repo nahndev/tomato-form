@@ -1,4 +1,4 @@
-import ColumnTypeBadge from "@/features/board/components/column/ColumnTypeBadge";
+import BoardTypeBadge from "@/features/board/components/column/BoardTypeBadge";
 import type { BoardColumn } from "@/types/board";
 
 export interface BoardColumnsHeaderRowProps {
@@ -16,8 +16,16 @@ const BoardColumnsHeaderRow: React.FC<BoardColumnsHeaderRowProps> = ({
       <div className="flex items-center gap-2">
         {columns.map((column) =>
           column.type === null ? null : (
-            <div key={column.id} className="min-w-[150px]">
-              <ColumnTypeBadge type={column.type} />
+            <div
+              key={column.id}
+              className="flex min-w-[150px] flex-col gap-1"
+            >
+              {column.label && (
+                <span className="truncate text-xs font-semibold">
+                  {column.label}
+                </span>
+              )}
+              <BoardTypeBadge type={column.type} />
             </div>
           ),
         )}

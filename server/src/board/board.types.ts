@@ -9,5 +9,6 @@ export interface BoardColumn {
   id: string;
   type: BoardColumnDisplayType;
   size: number;
+  label: string | null;
   items: BoardColumnItem[];
 }

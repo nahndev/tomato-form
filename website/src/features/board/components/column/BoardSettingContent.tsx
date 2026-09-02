@@ -2,24 +2,27 @@
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
-import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useUpdateBoard } from "@/features/board/hooks/useBoards";
-import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
+import { useTemplates } from "@/features/template/hooks/useTemplates";
 import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
-import type { BoardColumn } from "@/types/board";
+import type { Board, BoardColumn as BoardColumnData } from "@/types/board";
+import type { Template } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { useState } from "react";
-import AddColumnButton from "./AddColumnButton";
-import BoardColumnHeaderCell from "./BoardColumnHeaderCell";
-import BoardColumnSizeInput from "./BoardColumnSizeInput";
-import BoardColumnWidgetCell from "./BoardColumnWidgetCell";
+import BoardColumnCell from "./BoardColumnCell";
+import BoardColumnCreation from "./BoardColumnCreation";
+import BoardColumnFooter from "./BoardColumnFooter";
+import BoardColumnHeader from "./BoardColumnHeader";
+import BoardTemplate from "./BoardTemplate";
 
-const DEFAULT_COLUMN_SIZE = 150;
+export interface BoardSettingContentProps {
+  board: Board;
+}
 
 function prepareColumnsForSave(
-  columns: BoardColumn[],
+  columns: BoardColumnData[],
   boardTemplateIds: Set<string>,
-): BoardColumn[] | null {
+): BoardColumnData[] | null {
   const touched = columns.filter((c) => c.items.length > 0);
 
   const isInvalid = touched.some(
@@ -33,20 +36,38 @@ function prepareColumnsForSave(
   }));
 }
 
-const BoardColumnsSetting: React.FC = () => {
-  const board = useBoardContext();
+/** Column table for a board, including linking/unlinking templates from the same screen. */
+const BoardSettingContent: React.FC<BoardSettingContentProps> = ({
+  board,
+}) => {
   const { mutateAsync: updateBoard, isPending } = useUpdateBoard(board.id);
+  const { data: allTemplates = [], isLoading: isLoadingTemplates } =
+    useTemplates();
 
-  const [draftColumns, setDraftColumns] = useState<BoardColumn[]>(
+  const [draftColumns, setDraftColumns] = useState<BoardColumnData[]>(
     board.columns,
+  );
+  const [draftTemplateIds, setDraftTemplateIds] = useState<string[]>(
+    board.templates.map((t) => t.id),
+  );
+
+  const linkedTemplatesById = new Map(board.templates.map((t) => [t.id, t]));
+  const allTemplatesById = new Map(allTemplates.map((t) => [t.id, t]));
+  const draftTemplates = draftTemplateIds
+    .map((id) => linkedTemplatesById.get(id) ?? allTemplatesById.get(id))
+    .filter((t): t is Template => Boolean(t));
+  const availableTemplates = allTemplates.filter(
+    (t) => !draftTemplateIds.includes(t.id),
   );
 
   const isDirty =
-    JSON.stringify(draftColumns) !== JSON.stringify(board.columns);
+    JSON.stringify(draftColumns) !== JSON.stringify(board.columns) ||
+    JSON.stringify(draftTemplateIds) !==
+      JSON.stringify(board.templates.map((t) => t.id));
 
-  function updateColumn(columnId: string, patch: Partial<BoardColumn>) {
+  function replaceColumn(updated: BoardColumnData) {
     setDraftColumns((prev) =>
-      prev.map((c) => (c.id === columnId ? { ...c, ...patch } : c)),
+      prev.map((c) => (c.id === updated.id ? updated : c)),
     );
   }
 
@@ -54,49 +75,22 @@ const BoardColumnsSetting: React.FC = () => {
     setDraftColumns((prev) => prev.filter((c) => c.id !== columnId));
   }
 
-  function pickWidget(columnId: string, templateId: string, widgetId: string) {
-    setDraftColumns((prev) =>
-      prev.map((c) => {
-        if (c.id !== columnId) return c;
-
-        const itemsWithoutTemplate = c.items.filter(
-          (item) => item.templateId !== templateId,
-        );
-
-        if (!widgetId) {
-          return { ...c, items: itemsWithoutTemplate };
-        }
-
-        const template = board.templates.find((t) => t.id === templateId);
-        const latestVersion = findLatestVersion(
-          template?.templateVersions ?? [],
-        );
-        const widget = latestVersion?.snapshot.widgets[widgetId];
-
-        const type =
-          c.type ??
-          (widget ? WIDGET_DISPLAY_TYPE_REGISTRY[widget.type][0] : null);
-        const size = c.size ?? DEFAULT_COLUMN_SIZE;
-
-        return {
-          ...c,
-          type,
-          size,
-          items: [...itemsWithoutTemplate, { templateId, widgetId }],
-        };
-      }),
-    );
+  function addTemplate(templateId: string) {
+    setDraftTemplateIds((prev) => [...prev, templateId]);
   }
 
   async function handleSave() {
-    const boardTemplateIds = new Set(board.templates.map((t) => t.id));
+    const boardTemplateIds = new Set(draftTemplateIds);
     const prepared = prepareColumnsForSave(draftColumns, boardTemplateIds);
     if (!prepared) {
       toast.error("Every column needs a widget and a size before saving");
       return;
     }
     try {
-      await updateBoard({ columns: prepared });
+      await updateBoard({
+        columns: prepared,
+        templateIds: draftTemplateIds,
+      });
       setDraftColumns(prepared);
       toast.success("Columns updated");
     } catch (err) {
@@ -105,38 +99,26 @@ const BoardColumnsSetting: React.FC = () => {
     }
   }
 
-  if (board.templates.length === 0) {
-    return (
-      <p className="py-8 text-center text-sm text-muted-foreground">
-        Link a template on the Template tab before configuring columns.
-      </p>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-muted-foreground">
-        Add columns to show widget values on the board list. All widgets in a
-        column must share the same display type.
-      </p>
-
       <div className="overflow-x-auto">
         <table className="w-full border-separate border-spacing-2">
           <thead>
             <tr>
               <th className="text-left text-xs font-medium text-muted-foreground">
-                Template
+                Column
               </th>
               {draftColumns.map((column) => (
                 <th key={column.id}>
-                  <BoardColumnHeaderCell
+                  <BoardColumnHeader
                     column={column}
+                    onChange={replaceColumn}
                     onRemove={() => removeColumn(column.id)}
                   />
                 </th>
               ))}
               <th>
-                <AddColumnButton
+                <BoardColumnCreation
                   onAdd={(column) =>
                     setDraftColumns((prev) => [...prev, column])
                   }
@@ -145,39 +127,60 @@ const BoardColumnsSetting: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {board.templates.map((template) => {
+            {draftTemplates.length === 0 && (
+              <tr>
+                <td
+                  colSpan={draftColumns.length + 1}
+                  className="py-4 text-center text-sm text-muted-foreground"
+                >
+                  No templates linked yet.
+                </td>
+              </tr>
+            )}
+            {draftTemplates.map((template) => {
               const latestVersion = findLatestVersion(
                 template.templateVersions ?? [],
               );
               return (
                 <tr key={template.id}>
-                  <td className="text-sm">{template.name}</td>
+                  <td>
+                    <BoardTemplate part={{ kind: "badge", name: template.name }} />
+                  </td>
                   {draftColumns.map((column) => (
                     <td key={column.id}>
-                      <BoardColumnWidgetCell
+                      <BoardColumnCell
                         column={column}
-                        templateId={template.id}
-                        templateName={template.name}
+                        template={template}
                         latestVersion={latestVersion}
-                        onPick={(widgetId) =>
-                          pickWidget(column.id, template.id, widgetId)
-                        }
+                        onChange={replaceColumn}
                       />
                     </td>
                   ))}
                 </tr>
               );
             })}
+            <tr>
+              <td>
+                <BoardTemplate
+                  part={{
+                    kind: "creation",
+                    availableTemplates,
+                    isLoading: isLoadingTemplates,
+                    onAdd: addTemplate,
+                  }}
+                />
+              </td>
+              {draftColumns.map((column) => (
+                <td key={column.id} />
+              ))}
+            </tr>
           </tbody>
           <tfoot>
             <tr>
               <td className="text-xs text-muted-foreground">Size</td>
               {draftColumns.map((column) => (
                 <td key={column.id}>
-                  <BoardColumnSizeInput
-                    size={column.size}
-                    onChange={(size) => updateColumn(column.id, { size })}
-                  />
+                  <BoardColumnFooter column={column} />
                 </td>
               ))}
             </tr>
@@ -205,4 +208,4 @@ const BoardColumnsSetting: React.FC = () => {
   );
 };
 
-export default BoardColumnsSetting;
+export default BoardSettingContent;

@@ -1,10 +1,11 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
   IsArray,
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Min,
   ValidateNested,
@@ -49,6 +50,11 @@ export class BoardColumnDto {
   @IsInt()
   @Min(1)
   size!: number;
+
+  @ApiPropertyOptional({ nullable: true, example: "Assignee" })
+  @IsOptional()
+  @IsString()
+  label?: string | null;
 
   @ApiProperty({ type: [BoardColumnItemDto] })
   @ValidateNested({ each: true })

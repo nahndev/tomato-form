@@ -2,11 +2,11 @@ import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/disp
 import type { DisplayType } from "@/types/display-type";
 import { TomatoIcon } from "@tomato/icon";
 
-export interface ColumnTypeBadgeProps {
+export interface BoardTypeBadgeProps {
   type: DisplayType;
 }
 
-const ColumnTypeBadge: React.FC<ColumnTypeBadgeProps> = ({ type }) => {
+const BoardTypeBadge: React.FC<BoardTypeBadgeProps> = ({ type }) => {
   const definition = DISPLAY_TYPE_REGISTRY[type];
 
   return (
@@ -20,4 +20,4 @@ const ColumnTypeBadge: React.FC<ColumnTypeBadgeProps> = ({ type }) => {
   );
 };
 
-export default ColumnTypeBadge;
+export default BoardTypeBadge;

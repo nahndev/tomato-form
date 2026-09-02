@@ -7,7 +7,7 @@ import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widg
 import type { BoardColumn } from "@/types/board";
 import type { TemplateVersion } from "@/types/template";
 
-export interface BoardColumnWidgetCellProps {
+export interface WidgetSelectorProps {
   column: BoardColumn;
   templateId: string;
   templateName: string;
@@ -15,7 +15,7 @@ export interface BoardColumnWidgetCellProps {
   onPick: (widgetId: string) => void;
 }
 
-const BoardColumnWidgetCell: React.FC<BoardColumnWidgetCellProps> = ({
+const WidgetSelector: React.FC<WidgetSelectorProps> = ({
   column,
   templateId,
   templateName,
@@ -61,4 +61,4 @@ const BoardColumnWidgetCell: React.FC<BoardColumnWidgetCellProps> = ({
   );
 };
 
-export default BoardColumnWidgetCell;
+export default WidgetSelector;

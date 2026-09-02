@@ -1,7 +1,7 @@
-import BoardColumnsSetting from "./column/BoardColumnsSetting";
+import BoardSetting from "./column/BoardSetting";
 
 const Setting: React.FC = () => {
-  return <BoardColumnsSetting />;
+  return <BoardSetting />;
 };
 
 export default Setting;

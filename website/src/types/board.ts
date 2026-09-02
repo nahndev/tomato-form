@@ -2,7 +2,6 @@ import type { DisplayType } from "./display-type";
 import type { Template } from "./template";
 
 export const BoardTabValue = {
-  TEMPLATE: "template",
   SETTING: "setting",
   HISTORY: "history",
   DISCUSSION: "discussion",
@@ -16,10 +15,9 @@ export interface BoardColumnItem {
 
 export interface BoardColumn {
   id: string;
-  /** null while the column has no widget picked yet (not saveable). */
   type: DisplayType | null;
-  /** null until a size is set (not saveable). */
   size: number | null;
+  label: string | null;
   items: BoardColumnItem[];
 }
 

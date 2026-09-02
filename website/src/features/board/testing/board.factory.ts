@@ -19,6 +19,7 @@ export function getMockBoardColumn(
     id: mockId("column"),
     type: DisplayType.TEXT,
     size: 150,
+    label: null,
     items: [],
     ...overrides,
   };

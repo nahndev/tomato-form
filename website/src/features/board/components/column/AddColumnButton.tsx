@@ -9,7 +9,7 @@ export interface AddColumnButtonProps {
 
 const AddColumnButton: React.FC<AddColumnButtonProps> = ({ onAdd }) => {
   function handleClick() {
-    onAdd({ id: v4(), type: null, size: null, items: [] });
+    onAdd({ id: v4(), type: null, size: null, label: null, items: [] });
   }
 
   return (
