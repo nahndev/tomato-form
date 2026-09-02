@@ -12,7 +12,7 @@ const BoardSetting: React.FC = () => {
         Link templates and add columns to show widget values on the board list.
         All widgets in a column must share the same display type.
       </p>
-      <BoardSettingContent board={board} />;
+      <BoardSettingContent board={board} />
     </div>
   );
 };

@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  filename  String
+  mimeType  String   @map("mime_type")
+  size      Int
+  width     Int
+  height    Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("images")
+}

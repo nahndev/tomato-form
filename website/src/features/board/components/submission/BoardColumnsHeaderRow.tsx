@@ -1,4 +1,4 @@
-import BoardTypeBadge from "@/features/board/components/column/BoardTypeBadge";
+import BoardTypeBadge from "@/features/board/components/display/BoardTypeBadge";
 import type { BoardColumn } from "@/types/board";
 
 export interface BoardColumnsHeaderRowProps {

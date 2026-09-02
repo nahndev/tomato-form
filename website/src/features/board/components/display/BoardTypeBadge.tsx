@@ -1,14 +1,14 @@
 import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
-import type { DisplayType } from "@/types/display-type";
+import { DisplayType } from "@/types/display-type";
+import { Nullable } from "@/types/utils";
 import { TomatoIcon } from "@tomato/icon";
 
 export interface BoardTypeBadgeProps {
-  type: DisplayType;
+  type: Nullable<DisplayType>;
 }
 
 const BoardTypeBadge: React.FC<BoardTypeBadgeProps> = ({ type }) => {
-  const definition = DISPLAY_TYPE_REGISTRY[type];
-
+  const definition = DISPLAY_TYPE_REGISTRY[type ?? DisplayType.UNKNOWN];
   return (
     <span
       className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium"
