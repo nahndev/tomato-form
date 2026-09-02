@@ -44,3 +44,8 @@ export { Prisma }
  * 
  */
 export type Image = Prisma.ImageModel
+/**
+ * Model ImageVariant
+ * 
+ */
+export type ImageVariant = Prisma.ImageVariantModel

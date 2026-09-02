@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { join } from "node:path";
 import { AppModule } from "./app.module";
 import { GlobalExceptionFilter } from "./common/filters/http-exception.filter";
 import { ResponseInterceptor } from "./common/interceptors/response.interceptor";
@@ -12,7 +13,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = app.get(ConfigService<EnvironmentVariables, true>);
 
-  app.useStaticAssets(config.get("IMAGE_UPLOAD_DIR", { infer: true }), {
+  app.useStaticAssets(join(config.get("IMAGE_UPLOAD_DIR", { infer: true }), "images"), {
     prefix: "/uploads/",
   });
 

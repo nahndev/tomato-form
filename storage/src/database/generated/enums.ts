@@ -9,7 +9,10 @@
 * 🟢 You can import this file directly.
 */
 
+export const ImageVariantKind = {
+  THUMBNAIL: 'THUMBNAIL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type ImageVariantKind = (typeof ImageVariantKind)[keyof typeof ImageVariantKind]

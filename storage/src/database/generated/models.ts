@@ -9,4 +9,5 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Image'
+export type * from './models/ImageVariant'
 export type * from './commonInputTypes'

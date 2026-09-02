@@ -8,13 +8,36 @@ datasource db {
 }
 
 model Image {
-  id        String   @id @default(uuid())
+  id        String         @id @default(uuid())
   filename  String
-  mimeType  String   @map("mime_type")
+  mimeType  String         @map("mime_type")
   size      Int
   width     Int
   height    Int
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime       @default(now()) @map("created_at")
+  variants  ImageVariant[]
 
   @@map("images")
+}
+
+enum ImageVariantKind {
+  THUMBNAIL
+  MEDIUM
+  LARGE
+}
+
+model ImageVariant {
+  id        String           @id @default(uuid())
+  imageId   String           @map("image_id")
+  image     Image            @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  kind      ImageVariantKind
+  mimeType  String           @map("mime_type")
+  size      Int
+  width     Int
+  height    Int
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  @@unique([imageId, kind])
+  @@index([imageId])
+  @@map("image_variants")
 }

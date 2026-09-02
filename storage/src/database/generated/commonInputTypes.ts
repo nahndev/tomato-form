@@ -99,6 +99,23 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type EnumImageVariantKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageVariantKind | Prisma.EnumImageVariantKindFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel> | $Enums.ImageVariantKind
+}
+
+export type EnumImageVariantKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageVariantKind | Prisma.EnumImageVariantKindFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageVariantKindWithAggregatesFilter<$PrismaModel> | $Enums.ImageVariantKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -191,6 +208,23 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
+}
+
+export type NestedEnumImageVariantKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageVariantKind | Prisma.EnumImageVariantKindFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel> | $Enums.ImageVariantKind
+}
+
+export type NestedEnumImageVariantKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageVariantKind | Prisma.EnumImageVariantKindFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageVariantKindWithAggregatesFilter<$PrismaModel> | $Enums.ImageVariantKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel>
 }
 
 
