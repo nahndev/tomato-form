@@ -1,13 +1,10 @@
-export interface BoardRowActionProps<Row, Column> {
+import * as React from "react";
+
+export interface BoardRowActionProps<Row> {
   row: Row;
-  column: Column;
-  render: (row: Row, column: Column) => React.ReactNode;
+  children: React.ReactNode;
 }
 
-export default function BoardRowAction<Row, Column>({
-  row,
-  column,
-  render,
-}: BoardRowActionProps<Row, Column>) {
-  return <>{render(row, column)}</>;
+export default function BoardRowAction<Row>({ children }: BoardRowActionProps<Row>) {
+  return <div role="cell">{children}</div>;
 }

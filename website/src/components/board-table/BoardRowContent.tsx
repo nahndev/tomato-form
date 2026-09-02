@@ -1,13 +1,13 @@
+import * as React from "react";
+
 export interface BoardRowContentProps<Row, Column> {
   row: Row;
   column: Column;
-  render: (row: Row, column: Column) => React.ReactNode;
+  children: React.ReactNode;
 }
 
 export default function BoardRowContent<Row, Column>({
-  row,
-  column,
-  render,
+  children,
 }: BoardRowContentProps<Row, Column>) {
-  return <>{render(row, column)}</>;
+  return <div role="cell">{children}</div>;
 }

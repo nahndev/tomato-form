@@ -7,7 +7,7 @@ import { ConfigService } from "@nestjs/config";
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import * as sharp from "sharp";
+import sharp from "sharp";
 
 @Injectable()
 export class ImageService {

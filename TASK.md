@@ -1,37 +1,26 @@
-# Adjust board column settings
+# Create new component `board-table`
 
-## Tasks 01 - Rename and split component
+## Scope
 
-- [x] Rename `website/src/features/board/components/column/BoardColumnsSetting.tsx` into `BoardColumnsSettingContent`
-- [x] Split every column into new component
-- [x] Split cell into component
+- website/src/components
 
-## Tasks 02 - add label
+## Design
 
-- [x] Add `label` to `BoardColumn` (website/src/types/board.ts)
-- [x] Add component and display for `label`
+- [x] `BoardTable` accept `columns` and `rows`, provider `context` and render wrapper
+- [x] `BoardHeader` render wrapper for header, children is (columns) => React.FC
+- [x] `BoardColumnHeader` accept `column`
+- [x] `BoardActionHeader`
+- [x] `BoardContent` is wrapper
+- [x] `BoardRow` render wrapper of a row, children is (row, columns) => React.FC
+- [x] `BoardRowHeader` accept `row`
+- [x] `BoardRowContent` accept `row` and `column`
+- [x] `BoardRowAction` accept `row`
 
-## Tasks 03 - Merge setting template with column settings
+## Tasks 01
 
-- [x] Remove `TemplateSetting`
-- [x] In `BoardColumnSettingContent`, in bottom add button allow add `template` to list
+- Create folder `website/src/components/board-table`
+- Implement all components
 
-## Tasks 04 - Update structure of board
+## Rules
 
-- [x] Adjust `website/src/features/board/components/column`
-
-```md
-- BoardSetting
-  - BoardSettingContent
-    - BoardTemplate
-      - TemplateBadge
-      - AddTemplateButton
-    - BoardColumn
-      - BoardSizeBadge
-      - BoardLabelInput
-      - BoardTypeBadge
-      - WidgetSelector
-    - BoardColumnCreation
-      - AddColumnButton
-      - ColumnSkeleton
-```
+- Only accept props with description, if need new column, ask me
