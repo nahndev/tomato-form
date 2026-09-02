@@ -14,7 +14,13 @@ export default function BoardTable<Row, Column>({
 }: BoardTableProps<Row, Column>) {
   return (
     <BoardTableProvider value={{ columns, rows }}>
-      <div role="table" className="grid gap-2">
+      <div
+        role="table"
+        className="grid gap-2"
+        style={{
+          gridTemplateColumns: `minmax(140px, auto) repeat(${columns.length}, minmax(150px, 1fr)) auto`,
+        }}
+      >
         {children}
       </div>
     </BoardTableProvider>

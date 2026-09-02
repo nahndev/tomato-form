@@ -1,10 +1,17 @@
 "use client";
 
-import { toast } from "@/components/ui/sonner";
 import {
+  BoardActionHeader,
+  BoardColumnHeader as BoardColumnHeaderCell,
+  BoardContent,
+  BoardHeader,
+  BoardRow,
+  BoardRowAction,
+  BoardRowContent,
+  BoardRowHeader,
   BoardTable,
-  type BoardTableColumn,
-} from "@/features/board/components/display/BoardTable";
+} from "@/components/board-table";
+import { toast } from "@/components/ui/sonner";
 import { useUpdateBoard } from "@/features/board/hooks/useBoards";
 import { useTemplates } from "@/features/template/hooks/useTemplates";
 import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
@@ -100,47 +107,90 @@ const BoardSettingContent: React.FC<BoardSettingContentProps> = ({ board }) => {
     }
   }
 
-  const columns: BoardTableColumn<Template>[] = draftColumns.map((column) => ({
-    id: column.id,
-    header: (
-      <BoardColumnHeader
-        column={column}
-        onChange={replaceColumn}
-        onRemove={() => removeColumn(column.id)}
-      />
-    ),
-    cell: (template) => (
-      <BoardColumnCell
-        column={column}
-        template={template}
-        latestVersion={findLatestVersion(template.templateVersions ?? [])}
-        onChange={replaceColumn}
-      />
-    ),
-  }));
-
   return (
     <div className="flex flex-col gap-4">
-      <BoardTable
-        rowHeaderLabel="Templates"
-        columns={columns}
-        renderAddColumn={
-          <BoardColumnCreation
-            onAdd={(column) => setDraftColumns((prev) => [...prev, column])}
-          />
-        }
-        rows={draftTemplates}
-        getRowId={(t) => t.id}
-        renderRowHeader={(t) => <TemplateBadge name={t.name} />}
-        rowActions="Actions"
-        renderFooter={
-          <AddTemplateButton
-            availableTemplates={availableTemplates}
-            isLoading={isLoadingTemplates}
-            onAdd={addTemplate}
-          />
-        }
-        emptyState="No templates linked yet."
+      <BoardTable columns={draftColumns} rows={draftTemplates}>
+        <BoardHeader<Template, BoardColumnData>>
+          {(columns) => (
+            <>
+              <div
+                role="columnheader"
+                className="text-left text-xs font-medium text-muted-foreground"
+              >
+                Templates
+              </div>
+              {columns.map((column) => (
+                <BoardColumnHeaderCell key={column.id} column={column}>
+                  <BoardColumnHeader
+                    column={column}
+                    onChange={replaceColumn}
+                    onRemove={() => removeColumn(column.id)}
+                  />
+                </BoardColumnHeaderCell>
+              ))}
+              <BoardActionHeader>
+                <BoardColumnCreation
+                  onAdd={(column) =>
+                    setDraftColumns((prev) => [...prev, column])
+                  }
+                />
+              </BoardActionHeader>
+            </>
+          )}
+        </BoardHeader>
+
+        <BoardContent>
+          {draftTemplates.length === 0 ? (
+            <div role="row" className="contents">
+              <div
+                role="cell"
+                className="py-4 text-center text-sm text-muted-foreground"
+              >
+                No templates linked yet.
+              </div>
+            </div>
+          ) : (
+            draftTemplates.map((template) => (
+              <BoardRow<Template, BoardColumnData>
+                key={template.id}
+                row={template}
+              >
+                {(row, columns) => (
+                  <>
+                    <BoardRowHeader row={row}>
+                      <TemplateBadge name={row.name} />
+                    </BoardRowHeader>
+                    {columns.map((column) => (
+                      <BoardRowContent
+                        key={column.id}
+                        row={row}
+                        column={column}
+                      >
+                        <BoardColumnCell
+                          column={column}
+                          template={row}
+                          latestVersion={findLatestVersion(
+                            row.templateVersions ?? [],
+                          )}
+                          onChange={replaceColumn}
+                        />
+                      </BoardRowContent>
+                    ))}
+                    <BoardRowAction>
+                      <div>action</div>
+                    </BoardRowAction>
+                  </>
+                )}
+              </BoardRow>
+            ))
+          )}
+        </BoardContent>
+      </BoardTable>
+
+      <AddTemplateButton
+        availableTemplates={availableTemplates}
+        isLoading={isLoadingTemplates}
+        onAdd={addTemplate}
       />
 
       <BoardSettingActions
