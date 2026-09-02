@@ -7,5 +7,9 @@ export interface BoardRowActionProps<Row> {
 export default function BoardRowAction<Row>({
   children,
 }: BoardRowActionProps<Row>) {
-  return <div role="cell">{children}</div>;
+  return (
+    <div role="cell" className="flex items-center">
+      {children}
+    </div>
+  );
 }

@@ -1,5 +1,6 @@
-import BoardTypeBadge from "@/features/board/components/display/BoardTypeBadge";
+import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import type { BoardColumn } from "@/types/board";
+import { TomatoIcon } from "@tomato/icon";
 
 export interface BoardColumnsHeaderRowProps {
   columns: BoardColumn[];
@@ -25,7 +26,19 @@ const BoardColumnsHeaderRow: React.FC<BoardColumnsHeaderRowProps> = ({
                   {column.label}
                 </span>
               )}
-              <BoardTypeBadge type={column.type} />
+              <span
+                className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium"
+                style={{
+                  borderColor: DISPLAY_TYPE_REGISTRY[column.type].color,
+                  color: DISPLAY_TYPE_REGISTRY[column.type].color,
+                }}
+              >
+                <TomatoIcon
+                  icon={DISPLAY_TYPE_REGISTRY[column.type].icon}
+                  className="size-3.5"
+                />
+                {DISPLAY_TYPE_REGISTRY[column.type].label}
+              </span>
             </div>
           ),
         )}

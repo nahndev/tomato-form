@@ -5,5 +5,9 @@ export interface BoardActionHeaderProps {
 }
 
 export default function BoardActionHeader({ children }: BoardActionHeaderProps) {
-  return <div role="columnheader">{children}</div>;
+  return (
+    <div role="columnheader" className="flex items-center">
+      {children}
+    </div>
+  );
 }

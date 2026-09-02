@@ -6,5 +6,9 @@ export interface BoardRowHeaderProps<Row> {
 }
 
 export default function BoardRowHeader<Row>({ children }: BoardRowHeaderProps<Row>) {
-  return <div role="cell">{children}</div>;
+  return (
+    <div role="cell" className="flex items-center">
+      {children}
+    </div>
+  );
 }

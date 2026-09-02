@@ -9,5 +9,9 @@ export interface BoardRowContentProps<Row, Column> {
 export default function BoardRowContent<Row, Column>({
   children,
 }: BoardRowContentProps<Row, Column>) {
-  return <div role="cell">{children}</div>;
+  return (
+    <div role="cell" className="flex items-center gap-2">
+      {children}
+    </div>
+  );
 }
