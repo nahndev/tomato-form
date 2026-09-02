@@ -7,6 +7,8 @@ export interface TemplateState {
   sessions: Record<string, Session>;
   layouts: Record<string, GridLayout>;
   widgetToSession: Record<string, string>;
+  /** True from the moment a publish is requested until it settles, synced to every collaborator. */
+  isPublishing: boolean;
 }
 
 export function readTemplateState(doc: Y.Doc): TemplateState {
@@ -18,6 +20,7 @@ export function readTemplateState(doc: Y.Doc): TemplateState {
     widgetToSession: Object.fromEntries(
       doc.getMap<string>("widgetToSession").entries(),
     ),
+    isPublishing: typeof doc.getMap<number>("meta").get("publishing") === "number",
   };
 }
 

@@ -5,6 +5,8 @@ import { TemplateHandler } from "../handlers/TemplateHandler";
 
 export interface TemplateActions {
   setName: (name: string) => void;
+  requestPublish: () => void;
+  settlePublish: () => void;
 }
 
 /**
@@ -18,5 +20,7 @@ export function useTemplateActions(): TemplateActions {
 
   return {
     setName: (name) => transact(() => templateHandler.setName(name)),
+    requestPublish: () => transact(() => templateHandler.requestPublish()),
+    settlePublish: () => transact(() => templateHandler.settlePublish()),
   };
 }

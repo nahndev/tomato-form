@@ -1,7 +1,12 @@
 import { SyncDoc, SyncHandler } from "@tomato/sync";
-import { TemplateNameChangedEvent } from "../events";
+import {
+  TemplateNameChangedEvent,
+  TemplatePublishRequestedEvent,
+  TemplatePublishSettledEvent,
+} from "../events";
 
 const READY_KEY = "ready";
+const PUBLISHING_KEY = "publishing";
 
 /** Owns the `name` text and the `meta` "is this doc seeded" flag. */
 @SyncHandler()
@@ -30,5 +35,20 @@ export class TemplateHandler {
 
   markReady(): void {
     this.meta.set(READY_KEY, Date.now());
+  }
+
+  /** True from the moment a publish is requested until it settles, synced to every collaborator. */
+  isPublishing(): boolean {
+    return typeof this.meta.get(PUBLISHING_KEY) === "number";
+  }
+
+  requestPublish(): void {
+    this.meta.set(PUBLISHING_KEY, Date.now());
+    this.syncDoc.emit(new TemplatePublishRequestedEvent());
+  }
+
+  settlePublish(): void {
+    this.meta.delete(PUBLISHING_KEY);
+    this.syncDoc.emit(new TemplatePublishSettledEvent());
   }
 }

@@ -6,7 +6,9 @@ import {
   useTemplateId,
   useTemplateVersions,
 } from "@/features/template/components/provider/TemplateProvider";
+import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { usePublishTemplateVersion } from "@/features/template/hooks/useTemplates";
+import { useTemplateActions } from "@/features/template/sync/hooks/useTemplateActions";
 import type { TemplateVersion } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import * as semver from "semver";
@@ -17,27 +19,31 @@ export type VersionSettingProps = {};
 const VersionSetting: React.FC<VersionSettingProps> = () => {
   const templateId = useTemplateId();
   const templateVersions = useTemplateVersions();
-  const { mutateAsync: publishVersion, isPending } =
-    usePublishTemplateVersion(templateId);
+  const { isPublishing } = useTemplateState();
+  const { requestPublish, settlePublish } = useTemplateActions();
+  const { mutateAsync: publishVersion } = usePublishTemplateVersion(templateId);
 
   const versions = [...templateVersions].sort((a, b) =>
     semver.rcompare(a.version, b.version),
   );
 
   async function handlePublish() {
+    requestPublish();
     try {
       await publishVersion();
       toast.success("Publish requested — the new version will appear here shortly");
     } catch (err) {
       console.error("Failed to publish template version:", err);
       toast.error("Failed to publish version");
+    } finally {
+      settlePublish();
     }
   }
 
   return (
     <div className="flex h-full flex-col gap-2 p-2">
-      <Button onClick={handlePublish} disabled={isPending}>
-        {isPending ? (
+      <Button onClick={handlePublish} disabled={isPublishing}>
+        {isPublishing ? (
           <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
         ) : (
           "Publish current version"

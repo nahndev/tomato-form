@@ -51,3 +51,7 @@ export class TemplateNameChangedEvent extends SyncEvent {
     super();
   }
 }
+
+export class TemplatePublishRequestedEvent extends SyncEvent {}
+
+export class TemplatePublishSettledEvent extends SyncEvent {}
