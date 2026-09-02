@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { validateEnv } from "./config/env.schema";
 import { DatabaseModule } from "./database/database.module";
+import { FileModule } from "./file/file.module";
 import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
 
@@ -15,6 +16,7 @@ import { ImageModule } from "./image/image.module";
     DatabaseModule,
     HealthModule,
     ImageModule,
+    FileModule,
   ],
 })
 export class AppModule {}

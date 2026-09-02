@@ -26,6 +26,10 @@ export class EnvironmentVariables {
   @IsNumber()
   @IsOptional()
   IMAGE_MAX_HEIGHT: number = 1920;
+
+  @IsString()
+  @IsOptional()
+  FILE_UPLOAD_DIR: string = "./uploads";
 }
 
 export function validateEnv(config: Record<string, unknown>) {

@@ -17,6 +17,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/system/templates", label: "Templates", icon: TomatoIconKey.Document },
   { href: "/system/boards", label: "Boards", icon: TomatoIconKey.LayoutGrid },
   { href: "/system/users", label: "Users", icon: TomatoIconKey.Users },
+  { href: "/system/documents", label: "Documents", icon: TomatoIconKey.Database },
 ];
 
 export function AppSidebar() {

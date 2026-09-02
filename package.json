@@ -7,7 +7,9 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "clean": "turbo clean && rm -rf node_modules"
+    "clean": "turbo clean && rm -rf node_modules",
+    "generate": "pnpm --filter @tomato-form/server generate && pnpm --filter @tomato-form/storage generate",
+    "migrate": "pnpm --filter @tomato-form/server migrate && pnpm --filter @tomato-form/storage migrate"
   },
   "devDependencies": {
     "turbo": "^2.0.0"

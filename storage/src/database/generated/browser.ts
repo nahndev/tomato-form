@@ -27,3 +27,8 @@ export type Image = Prisma.ImageModel
  * 
  */
 export type ImageVariant = Prisma.ImageVariantModel
+/**
+ * Model File
+ * 
+ */
+export type File = Prisma.FileModel

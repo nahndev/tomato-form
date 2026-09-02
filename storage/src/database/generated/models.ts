@@ -10,4 +10,5 @@
  */
 export type * from './models/Image'
 export type * from './models/ImageVariant'
+export type * from './models/File'
 export type * from './commonInputTypes'

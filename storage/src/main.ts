@@ -17,6 +17,10 @@ async function bootstrap() {
     prefix: "/uploads/",
   });
 
+  app.useStaticAssets(join(config.get("FILE_UPLOAD_DIR", { infer: true }), "files"), {
+    prefix: "/uploads/files/",
+  });
+
   app.enableShutdownHooks();
   app.setGlobalPrefix("api");
 

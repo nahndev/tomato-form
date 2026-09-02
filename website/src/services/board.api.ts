@@ -2,7 +2,7 @@ import type { Board, CreateBoardInput, UpdateBoardInput } from "@/types/board";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3029/api",
+  baseURL: "/api",
 });
 
 interface ApiResponse<T> {

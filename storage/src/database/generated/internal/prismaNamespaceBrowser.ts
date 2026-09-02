@@ -52,7 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Image: 'Image',
-  ImageVariant: 'ImageVariant'
+  ImageVariant: 'ImageVariant',
+  File: 'File'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -96,6 +97,18 @@ export const ImageVariantScalarFieldEnum = {
 } as const
 
 export type ImageVariantScalarFieldEnum = (typeof ImageVariantScalarFieldEnum)[keyof typeof ImageVariantScalarFieldEnum]
+
+
+export const FileScalarFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  originalName: 'originalName',
+  mimeType: 'mimeType',
+  size: 'size',
+  createdAt: 'createdAt'
+} as const
+
+export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
 
 
 export const SortOrder = {
