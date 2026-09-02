@@ -1,7 +1,8 @@
-export enum RecipientType {
-  MAIL = "mail",
-  USER = "user",
-}
+export const RecipientType = {
+  MAIL: "mail",
+  USER: "user",
+} as const;
+export type RecipientType = (typeof RecipientType)[keyof typeof RecipientType];
 
 export interface Recipient {
   type: RecipientType;

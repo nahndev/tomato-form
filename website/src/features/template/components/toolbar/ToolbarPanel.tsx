@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import {
   TOOLBAR_REGISTRY,
   ToolbarType,
-} from "@/features/template/components/toolbar/registry";
+} from "@/features/template/constants/toolbar/registry";
 import { TomatoIcon } from "@tomato/icon";
 import clsx from "clsx";
 import React, { useState } from "react";

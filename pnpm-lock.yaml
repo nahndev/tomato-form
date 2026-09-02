@@ -23,6 +23,9 @@ importers:
       fractional-indexing:
         specifier: ^3.2.0
         version: 3.2.0
+      motion:
+        specifier: ^12.40.0
+        version: 12.40.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       re-resizable:
         specifier: ^6.11.2
         version: 6.11.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -54,6 +57,28 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.73
+        version: 18.3.31
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.2
+        version: 5.9.3
+
+  packages/sync:
+    dependencies:
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      reflect-metadata:
+        specifier: ^0.2.1
+        version: 0.2.2
+      yjs:
+        specifier: ^13.6.31
+        version: 13.6.31
     devDependencies:
       '@types/react':
         specifier: ^18.2.73
@@ -233,6 +258,9 @@ importers:
       '@tomato/icon':
         specifier: workspace:*
         version: link:../packages/icon
+      '@tomato/sync':
+        specifier: workspace:*
+        version: link:../packages/sync
       axios:
         specifier: ^1.17.0
         version: 1.17.0

@@ -1,42 +1,46 @@
-import type { SerializedEditorState } from "lexical";
-import { CSSProperties } from "react";
 import type { ButtonAction } from "@/types/button-action";
 import type { WidgetType } from "@/types/widget";
 import type { TomatoIconKey } from "@tomato/icon";
+import type { SerializedEditorState } from "lexical";
+import { CSSProperties } from "react";
 
 /**
  * Category a widget type is filed under in the "ADD WIDGET" picker.
  * `SYSTEM` is reserved for widgets backed by platform data (e.g. `users`)
  * rather than author-entered content.
  */
-export enum WidgetGroup {
-  COMMON = "common",
-  MEDIA = "media",
-  ADVANCE = "advance",
-  SYSTEM = "system",
-}
+export const WidgetGroup = {
+  COMMON: "common",
+  MEDIA: "media",
+  ADVANCE: "advance",
+  SYSTEM: "system",
+  DEFAULT: "DEFAULT",
+} as const;
+export type WidgetGroup = (typeof WidgetGroup)[keyof typeof WidgetGroup];
 
-export enum TemplateMode {
-  VIEW = "view",
-  EDIT = "edit",
-}
+export const TemplateMode = {
+  VIEW: "view",
+  EDIT: "edit",
+} as const;
+export type TemplateMode = (typeof TemplateMode)[keyof typeof TemplateMode];
 
 /**
  * Fixed color palette tokens available across the design system.
  * Values are Tailwind's default `-500` shade (see `tailwindcss/theme.css`),
  * so they can be dropped straight into a `CSSProperties` value.
  */
-export enum ColorEnum {
-  RED = "#ef4444",
-  ORANGE = "#f97316",
-  YELLOW = "#eab308",
-  GREEN = "#22c55e",
-  BLUE = "#3b82f6",
-  PURPLE = "#a855f7",
-  PINK = "#ec4899",
-  GRAY = "#6b7280",
-  WHITE = "#ffffff",
-}
+export const ColorEnum = {
+  RED: "#ef4444",
+  ORANGE: "#f97316",
+  YELLOW: "#eab308",
+  GREEN: "#22c55e",
+  BLUE: "#3b82f6",
+  PURPLE: "#a855f7",
+  PINK: "#ec4899",
+  GRAY: "#6b7280",
+  WHITE: "#ffffff",
+} as const;
+export type ColorEnum = (typeof ColorEnum)[keyof typeof ColorEnum];
 
 export interface Widget extends WidgetProperties {
   id: string;
@@ -70,23 +74,26 @@ export interface WidgetProperties {
   containerStyle?: CSSProperties;
 }
 
-export enum SessionConditionType {
-  ALWAYS = "always",
-  BUTTON_CLICKED = "button-clicked",
-  WIDGET_HAS_VALUE = "widget-has-value",
-}
+export const SessionConditionType = {
+  ALWAYS: "always",
+  BUTTON_CLICKED: "button-clicked",
+  WIDGET_HAS_VALUE: "widget-has-value",
+} as const;
+
+export type SessionConditionType =
+  (typeof SessionConditionType)[keyof typeof SessionConditionType];
 
 export interface AlwaysCondition {
-  type: SessionConditionType.ALWAYS;
+  type: typeof SessionConditionType.ALWAYS;
 }
 
 export interface ButtonClickedCondition {
-  type: SessionConditionType.BUTTON_CLICKED;
+  type: typeof SessionConditionType.BUTTON_CLICKED;
   widgetId: string;
 }
 
 export interface WidgetHasValueCondition {
-  type: SessionConditionType.WIDGET_HAS_VALUE;
+  type: typeof SessionConditionType.WIDGET_HAS_VALUE;
   widgetId: string;
 }
 

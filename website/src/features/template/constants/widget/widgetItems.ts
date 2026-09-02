@@ -1,6 +1,6 @@
 import { WidgetGroup } from "@/types/template";
-import { WidgetType } from "@/types/widget";
 import type { WidgetItemDefinition, WidgetItemRegistry } from "@/types/widget";
+import { WidgetType } from "@/types/widget";
 import { TomatoIconKey } from "@tomato/icon";
 import { DEFAULT_LAYOUTS } from "./layouts";
 import { DEFAULT_SETTINGS } from "./settings";
@@ -187,7 +187,7 @@ export const WidgetItems: WidgetItemRegistry = {
     icon: TomatoIconKey.History,
     description: "When the submission was created",
     isDataField: false,
-    group: WidgetGroup.SYSTEM,
+    group: WidgetGroup.DEFAULT,
     defaultSettings: DEFAULT_SETTINGS[WidgetType.CREATED_AT],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.CREATED_AT],
   },
@@ -197,7 +197,7 @@ export const WidgetItems: WidgetItemRegistry = {
     icon: TomatoIconKey.ClipboardList,
     description: "The template the submission was filled from",
     isDataField: false,
-    group: WidgetGroup.SYSTEM,
+    group: WidgetGroup.DEFAULT,
     defaultSettings: DEFAULT_SETTINGS[WidgetType.TEMPLATE],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.TEMPLATE],
   },
@@ -207,7 +207,7 @@ export const WidgetItems: WidgetItemRegistry = {
     icon: TomatoIconKey.UserRound,
     description: "Who submitted the entry",
     isDataField: false,
-    group: WidgetGroup.SYSTEM,
+    group: WidgetGroup.DEFAULT,
     defaultSettings: DEFAULT_SETTINGS[WidgetType.SUBMITTED_BY],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.SUBMITTED_BY],
   },

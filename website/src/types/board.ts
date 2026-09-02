@@ -1,12 +1,13 @@
 import type { DisplayType } from "./display-type";
 import type { Template } from "./template";
 
-export enum BoardTabValue {
-  TEMPLATE = "template",
-  SETTING = "setting",
-  HISTORY = "history",
-  DISCUSSION = "discussion",
-}
+export const BoardTabValue = {
+  TEMPLATE: "template",
+  SETTING: "setting",
+  HISTORY: "history",
+  DISCUSSION: "discussion",
+} as const;
+export type BoardTabValue = (typeof BoardTabValue)[keyof typeof BoardTabValue];
 
 export interface BoardColumnItem {
   templateId: string;

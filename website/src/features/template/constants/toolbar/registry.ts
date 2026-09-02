@@ -5,12 +5,13 @@ import VersionSetting from "@/features/template/components/toolbar/version/Versi
 import { TomatoIconKey } from "@tomato/icon";
 import { ComponentType } from "react";
 
-export enum ToolbarType {
-  Widget = "widget",
-  Structure = "structure",
-  Property = "property",
-  Version = "version",
-}
+export const ToolbarType = {
+  Widget: "widget",
+  Structure: "structure",
+  Property: "property",
+  Version: "version",
+} as const;
+export type ToolbarType = (typeof ToolbarType)[keyof typeof ToolbarType];
 export interface ToolbarDefinition {
   icon: TomatoIconKey;
   type: ToolbarType;

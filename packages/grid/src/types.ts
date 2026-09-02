@@ -1,8 +1,9 @@
 import { LayoutRect } from "./utils";
 
-export enum GridDndType {
-  WIDGET = "@grid/widget",
-}
+export const GridDndType = {
+  WIDGET: "@grid/widget",
+} as const;
+export type GridDndType = (typeof GridDndType)[keyof typeof GridDndType];
 
 export interface AbsoluteLayout extends LayoutRect {
   id: string;

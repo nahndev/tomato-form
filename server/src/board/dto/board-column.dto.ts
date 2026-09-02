@@ -15,11 +15,13 @@ import {
  * `website/src/types/display-type.ts` — there is no shared-types package
  * between web and server in this monorepo, so this is a hand mirror.
  */
-export enum BoardColumnDisplayTypeDto {
-  TEXT = "text",
-  DATE = "date",
-  NUMBER = "number",
-}
+export const BoardColumnDisplayTypeDto = {
+  TEXT: "text",
+  DATE: "date",
+  NUMBER: "number",
+} as const;
+export type BoardColumnDisplayTypeDto =
+  (typeof BoardColumnDisplayTypeDto)[keyof typeof BoardColumnDisplayTypeDto];
 
 export class BoardColumnItemDto {
   @ApiProperty()

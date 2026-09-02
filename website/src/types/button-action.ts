@@ -1,13 +1,15 @@
-export enum ButtonActionType {
-  LINK = "link",
-  MAIL = "mail",
-}
+export const ButtonActionType = {
+  LINK: "link",
+  MAIL: "mail",
+} as const;
+export type ButtonActionType = (typeof ButtonActionType)[keyof typeof ButtonActionType];
 
 /** Mirrors `server/src/mail/recipient.types.ts`. */
-export enum RecipientType {
-  MAIL = "mail",
-  USER = "user",
-}
+export const RecipientType = {
+  MAIL: "mail",
+  USER: "user",
+} as const;
+export type RecipientType = (typeof RecipientType)[keyof typeof RecipientType];
 
 export interface Recipient {
   type: RecipientType;
@@ -16,12 +18,12 @@ export interface Recipient {
 }
 
 export interface LinkAction {
-  type: ButtonActionType.LINK;
+  type: typeof ButtonActionType.LINK;
   url: string;
 }
 
 export interface MailAction {
-  type: ButtonActionType.MAIL;
+  type: typeof ButtonActionType.MAIL;
   recipients: Recipient[];
   subject: string;
   body: string;

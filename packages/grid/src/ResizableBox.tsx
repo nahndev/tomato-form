@@ -1,9 +1,9 @@
-import { COLUMN_WIDTH, GRID_COLUMNS } from "./constants";
-import { AbsoluteLayout } from "./types";
-import { getResizeSpan } from "./utils";
 import clsx from "clsx";
 import { Resizable, ResizeCallback } from "re-resizable";
 import { useState } from "react";
+import { COLUMN_WIDTH, GRID_COLUMNS } from "./constants";
+import { AbsoluteLayout } from "./types";
+import { getResizeSpan } from "./utils";
 
 export interface ResizableBoxProps {
   value: AbsoluteLayout;

@@ -24,9 +24,7 @@ export class SessionHandler {
    * transaction opened by `useTransaction()`.
    */
   getOrCreateDefaultSessionId(): string {
-    const existing = this.sessions.values().next().value as
-      | Session
-      | undefined;
+    const existing = this.sessions.values().next().value as Session | undefined;
     if (existing) return existing.id;
     this.sessions.set(DEFAULT_SESSION_ID, {
       id: DEFAULT_SESSION_ID,

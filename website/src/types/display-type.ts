@@ -1,11 +1,12 @@
 import type { ColorEnum } from "@/types/template";
 import type { TomatoIconKey } from "@tomato/icon";
 
-export enum DisplayType {
-  TEXT = "text",
-  DATE = "date",
-  NUMBER = "number",
-}
+export const DisplayType = {
+  TEXT: "text",
+  DATE: "date",
+  NUMBER: "number",
+} as const;
+export type DisplayType = (typeof DisplayType)[keyof typeof DisplayType];
 
 export interface DisplayTypeDefinition {
   type: DisplayType;
