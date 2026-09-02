@@ -54,3 +54,13 @@ export type ImageVariant = Prisma.ImageVariantModel
  * 
  */
 export type File = Prisma.FileModel
+/**
+ * Model Folder
+ * 
+ */
+export type Folder = Prisma.FolderModel
+/**
+ * Model Resource
+ * 
+ */
+export type Resource = Prisma.ResourceModel

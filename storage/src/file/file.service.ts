@@ -19,7 +19,7 @@ export class FileService {
     this.uploadDir = configService.get("FILE_UPLOAD_DIR", { infer: true });
   }
 
-  async upload(file: Express.Multer.File): Promise<File> {
+  async upload(file: Express.Multer.File, resourceId: string): Promise<File> {
     const id = randomUUID();
     const filename = `${id}/${file.originalname}`;
 
@@ -29,6 +29,7 @@ export class FileService {
     return this.prisma.file.create({
       data: {
         id,
+        resourceId,
         filename,
         originalName: file.originalname,
         mimeType: file.mimetype,
@@ -48,13 +49,19 @@ export class FileService {
   }
 
   async remove(id: string): Promise<void> {
+    const file = await this.findOne(id);
+
     try {
-      await this.prisma.file.delete({ where: { id } });
+      await this.prisma.resource.delete({ where: { id: file.resourceId } });
     } catch (err) {
       if (isPrismaNotFoundError(err)) throw new NotFoundException(`File ${id} not found`);
       throw err;
     }
 
+    await this.removeBlob(id);
+  }
+
+  async removeBlob(id: string): Promise<void> {
     await rm(join(this.uploadDir, "files", id), { recursive: true, force: true });
   }
 

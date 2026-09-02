@@ -1,4 +1,4 @@
-import type { Document } from "@/types/document";
+import type { ResourceItem, ResourceType } from "@/types/document";
 import axios from "axios";
 
 const api = axios.create({
@@ -11,22 +11,37 @@ interface ApiResponse<T> {
   message: string;
 }
 
-export const documentApi = {
-  list(): Promise<Document[]> {
-    return api.get<ApiResponse<Document[]>>("/files").then((r) => r.data.data);
+export const resourceApi = {
+  list(parentId?: string | null, type?: ResourceType): Promise<ResourceItem[]> {
+    return api
+      .get<ApiResponse<ResourceItem[]>>("/resources", { params: { parentId: parentId ?? undefined, type } })
+      .then((r) => r.data.data);
   },
 
-  get(id: string): Promise<Document> {
-    return api.get<ApiResponse<Document>>(`/files/${id}`).then((r) => r.data.data);
+  get(id: string): Promise<ResourceItem> {
+    return api.get<ApiResponse<ResourceItem>>(`/resources/${id}`).then((r) => r.data.data);
   },
 
-  upload(file: File): Promise<Document> {
+  createFolder(name: string, parentId?: string | null): Promise<ResourceItem> {
+    return api
+      .post<ApiResponse<ResourceItem>>("/resources/folders", { name, parentId: parentId ?? undefined })
+      .then((r) => r.data.data);
+  },
+
+  upload(file: File, parentId?: string | null): Promise<ResourceItem> {
     const formData = new FormData();
     formData.append("file", file);
-    return api.post<ApiResponse<Document>>("/files", formData).then((r) => r.data.data);
+    if (parentId) formData.append("parentId", parentId);
+    return api.post<ApiResponse<ResourceItem>>("/resources", formData).then((r) => r.data.data);
+  },
+
+  move(id: string, parentId?: string | null): Promise<ResourceItem> {
+    return api
+      .patch<ApiResponse<ResourceItem>>(`/resources/${id}/move`, { parentId: parentId ?? null })
+      .then((r) => r.data.data);
   },
 
   remove(id: string): Promise<void> {
-    return api.delete(`/files/${id}`).then(() => undefined);
+    return api.delete(`/resources/${id}`).then(() => undefined);
   },
 };

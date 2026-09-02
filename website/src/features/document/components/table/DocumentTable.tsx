@@ -10,15 +10,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatBytes } from "@/lib/format";
-import type { Document } from "@/types/document";
+import type { ResourceItem } from "@/types/document";
 
 interface DocumentTableProps {
-  documents: Document[];
+  documents: ResourceItem[];
   hasAnyDocuments: boolean;
   isLoading: boolean;
   isError: boolean;
   deletingId: string | null;
   onRetry: () => void;
+  onOpenFolder: (resource: ResourceItem) => void;
+  onMove: (resource: ResourceItem) => void;
   onDelete: (id: string) => void;
 }
 
@@ -29,6 +31,8 @@ const DocumentTable: React.FC<DocumentTableProps> = ({
   isError,
   deletingId,
   onRetry,
+  onOpenFolder,
+  onMove,
   onDelete,
 }) => {
   if (isError) {
@@ -56,10 +60,10 @@ const DocumentTable: React.FC<DocumentTableProps> = ({
       <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-20 text-center">
         <TomatoIcon icon={TomatoIconKey.Database} className="mb-4 size-12 text-muted-foreground/40" />
         <h3 className="font-semibold text-muted-foreground">
-          {hasAnyDocuments ? "No documents match your search" : "No documents yet"}
+          {hasAnyDocuments ? "No documents match your search" : "This folder is empty"}
         </h3>
         <p className="mt-1 text-sm text-muted-foreground/70">
-          {hasAnyDocuments ? "Try a different search term or filter" : "Upload a file to get started"}
+          {hasAnyDocuments ? "Try a different search term or filter" : "Upload a file or create a folder to get started"}
         </p>
       </div>
     );
@@ -78,41 +82,69 @@ const DocumentTable: React.FC<DocumentTableProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {documents.map((document) => (
-            <TableRow key={document.id}>
-              <TableCell className="font-medium">{document.originalName}</TableCell>
-              <TableCell>
-                <Badge variant="secondary">{document.mimeType}</Badge>
-              </TableCell>
-              <TableCell className="text-muted-foreground">{formatBytes(document.size)}</TableCell>
-              <TableCell className="text-muted-foreground">
-                {new Date(document.createdAt).toLocaleDateString()}
-              </TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-1">
-                  <Button variant="ghost" size="sm" asChild>
-                    <a href={document.url} target="_blank" rel="noopener noreferrer" download>
-                      Download
-                    </a>
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label="Delete document"
-                    disabled={deletingId === document.id}
-                    onClick={() => onDelete(document.id)}
-                    className="hover:text-destructive"
-                  >
-                    {deletingId === document.id ? (
-                      <TomatoIcon icon={TomatoIconKey.Loader} className="animate-spin" />
-                    ) : (
-                      <TomatoIcon icon={TomatoIconKey.Trash} />
+          {documents.map((document) => {
+            const isFolder = document.type === "FOLDER";
+            return (
+              <TableRow key={document.id}>
+                <TableCell className="font-medium">
+                  {isFolder ? (
+                    <button
+                      type="button"
+                      className="flex items-center gap-2 hover:underline"
+                      onClick={() => onOpenFolder(document)}
+                    >
+                      <TomatoIcon icon={TomatoIconKey.Folder} className="size-4 text-muted-foreground" />
+                      {document.name}
+                    </button>
+                  ) : (
+                    document.name
+                  )}
+                </TableCell>
+                <TableCell>
+                  <Badge variant="secondary">{isFolder ? "Folder" : document.mimeType}</Badge>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {isFolder || document.size === undefined ? "—" : formatBytes(document.size)}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {new Date(document.createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-1">
+                    {!isFolder && document.url && (
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href={document.url} target="_blank" rel="noopener noreferrer" download>
+                          Download
+                        </a>
+                      </Button>
                     )}
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      aria-label="Move"
+                      onClick={() => onMove(document)}
+                    >
+                      Move
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label="Delete"
+                      disabled={deletingId === document.id}
+                      onClick={() => onDelete(document.id)}
+                      className="hover:text-destructive"
+                    >
+                      {deletingId === document.id ? (
+                        <TomatoIcon icon={TomatoIconKey.Loader} className="animate-spin" />
+                      ) : (
+                        <TomatoIcon icon={TomatoIconKey.Trash} />
+                      )}
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

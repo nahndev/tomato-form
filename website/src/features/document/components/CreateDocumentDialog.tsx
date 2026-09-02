@@ -31,10 +31,11 @@ const uploadSchema = Yup.object({
 interface CreateDocumentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  parentId: string | null;
 }
 
-const CreateDocumentDialog: React.FC<CreateDocumentDialogProps> = ({ open, onOpenChange }) => {
-  const { mutateAsync: uploadDocument } = useUploadDocument();
+const CreateDocumentDialog: React.FC<CreateDocumentDialogProps> = ({ open, onOpenChange, parentId }) => {
+  const { mutateAsync: uploadDocument } = useUploadDocument(parentId);
 
   const formik = useFormik<{ file: File | null }>({
     initialValues: { file: null },

@@ -1,9 +1,6 @@
-import { NavigationButton } from "@/components/ui/navigation-button";
-
 const DocumentManagerHeader: React.FC = () => {
   return (
     <div className="flex items-center gap-3">
-      <NavigationButton href="/system" aria-label="Back to home" />
       <div>
         <h1 className="text-2xl font-bold">Documents</h1>
         <p className="mt-1 text-sm text-muted-foreground">

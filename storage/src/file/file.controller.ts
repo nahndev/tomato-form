@@ -5,16 +5,8 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseFilePipeBuilder,
-  Post,
-  UploadedFile,
-  UseInterceptors,
 } from "@nestjs/common";
-import { FileInterceptor } from "@nestjs/platform-express";
 import {
-  ApiBody,
-  ApiConsumes,
-  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
@@ -23,42 +15,12 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { FileResponseDto } from "./dto/file-response.dto";
-import { MAX_UPLOAD_SIZE_BYTES } from "./file.constants";
 import { FileService } from "./file.service";
 
 @ApiTags("Files")
 @Controller("files")
 export class FileController {
   constructor(private readonly fileService: FileService) {}
-
-  @Post()
-  @UseInterceptors(FileInterceptor("file"))
-  @ApiOperation({ summary: "Upload a file" })
-  @ApiConsumes("multipart/form-data")
-  @ApiBody({
-    schema: {
-      type: "object",
-      properties: {
-        file: { type: "string", format: "binary" },
-      },
-    },
-  })
-  @ApiCreatedResponse({ type: FileResponseDto, description: "File uploaded" })
-  @ApiResponse({ status: 422, description: "Missing or oversized file" })
-  async upload(
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addMaxSizeValidator({ maxSize: MAX_UPLOAD_SIZE_BYTES })
-        .build({
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-          fileIsRequired: true,
-        }),
-    )
-    file: Express.Multer.File,
-  ): Promise<FileResponseDto> {
-    const created = await this.fileService.upload(file);
-    return FileResponseDto.fromEntity(created);
-  }
 
   @Get()
   @ApiOperation({ summary: "List uploaded files" })

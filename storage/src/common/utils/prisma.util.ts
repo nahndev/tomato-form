@@ -11,3 +11,9 @@ export function isPrismaForeignKeyError(err: unknown): boolean {
     err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2003"
   );
 }
+
+export function isPrismaUniqueConstraintError(err: unknown): boolean {
+  return (
+    err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002"
+  );
+}

@@ -11,4 +11,6 @@
 export type * from './models/Image'
 export type * from './models/ImageVariant'
 export type * from './models/File'
+export type * from './models/Folder'
+export type * from './models/Resource'
 export type * from './commonInputTypes'

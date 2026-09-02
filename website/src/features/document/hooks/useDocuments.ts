@@ -1,27 +1,50 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { documentApi } from "@/services/document.api";
+import { resourceApi } from "@/services/document.api";
+import type { ResourceType } from "@/types/document";
 
-const DOCUMENTS_KEY = ["documents"] as const;
+function resourcesKey(parentId?: string | null) {
+  return ["resources", parentId ?? "root"] as const;
+}
 
-export function useDocuments() {
+export function useResources(parentId?: string | null, type?: ResourceType) {
   return useQuery({
-    queryKey: DOCUMENTS_KEY,
-    queryFn: documentApi.list,
+    queryKey: [...resourcesKey(parentId), type ?? "all"],
+    queryFn: () => resourceApi.list(parentId, type),
   });
 }
 
-export function useUploadDocument() {
+export function useCreateFolder(parentId?: string | null) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (file: File) => documentApi.upload(file),
-    onSuccess: () => qc.invalidateQueries({ queryKey: DOCUMENTS_KEY }),
+    mutationFn: (name: string) => resourceApi.createFolder(name, parentId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: resourcesKey(parentId) }),
   });
 }
 
-export function useDeleteDocument() {
+export function useUploadDocument(parentId?: string | null) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => documentApi.remove(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: DOCUMENTS_KEY }),
+    mutationFn: (file: File) => resourceApi.upload(file, parentId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: resourcesKey(parentId) }),
+  });
+}
+
+export function useMoveResource(parentId?: string | null) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, destinationId }: { id: string; destinationId: string | null }) =>
+      resourceApi.move(id, destinationId),
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({ queryKey: resourcesKey(parentId) });
+      qc.invalidateQueries({ queryKey: resourcesKey(variables.destinationId) });
+    },
+  });
+}
+
+export function useDeleteDocument(parentId?: string | null) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => resourceApi.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: resourcesKey(parentId) }),
   });
 }

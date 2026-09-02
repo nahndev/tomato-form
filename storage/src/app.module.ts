@@ -5,6 +5,7 @@ import { DatabaseModule } from "./database/database.module";
 import { FileModule } from "./file/file.module";
 import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
+import { ResourceModule } from "./resource/resource.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ImageModule } from "./image/image.module";
     HealthModule,
     ImageModule,
     FileModule,
+    ResourceModule,
   ],
 })
 export class AppModule {}

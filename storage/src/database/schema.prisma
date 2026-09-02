@@ -44,6 +44,8 @@ model ImageVariant {
 
 model File {
   id           String   @id @default(uuid())
+  resourceId   String   @unique @map("resource_id")
+  resource     Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   filename     String
   originalName String   @map("original_name")
   mimeType     String   @map("mime_type")
@@ -51,4 +53,30 @@ model File {
   createdAt    DateTime @default(now()) @map("created_at")
 
   @@map("files")
+}
+
+model Folder {
+  id         String   @id @default(uuid())
+  resourceId String   @unique @map("resource_id")
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  name       String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("folders")
+}
+
+model Resource {
+  id        String     @id @default(uuid())
+  slug      String
+  parentId  String?    @map("parent_id")
+  parent    Resource?  @relation("ResourceChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Resource[] @relation("ResourceChildren")
+  file      File?
+  folder    Folder?
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@unique([parentId, slug])
+  @@index([parentId])
+  @@map("resources")
 }

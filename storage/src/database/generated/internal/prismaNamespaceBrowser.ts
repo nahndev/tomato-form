@@ -53,7 +53,9 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Image: 'Image',
   ImageVariant: 'ImageVariant',
-  File: 'File'
+  File: 'File',
+  Folder: 'Folder',
+  Resource: 'Resource'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -101,6 +103,7 @@ export type ImageVariantScalarFieldEnum = (typeof ImageVariantScalarFieldEnum)[k
 
 export const FileScalarFieldEnum = {
   id: 'id',
+  resourceId: 'resourceId',
   filename: 'filename',
   originalName: 'originalName',
   mimeType: 'mimeType',
@@ -109,6 +112,27 @@ export const FileScalarFieldEnum = {
 } as const
 
 export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
+
+
+export const FolderScalarFieldEnum = {
+  id: 'id',
+  resourceId: 'resourceId',
+  name: 'name',
+  createdAt: 'createdAt'
+} as const
+
+export type FolderScalarFieldEnum = (typeof FolderScalarFieldEnum)[keyof typeof FolderScalarFieldEnum]
+
+
+export const ResourceScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  parentId: 'parentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResourceScalarFieldEnum = (typeof ResourceScalarFieldEnum)[keyof typeof ResourceScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -125,4 +149,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

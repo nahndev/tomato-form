@@ -12,6 +12,7 @@ interface DocumentToolbarProps {
   sort: DocumentSortOption;
   onSortChange: (value: DocumentSortOption) => void;
   onCreateClick: () => void;
+  onCreateFolderClick: () => void;
 }
 
 const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
@@ -21,6 +22,7 @@ const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
   sort,
   onSortChange,
   onCreateClick,
+  onCreateFolderClick,
 }) => {
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -44,6 +46,11 @@ const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
         </div>
 
         <DocumentSortMenu value={sort} onChange={onSortChange} />
+
+        <Button variant="outline" onClick={onCreateFolderClick}>
+          <TomatoIcon icon={TomatoIconKey.Folder} />
+          New folder
+        </Button>
 
         <Button onClick={onCreateClick}>
           <TomatoIcon icon={TomatoIconKey.Plus} />
