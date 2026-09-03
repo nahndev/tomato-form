@@ -84,6 +84,7 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   [WidgetType.BUTTON]: [LABEL, ACTIONS, TEXT_STYLE, CONTAINER_STYLE],
   [WidgetType.IMAGE_UPLOADER]: [LABEL, REQUIRED],
   [WidgetType.FILE_UPLOADER]: [LABEL, REQUIRED],
+  [WidgetType.BOARD]: [LABEL, REQUIRED],
   [WidgetType.BREAK]: [],
   [WidgetType.SESSION]: [LABEL],
   [WidgetType.USERS]: [LABEL, REQUIRED],

@@ -1,6 +1,7 @@
 import { WidgetType } from "@/types/widget";
 import type { WidgetComponent, WidgetComponentRegistry } from "@/types/widget";
 
+import { BoardWidgetItem } from "./items/BoardWidgetItem";
 import { BreakWidgetItem } from "./items/BreakWidgetItem";
 import { ButtonWidgetItem } from "./items/ButtonWidgetItem";
 import { CheckboxWidgetItem } from "./items/CheckboxWidgetItem";
@@ -41,6 +42,7 @@ export const WidgetComponents: WidgetComponentRegistry = {
   [WidgetType.BUTTON]: ButtonWidgetItem as WidgetComponent,
   [WidgetType.IMAGE_UPLOADER]: ImageUploaderWidgetItem as WidgetComponent,
   [WidgetType.FILE_UPLOADER]: FileUploaderWidgetItem as WidgetComponent,
+  [WidgetType.BOARD]: BoardWidgetItem as WidgetComponent,
   [WidgetType.BREAK]: BreakWidgetItem as WidgetComponent,
   [WidgetType.SESSION]: SessionWidgetItem as WidgetComponent,
   [WidgetType.USERS]: UsersWidgetItem as WidgetComponent,

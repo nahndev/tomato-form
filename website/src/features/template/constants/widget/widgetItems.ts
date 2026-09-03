@@ -151,6 +151,16 @@ export const WidgetItems: WidgetItemRegistry = {
     defaultSettings: DEFAULT_SETTINGS[WidgetType.FILE_UPLOADER],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.FILE_UPLOADER],
   },
+  [WidgetType.BOARD]: {
+    type: WidgetType.BOARD,
+    label: "Board",
+    icon: TomatoIconKey.Pencil,
+    description: "Upload an image and draw on top of it",
+    isDataField: true,
+    group: WidgetGroup.MEDIA,
+    defaultSettings: DEFAULT_SETTINGS[WidgetType.BOARD],
+    defaultLayout: DEFAULT_LAYOUTS[WidgetType.BOARD],
+  },
   [WidgetType.BREAK]: {
     type: WidgetType.BREAK,
     label: "Break",

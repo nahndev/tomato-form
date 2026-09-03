@@ -22,6 +22,7 @@ export const DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">> = {
   [WidgetType.BUTTON]: { column: 0, span: 1 },
   [WidgetType.IMAGE_UPLOADER]: { column: 0, span: 2 },
   [WidgetType.FILE_UPLOADER]: { column: 0, span: 2 },
+  [WidgetType.BOARD]: { column: 0, span: 4 },
   [WidgetType.BREAK]: {
     column: 0,
     span: 4,

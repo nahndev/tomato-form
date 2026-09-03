@@ -22,6 +22,7 @@ export const WidgetType = {
   BUTTON: "button",
   IMAGE_UPLOADER: "image-uploader",
   FILE_UPLOADER: "file-uploader",
+  BOARD: "board",
   BREAK: "break",
   SESSION: "session",
   USERS: "users",
