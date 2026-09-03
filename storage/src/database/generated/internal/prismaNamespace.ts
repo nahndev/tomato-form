@@ -401,7 +401,8 @@ export const ModelName = {
   ImageVariant: 'ImageVariant',
   File: 'File',
   Folder: 'Folder',
-  Resource: 'Resource'
+  Resource: 'Resource',
+  AccessToken: 'AccessToken'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "image" | "imageVariant" | "file" | "folder" | "resource"
+    modelProps: "image" | "imageVariant" | "file" | "folder" | "resource" | "accessToken"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -791,6 +792,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AccessToken: {
+      payload: Prisma.$AccessTokenPayload<ExtArgs>
+      fields: Prisma.AccessTokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AccessTokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AccessTokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload>
+        }
+        findFirst: {
+          args: Prisma.AccessTokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AccessTokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload>
+        }
+        findMany: {
+          args: Prisma.AccessTokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload>[]
+        }
+        create: {
+          args: Prisma.AccessTokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload>
+        }
+        createMany: {
+          args: Prisma.AccessTokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AccessTokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload>[]
+        }
+        delete: {
+          args: Prisma.AccessTokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload>
+        }
+        update: {
+          args: Prisma.AccessTokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.AccessTokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AccessTokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AccessTokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.AccessTokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessTokenPayload>
+        }
+        aggregate: {
+          args: Prisma.AccessTokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAccessToken>
+        }
+        groupBy: {
+          args: Prisma.AccessTokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccessTokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AccessTokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccessTokenCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -889,6 +964,17 @@ export const ResourceScalarFieldEnum = {
 } as const
 
 export type ResourceScalarFieldEnum = (typeof ResourceScalarFieldEnum)[keyof typeof ResourceScalarFieldEnum]
+
+
+export const AccessTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  folderId: 'folderId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AccessTokenScalarFieldEnum = (typeof AccessTokenScalarFieldEnum)[keyof typeof AccessTokenScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1146,6 +1232,7 @@ export type GlobalOmitConfig = {
   file?: Prisma.FileOmit
   folder?: Prisma.FolderOmit
   resource?: Prisma.ResourceOmit
+  accessToken?: Prisma.AccessTokenOmit
 }
 
 /* Types for Logging */

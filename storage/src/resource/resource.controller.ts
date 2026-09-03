@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   HttpCode,
   HttpStatus,
   Param,
@@ -15,6 +16,7 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
   ApiConsumes,
@@ -73,6 +75,7 @@ export class ResourceController {
   @UseInterceptors(FileInterceptor("file"))
   @ApiOperation({ summary: "Upload a file into the resource tree" })
   @ApiConsumes("multipart/form-data")
+  @ApiBearerAuth()
   @ApiBody({
     schema: {
       type: "object",
@@ -84,6 +87,7 @@ export class ResourceController {
   })
   @ApiCreatedResponse({ type: ResourceResponseDto, description: "File uploaded" })
   @ApiResponse({ status: 400, description: "Parent is not a folder" })
+  @ApiResponse({ status: 401, description: "Access token missing, invalid, expired, or not scoped to this folder" })
   @ApiResponse({ status: 404, description: "Parent folder not found" })
   @ApiResponse({ status: 422, description: "Missing or oversized file" })
   @ApiConflictResponse({ description: "A resource with that name already exists in the parent" })
@@ -98,8 +102,10 @@ export class ResourceController {
     )
     file: Express.Multer.File,
     @Body() dto: UploadFileDto,
+    @Headers("authorization") authorization?: string,
   ): Promise<ResourceResponseDto> {
-    const resource = await this.resourceService.uploadFile(file, dto.parentId);
+    const accessToken = authorization?.replace(/^Bearer\s+/i, "");
+    const resource = await this.resourceService.uploadFile(file, dto.parentId, accessToken);
     return ResourceResponseDto.fromEntity(resource);
   }
 

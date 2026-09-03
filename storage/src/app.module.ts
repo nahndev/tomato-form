@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { AccessTokenModule } from "./access-token/access-token.module";
 import { validateEnv } from "./config/env.schema";
 import { DatabaseModule } from "./database/database.module";
 import { FileModule } from "./file/file.module";
@@ -18,6 +19,7 @@ import { ResourceModule } from "./resource/resource.module";
     HealthModule,
     ImageModule,
     FileModule,
+    AccessTokenModule,
     ResourceModule,
   ],
 })

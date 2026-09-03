@@ -55,7 +55,8 @@ export const ModelName = {
   ImageVariant: 'ImageVariant',
   File: 'File',
   Folder: 'Folder',
-  Resource: 'Resource'
+  Resource: 'Resource',
+  AccessToken: 'AccessToken'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -133,6 +134,17 @@ export const ResourceScalarFieldEnum = {
 } as const
 
 export type ResourceScalarFieldEnum = (typeof ResourceScalarFieldEnum)[keyof typeof ResourceScalarFieldEnum]
+
+
+export const AccessTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  folderId: 'folderId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AccessTokenScalarFieldEnum = (typeof AccessTokenScalarFieldEnum)[keyof typeof AccessTokenScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -42,3 +42,8 @@ export type Folder = Prisma.FolderModel
  * 
  */
 export type Resource = Prisma.ResourceModel
+/**
+ * Model AccessToken
+ * 
+ */
+export type AccessToken = Prisma.AccessTokenModel

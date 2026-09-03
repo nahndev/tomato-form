@@ -186,6 +186,7 @@ export type ResourceWhereInput = {
   children?: Prisma.ResourceListRelationFilter
   file?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
   folder?: Prisma.XOR<Prisma.FolderNullableScalarRelationFilter, Prisma.FolderWhereInput> | null
+  accessTokens?: Prisma.AccessTokenListRelationFilter
 }
 
 export type ResourceOrderByWithRelationInput = {
@@ -198,6 +199,7 @@ export type ResourceOrderByWithRelationInput = {
   children?: Prisma.ResourceOrderByRelationAggregateInput
   file?: Prisma.FileOrderByWithRelationInput
   folder?: Prisma.FolderOrderByWithRelationInput
+  accessTokens?: Prisma.AccessTokenOrderByRelationAggregateInput
 }
 
 export type ResourceWhereUniqueInput = Prisma.AtLeast<{
@@ -214,6 +216,7 @@ export type ResourceWhereUniqueInput = Prisma.AtLeast<{
   children?: Prisma.ResourceListRelationFilter
   file?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
   folder?: Prisma.XOR<Prisma.FolderNullableScalarRelationFilter, Prisma.FolderWhereInput> | null
+  accessTokens?: Prisma.AccessTokenListRelationFilter
 }, "id" | "parentId_slug">
 
 export type ResourceOrderByWithAggregationInput = {
@@ -247,6 +250,7 @@ export type ResourceCreateInput = {
   children?: Prisma.ResourceCreateNestedManyWithoutParentInput
   file?: Prisma.FileCreateNestedOneWithoutResourceInput
   folder?: Prisma.FolderCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceUncheckedCreateInput = {
@@ -258,6 +262,7 @@ export type ResourceUncheckedCreateInput = {
   children?: Prisma.ResourceUncheckedCreateNestedManyWithoutParentInput
   file?: Prisma.FileUncheckedCreateNestedOneWithoutResourceInput
   folder?: Prisma.FolderUncheckedCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceUpdateInput = {
@@ -269,6 +274,7 @@ export type ResourceUpdateInput = {
   children?: Prisma.ResourceUpdateManyWithoutParentNestedInput
   file?: Prisma.FileUpdateOneWithoutResourceNestedInput
   folder?: Prisma.FolderUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceUncheckedUpdateInput = {
@@ -280,6 +286,7 @@ export type ResourceUncheckedUpdateInput = {
   children?: Prisma.ResourceUncheckedUpdateManyWithoutParentNestedInput
   file?: Prisma.FileUncheckedUpdateOneWithoutResourceNestedInput
   folder?: Prisma.FolderUncheckedUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceCreateManyInput = {
@@ -444,6 +451,20 @@ export type ResourceUncheckedUpdateManyWithoutParentNestedInput = {
   deleteMany?: Prisma.ResourceScalarWhereInput | Prisma.ResourceScalarWhereInput[]
 }
 
+export type ResourceCreateNestedOneWithoutAccessTokensInput = {
+  create?: Prisma.XOR<Prisma.ResourceCreateWithoutAccessTokensInput, Prisma.ResourceUncheckedCreateWithoutAccessTokensInput>
+  connectOrCreate?: Prisma.ResourceCreateOrConnectWithoutAccessTokensInput
+  connect?: Prisma.ResourceWhereUniqueInput
+}
+
+export type ResourceUpdateOneRequiredWithoutAccessTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.ResourceCreateWithoutAccessTokensInput, Prisma.ResourceUncheckedCreateWithoutAccessTokensInput>
+  connectOrCreate?: Prisma.ResourceCreateOrConnectWithoutAccessTokensInput
+  upsert?: Prisma.ResourceUpsertWithoutAccessTokensInput
+  connect?: Prisma.ResourceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ResourceUpdateToOneWithWhereWithoutAccessTokensInput, Prisma.ResourceUpdateWithoutAccessTokensInput>, Prisma.ResourceUncheckedUpdateWithoutAccessTokensInput>
+}
+
 export type ResourceCreateWithoutFileInput = {
   id?: string
   slug: string
@@ -452,6 +473,7 @@ export type ResourceCreateWithoutFileInput = {
   parent?: Prisma.ResourceCreateNestedOneWithoutChildrenInput
   children?: Prisma.ResourceCreateNestedManyWithoutParentInput
   folder?: Prisma.FolderCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceUncheckedCreateWithoutFileInput = {
@@ -462,6 +484,7 @@ export type ResourceUncheckedCreateWithoutFileInput = {
   updatedAt?: Date | string
   children?: Prisma.ResourceUncheckedCreateNestedManyWithoutParentInput
   folder?: Prisma.FolderUncheckedCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceCreateOrConnectWithoutFileInput = {
@@ -488,6 +511,7 @@ export type ResourceUpdateWithoutFileInput = {
   parent?: Prisma.ResourceUpdateOneWithoutChildrenNestedInput
   children?: Prisma.ResourceUpdateManyWithoutParentNestedInput
   folder?: Prisma.FolderUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceUncheckedUpdateWithoutFileInput = {
@@ -498,6 +522,7 @@ export type ResourceUncheckedUpdateWithoutFileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.ResourceUncheckedUpdateManyWithoutParentNestedInput
   folder?: Prisma.FolderUncheckedUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceCreateWithoutFolderInput = {
@@ -508,6 +533,7 @@ export type ResourceCreateWithoutFolderInput = {
   parent?: Prisma.ResourceCreateNestedOneWithoutChildrenInput
   children?: Prisma.ResourceCreateNestedManyWithoutParentInput
   file?: Prisma.FileCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceUncheckedCreateWithoutFolderInput = {
@@ -518,6 +544,7 @@ export type ResourceUncheckedCreateWithoutFolderInput = {
   updatedAt?: Date | string
   children?: Prisma.ResourceUncheckedCreateNestedManyWithoutParentInput
   file?: Prisma.FileUncheckedCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceCreateOrConnectWithoutFolderInput = {
@@ -544,6 +571,7 @@ export type ResourceUpdateWithoutFolderInput = {
   parent?: Prisma.ResourceUpdateOneWithoutChildrenNestedInput
   children?: Prisma.ResourceUpdateManyWithoutParentNestedInput
   file?: Prisma.FileUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceUncheckedUpdateWithoutFolderInput = {
@@ -554,6 +582,7 @@ export type ResourceUncheckedUpdateWithoutFolderInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   children?: Prisma.ResourceUncheckedUpdateManyWithoutParentNestedInput
   file?: Prisma.FileUncheckedUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceCreateWithoutChildrenInput = {
@@ -564,6 +593,7 @@ export type ResourceCreateWithoutChildrenInput = {
   parent?: Prisma.ResourceCreateNestedOneWithoutChildrenInput
   file?: Prisma.FileCreateNestedOneWithoutResourceInput
   folder?: Prisma.FolderCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceUncheckedCreateWithoutChildrenInput = {
@@ -574,6 +604,7 @@ export type ResourceUncheckedCreateWithoutChildrenInput = {
   updatedAt?: Date | string
   file?: Prisma.FileUncheckedCreateNestedOneWithoutResourceInput
   folder?: Prisma.FolderUncheckedCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceCreateOrConnectWithoutChildrenInput = {
@@ -589,6 +620,7 @@ export type ResourceCreateWithoutParentInput = {
   children?: Prisma.ResourceCreateNestedManyWithoutParentInput
   file?: Prisma.FileCreateNestedOneWithoutResourceInput
   folder?: Prisma.FolderCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceUncheckedCreateWithoutParentInput = {
@@ -599,6 +631,7 @@ export type ResourceUncheckedCreateWithoutParentInput = {
   children?: Prisma.ResourceUncheckedCreateNestedManyWithoutParentInput
   file?: Prisma.FileUncheckedCreateNestedOneWithoutResourceInput
   folder?: Prisma.FolderUncheckedCreateNestedOneWithoutResourceInput
+  accessTokens?: Prisma.AccessTokenUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type ResourceCreateOrConnectWithoutParentInput = {
@@ -630,6 +663,7 @@ export type ResourceUpdateWithoutChildrenInput = {
   parent?: Prisma.ResourceUpdateOneWithoutChildrenNestedInput
   file?: Prisma.FileUpdateOneWithoutResourceNestedInput
   folder?: Prisma.FolderUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceUncheckedUpdateWithoutChildrenInput = {
@@ -640,6 +674,7 @@ export type ResourceUncheckedUpdateWithoutChildrenInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   file?: Prisma.FileUncheckedUpdateOneWithoutResourceNestedInput
   folder?: Prisma.FolderUncheckedUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceUpsertWithWhereUniqueWithoutParentInput = {
@@ -669,6 +704,66 @@ export type ResourceScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Resource"> | Date | string
 }
 
+export type ResourceCreateWithoutAccessTokensInput = {
+  id?: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  parent?: Prisma.ResourceCreateNestedOneWithoutChildrenInput
+  children?: Prisma.ResourceCreateNestedManyWithoutParentInput
+  file?: Prisma.FileCreateNestedOneWithoutResourceInput
+  folder?: Prisma.FolderCreateNestedOneWithoutResourceInput
+}
+
+export type ResourceUncheckedCreateWithoutAccessTokensInput = {
+  id?: string
+  slug: string
+  parentId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  children?: Prisma.ResourceUncheckedCreateNestedManyWithoutParentInput
+  file?: Prisma.FileUncheckedCreateNestedOneWithoutResourceInput
+  folder?: Prisma.FolderUncheckedCreateNestedOneWithoutResourceInput
+}
+
+export type ResourceCreateOrConnectWithoutAccessTokensInput = {
+  where: Prisma.ResourceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ResourceCreateWithoutAccessTokensInput, Prisma.ResourceUncheckedCreateWithoutAccessTokensInput>
+}
+
+export type ResourceUpsertWithoutAccessTokensInput = {
+  update: Prisma.XOR<Prisma.ResourceUpdateWithoutAccessTokensInput, Prisma.ResourceUncheckedUpdateWithoutAccessTokensInput>
+  create: Prisma.XOR<Prisma.ResourceCreateWithoutAccessTokensInput, Prisma.ResourceUncheckedCreateWithoutAccessTokensInput>
+  where?: Prisma.ResourceWhereInput
+}
+
+export type ResourceUpdateToOneWithWhereWithoutAccessTokensInput = {
+  where?: Prisma.ResourceWhereInput
+  data: Prisma.XOR<Prisma.ResourceUpdateWithoutAccessTokensInput, Prisma.ResourceUncheckedUpdateWithoutAccessTokensInput>
+}
+
+export type ResourceUpdateWithoutAccessTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  parent?: Prisma.ResourceUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.ResourceUpdateManyWithoutParentNestedInput
+  file?: Prisma.FileUpdateOneWithoutResourceNestedInput
+  folder?: Prisma.FolderUpdateOneWithoutResourceNestedInput
+}
+
+export type ResourceUncheckedUpdateWithoutAccessTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.ResourceUncheckedUpdateManyWithoutParentNestedInput
+  file?: Prisma.FileUncheckedUpdateOneWithoutResourceNestedInput
+  folder?: Prisma.FolderUncheckedUpdateOneWithoutResourceNestedInput
+}
+
 export type ResourceCreateManyParentInput = {
   id?: string
   slug: string
@@ -684,6 +779,7 @@ export type ResourceUpdateWithoutParentInput = {
   children?: Prisma.ResourceUpdateManyWithoutParentNestedInput
   file?: Prisma.FileUpdateOneWithoutResourceNestedInput
   folder?: Prisma.FolderUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceUncheckedUpdateWithoutParentInput = {
@@ -694,6 +790,7 @@ export type ResourceUncheckedUpdateWithoutParentInput = {
   children?: Prisma.ResourceUncheckedUpdateManyWithoutParentNestedInput
   file?: Prisma.FileUncheckedUpdateOneWithoutResourceNestedInput
   folder?: Prisma.FolderUncheckedUpdateOneWithoutResourceNestedInput
+  accessTokens?: Prisma.AccessTokenUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type ResourceUncheckedUpdateManyWithoutParentInput = {
@@ -710,10 +807,12 @@ export type ResourceUncheckedUpdateManyWithoutParentInput = {
 
 export type ResourceCountOutputType = {
   children: number
+  accessTokens: number
 }
 
 export type ResourceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   children?: boolean | ResourceCountOutputTypeCountChildrenArgs
+  accessTokens?: boolean | ResourceCountOutputTypeCountAccessTokensArgs
 }
 
 /**
@@ -733,6 +832,13 @@ export type ResourceCountOutputTypeCountChildrenArgs<ExtArgs extends runtime.Typ
   where?: Prisma.ResourceWhereInput
 }
 
+/**
+ * ResourceCountOutputType without action
+ */
+export type ResourceCountOutputTypeCountAccessTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccessTokenWhereInput
+}
+
 
 export type ResourceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -744,6 +850,7 @@ export type ResourceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   children?: boolean | Prisma.Resource$childrenArgs<ExtArgs>
   file?: boolean | Prisma.Resource$fileArgs<ExtArgs>
   folder?: boolean | Prisma.Resource$folderArgs<ExtArgs>
+  accessTokens?: boolean | Prisma.Resource$accessTokensArgs<ExtArgs>
   _count?: boolean | Prisma.ResourceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["resource"]>
 
@@ -779,6 +886,7 @@ export type ResourceInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   children?: boolean | Prisma.Resource$childrenArgs<ExtArgs>
   file?: boolean | Prisma.Resource$fileArgs<ExtArgs>
   folder?: boolean | Prisma.Resource$folderArgs<ExtArgs>
+  accessTokens?: boolean | Prisma.Resource$accessTokensArgs<ExtArgs>
   _count?: boolean | Prisma.ResourceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ResourceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -795,6 +903,7 @@ export type $ResourcePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     children: Prisma.$ResourcePayload<ExtArgs>[]
     file: Prisma.$FilePayload<ExtArgs> | null
     folder: Prisma.$FolderPayload<ExtArgs> | null
+    accessTokens: Prisma.$AccessTokenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1200,6 +1309,7 @@ export interface Prisma__ResourceClient<T, Null = never, ExtArgs extends runtime
   children<T extends Prisma.Resource$childrenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resource$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   file<T extends Prisma.Resource$fileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resource$fileArgs<ExtArgs>>): Prisma.Prisma__FileClient<runtime.Types.Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   folder<T extends Prisma.Resource$folderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resource$folderArgs<ExtArgs>>): Prisma.Prisma__FolderClient<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  accessTokens<T extends Prisma.Resource$accessTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Resource$accessTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccessTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1713,6 +1823,30 @@ export type Resource$folderArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   include?: Prisma.FolderInclude<ExtArgs> | null
   where?: Prisma.FolderWhereInput
+}
+
+/**
+ * Resource.accessTokens
+ */
+export type Resource$accessTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AccessToken
+   */
+  select?: Prisma.AccessTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AccessToken
+   */
+  omit?: Prisma.AccessTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccessTokenInclude<ExtArgs> | null
+  where?: Prisma.AccessTokenWhereInput
+  orderBy?: Prisma.AccessTokenOrderByWithRelationInput | Prisma.AccessTokenOrderByWithRelationInput[]
+  cursor?: Prisma.AccessTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AccessTokenScalarFieldEnum | Prisma.AccessTokenScalarFieldEnum[]
 }
 
 /**

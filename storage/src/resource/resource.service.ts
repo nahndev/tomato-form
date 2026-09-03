@@ -1,3 +1,4 @@
+import { AccessTokenService } from "@/access-token/access-token.service";
 import { isPrismaNotFoundError, isPrismaUniqueConstraintError } from "@/common/utils/prisma.util";
 import { slugify } from "@/common/utils/slug.util";
 import { PrismaService } from "@/database/prisma.service";
@@ -12,6 +13,7 @@ export class ResourceService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly fileService: FileService,
+    private readonly accessTokenService: AccessTokenService,
   ) {}
 
   async findChildren(parentId?: string, type?: "FILE" | "FOLDER"): Promise<ResourceWithRelations[]> {
@@ -59,7 +61,12 @@ export class ResourceService {
     }
   }
 
-  async uploadFile(file: Express.Multer.File, parentId?: string): Promise<ResourceWithRelations> {
+  async uploadFile(
+    file: Express.Multer.File,
+    parentId?: string,
+    accessToken?: string,
+  ): Promise<ResourceWithRelations> {
+    await this.accessTokenService.validateForFolder(accessToken, parentId);
     await this.assertFolder(parentId);
     const slug = slugify(file.originalname);
 
