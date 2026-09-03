@@ -1,24 +1,17 @@
-# Improve feature for file manager
+# Add new widget `Board`
 
-## Currently
+## Design
 
-- The value only files
+- The widget allow draw on board
+- Allow upload a image, and image will fill in canvas
 
-## Tasks 01
+## Tasks 01 - Read context and write docs "Design of widgets" [x]
 
-[storage]
+- Add new docs in `./docs/WIDGET.md`
+- Add description "How to add widget"
+- Docs include all path of related files
+- Docs include all action need.
 
-- [x] Add new entity `resource`
-- [x] Entity `resource` link with `file` and `folder`
-- [x] Folder can add children is `resource`
-- [x] Add api allow add folder
-- [x] Add `parent` for `resource` (nullable)
-- [x] Add api allow move `resource` to other parent
-- [x] Every `resource` should exist `slug`
+## Tasks 02 - Base on Tasks 01 [x]
 
-[website]
-
-- [x] Add new `folder` button
-- [x] Adjust api
-- [x] Update api with tree-structure
-- [x] Add UI allow move resource
+- Add new widget `Board`

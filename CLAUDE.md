@@ -67,6 +67,7 @@ Note: there is currently no auth/RBAC module — endpoints are not guarded and t
 - Avoid run eslint, typecheck.
 - Avoid using generic words in function names.
 - If exist `TASK.md`, mark completed tasks.
+- Read `./docs` as context
 
 ### Error Handling
 
