@@ -1,4 +1,4 @@
-import type { ResourceItem, ResourceType } from "@/types/document";
+import type { AccessToken, ResourceItem, ResourceType } from "@/types/document";
 import axios from "axios";
 
 const api = axios.create({
@@ -43,5 +43,11 @@ export const resourceApi = {
 
   remove(id: string): Promise<void> {
     return api.delete(`/resources/${id}`).then(() => undefined);
+  },
+};
+
+export const accessTokenApi = {
+  issue(folderId: string): Promise<AccessToken> {
+    return api.post<ApiResponse<AccessToken>>("/access-tokens", { folderId }).then((r) => r.data.data);
   },
 };

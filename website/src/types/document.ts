@@ -12,3 +12,11 @@ export interface ResourceItem {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface AccessToken {
+  id: string;
+  token: string;
+  folderId: string;
+  expiresAt: string;
+  createdAt: string;
+}

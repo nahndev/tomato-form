@@ -9,7 +9,7 @@ import MoveResourceDialog from "@/features/document/components/MoveResourceDialo
 import DocumentTable from "@/features/document/components/table/DocumentTable";
 import DocumentToolbar from "@/features/document/components/toolbar/DocumentToolbar";
 import type { DocumentSortOption } from "@/features/document/constants/documentSortOptions";
-import { useDeleteDocument, useResources } from "@/features/document/hooks/useDocuments";
+import { useDeleteDocument, useIssueAccessToken, useResources } from "@/features/document/hooks/useDocuments";
 import type { ResourceItem } from "@/types/document";
 
 interface Crumb {
@@ -43,6 +43,7 @@ const DocumentManagement: React.FC = () => {
 
   const { data: documents = [], isLoading, isError, refetch } = useResources(currentParentId);
   const { mutateAsync: deleteDocument } = useDeleteDocument(currentParentId);
+  const { mutateAsync: issueAccessToken, isPending: isApiCopying } = useIssueAccessToken();
 
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<DocumentSortOption>("name-asc");
@@ -88,6 +89,27 @@ const DocumentManagement: React.FC = () => {
     }
   }
 
+  async function handleApiCopy() {
+    if (!currentParentId) return;
+
+    try {
+      const accessToken = await issueAccessToken(currentParentId);
+      const uploadUrl = `${window.location.origin}/api/storage/resources`;
+      const curl = [
+        `curl -X POST "${uploadUrl}"`,
+        `-H "Authorization: Bearer ${accessToken.token}"`,
+        `-F "file=@/path/to/file"`,
+        `-F "parentId=${currentParentId}"`,
+      ].join(" \\\n  ");
+
+      await navigator.clipboard.writeText(curl);
+      toast.success("Upload curl copied to clipboard");
+    } catch (err) {
+      console.error("Failed to build upload curl:", err);
+      toast.error("Failed to copy upload curl");
+    }
+  }
+
   return (
     <div className="container mx-auto max-w-5xl px-6 py-10">
       <DocumentManagerHeader />
@@ -117,6 +139,9 @@ const DocumentManagement: React.FC = () => {
           onSortChange={handleSortChange}
           onCreateClick={() => setUploadDialogOpen(true)}
           onCreateFolderClick={() => setFolderDialogOpen(true)}
+          currentFolderId={currentParentId}
+          onApiCopy={handleApiCopy}
+          isApiCopying={isApiCopying}
         />
 
         <DocumentTable

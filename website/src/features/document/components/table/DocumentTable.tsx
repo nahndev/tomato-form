@@ -1,16 +1,14 @@
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatBytes } from "@/lib/format";
 import type { ResourceItem } from "@/types/document";
+import DocumentTableRow from "./DocumentTableRow";
 
 interface DocumentTableProps {
   documents: ResourceItem[];
@@ -82,69 +80,16 @@ const DocumentTable: React.FC<DocumentTableProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {documents.map((document) => {
-            const isFolder = document.type === "FOLDER";
-            return (
-              <TableRow key={document.id}>
-                <TableCell className="font-medium">
-                  {isFolder ? (
-                    <button
-                      type="button"
-                      className="flex items-center gap-2 hover:underline"
-                      onClick={() => onOpenFolder(document)}
-                    >
-                      <TomatoIcon icon={TomatoIconKey.Folder} className="size-4 text-muted-foreground" />
-                      {document.name}
-                    </button>
-                  ) : (
-                    document.name
-                  )}
-                </TableCell>
-                <TableCell>
-                  <Badge variant="secondary">{isFolder ? "Folder" : document.mimeType}</Badge>
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {isFolder || document.size === undefined ? "—" : formatBytes(document.size)}
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {new Date(document.createdAt).toLocaleDateString()}
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-1">
-                    {!isFolder && document.url && (
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={document.url} target="_blank" rel="noopener noreferrer" download>
-                          Download
-                        </a>
-                      </Button>
-                    )}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      aria-label="Move"
-                      onClick={() => onMove(document)}
-                    >
-                      Move
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      aria-label="Delete"
-                      disabled={deletingId === document.id}
-                      onClick={() => onDelete(document.id)}
-                      className="hover:text-destructive"
-                    >
-                      {deletingId === document.id ? (
-                        <TomatoIcon icon={TomatoIconKey.Loader} className="animate-spin" />
-                      ) : (
-                        <TomatoIcon icon={TomatoIconKey.Trash} />
-                      )}
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          {documents.map((document) => (
+            <DocumentTableRow
+              key={document.id}
+              document={document}
+              deletingId={deletingId}
+              onOpenFolder={onOpenFolder}
+              onMove={onMove}
+              onDelete={onDelete}
+            />
+          ))}
         </TableBody>
       </Table>
     </div>

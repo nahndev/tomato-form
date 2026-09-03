@@ -1,9 +1,9 @@
-import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import DocumentSortMenu from "@/features/document/components/toolbar/DocumentSortMenu";
 import type { DocumentSortOption } from "@/features/document/constants/documentSortOptions";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 interface DocumentToolbarProps {
   total: number;
@@ -13,6 +13,9 @@ interface DocumentToolbarProps {
   onSortChange: (value: DocumentSortOption) => void;
   onCreateClick: () => void;
   onCreateFolderClick: () => void;
+  currentFolderId: string | null;
+  onApiCopy: () => void;
+  isApiCopying: boolean;
 }
 
 const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
@@ -23,6 +26,9 @@ const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
   onSortChange,
   onCreateClick,
   onCreateFolderClick,
+  currentFolderId,
+  onApiCopy,
+  isApiCopying,
 }) => {
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -56,6 +62,16 @@ const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
           <TomatoIcon icon={TomatoIconKey.Plus} />
           Upload
         </Button>
+        {currentFolderId && (
+          <Button variant="outline" disabled={isApiCopying} onClick={onApiCopy}>
+            {isApiCopying ? (
+              <TomatoIcon icon={TomatoIconKey.Loader} className="animate-spin" />
+            ) : (
+              <TomatoIcon icon={TomatoIconKey.Key} />
+            )}
+            Copy upload curl
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { resourceApi } from "@/services/document.api";
+import { accessTokenApi, resourceApi } from "@/services/document.api";
 import type { ResourceType } from "@/types/document";
 
 function resourcesKey(parentId?: string | null) {
@@ -46,5 +46,11 @@ export function useDeleteDocument(parentId?: string | null) {
   return useMutation({
     mutationFn: (id: string) => resourceApi.remove(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: resourcesKey(parentId) }),
+  });
+}
+
+export function useIssueAccessToken() {
+  return useMutation({
+    mutationFn: (folderId: string) => accessTokenApi.issue(folderId),
   });
 }
