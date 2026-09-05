@@ -75,6 +75,16 @@ const BoardSetting: React.FC = () => {
     setDraftTemplateIds((prev) => [...prev, templateId]);
   }
 
+  function removeTemplate(templateId: string) {
+    setDraftTemplateIds((prev) => prev.filter((id) => id !== templateId));
+    setDraftColumns((prev) =>
+      prev.map((c) => ({
+        ...c,
+        items: c.items.filter((item) => item.templateId !== templateId),
+      })),
+    );
+  }
+
   async function handleSave() {
     const boardTemplateIds = new Set(draftTemplateIds);
     const prepared = prepareColumnsForSave(draftColumns, boardTemplateIds);
@@ -104,9 +114,7 @@ const BoardSetting: React.FC = () => {
 
       <div className={clsx("flex flex-col size-full gap-2 text-sm")}>
         <BoardSettingToolbar
-          columns={draftColumns}
           onAddColumn={(column) => setDraftColumns((prev) => [...prev, column])}
-          onRemoveColumn={removeColumn}
         />
         <div className="flex flex-row">
           <BoardSettingTemplateNames templates={draftTemplates} />
@@ -117,10 +125,14 @@ const BoardSetting: React.FC = () => {
                 column={column}
                 templates={draftTemplates}
                 onChangeColumn={replaceColumn}
+                onRemoveColumn={removeColumn}
               />
             ))}
           </div>
-          <BoardSettingRowActions templates={draftTemplates} />
+          <BoardSettingRowActions
+            templates={draftTemplates}
+            onRemoveTemplate={removeTemplate}
+          />
         </div>
 
         {draftTemplates.length === 0 && (

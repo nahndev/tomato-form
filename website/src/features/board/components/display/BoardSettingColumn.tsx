@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import BoardColumnBox from "@/features/board/components/display/BoardColumnBox";
@@ -12,6 +13,7 @@ import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
 import type { BoardColumn } from "@/types/board";
 import { DisplayType } from "@/types/display-type";
 import type { Template } from "@/types/template";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
 
 const DEFAULT_COLUMN_SIZE = 150;
@@ -20,6 +22,7 @@ export interface BoardSettingColumnProps {
   column: BoardColumn;
   templates: Template[];
   onChangeColumn: (column: BoardColumn) => void;
+  onRemoveColumn: (columnId: string) => void;
 }
 
 /** One column of the board grid: label + size editors, then a widget picker for each linked template. */
@@ -27,6 +30,7 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
   column,
   templates,
   onChangeColumn,
+  onRemoveColumn,
 }) => {
   function pickWidget(templateId: string, widgetId: string) {
     const itemsWithoutTemplate = column.items.filter(
@@ -65,8 +69,18 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
             onChange={(e) =>
               onChangeColumn({ ...column, label: e.target.value })
             }
-            className="border-none shadow-none focus-visible:ring-0 text-xs font-semibold"
+            className="flex-1 min-w-0 border-none shadow-none focus-visible:ring-0 text-xs font-semibold"
           />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            className="shrink-0"
+            onClick={() => onRemoveColumn(column.id)}
+            aria-label={`Remove column ${column.label ?? column.id}`}
+          >
+            <TomatoIcon icon={TomatoIconKey.Trash} className="size-3.5" />
+          </Button>
         </BoardColumnBox>
       </div>
 
