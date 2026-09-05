@@ -8,11 +8,6 @@ export const BoardTabValue = {
 } as const;
 export type BoardTabValue = (typeof BoardTabValue)[keyof typeof BoardTabValue];
 
-export interface BoardColumnItem {
-  templateId: string;
-  widgetId: string;
-}
-
 export type ColumnSize = { width: number } | { flex: number };
 
 export interface BoardColumn {
@@ -20,7 +15,8 @@ export interface BoardColumn {
   type: DisplayType | null;
   size: ColumnSize | null;
   label: string | null;
-  items: BoardColumnItem[];
+  /** Map of templateId to the widgetId picked from that template. */
+  items: Record<string, string>;
 }
 
 export interface Board {

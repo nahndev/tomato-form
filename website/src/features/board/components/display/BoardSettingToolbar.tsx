@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { JsonColumn } from "@/features/board/utils/column";
 import type { BoardColumn } from "@/types/board";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
-import { v4 } from "uuid";
 
 export interface BoardSettingToolbarProps {
   onAddColumn: (column: BoardColumn) => void;
@@ -14,7 +14,7 @@ const BoardSettingToolbar: React.FC<BoardSettingToolbarProps> = ({
   onAddColumn,
 }) => {
   function handleAddColumn() {
-    onAddColumn({ id: v4(), type: null, size: null, label: null, items: [] });
+    onAddColumn(JsonColumn.create());
   }
 
   return (

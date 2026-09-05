@@ -1,20 +1,10 @@
 import type { Board } from "@/database/prisma-client";
-import type { BoardColumn, BoardColumnItem } from "../board.types";
+import type { BoardColumn } from "../board.types";
 
 let counter = 0;
 function mockId(prefix: string): string {
   counter += 1;
   return `${prefix}-${counter}`;
-}
-
-export function getMockBoardColumnItem(
-  overrides?: Partial<BoardColumnItem>,
-): BoardColumnItem {
-  return {
-    templateId: mockId("template"),
-    widgetId: mockId("widget"),
-    ...overrides,
-  };
 }
 
 export function getMockBoardColumn(
@@ -25,7 +15,7 @@ export function getMockBoardColumn(
     type: "text",
     size: { width: 150 },
     label: null,
-    items: [],
+    items: {},
     ...overrides,
   };
 }

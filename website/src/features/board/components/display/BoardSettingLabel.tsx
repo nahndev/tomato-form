@@ -9,16 +9,12 @@ import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 export interface BoardSettingLabelProps {
   templates: Template[];
-  availableTemplates: Template[];
-  isLoading: boolean;
   onAdd: (templateId: string) => void;
 }
 
 /** Fixed left column of row headers, aligned with the value rows inside each BoardSettingColumn. */
 const BoardSettingLabel: React.FC<BoardSettingLabelProps> = ({
   templates,
-  availableTemplates,
-  isLoading,
   onAdd,
 }) => {
   return (
@@ -32,6 +28,15 @@ const BoardSettingLabel: React.FC<BoardSettingLabelProps> = ({
             <Typography className="text-tiny text-gray-500">Flex/Px</Typography>
           </div>
         </ZebraCell>
+        <ZebraCell index={1} className="w-40 gap-2 p-2">
+          <TomatoIcon icon={TomatoIconKey.Type} />
+          <div className="flex flex-col">
+            <Typography className="text-xs font-bold">Type</Typography>
+            <Typography className="text-tiny text-gray-500">
+              Text/Date/Number
+            </Typography>
+          </div>
+        </ZebraCell>
       </SessionCard>
       <SessionCard title="Templates">
         <div className="flex flex-col">
@@ -43,8 +48,7 @@ const BoardSettingLabel: React.FC<BoardSettingLabelProps> = ({
           ))}
           <div className="px-2 py-2 border-t border-border bg-muted/20">
             <AddTemplateButton
-              availableTemplates={availableTemplates}
-              isLoading={isLoading}
+              linkedTemplateIds={templates.map((t) => t.id)}
               onAdd={onAdd}
             />
           </div>

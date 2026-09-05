@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Select,
   SelectContent,
@@ -5,19 +7,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Template } from "@/types/template";
+import { useTemplates } from "@/features/template/hooks/useTemplates";
 
 export interface AddTemplateButtonProps {
-  availableTemplates: Template[];
-  isLoading: boolean;
+  linkedTemplateIds: string[];
   onAdd: (templateId: string) => void;
 }
 
 const AddTemplateButton: React.FC<AddTemplateButtonProps> = ({
-  availableTemplates,
-  isLoading,
+  linkedTemplateIds,
   onAdd,
 }) => {
+  const { data: allTemplates = [], isLoading } = useTemplates();
+  const availableTemplates = allTemplates.filter(
+    (t) => !linkedTemplateIds.includes(t.id),
+  );
+
   if (isLoading) {
     return (
       <span className="text-xs text-muted-foreground">Loading templates…</span>

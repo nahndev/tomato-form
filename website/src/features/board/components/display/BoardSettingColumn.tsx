@@ -3,36 +3,20 @@
 import { Button } from "@/components/ui/button";
 import { FlexRow } from "@/components/ui/flex-row";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import ColumnDisplayTypeSelect from "@/features/board/components/display/select/ColumnDisplayTypeSelect";
+import ColumnSizeSelect from "@/features/board/components/display/select/ColumnSizeSelect";
+import TemplateWidgetSelect from "@/features/board/components/display/select/TemplateWidgetSelect";
 import { SessionWrapper } from "@/features/board/components/display/session/SessionWrapper";
 import { RowWrapper } from "@/features/board/components/display/wrapper/RowWrapper";
 import { ZebraCell } from "@/features/board/components/display/wrapper/ZebraCell";
-import {
-  COLUMN_SIZE_OPTIONS,
-  decodeColumnSize,
-  encodeColumnSize,
-} from "@/features/board/constants/column/sizeOptions";
-import {
-  getDataFieldWidgets,
-  getWidgetOptionLabel,
-} from "@/features/board/utils/boardColumnWidgets";
+import { getSelectedColumnWidgets } from "@/features/board/utils/boardColumnWidgets";
+import { JsonColumn } from "@/features/board/utils/column";
+import { getCommonDisplayTypes } from "@/features/board/utils/displayTypeHelper";
 import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget";
-import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
-import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
-import type { BoardColumn, ColumnSize } from "@/types/board";
+import type { BoardColumn } from "@/types/board";
 import { DisplayType } from "@/types/display-type";
 import type { Template } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
-
-const DEFAULT_COLUMN_SIZE: ColumnSize = { width: 100 };
-/** Radix Select.Item forbids an empty-string value, so a sentinel stands in for "no widget picked". */
-const UNSELECTED_WIDGET = "__unselected__";
 
 export interface BoardSettingColumnProps {
   column: BoardColumn;
@@ -49,33 +33,17 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
   onChangeColumn,
   onRemoveColumn,
 }) => {
-  function pickWidget(templateId: string, widgetId: string) {
-    const itemsWithoutTemplate = column.items.filter(
-      (item) => item.templateId !== templateId,
+  function pickWidget(templateId: string, widgetId: string | null) {
+    onChangeColumn(
+      widgetId
+        ? JsonColumn.setItem(column, templateId, widgetId)
+        : JsonColumn.removeItem(column, templateId),
     );
-
-    if (!widgetId) {
-      onChangeColumn({ ...column, items: itemsWithoutTemplate });
-      return;
-    }
-
-    const template = templates.find((t) => t.id === templateId);
-    const latestVersion = findLatestVersion(template?.templateVersions ?? []);
-    const widget = latestVersion?.snapshot.widgets[widgetId];
-    const type =
-      column.type ??
-      (widget ? WIDGET_DISPLAY_TYPE_REGISTRY[widget.type][0] : null);
-    const size = column.size ?? DEFAULT_COLUMN_SIZE;
-
-    onChangeColumn({
-      ...column,
-      type,
-      size,
-      items: [...itemsWithoutTemplate, { templateId, widgetId }],
-    });
   }
 
-  const { icon } = DISPLAY_TYPE_REGISTRY[column.type ?? DisplayType.UNKNOWN];
+  const { icon } =
+    DISPLAY_TYPE_REGISTRY[JsonColumn.getType(column) ?? DisplayType.UNKNOWN];
+  const selectedWidgets = getSelectedColumnWidgets(column, templates);
 
   return (
     <RowWrapper>
@@ -84,10 +52,10 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
           <TomatoIcon icon={icon} />
           <Input
             type="text"
-            value={column.label ?? ""}
+            value={JsonColumn.getLabel(column) ?? ""}
             placeholder="Label"
             onChange={(e) =>
-              onChangeColumn({ ...column, label: e.target.value })
+              onChangeColumn(JsonColumn.setLabel(column, e.target.value))
             }
             variant="ghost"
           />
@@ -96,8 +64,8 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
             variant="ghost"
             size="icon-sm"
             className="shrink-0"
-            onClick={() => onRemoveColumn(column.id)}
-            aria-label={`Remove column ${column.label ?? column.id}`}
+            onClick={() => onRemoveColumn(JsonColumn.getId(column))}
+            aria-label={`Remove column ${JsonColumn.getLabel(column) ?? JsonColumn.getId(column)}`}
           >
             <TomatoIcon icon={TomatoIconKey.Trash} className="size-3.5" />
           </Button>
@@ -105,87 +73,41 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
       </div>
       <SessionWrapper>
         <ZebraCell className="px-2">
-          <Select
-            value={column.size ? encodeColumnSize(column.size) : ""}
-            onValueChange={(value) =>
-              onChangeColumn({ ...column, size: decodeColumnSize(value) })
-            }
-          >
-            <SelectTrigger aria-label="Column size" className="text-xs">
-              <SelectValue placeholder="Size" />
-            </SelectTrigger>
-            <SelectContent>
-              {COLUMN_SIZE_OPTIONS.map((option) => {
-                const value = encodeColumnSize(option.size);
-                return (
-                  <SelectItem key={value} value={value}>
-                    {option.label}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
+          <ColumnSizeSelect
+            size={JsonColumn.getSize(column)}
+            onChange={(size) => onChangeColumn(JsonColumn.setSize(column, size))}
+          />
+        </ZebraCell>
+        <ZebraCell index={1} className="px-2">
+          <ColumnDisplayTypeSelect
+            value={JsonColumn.getType(column)}
+            allowedTypes={getCommonDisplayTypes(
+              selectedWidgets.map((w) => w.widget),
+            )}
+            onChange={(type) => onChangeColumn(JsonColumn.setType(column, type))}
+          />
         </ZebraCell>
       </SessionWrapper>
 
       <SessionWrapper>
         {templates.map((template, idx) => {
-          const latestVersion = findLatestVersion(
-            template.templateVersions ?? [],
+          const selectedWidgetId = JsonColumn.getItemWidgetId(
+            column,
+            template.id,
           );
-          const ariaLabel = `Widget for ${template.name}`;
 
-          if (!latestVersion) {
-            return (
-              <ZebraCell key={template.id} index={idx} className="gap-2 px-2">
-                <Select disabled>
-                  <SelectTrigger aria-label={ariaLabel}>
-                    <SelectValue placeholder="No published version" />
-                  </SelectTrigger>
-                  <SelectContent />
-                </Select>
-              </ZebraCell>
-            );
-          }
-
-          const snapshot = latestVersion.snapshot;
-          const options = getDataFieldWidgets(snapshot).filter(
-            (widget) =>
-              column.type === null ||
-              WIDGET_DISPLAY_TYPE_REGISTRY[widget.type].includes(column.type),
-          );
-          const selectedWidgetId =
-            column.items.find((item) => item.templateId === template.id)
-              ?.widgetId ?? UNSELECTED_WIDGET;
+          const otherSelectedWidgets = selectedWidgets
+            .filter((w) => w.templateId !== template.id)
+            .map((w) => w.widget);
 
           return (
             <ZebraCell key={template.id} index={idx} className="gap-2 px-2">
-              <Select
+              <TemplateWidgetSelect
+                template={template}
+                allowDisplayTypes={getCommonDisplayTypes(otherSelectedWidgets)}
                 value={selectedWidgetId}
-                onValueChange={(value) =>
-                  pickWidget(
-                    template.id,
-                    value === UNSELECTED_WIDGET ? "" : value,
-                  )
-                }
-                disabled={options.length === 0}
-              >
-                <SelectTrigger aria-label={ariaLabel}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={UNSELECTED_WIDGET}>
-                    {options.length === 0
-                      ? "No matching widget"
-                      : "Select widget"}
-                  </SelectItem>
-                  {options.map((widget) => (
-                    <SelectItem key={widget.id} value={widget.id}>
-                      {getWidgetOptionLabel(snapshot, widget.id)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(widgetId) => pickWidget(template.id, widgetId)}
+              />
             </ZebraCell>
           );
         })}

@@ -92,6 +92,10 @@ Note: there is currently no auth/RBAC module — endpoints are not guarded and t
 - Priority use `shadcn/ui` instead of using html tags.
 - Priority use `pnpm dlx shadcn@latest add <component>` instead of self generate.
 
+- When have new component, ensure the component is placed in the correct directory (creating a new directory is permitted if necessary).
+
+- Should using `value - onChange` pair.
+
 ### Backend
 
 - Every tenant-scoped document must include `enterpriseId`

@@ -5,12 +5,14 @@ import { toast } from "@/components/ui/sonner";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useUpdateBoard } from "@/features/board/hooks/useBoards";
 import { getColumnSizeStyle } from "@/features/board/utils/boardColumnWidgets";
+import { JsonColumn } from "@/features/board/utils/column";
 import { useTemplates } from "@/features/template/hooks/useTemplates";
 import type { BoardColumn as BoardColumnData } from "@/types/board";
 import type { Template } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
 import { useState } from "react";
+import { useList } from "react-use";
 import BoardSettingColumn from "./BoardSettingColumn";
 import BoardSettingLabel from "./BoardSettingLabel";
 import BoardSettingToolbar from "./BoardSettingToolbar";
@@ -19,25 +21,23 @@ function prepareColumnsForSave(
   columns: BoardColumnData[],
   boardTemplateIds: Set<string>,
 ): BoardColumnData[] | null {
-  const touched = columns.filter((c) => c.items.length > 0);
+  const touched = columns.filter((c) => JsonColumn.hasItems(c));
 
-  const isInvalid = touched.some((c) => c.type === null || !c.size);
+  const isInvalid = touched.some((c) => !JsonColumn.isReadyToSave(c));
   if (isInvalid) return null;
 
-  return touched.map((c) => ({
-    ...c,
-    items: c.items.filter((item) => boardTemplateIds.has(item.templateId)),
-  }));
+  return touched.map((c) =>
+    JsonColumn.filterItemsByTemplateIds(c, boardTemplateIds),
+  );
 }
 
 /** Column grid for a board, including linking/unlinking templates from the same screen. */
 const BoardSetting: React.FC = () => {
   const board = useBoardContext();
   const { mutateAsync: updateBoard, isPending } = useUpdateBoard(board.id);
-  const { data: allTemplates = [], isLoading: isLoadingTemplates } =
-    useTemplates();
+  const { data: allTemplates = [] } = useTemplates();
 
-  const [draftColumns, setDraftColumns] = useState<BoardColumnData[]>(
+  const [draftColumns, draftColumnActions] = useList<BoardColumnData>(
     board.columns,
   );
   const [draftTemplateIds, setDraftTemplateIds] = useState<string[]>(
@@ -49,44 +49,19 @@ const BoardSetting: React.FC = () => {
   const draftTemplates = draftTemplateIds
     .map((id) => linkedTemplatesById.get(id) ?? allTemplatesById.get(id))
     .filter((t): t is Template => Boolean(t));
-  const availableTemplates = allTemplates.filter(
-    (t) => !draftTemplateIds.includes(t.id),
-  );
 
   const isDirty =
     JSON.stringify(draftColumns) !== JSON.stringify(board.columns) ||
     JSON.stringify(draftTemplateIds) !==
       JSON.stringify(board.templates.map((t) => t.id));
 
-  function replaceColumn(updated: BoardColumnData) {
-    setDraftColumns((prev) =>
-      prev.map((c) => (c.id === updated.id ? updated : c)),
-    );
-  }
-
-  function removeColumn(columnId: string) {
-    setDraftColumns((prev) => prev.filter((c) => c.id !== columnId));
-  }
-
-  function addTemplate(templateId: string) {
-    setDraftTemplateIds((prev) => [...prev, templateId]);
-  }
-
-  function removeTemplate(templateId: string) {
-    setDraftTemplateIds((prev) => prev.filter((id) => id !== templateId));
-    setDraftColumns((prev) =>
-      prev.map((c) => ({
-        ...c,
-        items: c.items.filter((item) => item.templateId !== templateId),
-      })),
-    );
-  }
-
   async function handleSave() {
     const boardTemplateIds = new Set(draftTemplateIds);
     const prepared = prepareColumnsForSave(draftColumns, boardTemplateIds);
     if (!prepared) {
-      toast.error("Every column needs a widget and a size before saving");
+      toast.error(
+        "Every column needs a widget, a size, and a type before saving",
+      );
       return;
     }
     try {
@@ -94,7 +69,7 @@ const BoardSetting: React.FC = () => {
         columns: prepared,
         templateIds: draftTemplateIds,
       });
-      setDraftColumns(prepared);
+      draftColumnActions.set(prepared);
       toast.success("Columns updated");
     } catch (err) {
       console.error("Failed to update columns:", err);
@@ -108,27 +83,37 @@ const BoardSetting: React.FC = () => {
         Link templates and add columns to show widget values on the board list.
         All widgets in a column must share the same display type.
       </p>
-      <BoardSettingToolbar
-        onAddColumn={(column) => setDraftColumns((prev) => [...prev, column])}
-      />
+      <BoardSettingToolbar onAddColumn={draftColumnActions.push} />
       <div className={clsx("size-full relative")}>
         <div className="">
           <BoardSettingLabel
             templates={draftTemplates}
-            availableTemplates={availableTemplates}
-            isLoading={isLoadingTemplates}
-            onAdd={addTemplate}
+            onAdd={(templateId) =>
+              setDraftTemplateIds((prev) => [...prev, templateId])
+            }
           />
           <div className="absolute top-0 left-40 w-[calc(100%-var(--spacing)*40)] h-full">
             <div className="flex flex-row gap-2">
               {draftColumns.map((column, index) => (
-                <div key={column.id} style={getColumnSizeStyle(column.size)}>
+                <div
+                  key={JsonColumn.getId(column)}
+                  style={getColumnSizeStyle(JsonColumn.getSize(column))}
+                >
                   <BoardSettingColumn
                     column={column}
                     index={index}
                     templates={draftTemplates}
-                    onChangeColumn={replaceColumn}
-                    onRemoveColumn={removeColumn}
+                    onChangeColumn={(updated) =>
+                      draftColumnActions.update(
+                        (c) => JsonColumn.getId(c) === JsonColumn.getId(updated),
+                        updated,
+                      )
+                    }
+                    onRemoveColumn={(columnId) =>
+                      draftColumnActions.filter(
+                        (c) => JsonColumn.getId(c) !== columnId,
+                      )
+                    }
                   />
                 </div>
               ))}

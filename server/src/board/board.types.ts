@@ -1,10 +1,5 @@
 export type BoardColumnDisplayType = "text" | "date" | "number";
 
-export interface BoardColumnItem {
-  templateId: string;
-  widgetId: string;
-}
-
 export type ColumnSize = { width: number } | { flex: number };
 
 export interface BoardColumn {
@@ -12,5 +7,6 @@ export interface BoardColumn {
   type: BoardColumnDisplayType;
   size: ColumnSize;
   label: string | null;
-  items: BoardColumnItem[];
+  /** Map of templateId to the widgetId picked from that template. */
+  items: Record<string, string>;
 }

@@ -1,16 +1,6 @@
 import { DisplayType } from "@/types/display-type";
-import type { Board, BoardColumn, BoardColumnItem } from "@/types/board";
+import type { Board, BoardColumn } from "@/types/board";
 import { mockId } from "@/lib/testing/mockId";
-
-export function getMockBoardColumnItem(
-  overrides?: Partial<BoardColumnItem>,
-): BoardColumnItem {
-  return {
-    templateId: mockId("template"),
-    widgetId: mockId("widget"),
-    ...overrides,
-  };
-}
 
 export function getMockBoardColumn(
   overrides?: Partial<BoardColumn>,
@@ -20,7 +10,7 @@ export function getMockBoardColumn(
     type: DisplayType.TEXT,
     size: { width: 150 },
     label: null,
-    items: [],
+    items: {},
     ...overrides,
   };
 }

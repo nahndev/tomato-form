@@ -12,7 +12,7 @@ describe("BoardColumnDto", () => {
     id: "col-1",
     type: "text",
     size: { width: 150 },
-    items: [{ templateId: "template-1", widgetId: "widget-1" }],
+    items: { "template-1": "widget-1" },
   };
 
   it("accepts a fully valid column", async () => {
@@ -53,10 +53,18 @@ describe("BoardColumnDto", () => {
     expect(errors).toHaveLength(0);
   });
 
-  it("rejects a column whose item is missing a widgetId", async () => {
+  it("rejects a column whose items value is not a string", async () => {
     const errors = await validateColumn({
       ...validPayload,
-      items: [{ templateId: "template-1" }],
+      items: { "template-1": 123 },
+    });
+    expect(errors.some((e) => e.property === "items")).toBe(true);
+  });
+
+  it("rejects a column whose items is an array", async () => {
+    const errors = await validateColumn({
+      ...validPayload,
+      items: [{ templateId: "template-1", widgetId: "widget-1" }],
     });
     expect(errors.some((e) => e.property === "items")).toBe(true);
   });

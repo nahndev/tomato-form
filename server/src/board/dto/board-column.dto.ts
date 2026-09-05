@@ -1,13 +1,10 @@
 import { ApiExtraModels, ApiProperty, ApiPropertyOptional, getSchemaPath } from "@nestjs/swagger";
-import { Type } from "class-transformer";
 import {
-  IsArray,
   IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
   Validate,
-  ValidateNested,
   ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
@@ -57,16 +54,23 @@ export const BoardColumnDisplayTypeDto = {
 export type BoardColumnDisplayTypeDto =
   (typeof BoardColumnDisplayTypeDto)[keyof typeof BoardColumnDisplayTypeDto];
 
-export class BoardColumnItemDto {
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  templateId!: string;
+@ValidatorConstraint({ name: "isBoardColumnItems", async: false })
+class IsBoardColumnItemsConstraint implements ValidatorConstraintInterface {
+  validate(value: unknown): boolean {
+    if (typeof value !== "object" || value === null || Array.isArray(value))
+      return false;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  widgetId!: string;
+    return Object.entries(value as Record<string, unknown>).every(
+      ([templateId, widgetId]) =>
+        templateId.length > 0 &&
+        typeof widgetId === "string" &&
+        widgetId.length > 0,
+    );
+  }
+
+  defaultMessage(args: ValidationArguments): string {
+    return `${args.property} must be an object mapping templateId to widgetId`;
+  }
 }
 
 @ApiExtraModels(ColumnWidthDto, ColumnFlexDto)
@@ -95,9 +99,12 @@ export class BoardColumnDto {
   @IsString()
   label?: string | null;
 
-  @ApiProperty({ type: [BoardColumnItemDto] })
-  @ValidateNested({ each: true })
-  @Type(() => BoardColumnItemDto)
-  @IsArray()
-  items!: BoardColumnItemDto[];
+  @ApiProperty({
+    description: "Map of templateId to the widgetId picked from that template",
+    type: "object",
+    additionalProperties: { type: "string" },
+    example: { "template-1": "widget-1" },
+  })
+  @Validate(IsBoardColumnItemsConstraint)
+  items!: Record<string, string>;
 }
