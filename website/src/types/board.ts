@@ -13,10 +13,12 @@ export interface BoardColumnItem {
   widgetId: string;
 }
 
+export type ColumnSize = { width: number } | { flex: number };
+
 export interface BoardColumn {
   id: string;
   type: DisplayType | null;
-  size: number | null;
+  size: ColumnSize | null;
   label: string | null;
   items: BoardColumnItem[];
 }

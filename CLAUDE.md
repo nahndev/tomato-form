@@ -87,6 +87,11 @@ Note: there is currently no auth/RBAC module — endpoints are not guarded and t
 - Show loading indicator on buttons
 - Always have onError handler with user feedback
 
+## Frontend
+
+- Priority use `shadcn/ui` instead of using html tags.
+- Priority use `pnpm dlx shadcn@latest add <component>` instead of self generate.
+
 ### Backend
 
 - Every tenant-scoped document must include `enterpriseId`

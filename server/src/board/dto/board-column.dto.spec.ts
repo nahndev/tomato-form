@@ -11,7 +11,7 @@ describe("BoardColumnDto", () => {
   const validPayload = {
     id: "col-1",
     type: "text",
-    size: 150,
+    size: { width: 150 },
     items: [{ templateId: "template-1", widgetId: "widget-1" }],
   };
 
@@ -30,9 +30,27 @@ describe("BoardColumnDto", () => {
     expect(errors.some((e) => e.property === "type")).toBe(true);
   });
 
-  it("rejects a column with size 0", async () => {
-    const errors = await validateColumn({ ...validPayload, size: 0 });
+  it("rejects a column whose size is not a width/flex object", async () => {
+    const errors = await validateColumn({ ...validPayload, size: "150px" });
     expect(errors.some((e) => e.property === "size")).toBe(true);
+  });
+
+  it("rejects a column whose size sets both width and flex", async () => {
+    const errors = await validateColumn({
+      ...validPayload,
+      size: { width: 150, flex: 2 },
+    });
+    expect(errors.some((e) => e.property === "size")).toBe(true);
+  });
+
+  it("rejects a column with a non-positive size", async () => {
+    const errors = await validateColumn({ ...validPayload, size: { width: 0 } });
+    expect(errors.some((e) => e.property === "size")).toBe(true);
+  });
+
+  it("accepts a column with a flex size", async () => {
+    const errors = await validateColumn({ ...validPayload, size: { flex: 2 } });
+    expect(errors).toHaveLength(0);
   });
 
   it("rejects a column whose item is missing a widgetId", async () => {

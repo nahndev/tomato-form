@@ -5,10 +5,12 @@ export interface BoardColumnItem {
   widgetId: string;
 }
 
+export type ColumnSize = { width: number } | { flex: number };
+
 export interface BoardColumn {
   id: string;
   type: BoardColumnDisplayType;
-  size: number;
+  size: ColumnSize;
   label: string | null;
   items: BoardColumnItem[];
 }

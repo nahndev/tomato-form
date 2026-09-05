@@ -3,7 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { WidgetPropertyFieldProps } from "@/features/template/components/property/types";
 import { useUserStore } from "@/store/user.store";
 import {
@@ -68,18 +74,20 @@ export function ActionsDescriptor({
             <div className="flex items-center gap-1">
               <Select
                 value={action.type}
-                onChange={(e) =>
-                  update(
-                    index,
-                    defaultActionFor(e.target.value as ButtonActionType),
-                  )
+                onValueChange={(value) =>
+                  update(index, defaultActionFor(value as ButtonActionType))
                 }
               >
-                {Object.values(ButtonActionType).map((type) => (
-                  <option key={type} value={type}>
-                    {ACTION_LABELS[type]}
-                  </option>
-                ))}
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.values(ButtonActionType).map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {ACTION_LABELS[type]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
               <Button
                 type="button"
@@ -192,27 +200,38 @@ function RecipientsEditor({
         <div key={index} className="flex items-center gap-1">
           <Select
             value={recipient.type}
-            onChange={(e) =>
+            onValueChange={(value) =>
               update(index, {
-                type: e.target.value as RecipientType,
+                type: value as RecipientType,
                 value: "",
               })
             }
           >
-            <option value={RecipientType.MAIL}>Email</option>
-            <option value={RecipientType.USER}>User</option>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={RecipientType.MAIL}>Email</SelectItem>
+              <SelectItem value={RecipientType.USER}>User</SelectItem>
+            </SelectContent>
           </Select>
           {recipient.type === RecipientType.USER ? (
             <Select
               value={recipient.value}
-              onChange={(e) => update(index, { ...recipient, value: e.target.value })}
+              onValueChange={(value) =>
+                update(index, { ...recipient, value })
+              }
             >
-              <option value="">Select a user…</option>
-              {users.map((user) => (
-                <option key={user.uuid} value={user.uuid}>
-                  {user.name}
-                </option>
-              ))}
+              <SelectTrigger>
+                <SelectValue placeholder="Select a user…" />
+              </SelectTrigger>
+              <SelectContent>
+                {users.map((user) => (
+                  <SelectItem key={user.uuid} value={user.uuid}>
+                    {user.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           ) : (
             <Input

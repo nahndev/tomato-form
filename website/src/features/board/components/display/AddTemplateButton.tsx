@@ -1,4 +1,10 @@
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Template } from "@/types/template";
 
 export interface AddTemplateButtonProps {
@@ -27,20 +33,17 @@ const AddTemplateButton: React.FC<AddTemplateButtonProps> = ({
   }
 
   return (
-    <Select
-      value=""
-      onChange={(e) => {
-        if (e.target.value) onAdd(e.target.value);
-      }}
-      className="w-40"
-      aria-label="Add template"
-    >
-      <option value="">+ Add template</option>
-      {availableTemplates.map((t) => (
-        <option key={t.id} value={t.id}>
-          {t.name}
-        </option>
-      ))}
+    <Select value="" onValueChange={(value) => onAdd(value)}>
+      <SelectTrigger aria-label="Add template" className="w-40">
+        <SelectValue placeholder="+ Add template" />
+      </SelectTrigger>
+      <SelectContent>
+        {availableTemplates.map((t) => (
+          <SelectItem key={t.id} value={t.id}>
+            {t.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
     </Select>
   );
 };

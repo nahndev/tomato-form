@@ -1,5 +1,18 @@
 import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
+import type { ColumnSize } from "@/types/board";
 import type { TemplateVersionSnapshot, Widget } from "@/types/template";
+import type { CSSProperties } from "react";
+
+/** Maps a column's stored size to the inline style that renders it in a flex row. */
+export function getColumnSizeStyle(
+  size: ColumnSize | null,
+): CSSProperties | undefined {
+  if (!size) return undefined;
+
+  if ("flex" in size) return { flex: `${size.flex} 1 0%` };
+
+  return { width: size.width, flexShrink: 0 };
+}
 
 export function getDataFieldWidgets(
   snapshot: TemplateVersionSnapshot,

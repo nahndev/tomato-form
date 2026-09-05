@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useUpdateBoard } from "@/features/board/hooks/useBoards";
+import { getColumnSizeStyle } from "@/features/board/utils/boardColumnWidgets";
 import { useTemplates } from "@/features/template/hooks/useTemplates";
 import type { BoardColumn as BoardColumnData } from "@/types/board";
 import type { Template } from "@/types/template";
@@ -20,9 +21,7 @@ function prepareColumnsForSave(
 ): BoardColumnData[] | null {
   const touched = columns.filter((c) => c.items.length > 0);
 
-  const isInvalid = touched.some(
-    (c) => c.type === null || !c.size || c.size < 1,
-  );
+  const isInvalid = touched.some((c) => c.type === null || !c.size);
   if (isInvalid) return null;
 
   return touched.map((c) => ({
@@ -120,17 +119,18 @@ const BoardSetting: React.FC = () => {
             isLoading={isLoadingTemplates}
             onAdd={addTemplate}
           />
-          <div className="absolute top-0 left-40 h-full">
+          <div className="absolute top-0 left-40 w-[calc(100%-var(--spacing)*40)] h-full">
             <div className="flex flex-row gap-2">
               {draftColumns.map((column, index) => (
-                <BoardSettingColumn
-                  key={column.id}
-                  column={column}
-                  index={index}
-                  templates={draftTemplates}
-                  onChangeColumn={replaceColumn}
-                  onRemoveColumn={removeColumn}
-                />
+                <div key={column.id} style={getColumnSizeStyle(column.size)}>
+                  <BoardSettingColumn
+                    column={column}
+                    index={index}
+                    templates={draftTemplates}
+                    onChangeColumn={replaceColumn}
+                    onRemoveColumn={removeColumn}
+                  />
+                </div>
               ))}
             </div>
           </div>

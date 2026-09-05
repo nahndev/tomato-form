@@ -9,7 +9,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
 import { useSessionActions } from "@/features/template/sync/hooks/useSessionActions";
@@ -98,15 +104,20 @@ const SessionSettingPopup: React.FC = () => {
             <Label>Show this session</Label>
             <Select
               value={condition.type}
-              onChange={(e) =>
-                updateConditionType(e.target.value as SessionConditionType)
+              onValueChange={(value) =>
+                updateConditionType(value as SessionConditionType)
               }
             >
-              {Object.values(SessionConditionType).map((type) => (
-                <option key={type} value={type}>
-                  {CONDITION_LABELS[type]}
-                </option>
-              ))}
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(SessionConditionType).map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {CONDITION_LABELS[type]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           </div>
 
@@ -119,14 +130,18 @@ const SessionSettingPopup: React.FC = () => {
               </Label>
               <Select
                 value={condition.widgetId}
-                onChange={(e) => updateConditionWidget(e.target.value)}
+                onValueChange={(value) => updateConditionWidget(value)}
               >
-                <option value="">Select…</option>
-                {widgetOptions.map((widget) => (
-                  <option key={widget.id} value={widget.id}>
-                    {widgetOptionLabel(widget.id)}
-                  </option>
-                ))}
+                <SelectTrigger>
+                  <SelectValue placeholder="Select…" />
+                </SelectTrigger>
+                <SelectContent>
+                  {widgetOptions.map((widget) => (
+                    <SelectItem key={widget.id} value={widget.id}>
+                      {widgetOptionLabel(widget.id)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             </div>
           )}

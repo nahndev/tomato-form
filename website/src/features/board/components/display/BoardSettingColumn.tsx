@@ -3,10 +3,21 @@
 import { Button } from "@/components/ui/button";
 import { FlexRow } from "@/components/ui/flex-row";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { SessionWrapper } from "@/features/board/components/display/session/SessionWrapper";
 import { RowWrapper } from "@/features/board/components/display/wrapper/RowWrapper";
 import { ZebraCell } from "@/features/board/components/display/wrapper/ZebraCell";
+import {
+  COLUMN_SIZE_OPTIONS,
+  decodeColumnSize,
+  encodeColumnSize,
+} from "@/features/board/constants/column/sizeOptions";
 import {
   getDataFieldWidgets,
   getWidgetOptionLabel,
@@ -14,12 +25,14 @@ import {
 import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget";
 import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
-import type { BoardColumn } from "@/types/board";
+import type { BoardColumn, ColumnSize } from "@/types/board";
 import { DisplayType } from "@/types/display-type";
 import type { Template } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
-const DEFAULT_COLUMN_SIZE = 150;
+const DEFAULT_COLUMN_SIZE: ColumnSize = { width: 100 };
+/** Radix Select.Item forbids an empty-string value, so a sentinel stands in for "no widget picked". */
+const UNSELECTED_WIDGET = "__unselected__";
 
 export interface BoardSettingColumnProps {
   column: BoardColumn;
@@ -32,7 +45,6 @@ export interface BoardSettingColumnProps {
 /** One column of the board grid: label + size editors, then a widget picker for each linked template. */
 const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
   column,
-  index,
   templates,
   onChangeColumn,
   onRemoveColumn,
@@ -63,11 +75,7 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
     });
   }
 
-  const {
-    label: typeLabel,
-    icon,
-    color: typeColor,
-  } = DISPLAY_TYPE_REGISTRY[column.type ?? DisplayType.UNKNOWN];
+  const { icon } = DISPLAY_TYPE_REGISTRY[column.type ?? DisplayType.UNKNOWN];
 
   return (
     <RowWrapper>
@@ -97,19 +105,26 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
       </div>
       <SessionWrapper>
         <ZebraCell className="px-2">
-          <Input
-            type="number"
-            min={1}
-            value={column.size ?? ""}
-            placeholder="Size"
-            onChange={(e) =>
-              onChangeColumn({
-                ...column,
-                size: e.target.value === "" ? null : Number(e.target.value),
-              })
+          <Select
+            value={column.size ? encodeColumnSize(column.size) : ""}
+            onValueChange={(value) =>
+              onChangeColumn({ ...column, size: decodeColumnSize(value) })
             }
-            className="text-xs"
-          />
+          >
+            <SelectTrigger aria-label="Column size" className="text-xs">
+              <SelectValue placeholder="Size" />
+            </SelectTrigger>
+            <SelectContent>
+              {COLUMN_SIZE_OPTIONS.map((option) => {
+                const value = encodeColumnSize(option.size);
+                return (
+                  <SelectItem key={value} value={value}>
+                    {option.label}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
         </ZebraCell>
       </SessionWrapper>
 
@@ -123,8 +138,11 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
           if (!latestVersion) {
             return (
               <ZebraCell key={template.id} index={idx} className="gap-2 px-2">
-                <Select disabled value="" aria-label={ariaLabel}>
-                  <option value="">No published version</option>
+                <Select disabled>
+                  <SelectTrigger aria-label={ariaLabel}>
+                    <SelectValue placeholder="No published version" />
+                  </SelectTrigger>
+                  <SelectContent />
                 </Select>
               </ZebraCell>
             );
@@ -138,26 +156,35 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
           );
           const selectedWidgetId =
             column.items.find((item) => item.templateId === template.id)
-              ?.widgetId ?? "";
+              ?.widgetId ?? UNSELECTED_WIDGET;
 
           return (
             <ZebraCell key={template.id} index={idx} className="gap-2 px-2">
               <Select
                 value={selectedWidgetId}
-                onChange={(e) => pickWidget(template.id, e.target.value)}
+                onValueChange={(value) =>
+                  pickWidget(
+                    template.id,
+                    value === UNSELECTED_WIDGET ? "" : value,
+                  )
+                }
                 disabled={options.length === 0}
-                aria-label={ariaLabel}
               >
-                <option value="">
-                  {options.length === 0
-                    ? "No matching widget"
-                    : "Select widget"}
-                </option>
-                {options.map((widget) => (
-                  <option key={widget.id} value={widget.id}>
-                    {getWidgetOptionLabel(snapshot, widget.id)}
-                  </option>
-                ))}
+                <SelectTrigger aria-label={ariaLabel}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={UNSELECTED_WIDGET}>
+                    {options.length === 0
+                      ? "No matching widget"
+                      : "Select widget"}
+                  </SelectItem>
+                  {options.map((widget) => (
+                    <SelectItem key={widget.id} value={widget.id}>
+                      {getWidgetOptionLabel(snapshot, widget.id)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             </ZebraCell>
           );

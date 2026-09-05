@@ -4,7 +4,13 @@ import { useState } from "react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -76,16 +82,17 @@ const MoreSubmissionButton: React.FC = () => {
 
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="submission-template">Template</Label>
-          <Select
-            id="submission-template"
-            value={pickedTemplateId}
-            onChange={(e) => setPickedTemplateId(e.target.value)}
-          >
-            {templates.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
+          <Select value={pickedTemplateId} onValueChange={setPickedTemplateId}>
+            <SelectTrigger id="submission-template">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {templates.map((t) => (
+                <SelectItem key={t.id} value={t.id}>
+                  {t.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         </div>
 

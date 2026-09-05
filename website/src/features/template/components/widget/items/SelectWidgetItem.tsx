@@ -1,6 +1,12 @@
 "use client";
 
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { FieldComponentProps } from "@/types/widget";
 
 export function SelectWidgetItem({
@@ -11,17 +17,17 @@ export function SelectWidgetItem({
   const options = widget.options ?? [];
 
   return (
-    <Select
-      id={widget.id}
-      value={value ?? ""}
-      onChange={(e) => onChange?.(e.target.value)}
-    >
-      <option value="">Select…</option>
-      {options.map((opt) => (
-        <option key={opt} value={opt}>
-          {opt}
-        </option>
-      ))}
+    <Select value={value ?? ""} onValueChange={(v) => onChange?.(v)}>
+      <SelectTrigger id={widget.id}>
+        <SelectValue placeholder="Select…" />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((opt) => (
+          <SelectItem key={opt} value={opt}>
+            {opt}
+          </SelectItem>
+        ))}
+      </SelectContent>
     </Select>
   );
 }

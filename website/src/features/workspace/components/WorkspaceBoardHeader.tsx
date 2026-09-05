@@ -7,7 +7,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import MoreSubmissionButton from "@/features/board/components/header/MoreSubmissionButton";
 import type { Board } from "@/types/board";
 
@@ -37,18 +43,18 @@ const WorkspaceBoardHeader: React.FC<WorkspaceBoardHeaderProps> = ({
     <div className="flex items-center gap-3 border-b px-4 py-3">
       <h2 className="shrink-0 text-lg font-semibold">{board.name}</h2>
 
-      <Select
-        aria-label="Filter by template"
-        value={templateFilter}
-        onChange={(e) => onTemplateFilterChange(e.target.value)}
-        className="w-48"
-      >
-        <option value="all">All templates</option>
-        {board.templates.map((template) => (
-          <option key={template.id} value={template.id}>
-            {template.name}
-          </option>
-        ))}
+      <Select value={templateFilter} onValueChange={onTemplateFilterChange}>
+        <SelectTrigger aria-label="Filter by template" className="w-48">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All templates</SelectItem>
+          {board.templates.map((template) => (
+            <SelectItem key={template.id} value={template.id}>
+              {template.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
       </Select>
 
       <div className="flex-1" />
