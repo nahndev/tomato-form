@@ -1,10 +1,10 @@
-import { ContainerLayout } from "@tomato/grid";
 import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
 import { useSessionId } from "@/features/template/components/session/SessionProvider";
 import { WidgetItem } from "@/features/template/components/widget/WidgetItem";
-import { useSessionActions } from "@/features/template/sync/hooks/useSessionActions";
 import { useSessionState } from "@/features/template/hooks/state/useSessionState";
+import { useSessionActions } from "@/features/template/sync/hooks/useSessionActions";
 import { TemplateMode } from "@/types/template";
+import { ContainerLayout } from "@tomato/grid";
 import { useCallback } from "react";
 
 const SessionCanvas: React.FC = () => {
@@ -34,6 +34,7 @@ const SessionCanvas: React.FC = () => {
       onMoving={onMoving}
       onResize={onResize}
       disabled={mode === TemplateMode.VIEW}
+      options={{ grid: true }}
     >
       {(id: string) => <WidgetItem key={id} widget={widgets[id]} />}
     </ContainerLayout>

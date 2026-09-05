@@ -1,3 +1,8 @@
+import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
+import clsx from "clsx";
+import { generateKeyBetween } from "fractional-indexing";
+import { useMemo, useState } from "react";
+import { useDebounceValue, useMap } from "usehooks-ts";
 import { COLUMN_WIDTH, GRID_COLUMNS } from "./constants";
 import ContainerGrid from "./ContainerGrid";
 import ItemLayout from "./ItemLayout";
@@ -11,14 +16,13 @@ import {
   LayoutRect,
   setMaxHeight,
 } from "./utils";
-import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
-import clsx from "clsx";
-import { generateKeyBetween } from "fractional-indexing";
-import { useMemo, useState } from "react";
-import { useDebounceValue, useMap } from "usehooks-ts";
 
 export interface MovingLayout extends LayoutRect {
   id: string;
+}
+
+export interface ContainerOptions {
+  grid?: boolean;
 }
 export interface ContainerLayoutProps {
   id: string;
@@ -27,6 +31,7 @@ export interface ContainerLayoutProps {
   onMoving?: (id: string, column: number, idx: string) => void;
   onResize?: (id: string, span: number) => void;
   disabled?: boolean;
+  options?: ContainerOptions;
 }
 
 export function ContainerLayout({
@@ -36,6 +41,7 @@ export function ContainerLayout({
   onMoving,
   onResize,
   disabled,
+  options,
 }: ContainerLayoutProps) {
   const [heightMap, { set: setHeight }] = useMap<string, number>();
   const { ref, isDropTarget } = useDroppable({
@@ -45,6 +51,7 @@ export function ContainerLayout({
   const [version, setVersion] = useState<number>(0);
   const [moving, setMoving] = useState<MovingLayout | null>(null);
   const [hidden, setHidden] = useState<string | null>(null);
+  const isShownGrid = useMemo(() => options?.grid ?? false, [options]);
 
   // Lay widgets out top-to-bottom by idx, then make room for the widget
   // currently being dragged ("moving") by reserving its height at the slot
@@ -149,7 +156,7 @@ export function ContainerLayout({
         height: containerHeightDebounced,
       }}
     >
-      <ContainerGrid />
+      <ContainerGrid className={clsx(!isShownGrid && "hidden")} />
       {computedLayouts.map((layout) => (
         <div
           className={clsx(
