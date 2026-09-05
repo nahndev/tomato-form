@@ -14,9 +14,7 @@ const AddTemplateButton: React.FC<AddTemplateButtonProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <span className="text-xs text-muted-foreground">
-        Loading templates…
-      </span>
+      <span className="text-xs text-muted-foreground">Loading templates…</span>
     );
   }
 
@@ -34,6 +32,7 @@ const AddTemplateButton: React.FC<AddTemplateButtonProps> = ({
       onChange={(e) => {
         if (e.target.value) onAdd(e.target.value);
       }}
+      className="w-40"
       aria-label="Add template"
     >
       <option value="">+ Add template</option>

@@ -14,16 +14,17 @@ const BoardSettingRowActions: React.FC<BoardSettingRowActionsProps> = ({
   onRemoveTemplate,
 }) => {
   return (
-    <div role="row" className="flex flex-col">
-      <div role="cell" className="h-10" />
-      <div role="cell" className="h-10" />
+    <div role="row" className="flex flex-col border-l border-border">
+      <div role="cell" className="h-12 border-b border-border" />
+      <div role="cell" className="h-10 border-b border-border" />
+      <div className="h-8 bg-muted/40 border-b border-border" />
       {templates.map((template, idx) => (
         <div
           key={template.id}
           role="cell"
           className={clsx(
-            "h-10 flex items-center",
-            idx % 2 === 1 && "bg-slate-100",
+            "h-10 flex items-center justify-center px-2 transition-colors hover:bg-muted/60",
+            idx % 2 === 1 && "bg-muted/30",
           )}
         >
           <Button

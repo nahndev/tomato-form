@@ -10,10 +10,8 @@ import type { Template } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
 import { useState } from "react";
-import AddTemplateButton from "./AddTemplateButton";
 import BoardSettingColumn from "./BoardSettingColumn";
-import BoardSettingRowActions from "./BoardSettingRowActions";
-import BoardSettingTemplateNames from "./BoardSettingTemplateNames";
+import BoardSettingLabel from "./BoardSettingLabel";
 import BoardSettingToolbar from "./BoardSettingToolbar";
 
 function prepareColumnsForSave(
@@ -107,32 +105,35 @@ const BoardSetting: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground relative">
         Link templates and add columns to show widget values on the board list.
         All widgets in a column must share the same display type.
       </p>
-
-      <div className={clsx("flex flex-col size-full gap-2 text-sm")}>
-        <BoardSettingToolbar
-          onAddColumn={(column) => setDraftColumns((prev) => [...prev, column])}
-        />
-        <div className="flex flex-row">
-          <BoardSettingTemplateNames templates={draftTemplates} />
-          <div className="flex-1 flex flex-row">
-            {draftColumns.map((column) => (
-              <BoardSettingColumn
-                key={column.id}
-                column={column}
-                templates={draftTemplates}
-                onChangeColumn={replaceColumn}
-                onRemoveColumn={removeColumn}
-              />
-            ))}
-          </div>
-          <BoardSettingRowActions
+      <BoardSettingToolbar
+        onAddColumn={(column) => setDraftColumns((prev) => [...prev, column])}
+      />
+      <div className={clsx("size-full relative")}>
+        <div className="">
+          <BoardSettingLabel
             templates={draftTemplates}
-            onRemoveTemplate={removeTemplate}
+            availableTemplates={availableTemplates}
+            isLoading={isLoadingTemplates}
+            onAdd={addTemplate}
           />
+          <div className="absolute top-0 left-40 h-full">
+            <div className="flex flex-row gap-2">
+              {draftColumns.map((column, index) => (
+                <BoardSettingColumn
+                  key={column.id}
+                  column={column}
+                  index={index}
+                  templates={draftTemplates}
+                  onChangeColumn={replaceColumn}
+                  onRemoveColumn={removeColumn}
+                />
+              ))}
+            </div>
+          </div>
         </div>
 
         {draftTemplates.length === 0 && (
@@ -141,12 +142,6 @@ const BoardSetting: React.FC = () => {
           </p>
         )}
       </div>
-
-      <AddTemplateButton
-        availableTemplates={availableTemplates}
-        isLoading={isLoadingTemplates}
-        onAdd={addTemplate}
-      />
 
       <div className="flex justify-end">
         <Button

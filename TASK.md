@@ -1,11 +1,11 @@
-# Merge `board-table` to using for `website/src/features/board/components/display`
+# Improve size picker for board
 
-- Currently, board-table is very specific to `Board`
-- Maintain `board-table` as shared component is not necessary
+## Scope
+
+- website/src/features/board/components/display/BoardSetting.tsx
 
 ## Tasks 01
 
-- [x] Merge current `board-table` into`website/src/features/board/components/display`
-- [x] Remove redundant component
-- [x] Merge redundant component
-- [x] Should only include `BoardSettingRow`, `BoardSettingRow`, `BoardSetting`, `AddTemplateButton`, `AddColumnButton`
+- Convert size picker into selector
+- List value is `100`, `200`, ... and `1 col`, `2 col`, .... (base on 12 cols)
+- Update `BoardSetting`, `columns` render -> using size
