@@ -1,17 +1,11 @@
-# Add new widget `Board`
+# Merge `board-table` to using for `website/src/features/board/components/display`
 
-## Design
+- Currently, board-table is very specific to `Board`
+- Maintain `board-table` as shared component is not necessary
 
-- The widget allow draw on board
-- Allow upload a image, and image will fill in canvas
+## Tasks 01
 
-## Tasks 01 - Read context and write docs "Design of widgets" [x]
-
-- Add new docs in `./docs/WIDGET.md`
-- Add description "How to add widget"
-- Docs include all path of related files
-- Docs include all action need.
-
-## Tasks 02 - Base on Tasks 01 [x]
-
-- Add new widget `Board`
+- [x] Merge current `board-table` into`website/src/features/board/components/display`
+- [x] Remove redundant component
+- [x] Merge redundant component
+- [x] Should only include `BoardSettingRow`, `BoardSettingRow`, `BoardSetting`, `AddTemplateButton`, `AddColumnButton`

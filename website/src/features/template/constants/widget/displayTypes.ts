@@ -62,4 +62,5 @@ export const WIDGET_DISPLAY_TYPE_REGISTRY: Record<WidgetType, DisplayType[]> = {
   [WidgetType.CREATED_AT]: [DisplayType.DATE, DisplayType.TEXT],
   [WidgetType.TEMPLATE]: [],
   [WidgetType.SUBMITTED_BY]: [DisplayType.TEXT],
+  [WidgetType.BOARD]: [],
 };

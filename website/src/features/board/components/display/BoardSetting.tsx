@@ -1,6 +1,5 @@
 "use client";
 
-import { BoardContent, BoardTable } from "@/components/board-table";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
@@ -9,10 +8,13 @@ import { useTemplates } from "@/features/template/hooks/useTemplates";
 import type { BoardColumn as BoardColumnData } from "@/types/board";
 import type { Template } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
+import clsx from "clsx";
 import { useState } from "react";
 import AddTemplateButton from "./AddTemplateButton";
-import BoardSettingHeader from "./BoardSettingHeader";
-import BoardSettingRow from "./BoardSettingRow";
+import BoardSettingColumn from "./BoardSettingColumn";
+import BoardSettingRowActions from "./BoardSettingRowActions";
+import BoardSettingTemplateNames from "./BoardSettingTemplateNames";
+import BoardSettingToolbar from "./BoardSettingToolbar";
 
 function prepareColumnsForSave(
   columns: BoardColumnData[],
@@ -100,36 +102,33 @@ const BoardSetting: React.FC = () => {
         All widgets in a column must share the same display type.
       </p>
 
-      <BoardTable columns={draftColumns} rows={draftTemplates}>
-        <BoardSettingHeader
-          onChangeColumn={replaceColumn}
+      <div className={clsx("flex flex-col size-full gap-2 text-sm")}>
+        <BoardSettingToolbar
+          columns={draftColumns}
+          onAddColumn={(column) => setDraftColumns((prev) => [...prev, column])}
           onRemoveColumn={removeColumn}
-          onAddColumn={(column) =>
-            setDraftColumns((prev) => [...prev, column])
-          }
         />
-
-        <BoardContent>
-          {draftTemplates.length === 0 ? (
-            <div role="row" className="contents">
-              <div
-                role="cell"
-                className="py-4 text-center text-sm text-muted-foreground"
-              >
-                No templates linked yet.
-              </div>
-            </div>
-          ) : (
-            draftTemplates.map((template) => (
-              <BoardSettingRow
-                key={template.id}
-                template={template}
+        <div className="flex flex-row">
+          <BoardSettingTemplateNames templates={draftTemplates} />
+          <div className="flex-1 flex flex-row">
+            {draftColumns.map((column) => (
+              <BoardSettingColumn
+                key={column.id}
+                column={column}
+                templates={draftTemplates}
                 onChangeColumn={replaceColumn}
               />
-            ))
-          )}
-        </BoardContent>
-      </BoardTable>
+            ))}
+          </div>
+          <BoardSettingRowActions templates={draftTemplates} />
+        </div>
+
+        {draftTemplates.length === 0 && (
+          <p className="py-4 text-center text-sm text-muted-foreground">
+            No templates linked yet.
+          </p>
+        )}
+      </div>
 
       <AddTemplateButton
         availableTemplates={availableTemplates}
