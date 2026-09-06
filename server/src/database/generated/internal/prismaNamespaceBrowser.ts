@@ -111,6 +111,7 @@ export const SubmissionScalarFieldEnum = {
   boardId: 'boardId',
   templateVersionId: 'templateVersionId',
   data: 'data',
+  dataClocks: 'dataClocks',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

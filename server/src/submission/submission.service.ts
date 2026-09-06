@@ -1,7 +1,14 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from "@nestjs/common";
 import { Prisma, Submission } from "@/database/prisma-client";
 import { Recipient, RecipientType } from "@/mail/recipient.types";
 import { MailService } from "@/mail/mail.service";
+import { SubmissionSearchService } from "@/search/submission-search.service";
+import type { TemplateVersionSnapshot } from "@/template/template.types";
 import { UserService } from "@/user/user.service";
 import {
   isPrismaForeignKeyError,
@@ -10,14 +17,18 @@ import {
 import { PrismaService } from "../database/prisma.service";
 import { CreateSubmissionDto } from "./dto/create-submission.dto";
 import { SendMailActionDto } from "./dto/send-mail-action.dto";
+import { SubmissionValuesChangedEvent } from "./submission-value.contract";
 import { UpdateSubmissionDto } from "./dto/update-submission.dto";
 
 @Injectable()
 export class SubmissionService {
+  private readonly logger = new Logger(SubmissionService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
     private readonly userService: UserService,
+    private readonly submissionSearchService: SubmissionSearchService,
   ) {}
 
   async create(dto: CreateSubmissionDto): Promise<Submission> {
@@ -93,6 +104,59 @@ export class SubmissionService {
         body: dto.body,
       });
     }
+  }
+
+  /**
+   * Handles yjs-server's `SUBMISSION_VALUES_CHANGED_EVENT`, merging values
+   * into `data` and `dataClocks`. A key is only applied when its clock is
+   * newer than the one last applied for that key, so an out-of-order
+   * delivery can't clobber a more recent value.
+   */
+  async applyValuesChangedEvent(
+    event: SubmissionValuesChangedEvent,
+  ): Promise<void> {
+    const submission = await this.prisma.submission.findUnique({
+      where: { id: event.submissionId },
+      select: {
+        data: true,
+        dataClocks: true,
+        templateVersion: { select: { snapshot: true } },
+      },
+    });
+    if (!submission) {
+      this.logger.warn(
+        `Submission ${event.submissionId} not found for values-changed event`,
+      );
+      return;
+    }
+
+    const data = { ...(submission.data as Record<string, unknown>) };
+    const clocks = { ...(submission.dataClocks as Record<string, number>) };
+
+    let changed = false;
+    for (const [key, entry] of Object.entries(event.values)) {
+      if (clocks[key] !== undefined && clocks[key] >= entry.clock) continue;
+      data[key] = entry.value;
+      clocks[key] = entry.clock;
+      changed = true;
+    }
+
+    if (!changed) return;
+
+    await this.prisma.submission.update({
+      where: { id: event.submissionId },
+      data: {
+        data: data as Prisma.InputJsonValue,
+        dataClocks: clocks as Prisma.InputJsonValue,
+      },
+    });
+
+    const snapshot = submission.templateVersion.snapshot as unknown as TemplateVersionSnapshot;
+    await this.submissionSearchService.indexSubmission(
+      event.submissionId,
+      data,
+      snapshot.widgets ?? {},
+    );
   }
 
   private async resolveEmail(recipient: Recipient): Promise<string> {

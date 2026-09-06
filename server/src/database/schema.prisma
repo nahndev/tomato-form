@@ -60,6 +60,8 @@ model Submission {
   boardId           String   @map("board_id")
   templateVersionId String   @map("template_version_id")
   data              Json     @default("{}")
+  /** Last-applied Yjs item clock per `data` key, for dropping stale out-of-order sync events. */
+  dataClocks        Json     @default("{}") @map("data_clocks")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 

@@ -1,41 +1,33 @@
+import { DocumentStrategy } from "@/collaboration/document-strategy";
+import { SubmissionStrategy } from "@/collaboration/submission.strategy";
+import { TemplateStrategy } from "@/collaboration/template.strategy";
+import { EnvironmentVariables } from "@/config/env.schema";
 import { Server } from "@hocuspocus/server";
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import * as fs from "fs";
-import * as path from "path";
-import * as Y from "yjs";
-import { EnvironmentVariables } from "@/config/env.schema";
-import { resolveDocumentFile, readDocFromFile } from "@/collaboration/document-file.util";
 
-/** Hocuspocus WebSocket collaboration server, persisting each Yjs doc as a raw `.yjs` file under `FILE_DIR`. */
+/** Hocuspocus WebSocket collaboration server, delegating load/store per document type to a `DocumentStrategy`. */
 @Injectable()
 export class CollaborationService implements OnModuleInit, OnModuleDestroy {
-  private readonly dataDir: string;
   private readonly port: number;
   private server: Server | undefined;
 
-  constructor(configService: ConfigService<EnvironmentVariables, true>) {
-    this.dataDir = configService.get("FILE_DIR", { infer: true });
+  constructor(
+    configService: ConfigService<EnvironmentVariables, true>,
+    private readonly templateStrategy: TemplateStrategy,
+    private readonly submissionStrategy: SubmissionStrategy,
+  ) {
     this.port = configService.get("PORT", { infer: true });
   }
 
   async onModuleInit(): Promise<void> {
-    fs.mkdirSync(this.dataDir, { recursive: true });
-
     this.server = new Server({
       port: this.port,
       onLoadDocument: async ({ documentName }) => {
-        const file = resolveDocumentFile(this.dataDir, documentName);
-        if (!fs.existsSync(file)) {
-          return new Y.Doc();
-        }
-        return readDocFromFile(file);
+        return this.resolveStrategy(documentName).load(documentName);
       },
       onStoreDocument: async ({ documentName, document }) => {
-        const file = resolveDocumentFile(this.dataDir, documentName);
-        fs.mkdirSync(path.dirname(file), { recursive: true });
-        const update = Y.encodeStateAsUpdate(document);
-        fs.writeFileSync(file, Buffer.from(update));
+        await this.resolveStrategy(documentName).store(documentName, document);
       },
     });
 
@@ -44,5 +36,11 @@ export class CollaborationService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleDestroy(): Promise<void> {
     await this.server?.destroy();
+  }
+
+  /** documentName is `{type}/{id}/{version?}` - see `document-file.util.ts`. */
+  private resolveStrategy(documentName: string): DocumentStrategy {
+    const [type] = documentName.split("/");
+    return type === "submission" ? this.submissionStrategy : this.templateStrategy;
   }
 }

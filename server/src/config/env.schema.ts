@@ -34,6 +34,12 @@ export class EnvironmentVariables {
 
   @IsString()
   RABBITMQ_URL!: string;
+
+  @IsString()
+  MEILISEARCH_URL!: string;
+
+  @IsString()
+  MEILISEARCH_API_KEY!: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

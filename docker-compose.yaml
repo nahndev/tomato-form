@@ -25,6 +25,18 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
+  meilisearch:
+    image: getmeili/meilisearch:v1.10
+    restart: unless-stopped
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: tomato
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - meilisearch_data:/meili_data
+
 volumes:
   postgres_data:
   rabbitmq_data:
+  meilisearch_data:
