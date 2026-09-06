@@ -1,12 +1,10 @@
 import { DISPLAY_VALUE_REGISTRY } from "@/features/board/components/submission/display/registry";
 import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import { DisplayType } from "@/types/display-type";
-import type { SubmissionDisplayValue } from "@/types/submission-display";
 import { TomatoIcon } from "@tomato/icon";
 
 export interface BoardColumnCellProps {
   type: DisplayType | null;
-  displayValue: SubmissionDisplayValue | undefined;
 }
 
 const BoardColumnCell: React.FC<BoardColumnCellProps> = ({

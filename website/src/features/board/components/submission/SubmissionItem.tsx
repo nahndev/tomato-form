@@ -31,18 +31,7 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
       <FlexRow className="group hover:bg-accent">
         <div className="flex flex-1 items-center gap-2">
           {board.columns.map((column) => {
-            const widgetId = template ? column.items[template.id] : undefined;
-            const displayValue = widgetId
-              ? submission.dataDisplays[widgetId]
-              : undefined;
-
-            return (
-              <BoardColumnCell
-                key={column.id}
-                type={column.type}
-                displayValue={displayValue}
-              />
-            );
+            return <BoardColumnCell key={column.id} type={column.type} />;
           })}
         </div>
         <div className="w-40 flex flex-row-reverse">
