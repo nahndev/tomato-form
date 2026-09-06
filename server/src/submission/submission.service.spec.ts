@@ -1,3 +1,5 @@
+import { ConflictException } from "@nestjs/common";
+import type { SubmissionDisplayService } from "@/display/submission-display.service";
 import type { MailService } from "@/mail/mail.service";
 import type { SubmissionSearchService } from "@/search/submission-search.service";
 import type { UserService } from "@/user/user.service";
@@ -8,8 +10,12 @@ import { getMockSubmissionEventRow } from "./testing/submission.factory";
 function createMockPrisma() {
   return {
     submission: {
+      create: jest.fn(),
       findUnique: jest.fn(),
       update: jest.fn(),
+    },
+    templateVersion: {
+      findUnique: jest.fn(),
     },
   };
 }
@@ -18,20 +24,66 @@ function createMockSubmissionSearchService() {
   return { indexSubmission: jest.fn() };
 }
 
+function createMockSubmissionDisplayService() {
+  return { buildDisplayDoc: jest.fn().mockReturnValue({}) };
+}
+
 describe("SubmissionService", () => {
   let prisma: ReturnType<typeof createMockPrisma>;
   let submissionSearchService: ReturnType<typeof createMockSubmissionSearchService>;
+  let submissionDisplayService: ReturnType<typeof createMockSubmissionDisplayService>;
   let service: SubmissionService;
 
   beforeEach(() => {
     prisma = createMockPrisma();
     submissionSearchService = createMockSubmissionSearchService();
+    submissionDisplayService = createMockSubmissionDisplayService();
     service = new SubmissionService(
       prisma as unknown as PrismaService,
       {} as MailService,
       {} as UserService,
       submissionSearchService as unknown as SubmissionSearchService,
+      submissionDisplayService as unknown as SubmissionDisplayService,
     );
+  });
+
+  describe("create", () => {
+    it("computes dataDisplays from the initial data and the template version's widgets", async () => {
+      const widgets = { w1: { id: "w1", type: "text", label: "Name" } };
+      prisma.templateVersion.findUnique.mockResolvedValue({ snapshot: { widgets } });
+      submissionDisplayService.buildDisplayDoc.mockReturnValue({ w1: { text: "hello" } });
+      prisma.submission.create.mockResolvedValue(getMockSubmissionEventRow());
+
+      await service.create({
+        boardId: "b1",
+        templateVersionId: "tv1",
+        data: { w1: "hello" },
+      });
+
+      expect(submissionDisplayService.buildDisplayDoc).toHaveBeenCalledWith(
+        { data: { w1: "hello" } },
+        { widgets },
+      );
+      expect(prisma.submission.create).toHaveBeenCalledWith({
+        data: {
+          boardId: "b1",
+          templateVersionId: "tv1",
+          data: { w1: "hello" },
+          dataDisplays: { w1: { text: "hello" } },
+        },
+      });
+    });
+
+    it("throws when the template version doesn't exist, without creating the submission", async () => {
+      prisma.templateVersion.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.create({ boardId: "b1", templateVersionId: "missing" }),
+      ).rejects.toThrow(ConflictException);
+
+      expect(prisma.submission.create).not.toHaveBeenCalled();
+      expect(submissionDisplayService.buildDisplayDoc).not.toHaveBeenCalled();
+    });
   });
 
   describe("applyValuesChangedEvent", () => {
@@ -49,6 +101,7 @@ describe("SubmissionService", () => {
         data: {
           data: { w1: "hello" },
           dataClocks: { w1: 1 },
+          dataDisplays: {},
         },
       });
     });
@@ -67,6 +120,7 @@ describe("SubmissionService", () => {
 
       expect(prisma.submission.update).not.toHaveBeenCalled();
       expect(submissionSearchService.indexSubmission).not.toHaveBeenCalled();
+      expect(submissionDisplayService.buildDisplayDoc).not.toHaveBeenCalled();
     });
 
     it("merges only the keys with a newer clock, leaving others untouched", async () => {
@@ -89,6 +143,7 @@ describe("SubmissionService", () => {
         data: {
           data: { w1: "new", w2: "keep-me" },
           dataClocks: { w1: 2, w2: 9 },
+          dataDisplays: {},
         },
       });
     });
@@ -123,6 +178,31 @@ describe("SubmissionService", () => {
         { w1: "hello" },
         { w1: { id: "w1", type: "text", label: "Name" } },
       );
+    });
+
+    it("computes dataDisplays from the merged data and the template version's widgets", async () => {
+      const widgets = { w1: { id: "w1", type: "text", label: "Name" } };
+      const row = getMockSubmissionEventRow({ data: {}, dataClocks: {}, snapshot: { widgets } });
+      prisma.submission.findUnique.mockResolvedValue(row);
+      submissionDisplayService.buildDisplayDoc.mockReturnValue({ w1: { text: "hello" } });
+
+      await service.applyValuesChangedEvent({
+        submissionId: "s1",
+        values: { w1: { value: "hello", clock: 1 } },
+      });
+
+      expect(submissionDisplayService.buildDisplayDoc).toHaveBeenCalledWith(
+        { data: { w1: "hello" } },
+        { widgets },
+      );
+      expect(prisma.submission.update).toHaveBeenCalledWith({
+        where: { id: "s1" },
+        data: {
+          data: { w1: "hello" },
+          dataClocks: { w1: 1 },
+          dataDisplays: { w1: { text: "hello" } },
+        },
+      });
     });
   });
 });

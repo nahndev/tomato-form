@@ -46,6 +46,7 @@ export type SubmissionCountAggregateOutputType = {
   templateVersionId: number
   data: number
   dataClocks: number
+  dataDisplays: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -74,6 +75,7 @@ export type SubmissionCountAggregateInputType = {
   templateVersionId?: true
   data?: true
   dataClocks?: true
+  dataDisplays?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -157,6 +159,7 @@ export type SubmissionGroupByOutputType = {
   templateVersionId: string
   data: runtime.JsonValue
   dataClocks: runtime.JsonValue
+  dataDisplays: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: SubmissionCountAggregateOutputType | null
@@ -188,6 +191,7 @@ export type SubmissionWhereInput = {
   templateVersionId?: Prisma.StringFilter<"Submission"> | string
   data?: Prisma.JsonFilter<"Submission">
   dataClocks?: Prisma.JsonFilter<"Submission">
+  dataDisplays?: Prisma.JsonFilter<"Submission">
   createdAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   board?: Prisma.XOR<Prisma.BoardScalarRelationFilter, Prisma.BoardWhereInput>
@@ -200,6 +204,7 @@ export type SubmissionOrderByWithRelationInput = {
   templateVersionId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   dataClocks?: Prisma.SortOrder
+  dataDisplays?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   board?: Prisma.BoardOrderByWithRelationInput
@@ -215,6 +220,7 @@ export type SubmissionWhereUniqueInput = Prisma.AtLeast<{
   templateVersionId?: Prisma.StringFilter<"Submission"> | string
   data?: Prisma.JsonFilter<"Submission">
   dataClocks?: Prisma.JsonFilter<"Submission">
+  dataDisplays?: Prisma.JsonFilter<"Submission">
   createdAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   board?: Prisma.XOR<Prisma.BoardScalarRelationFilter, Prisma.BoardWhereInput>
@@ -227,6 +233,7 @@ export type SubmissionOrderByWithAggregationInput = {
   templateVersionId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   dataClocks?: Prisma.SortOrder
+  dataDisplays?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SubmissionCountOrderByAggregateInput
@@ -243,6 +250,7 @@ export type SubmissionScalarWhereWithAggregatesInput = {
   templateVersionId?: Prisma.StringWithAggregatesFilter<"Submission"> | string
   data?: Prisma.JsonWithAggregatesFilter<"Submission">
   dataClocks?: Prisma.JsonWithAggregatesFilter<"Submission">
+  dataDisplays?: Prisma.JsonWithAggregatesFilter<"Submission">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Submission"> | Date | string
 }
@@ -251,6 +259,7 @@ export type SubmissionCreateInput = {
   id?: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   board: Prisma.BoardCreateNestedOneWithoutSubmissionsInput
@@ -263,6 +272,7 @@ export type SubmissionUncheckedCreateInput = {
   templateVersionId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -271,6 +281,7 @@ export type SubmissionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   board?: Prisma.BoardUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -283,6 +294,7 @@ export type SubmissionUncheckedUpdateInput = {
   templateVersionId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -293,6 +305,7 @@ export type SubmissionCreateManyInput = {
   templateVersionId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -301,6 +314,7 @@ export type SubmissionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -311,6 +325,7 @@ export type SubmissionUncheckedUpdateManyInput = {
   templateVersionId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -331,6 +346,7 @@ export type SubmissionCountOrderByAggregateInput = {
   templateVersionId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   dataClocks?: Prisma.SortOrder
+  dataDisplays?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -439,6 +455,7 @@ export type SubmissionCreateWithoutBoardInput = {
   id?: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   templateVersion: Prisma.TemplateVersionCreateNestedOneWithoutSubmissionsInput
@@ -449,6 +466,7 @@ export type SubmissionUncheckedCreateWithoutBoardInput = {
   templateVersionId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -488,6 +506,7 @@ export type SubmissionScalarWhereInput = {
   templateVersionId?: Prisma.StringFilter<"Submission"> | string
   data?: Prisma.JsonFilter<"Submission">
   dataClocks?: Prisma.JsonFilter<"Submission">
+  dataDisplays?: Prisma.JsonFilter<"Submission">
   createdAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
 }
@@ -496,6 +515,7 @@ export type SubmissionCreateWithoutTemplateVersionInput = {
   id?: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   board: Prisma.BoardCreateNestedOneWithoutSubmissionsInput
@@ -506,6 +526,7 @@ export type SubmissionUncheckedCreateWithoutTemplateVersionInput = {
   boardId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -541,6 +562,7 @@ export type SubmissionCreateManyBoardInput = {
   templateVersionId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -549,6 +571,7 @@ export type SubmissionUpdateWithoutBoardInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templateVersion?: Prisma.TemplateVersionUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -559,6 +582,7 @@ export type SubmissionUncheckedUpdateWithoutBoardInput = {
   templateVersionId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -568,6 +592,7 @@ export type SubmissionUncheckedUpdateManyWithoutBoardInput = {
   templateVersionId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -577,6 +602,7 @@ export type SubmissionCreateManyTemplateVersionInput = {
   boardId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -585,6 +611,7 @@ export type SubmissionUpdateWithoutTemplateVersionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   board?: Prisma.BoardUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -595,6 +622,7 @@ export type SubmissionUncheckedUpdateWithoutTemplateVersionInput = {
   boardId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -604,6 +632,7 @@ export type SubmissionUncheckedUpdateManyWithoutTemplateVersionInput = {
   boardId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -616,6 +645,7 @@ export type SubmissionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   templateVersionId?: boolean
   data?: boolean
   dataClocks?: boolean
+  dataDisplays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
@@ -628,6 +658,7 @@ export type SubmissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   templateVersionId?: boolean
   data?: boolean
   dataClocks?: boolean
+  dataDisplays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
@@ -640,6 +671,7 @@ export type SubmissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   templateVersionId?: boolean
   data?: boolean
   dataClocks?: boolean
+  dataDisplays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
@@ -652,11 +684,12 @@ export type SubmissionSelectScalar = {
   templateVersionId?: boolean
   data?: boolean
   dataClocks?: boolean
+  dataDisplays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "boardId" | "templateVersionId" | "data" | "dataClocks" | "createdAt" | "updatedAt", ExtArgs["result"]["submission"]>
+export type SubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "boardId" | "templateVersionId" | "data" | "dataClocks" | "dataDisplays" | "createdAt" | "updatedAt", ExtArgs["result"]["submission"]>
 export type SubmissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
   templateVersion?: boolean | Prisma.TemplateVersionDefaultArgs<ExtArgs>
@@ -685,6 +718,10 @@ export type $SubmissionPayload<ExtArgs extends runtime.Types.Extensions.Internal
      * * Last-applied Yjs item clock per `data` key, for dropping stale out-of-order sync events.
      */
     dataClocks: runtime.JsonValue
+    /**
+     * * `SubmissionDisplayDoc` derived from `data` - `{ [widgetKey]: { [displayType]: value } }` - kept in sync so rendering doesn't need to recompute it from `data` + the template snapshot on every read.
+     */
+    dataDisplays: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["submission"]>
@@ -1117,6 +1154,7 @@ export interface SubmissionFieldRefs {
   readonly templateVersionId: Prisma.FieldRef<"Submission", 'String'>
   readonly data: Prisma.FieldRef<"Submission", 'Json'>
   readonly dataClocks: Prisma.FieldRef<"Submission", 'Json'>
+  readonly dataDisplays: Prisma.FieldRef<"Submission", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Submission", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Submission", 'DateTime'>
 }

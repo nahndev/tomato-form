@@ -62,6 +62,8 @@ model Submission {
   data              Json     @default("{}")
   /** Last-applied Yjs item clock per `data` key, for dropping stale out-of-order sync events. */
   dataClocks        Json     @default("{}") @map("data_clocks")
+  /** `SubmissionDisplayDoc` derived from `data` - `{ [widgetKey]: { [displayType]: value } }` - kept in sync so rendering doesn't need to recompute it from `data` + the template snapshot on every read. */
+  dataDisplays      Json     @default("{}") @map("data_displays")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 

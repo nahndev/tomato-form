@@ -1,15 +1,16 @@
+import { Prisma, Submission } from "@/database/prisma-client";
+import { SubmissionDisplayService } from "@/display/submission-display.service";
+import { MailService } from "@/mail/mail.service";
+import { Recipient, RecipientType } from "@/mail/recipient.types";
+import { SubmissionSearchService } from "@/search/submission-search.service";
+import type { TemplateVersionSnapshot } from "@/template/template.types";
+import { UserService } from "@/user/user.service";
 import {
   ConflictException,
   Injectable,
   Logger,
   NotFoundException,
 } from "@nestjs/common";
-import { Prisma, Submission } from "@/database/prisma-client";
-import { Recipient, RecipientType } from "@/mail/recipient.types";
-import { MailService } from "@/mail/mail.service";
-import { SubmissionSearchService } from "@/search/submission-search.service";
-import type { TemplateVersionSnapshot } from "@/template/template.types";
-import { UserService } from "@/user/user.service";
 import {
   isPrismaForeignKeyError,
   isPrismaNotFoundError,
@@ -17,8 +18,8 @@ import {
 import { PrismaService } from "../database/prisma.service";
 import { CreateSubmissionDto } from "./dto/create-submission.dto";
 import { SendMailActionDto } from "./dto/send-mail-action.dto";
-import { SubmissionValuesChangedEvent } from "./submission-value.contract";
 import { UpdateSubmissionDto } from "./dto/update-submission.dto";
+import { SubmissionValuesChangedEvent } from "./submission-value.contract";
 
 @Injectable()
 export class SubmissionService {
@@ -29,15 +30,35 @@ export class SubmissionService {
     private readonly mailService: MailService,
     private readonly userService: UserService,
     private readonly submissionSearchService: SubmissionSearchService,
+    private readonly submissionDisplayService: SubmissionDisplayService,
   ) {}
 
   async create(dto: CreateSubmissionDto): Promise<Submission> {
+    const templateVersion = await this.prisma.templateVersion.findUnique({
+      where: { id: dto.templateVersionId },
+      select: { snapshot: true },
+    });
+    if (!templateVersion) {
+      throw new ConflictException(
+        "Submission references a board or template that does not exist",
+      );
+    }
+
+    const data = dto.data ?? {};
+    const snapshot =
+      templateVersion.snapshot as unknown as TemplateVersionSnapshot;
+    const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
+      { data },
+      snapshot,
+    );
+
     try {
       return await this.prisma.submission.create({
         data: {
           boardId: dto.boardId,
           templateVersionId: dto.templateVersionId,
-          data: (dto.data ?? {}) as Prisma.InputJsonValue,
+          data: data as Prisma.InputJsonValue,
+          dataDisplays: dataDisplays as Prisma.InputJsonValue,
         },
       });
     } catch (err) {
@@ -108,9 +129,10 @@ export class SubmissionService {
 
   /**
    * Handles yjs-server's `SUBMISSION_VALUES_CHANGED_EVENT`, merging values
-   * into `data` and `dataClocks`. A key is only applied when its clock is
-   * newer than the one last applied for that key, so an out-of-order
-   * delivery can't clobber a more recent value.
+   * into `data` and `dataClocks`, and recomputing `dataDisplays` from the
+   * result. A key is only applied when its clock is newer than the one last
+   * applied for that key, so an out-of-order delivery can't clobber a more
+   * recent value.
    */
   async applyValuesChangedEvent(
     event: SubmissionValuesChangedEvent,
@@ -143,19 +165,26 @@ export class SubmissionService {
 
     if (!changed) return;
 
+    const snapshot = submission.templateVersion
+      .snapshot as unknown as TemplateVersionSnapshot;
+    const widgets = snapshot.widgets ?? {};
+    const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
+      { data },
+      snapshot,
+    );
     await this.prisma.submission.update({
       where: { id: event.submissionId },
       data: {
         data: data as Prisma.InputJsonValue,
         dataClocks: clocks as Prisma.InputJsonValue,
+        dataDisplays: dataDisplays as Prisma.InputJsonValue,
       },
     });
 
-    const snapshot = submission.templateVersion.snapshot as unknown as TemplateVersionSnapshot;
     await this.submissionSearchService.indexSubmission(
       event.submissionId,
       data,
-      snapshot.widgets ?? {},
+      widgets,
     );
   }
 
@@ -166,9 +195,7 @@ export class SubmissionService {
 
     const user = await this.userService.findOne(recipient.value);
     if (!user.email) {
-      throw new ConflictException(
-        `User ${user.uuid} has no email configured`,
-      );
+      throw new ConflictException(`User ${user.uuid} has no email configured`);
     }
     return user.email;
   }

@@ -1,6 +1,7 @@
+import { FlexRow } from "@/components/ui/flex-row";
 import { toast } from "@/components/ui/sonner";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
-import BoardColumnMockCell from "@/features/board/components/submission/BoardColumnMockCell";
+import BoardColumnCell from "@/features/board/components/submission/BoardColumnCell";
 import { useDeleteSubmission } from "@/features/board/hooks/useSubmissions";
 import { useTemplates } from "@/features/template";
 import { Submission } from "@/types/submission";
@@ -27,24 +28,24 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
       href={`/submission/${submission.id}`}
       rel="noopener noreferrer"
     >
-      <div className="flex flex-row items-center p-2 group hover:bg-accent">
-        <div className="flex items-start justify-between gap-2">
-          <div className="text-base">
-            {template?.name ?? "Unknown template"}
-          </div>
+      <FlexRow className="group hover:bg-accent">
+        <div className="flex flex-1 items-center gap-2">
+          {board.columns.map((column) => {
+            const widgetId = template ? column.items[template.id] : undefined;
+            const displayValue = widgetId
+              ? submission.dataDisplays[widgetId]
+              : undefined;
+
+            return (
+              <BoardColumnCell
+                key={column.id}
+                type={column.type}
+                displayValue={displayValue}
+              />
+            );
+          })}
         </div>
-        <div>
-          {submission.createdAt
-            ? new Date(submission.createdAt).toLocaleString()
-            : "—"}
-        </div>
-        <div className="ml-2 flex-1" />
-        <div className="flex items-center gap-2">
-          {board.columns.map((column) => (
-            <BoardColumnMockCell key={column.id} type={column.type} />
-          ))}
-        </div>
-        <div>
+        <div className="w-40 flex flex-row-reverse">
           <button
             onClick={async (e) => {
               e.preventDefault();
@@ -62,13 +63,16 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
             aria-label="Delete submission"
           >
             {isPending ? (
-              <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
+              <TomatoIcon
+                icon={TomatoIconKey.Loader}
+                className="size-4 animate-spin"
+              />
             ) : (
               <TomatoIcon icon={TomatoIconKey.Trash} className="size-4" />
             )}
           </button>
         </div>
-      </div>
+      </FlexRow>
     </Link>
   );
 };
