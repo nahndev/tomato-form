@@ -7,8 +7,8 @@ import type { SubmissionDisplayValue } from "@/types/submission-display";
  * Single point of access for the Submission json shape, mirroring JsonColumn.
  */
 export class JsonSubmission {
-  static getTemplateVersionId(submission: Submission): string {
-    return submission.templateVersionId;
+  static getTemplateId(submission: Submission): string {
+    return submission.templateId;
   }
 
   static getDisplayValue(
@@ -17,7 +17,7 @@ export class JsonSubmission {
   ): SubmissionDisplayValue | undefined {
     const widgetId = JsonColumn.getItemWidgetId(
       column,
-      JsonSubmission.getTemplateVersionId(submission)
+      JsonSubmission.getTemplateId(submission)
     );
     if (widgetId === null) return undefined;
 

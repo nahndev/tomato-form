@@ -15,35 +15,35 @@ import { getCommonDisplayTypes } from "@/features/board/utils/displayTypeHelper"
 import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget";
 import type { BoardColumnDraft } from "@/types/board";
 import { DisplayType } from "@/types/display-type";
-import type { TemplateVersion } from "@/types/template";
+import type { Template } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 export interface BoardSettingColumnProps {
   column: BoardColumnDraft;
   index: number;
-  templateVersions: TemplateVersion[];
+  templates: Template[];
   onChangeColumn: (column: BoardColumnDraft) => void;
   onRemoveColumn: (columnId: string) => void;
 }
 
-/** One column of the board grid: label + size editors, then a widget picker for each linked template version. */
+/** One column of the board grid: label + size editors, then a widget picker for each linked template. */
 const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
   column,
-  templateVersions,
+  templates,
   onChangeColumn,
   onRemoveColumn,
 }) => {
-  function pickWidget(templateVersionId: string, widgetId: string | null) {
+  function pickWidget(templateId: string, widgetId: string | null) {
     onChangeColumn(
       widgetId
-        ? JsonColumn.setItem(column, templateVersionId, widgetId)
-        : JsonColumn.removeItem(column, templateVersionId),
+        ? JsonColumn.setItem(column, templateId, widgetId)
+        : JsonColumn.removeItem(column, templateId),
     );
   }
 
   const { icon } =
     DISPLAY_TYPE_REGISTRY[JsonColumn.getType(column) ?? DisplayType.UNKNOWN];
-  const selectedWidgets = getSelectedColumnWidgets(column, templateVersions);
+  const selectedWidgets = getSelectedColumnWidgets(column, templates);
 
   return (
     <RowWrapper>
@@ -90,27 +90,20 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
       </SessionWrapper>
 
       <SessionWrapper>
-        {templateVersions.map((templateVersion, idx) => {
-          const selectedWidgetId = JsonColumn.getItemWidgetId(
-            column,
-            templateVersion.id,
-          );
+        {templates.map((template, idx) => {
+          const selectedWidgetId = JsonColumn.getItemWidgetId(column, template.id);
 
           const otherSelectedWidgets = selectedWidgets
-            .filter((w) => w.templateVersionId !== templateVersion.id)
+            .filter((w) => w.templateId !== template.id)
             .map((w) => w.widget);
 
           return (
-            <ZebraCell
-              key={templateVersion.id}
-              index={idx}
-              className="gap-2 px-2"
-            >
+            <ZebraCell key={template.id} index={idx} className="gap-2 px-2">
               <TemplateWidgetSelect
-                templateVersion={templateVersion}
+                template={template}
                 allowDisplayTypes={getCommonDisplayTypes(otherSelectedWidgets)}
                 value={selectedWidgetId}
-                onChange={(widgetId) => pickWidget(templateVersion.id, widgetId)}
+                onChange={(widgetId) => pickWidget(template.id, widgetId)}
               />
             </ZebraCell>
           );

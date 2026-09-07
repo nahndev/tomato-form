@@ -28,8 +28,8 @@ export interface Session extends SessionProperties {
   id: string;
 }
 
-/** Shape of `TemplateVersion.snapshot` - everything loaded from the yjs doc at publish time. */
-export interface TemplateVersionSnapshot {
+/** Shape of `Template.snapshot` - everything loaded from the yjs doc at publish time. */
+export interface TemplateSnapshot {
   widgets: Record<string, Widget>;
   layouts: Record<string, GridLayout>;
   widgetToSession: Record<string, string>;

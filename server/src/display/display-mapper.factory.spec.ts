@@ -1,4 +1,4 @@
-import type { TemplateVersionSnapshot, Widget } from "@/template/template.types";
+import type { TemplateSnapshot, Widget } from "@/template/template.types";
 import { DisplayMapperFactory } from "./display-mapper.factory";
 import { DisplayMapperContext, SubmissionDisplayDoc } from "./display-mapper.types";
 
@@ -14,7 +14,7 @@ function getMockWidget(overrides?: Partial<Widget>): Widget {
 function getMockContext(data: Record<string, unknown>): DisplayMapperContext {
   return {
     submission: { data },
-    snapshot: { widgets: {} } as TemplateVersionSnapshot,
+    snapshot: { widgets: {} } as TemplateSnapshot,
   };
 }
 

@@ -53,7 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Board: 'Board',
   Template: 'Template',
-  TemplateVersion: 'TemplateVersion',
+  TemplateMigration: 'TemplateMigration',
   Submission: 'Submission',
   User: 'User'
 } as const
@@ -88,6 +88,8 @@ export type BoardScalarFieldEnum = (typeof BoardScalarFieldEnum)[keyof typeof Bo
 export const TemplateScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  version: 'version',
+  snapshot: 'snapshot',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -95,21 +97,24 @@ export const TemplateScalarFieldEnum = {
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
 
 
-export const TemplateVersionScalarFieldEnum = {
+export const TemplateMigrationScalarFieldEnum = {
   id: 'id',
   templateId: 'templateId',
-  version: 'version',
-  snapshot: 'snapshot',
+  fromSnapshot: 'fromSnapshot',
+  toSnapshot: 'toSnapshot',
+  conflicts: 'conflicts',
+  resolutions: 'resolutions',
+  resolvedAt: 'resolvedAt',
   createdAt: 'createdAt'
 } as const
 
-export type TemplateVersionScalarFieldEnum = (typeof TemplateVersionScalarFieldEnum)[keyof typeof TemplateVersionScalarFieldEnum]
+export type TemplateMigrationScalarFieldEnum = (typeof TemplateMigrationScalarFieldEnum)[keyof typeof TemplateMigrationScalarFieldEnum]
 
 
 export const SubmissionScalarFieldEnum = {
   id: 'id',
   boardId: 'boardId',
-  templateVersionId: 'templateVersionId',
+  templateId: 'templateId',
   data: 'data',
   dataClocks: 'dataClocks',
   dataDisplays: 'dataDisplays',
@@ -144,6 +149,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

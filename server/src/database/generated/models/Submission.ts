@@ -27,7 +27,7 @@ export type AggregateSubmission = {
 export type SubmissionMinAggregateOutputType = {
   id: string | null
   boardId: string | null
-  templateVersionId: string | null
+  templateId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -35,7 +35,7 @@ export type SubmissionMinAggregateOutputType = {
 export type SubmissionMaxAggregateOutputType = {
   id: string | null
   boardId: string | null
-  templateVersionId: string | null
+  templateId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -43,7 +43,7 @@ export type SubmissionMaxAggregateOutputType = {
 export type SubmissionCountAggregateOutputType = {
   id: number
   boardId: number
-  templateVersionId: number
+  templateId: number
   data: number
   dataClocks: number
   dataDisplays: number
@@ -56,7 +56,7 @@ export type SubmissionCountAggregateOutputType = {
 export type SubmissionMinAggregateInputType = {
   id?: true
   boardId?: true
-  templateVersionId?: true
+  templateId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -64,7 +64,7 @@ export type SubmissionMinAggregateInputType = {
 export type SubmissionMaxAggregateInputType = {
   id?: true
   boardId?: true
-  templateVersionId?: true
+  templateId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -72,7 +72,7 @@ export type SubmissionMaxAggregateInputType = {
 export type SubmissionCountAggregateInputType = {
   id?: true
   boardId?: true
-  templateVersionId?: true
+  templateId?: true
   data?: true
   dataClocks?: true
   dataDisplays?: true
@@ -156,7 +156,7 @@ export type SubmissionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type SubmissionGroupByOutputType = {
   id: string
   boardId: string
-  templateVersionId: string
+  templateId: string
   data: runtime.JsonValue
   dataClocks: runtime.JsonValue
   dataDisplays: runtime.JsonValue
@@ -188,27 +188,27 @@ export type SubmissionWhereInput = {
   NOT?: Prisma.SubmissionWhereInput | Prisma.SubmissionWhereInput[]
   id?: Prisma.StringFilter<"Submission"> | string
   boardId?: Prisma.StringFilter<"Submission"> | string
-  templateVersionId?: Prisma.StringFilter<"Submission"> | string
+  templateId?: Prisma.StringFilter<"Submission"> | string
   data?: Prisma.JsonFilter<"Submission">
   dataClocks?: Prisma.JsonFilter<"Submission">
   dataDisplays?: Prisma.JsonFilter<"Submission">
   createdAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   board?: Prisma.XOR<Prisma.BoardScalarRelationFilter, Prisma.BoardWhereInput>
-  templateVersion?: Prisma.XOR<Prisma.TemplateVersionScalarRelationFilter, Prisma.TemplateVersionWhereInput>
+  template?: Prisma.XOR<Prisma.TemplateScalarRelationFilter, Prisma.TemplateWhereInput>
 }
 
 export type SubmissionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   boardId?: Prisma.SortOrder
-  templateVersionId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   dataClocks?: Prisma.SortOrder
   dataDisplays?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   board?: Prisma.BoardOrderByWithRelationInput
-  templateVersion?: Prisma.TemplateVersionOrderByWithRelationInput
+  template?: Prisma.TemplateOrderByWithRelationInput
 }
 
 export type SubmissionWhereUniqueInput = Prisma.AtLeast<{
@@ -217,20 +217,20 @@ export type SubmissionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.SubmissionWhereInput[]
   NOT?: Prisma.SubmissionWhereInput | Prisma.SubmissionWhereInput[]
   boardId?: Prisma.StringFilter<"Submission"> | string
-  templateVersionId?: Prisma.StringFilter<"Submission"> | string
+  templateId?: Prisma.StringFilter<"Submission"> | string
   data?: Prisma.JsonFilter<"Submission">
   dataClocks?: Prisma.JsonFilter<"Submission">
   dataDisplays?: Prisma.JsonFilter<"Submission">
   createdAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
   board?: Prisma.XOR<Prisma.BoardScalarRelationFilter, Prisma.BoardWhereInput>
-  templateVersion?: Prisma.XOR<Prisma.TemplateVersionScalarRelationFilter, Prisma.TemplateVersionWhereInput>
+  template?: Prisma.XOR<Prisma.TemplateScalarRelationFilter, Prisma.TemplateWhereInput>
 }, "id">
 
 export type SubmissionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   boardId?: Prisma.SortOrder
-  templateVersionId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   dataClocks?: Prisma.SortOrder
   dataDisplays?: Prisma.SortOrder
@@ -247,7 +247,7 @@ export type SubmissionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.SubmissionScalarWhereWithAggregatesInput | Prisma.SubmissionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Submission"> | string
   boardId?: Prisma.StringWithAggregatesFilter<"Submission"> | string
-  templateVersionId?: Prisma.StringWithAggregatesFilter<"Submission"> | string
+  templateId?: Prisma.StringWithAggregatesFilter<"Submission"> | string
   data?: Prisma.JsonWithAggregatesFilter<"Submission">
   dataClocks?: Prisma.JsonWithAggregatesFilter<"Submission">
   dataDisplays?: Prisma.JsonWithAggregatesFilter<"Submission">
@@ -263,13 +263,13 @@ export type SubmissionCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   board: Prisma.BoardCreateNestedOneWithoutSubmissionsInput
-  templateVersion: Prisma.TemplateVersionCreateNestedOneWithoutSubmissionsInput
+  template: Prisma.TemplateCreateNestedOneWithoutSubmissionsInput
 }
 
 export type SubmissionUncheckedCreateInput = {
   id?: string
   boardId: string
-  templateVersionId: string
+  templateId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -285,13 +285,13 @@ export type SubmissionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   board?: Prisma.BoardUpdateOneRequiredWithoutSubmissionsNestedInput
-  templateVersion?: Prisma.TemplateVersionUpdateOneRequiredWithoutSubmissionsNestedInput
+  template?: Prisma.TemplateUpdateOneRequiredWithoutSubmissionsNestedInput
 }
 
 export type SubmissionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   boardId?: Prisma.StringFieldUpdateOperationsInput | string
-  templateVersionId?: Prisma.StringFieldUpdateOperationsInput | string
+  templateId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -302,7 +302,7 @@ export type SubmissionUncheckedUpdateInput = {
 export type SubmissionCreateManyInput = {
   id?: string
   boardId: string
-  templateVersionId: string
+  templateId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -322,7 +322,7 @@ export type SubmissionUpdateManyMutationInput = {
 export type SubmissionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   boardId?: Prisma.StringFieldUpdateOperationsInput | string
-  templateVersionId?: Prisma.StringFieldUpdateOperationsInput | string
+  templateId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -343,7 +343,7 @@ export type SubmissionOrderByRelationAggregateInput = {
 export type SubmissionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   boardId?: Prisma.SortOrder
-  templateVersionId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   dataClocks?: Prisma.SortOrder
   dataDisplays?: Prisma.SortOrder
@@ -354,7 +354,7 @@ export type SubmissionCountOrderByAggregateInput = {
 export type SubmissionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   boardId?: Prisma.SortOrder
-  templateVersionId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -362,7 +362,7 @@ export type SubmissionMaxOrderByAggregateInput = {
 export type SubmissionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   boardId?: Prisma.SortOrder
-  templateVersionId?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -409,45 +409,45 @@ export type SubmissionUncheckedUpdateManyWithoutBoardNestedInput = {
   deleteMany?: Prisma.SubmissionScalarWhereInput | Prisma.SubmissionScalarWhereInput[]
 }
 
-export type SubmissionCreateNestedManyWithoutTemplateVersionInput = {
-  create?: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateVersionInput, Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput> | Prisma.SubmissionCreateWithoutTemplateVersionInput[] | Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput[]
-  connectOrCreate?: Prisma.SubmissionCreateOrConnectWithoutTemplateVersionInput | Prisma.SubmissionCreateOrConnectWithoutTemplateVersionInput[]
-  createMany?: Prisma.SubmissionCreateManyTemplateVersionInputEnvelope
+export type SubmissionCreateNestedManyWithoutTemplateInput = {
+  create?: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateInput, Prisma.SubmissionUncheckedCreateWithoutTemplateInput> | Prisma.SubmissionCreateWithoutTemplateInput[] | Prisma.SubmissionUncheckedCreateWithoutTemplateInput[]
+  connectOrCreate?: Prisma.SubmissionCreateOrConnectWithoutTemplateInput | Prisma.SubmissionCreateOrConnectWithoutTemplateInput[]
+  createMany?: Prisma.SubmissionCreateManyTemplateInputEnvelope
   connect?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
 }
 
-export type SubmissionUncheckedCreateNestedManyWithoutTemplateVersionInput = {
-  create?: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateVersionInput, Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput> | Prisma.SubmissionCreateWithoutTemplateVersionInput[] | Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput[]
-  connectOrCreate?: Prisma.SubmissionCreateOrConnectWithoutTemplateVersionInput | Prisma.SubmissionCreateOrConnectWithoutTemplateVersionInput[]
-  createMany?: Prisma.SubmissionCreateManyTemplateVersionInputEnvelope
+export type SubmissionUncheckedCreateNestedManyWithoutTemplateInput = {
+  create?: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateInput, Prisma.SubmissionUncheckedCreateWithoutTemplateInput> | Prisma.SubmissionCreateWithoutTemplateInput[] | Prisma.SubmissionUncheckedCreateWithoutTemplateInput[]
+  connectOrCreate?: Prisma.SubmissionCreateOrConnectWithoutTemplateInput | Prisma.SubmissionCreateOrConnectWithoutTemplateInput[]
+  createMany?: Prisma.SubmissionCreateManyTemplateInputEnvelope
   connect?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
 }
 
-export type SubmissionUpdateManyWithoutTemplateVersionNestedInput = {
-  create?: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateVersionInput, Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput> | Prisma.SubmissionCreateWithoutTemplateVersionInput[] | Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput[]
-  connectOrCreate?: Prisma.SubmissionCreateOrConnectWithoutTemplateVersionInput | Prisma.SubmissionCreateOrConnectWithoutTemplateVersionInput[]
-  upsert?: Prisma.SubmissionUpsertWithWhereUniqueWithoutTemplateVersionInput | Prisma.SubmissionUpsertWithWhereUniqueWithoutTemplateVersionInput[]
-  createMany?: Prisma.SubmissionCreateManyTemplateVersionInputEnvelope
+export type SubmissionUpdateManyWithoutTemplateNestedInput = {
+  create?: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateInput, Prisma.SubmissionUncheckedCreateWithoutTemplateInput> | Prisma.SubmissionCreateWithoutTemplateInput[] | Prisma.SubmissionUncheckedCreateWithoutTemplateInput[]
+  connectOrCreate?: Prisma.SubmissionCreateOrConnectWithoutTemplateInput | Prisma.SubmissionCreateOrConnectWithoutTemplateInput[]
+  upsert?: Prisma.SubmissionUpsertWithWhereUniqueWithoutTemplateInput | Prisma.SubmissionUpsertWithWhereUniqueWithoutTemplateInput[]
+  createMany?: Prisma.SubmissionCreateManyTemplateInputEnvelope
   set?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
   disconnect?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
   delete?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
   connect?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
-  update?: Prisma.SubmissionUpdateWithWhereUniqueWithoutTemplateVersionInput | Prisma.SubmissionUpdateWithWhereUniqueWithoutTemplateVersionInput[]
-  updateMany?: Prisma.SubmissionUpdateManyWithWhereWithoutTemplateVersionInput | Prisma.SubmissionUpdateManyWithWhereWithoutTemplateVersionInput[]
+  update?: Prisma.SubmissionUpdateWithWhereUniqueWithoutTemplateInput | Prisma.SubmissionUpdateWithWhereUniqueWithoutTemplateInput[]
+  updateMany?: Prisma.SubmissionUpdateManyWithWhereWithoutTemplateInput | Prisma.SubmissionUpdateManyWithWhereWithoutTemplateInput[]
   deleteMany?: Prisma.SubmissionScalarWhereInput | Prisma.SubmissionScalarWhereInput[]
 }
 
-export type SubmissionUncheckedUpdateManyWithoutTemplateVersionNestedInput = {
-  create?: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateVersionInput, Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput> | Prisma.SubmissionCreateWithoutTemplateVersionInput[] | Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput[]
-  connectOrCreate?: Prisma.SubmissionCreateOrConnectWithoutTemplateVersionInput | Prisma.SubmissionCreateOrConnectWithoutTemplateVersionInput[]
-  upsert?: Prisma.SubmissionUpsertWithWhereUniqueWithoutTemplateVersionInput | Prisma.SubmissionUpsertWithWhereUniqueWithoutTemplateVersionInput[]
-  createMany?: Prisma.SubmissionCreateManyTemplateVersionInputEnvelope
+export type SubmissionUncheckedUpdateManyWithoutTemplateNestedInput = {
+  create?: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateInput, Prisma.SubmissionUncheckedCreateWithoutTemplateInput> | Prisma.SubmissionCreateWithoutTemplateInput[] | Prisma.SubmissionUncheckedCreateWithoutTemplateInput[]
+  connectOrCreate?: Prisma.SubmissionCreateOrConnectWithoutTemplateInput | Prisma.SubmissionCreateOrConnectWithoutTemplateInput[]
+  upsert?: Prisma.SubmissionUpsertWithWhereUniqueWithoutTemplateInput | Prisma.SubmissionUpsertWithWhereUniqueWithoutTemplateInput[]
+  createMany?: Prisma.SubmissionCreateManyTemplateInputEnvelope
   set?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
   disconnect?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
   delete?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
   connect?: Prisma.SubmissionWhereUniqueInput | Prisma.SubmissionWhereUniqueInput[]
-  update?: Prisma.SubmissionUpdateWithWhereUniqueWithoutTemplateVersionInput | Prisma.SubmissionUpdateWithWhereUniqueWithoutTemplateVersionInput[]
-  updateMany?: Prisma.SubmissionUpdateManyWithWhereWithoutTemplateVersionInput | Prisma.SubmissionUpdateManyWithWhereWithoutTemplateVersionInput[]
+  update?: Prisma.SubmissionUpdateWithWhereUniqueWithoutTemplateInput | Prisma.SubmissionUpdateWithWhereUniqueWithoutTemplateInput[]
+  updateMany?: Prisma.SubmissionUpdateManyWithWhereWithoutTemplateInput | Prisma.SubmissionUpdateManyWithWhereWithoutTemplateInput[]
   deleteMany?: Prisma.SubmissionScalarWhereInput | Prisma.SubmissionScalarWhereInput[]
 }
 
@@ -458,12 +458,12 @@ export type SubmissionCreateWithoutBoardInput = {
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  templateVersion: Prisma.TemplateVersionCreateNestedOneWithoutSubmissionsInput
+  template: Prisma.TemplateCreateNestedOneWithoutSubmissionsInput
 }
 
 export type SubmissionUncheckedCreateWithoutBoardInput = {
   id?: string
-  templateVersionId: string
+  templateId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -503,7 +503,7 @@ export type SubmissionScalarWhereInput = {
   NOT?: Prisma.SubmissionScalarWhereInput | Prisma.SubmissionScalarWhereInput[]
   id?: Prisma.StringFilter<"Submission"> | string
   boardId?: Prisma.StringFilter<"Submission"> | string
-  templateVersionId?: Prisma.StringFilter<"Submission"> | string
+  templateId?: Prisma.StringFilter<"Submission"> | string
   data?: Prisma.JsonFilter<"Submission">
   dataClocks?: Prisma.JsonFilter<"Submission">
   dataDisplays?: Prisma.JsonFilter<"Submission">
@@ -511,7 +511,7 @@ export type SubmissionScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Submission"> | Date | string
 }
 
-export type SubmissionCreateWithoutTemplateVersionInput = {
+export type SubmissionCreateWithoutTemplateInput = {
   id?: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -521,7 +521,7 @@ export type SubmissionCreateWithoutTemplateVersionInput = {
   board: Prisma.BoardCreateNestedOneWithoutSubmissionsInput
 }
 
-export type SubmissionUncheckedCreateWithoutTemplateVersionInput = {
+export type SubmissionUncheckedCreateWithoutTemplateInput = {
   id?: string
   boardId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -531,35 +531,35 @@ export type SubmissionUncheckedCreateWithoutTemplateVersionInput = {
   updatedAt?: Date | string
 }
 
-export type SubmissionCreateOrConnectWithoutTemplateVersionInput = {
+export type SubmissionCreateOrConnectWithoutTemplateInput = {
   where: Prisma.SubmissionWhereUniqueInput
-  create: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateVersionInput, Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput>
+  create: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateInput, Prisma.SubmissionUncheckedCreateWithoutTemplateInput>
 }
 
-export type SubmissionCreateManyTemplateVersionInputEnvelope = {
-  data: Prisma.SubmissionCreateManyTemplateVersionInput | Prisma.SubmissionCreateManyTemplateVersionInput[]
+export type SubmissionCreateManyTemplateInputEnvelope = {
+  data: Prisma.SubmissionCreateManyTemplateInput | Prisma.SubmissionCreateManyTemplateInput[]
   skipDuplicates?: boolean
 }
 
-export type SubmissionUpsertWithWhereUniqueWithoutTemplateVersionInput = {
+export type SubmissionUpsertWithWhereUniqueWithoutTemplateInput = {
   where: Prisma.SubmissionWhereUniqueInput
-  update: Prisma.XOR<Prisma.SubmissionUpdateWithoutTemplateVersionInput, Prisma.SubmissionUncheckedUpdateWithoutTemplateVersionInput>
-  create: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateVersionInput, Prisma.SubmissionUncheckedCreateWithoutTemplateVersionInput>
+  update: Prisma.XOR<Prisma.SubmissionUpdateWithoutTemplateInput, Prisma.SubmissionUncheckedUpdateWithoutTemplateInput>
+  create: Prisma.XOR<Prisma.SubmissionCreateWithoutTemplateInput, Prisma.SubmissionUncheckedCreateWithoutTemplateInput>
 }
 
-export type SubmissionUpdateWithWhereUniqueWithoutTemplateVersionInput = {
+export type SubmissionUpdateWithWhereUniqueWithoutTemplateInput = {
   where: Prisma.SubmissionWhereUniqueInput
-  data: Prisma.XOR<Prisma.SubmissionUpdateWithoutTemplateVersionInput, Prisma.SubmissionUncheckedUpdateWithoutTemplateVersionInput>
+  data: Prisma.XOR<Prisma.SubmissionUpdateWithoutTemplateInput, Prisma.SubmissionUncheckedUpdateWithoutTemplateInput>
 }
 
-export type SubmissionUpdateManyWithWhereWithoutTemplateVersionInput = {
+export type SubmissionUpdateManyWithWhereWithoutTemplateInput = {
   where: Prisma.SubmissionScalarWhereInput
-  data: Prisma.XOR<Prisma.SubmissionUpdateManyMutationInput, Prisma.SubmissionUncheckedUpdateManyWithoutTemplateVersionInput>
+  data: Prisma.XOR<Prisma.SubmissionUpdateManyMutationInput, Prisma.SubmissionUncheckedUpdateManyWithoutTemplateInput>
 }
 
 export type SubmissionCreateManyBoardInput = {
   id?: string
-  templateVersionId: string
+  templateId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -574,12 +574,12 @@ export type SubmissionUpdateWithoutBoardInput = {
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  templateVersion?: Prisma.TemplateVersionUpdateOneRequiredWithoutSubmissionsNestedInput
+  template?: Prisma.TemplateUpdateOneRequiredWithoutSubmissionsNestedInput
 }
 
 export type SubmissionUncheckedUpdateWithoutBoardInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  templateVersionId?: Prisma.StringFieldUpdateOperationsInput | string
+  templateId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -589,7 +589,7 @@ export type SubmissionUncheckedUpdateWithoutBoardInput = {
 
 export type SubmissionUncheckedUpdateManyWithoutBoardInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  templateVersionId?: Prisma.StringFieldUpdateOperationsInput | string
+  templateId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataDisplays?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -597,7 +597,7 @@ export type SubmissionUncheckedUpdateManyWithoutBoardInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type SubmissionCreateManyTemplateVersionInput = {
+export type SubmissionCreateManyTemplateInput = {
   id?: string
   boardId: string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -607,7 +607,7 @@ export type SubmissionCreateManyTemplateVersionInput = {
   updatedAt?: Date | string
 }
 
-export type SubmissionUpdateWithoutTemplateVersionInput = {
+export type SubmissionUpdateWithoutTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   dataClocks?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -617,7 +617,7 @@ export type SubmissionUpdateWithoutTemplateVersionInput = {
   board?: Prisma.BoardUpdateOneRequiredWithoutSubmissionsNestedInput
 }
 
-export type SubmissionUncheckedUpdateWithoutTemplateVersionInput = {
+export type SubmissionUncheckedUpdateWithoutTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   boardId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -627,7 +627,7 @@ export type SubmissionUncheckedUpdateWithoutTemplateVersionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type SubmissionUncheckedUpdateManyWithoutTemplateVersionInput = {
+export type SubmissionUncheckedUpdateManyWithoutTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   boardId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -642,46 +642,46 @@ export type SubmissionUncheckedUpdateManyWithoutTemplateVersionInput = {
 export type SubmissionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   boardId?: boolean
-  templateVersionId?: boolean
+  templateId?: boolean
   data?: boolean
   dataClocks?: boolean
   dataDisplays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
-  templateVersion?: boolean | Prisma.TemplateVersionDefaultArgs<ExtArgs>
+  template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["submission"]>
 
 export type SubmissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   boardId?: boolean
-  templateVersionId?: boolean
+  templateId?: boolean
   data?: boolean
   dataClocks?: boolean
   dataDisplays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
-  templateVersion?: boolean | Prisma.TemplateVersionDefaultArgs<ExtArgs>
+  template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["submission"]>
 
 export type SubmissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   boardId?: boolean
-  templateVersionId?: boolean
+  templateId?: boolean
   data?: boolean
   dataClocks?: boolean
   dataDisplays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
-  templateVersion?: boolean | Prisma.TemplateVersionDefaultArgs<ExtArgs>
+  template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["submission"]>
 
 export type SubmissionSelectScalar = {
   id?: boolean
   boardId?: boolean
-  templateVersionId?: boolean
+  templateId?: boolean
   data?: boolean
   dataClocks?: boolean
   dataDisplays?: boolean
@@ -689,30 +689,30 @@ export type SubmissionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "boardId" | "templateVersionId" | "data" | "dataClocks" | "dataDisplays" | "createdAt" | "updatedAt", ExtArgs["result"]["submission"]>
+export type SubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "boardId" | "templateId" | "data" | "dataClocks" | "dataDisplays" | "createdAt" | "updatedAt", ExtArgs["result"]["submission"]>
 export type SubmissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
-  templateVersion?: boolean | Prisma.TemplateVersionDefaultArgs<ExtArgs>
+  template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }
 export type SubmissionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
-  templateVersion?: boolean | Prisma.TemplateVersionDefaultArgs<ExtArgs>
+  template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }
 export type SubmissionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
-  templateVersion?: boolean | Prisma.TemplateVersionDefaultArgs<ExtArgs>
+  template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }
 
 export type $SubmissionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Submission"
   objects: {
     board: Prisma.$BoardPayload<ExtArgs>
-    templateVersion: Prisma.$TemplateVersionPayload<ExtArgs>
+    template: Prisma.$TemplatePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     boardId: string
-    templateVersionId: string
+    templateId: string
     data: runtime.JsonValue
     /**
      * * Last-applied Yjs item clock per `data` key, for dropping stale out-of-order sync events.
@@ -1119,7 +1119,7 @@ readonly fields: SubmissionFieldRefs;
 export interface Prisma__SubmissionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   board<T extends Prisma.BoardDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BoardDefaultArgs<ExtArgs>>): Prisma.Prisma__BoardClient<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  templateVersion<T extends Prisma.TemplateVersionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TemplateVersionDefaultArgs<ExtArgs>>): Prisma.Prisma__TemplateVersionClient<runtime.Types.Result.GetResult<Prisma.$TemplateVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  template<T extends Prisma.TemplateDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TemplateDefaultArgs<ExtArgs>>): Prisma.Prisma__TemplateClient<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1151,7 +1151,7 @@ export interface Prisma__SubmissionClient<T, Null = never, ExtArgs extends runti
 export interface SubmissionFieldRefs {
   readonly id: Prisma.FieldRef<"Submission", 'String'>
   readonly boardId: Prisma.FieldRef<"Submission", 'String'>
-  readonly templateVersionId: Prisma.FieldRef<"Submission", 'String'>
+  readonly templateId: Prisma.FieldRef<"Submission", 'String'>
   readonly data: Prisma.FieldRef<"Submission", 'Json'>
   readonly dataClocks: Prisma.FieldRef<"Submission", 'Json'>
   readonly dataDisplays: Prisma.FieldRef<"Submission", 'Json'>

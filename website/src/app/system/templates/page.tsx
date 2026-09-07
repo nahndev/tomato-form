@@ -19,7 +19,7 @@ export default function TemplatesPage() {
   );
 
   const publishedCount = useMemo(
-    () => sorted.filter((t) => (t.templateVersions?.length ?? 0) > 0).length,
+    () => sorted.filter((t) => Boolean(t.version)).length,
     [sorted],
   );
 

@@ -7,8 +7,8 @@ import {
   SubmissionProvider,
   useSubmission,
 } from "@/features/submission";
-import { TemplateVersionStateProvider } from "@/features/submission/components/provider/TemplateVersionStateProvider";
-import { useTemplateVersion } from "@/features/submission/hooks/useTemplateVersion";
+import { TemplateSnapshotStateProvider } from "@/features/submission/components/provider/TemplateSnapshotStateProvider";
+import { useTemplate } from "@/features/template";
 import { DragDropProvider } from "@dnd-kit/react";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { notFound } from "next/navigation";
@@ -23,12 +23,12 @@ export default function SubmissionPage({ params }: PageProps) {
 
   const { data: submission, isLoading, isError } = useSubmission(uuid);
   const {
-    data: templateVersion,
-    isLoading: isLoadingVersion,
-    isError: isVersionError,
-  } = useTemplateVersion(submission?.templateVersionId ?? "");
+    data: template,
+    isLoading: isLoadingTemplate,
+    isError: isTemplateError,
+  } = useTemplate(submission?.templateId ?? "");
 
-  if (isLoading || (submission && isLoadingVersion)) {
+  if (isLoading || (submission && isLoadingTemplate)) {
     return (
       <div className="flex h-screen items-center justify-center">
         <TomatoIcon
@@ -40,11 +40,11 @@ export default function SubmissionPage({ params }: PageProps) {
   }
 
   if (isError || !submission) notFound();
-  if (isVersionError || !templateVersion) notFound();
+  if (isTemplateError || !template) notFound();
 
   return (
     <DragDropProvider>
-      <TemplateVersionStateProvider templateVersion={templateVersion}>
+      <TemplateSnapshotStateProvider template={template}>
         <SubmissionProvider submission={submission}>
           <SubmissionButtonActionProvider>
             <div className="h-screen grid grid-rows-[auto_1fr] overflow-hidden">
@@ -53,7 +53,7 @@ export default function SubmissionPage({ params }: PageProps) {
             </div>
           </SubmissionButtonActionProvider>
         </SubmissionProvider>
-      </TemplateVersionStateProvider>
+      </TemplateSnapshotStateProvider>
     </DragDropProvider>
   );
 }

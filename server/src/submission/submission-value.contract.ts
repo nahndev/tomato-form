@@ -1,6 +1,6 @@
 /**
  * RabbitMQ fire-and-forget event contract for submission value sync, shared
- * (by manual duplication, same convention as `template-version/template-file.contract.ts`)
+ * (by manual duplication, same convention as `template-migration/template-migration.contract.ts`)
  * with `yjs-server/src/collaboration/submission-value.contract.ts`. Keep both in sync.
  *
  * Flow: whenever hocuspocus stores a `submission/{id}/default` doc,

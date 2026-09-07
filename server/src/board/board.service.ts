@@ -20,27 +20,27 @@ export class BoardService {
     return this.prisma.board.create({
       data: {
         name: dto.name,
-        templateVersions: dto.templateVersionIds
-          ? { connect: dto.templateVersionIds.map((id) => ({ id })) }
+        templates: dto.templateIds
+          ? { connect: dto.templateIds.map((id) => ({ id })) }
           : undefined,
         columns: (dto.columns ?? []) as unknown as Prisma.InputJsonValue,
       },
       include: {
-        templateVersions: { include: { template: true } },
+        templates: true,
       },
     });
   }
 
   async findAll(): Promise<Board[]> {
     return this.prisma.board.findMany({
-      include: { templateVersions: { include: { template: true } } },
+      include: { templates: true },
     });
   }
 
   async findOne(id: string): Promise<Board> {
     const doc = await this.prisma.board.findUnique({
       where: { id },
-      include: { templateVersions: { include: { template: true } } },
+      include: { templates: true },
     });
     if (!doc) throw new NotFoundException(`Board ${id} not found`);
     return doc;
@@ -52,10 +52,10 @@ export class BoardService {
         where: { id },
         data: {
           ...(dto.name !== undefined ? { name: dto.name } : {}),
-          ...(dto.templateVersionIds
+          ...(dto.templateIds
             ? {
-                templateVersions: {
-                  set: dto.templateVersionIds.map((id) => ({ id })),
+                templates: {
+                  set: dto.templateIds.map((id) => ({ id })),
                 },
               }
             : {}),
@@ -64,7 +64,7 @@ export class BoardService {
             : {}),
         },
         include: {
-          templateVersions: { include: { template: true } },
+          templates: true,
         },
       });
     } catch (err) {

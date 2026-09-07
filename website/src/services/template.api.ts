@@ -3,6 +3,7 @@ import type {
   Template,
   UpdateTemplateInput,
 } from "@/types/template";
+import type { TemplateMigration } from "@/types/template-migration";
 import axios from "axios";
 
 const api = axios.create({
@@ -44,8 +45,11 @@ export const templateApi = {
     return api.delete(`/templates/${id}`).then(() => undefined);
   },
 
-  /** Fire-and-forget: requests a publish. The new version is created asynchronously, not returned here. */
-  publishVersion(id: string): Promise<void> {
-    return api.post(`/templates/${id}/versions`).then(() => undefined);
+  publish(id: string): Promise<{ migration: TemplateMigration; template: Template }> {
+    return api
+      .post<ApiResponse<{ migration: TemplateMigration; template: Template }>>(
+        `/templates/${id}/publish`,
+      )
+      .then((r) => r.data.data);
   },
 };

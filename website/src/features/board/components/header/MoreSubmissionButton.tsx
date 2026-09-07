@@ -29,21 +29,21 @@ const MoreSubmissionButton: React.FC = () => {
   const { mutateAsync: createSubmission, isPending } = useCreateSubmission();
 
   const [open, setOpen] = useState(false);
-  const [pickedTemplateVersionId, setPickedTemplateVersionId] = useState("");
+  const [pickedTemplateId, setPickedTemplateId] = useState("");
 
-  const templateVersions = board.templateVersions ?? [];
+  const templates = board.templates ?? [];
 
   function openDialog() {
-    setPickedTemplateVersionId(templateVersions[0]?.id ?? "");
+    setPickedTemplateId(templates[0]?.id ?? "");
     setOpen(true);
   }
 
   async function handleCreate() {
-    if (!pickedTemplateVersionId) return;
+    if (!pickedTemplateId) return;
     try {
       await createSubmission({
         boardId: board.id,
-        templateVersionId: pickedTemplateVersionId,
+        templateId: pickedTemplateId,
       });
       toast.success("Submission created");
       setOpen(false);
@@ -59,7 +59,7 @@ const MoreSubmissionButton: React.FC = () => {
         <Button
           size="sm"
           onClick={openDialog}
-          disabled={templateVersions.length === 0}
+          disabled={templates.length === 0}
         >
           <TomatoIcon icon={TomatoIconKey.Plus} className="mr-1.5 size-4" />
           New Submission
@@ -76,16 +76,16 @@ const MoreSubmissionButton: React.FC = () => {
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="submission-template">Template</Label>
           <Select
-            value={pickedTemplateVersionId}
-            onValueChange={setPickedTemplateVersionId}
+            value={pickedTemplateId}
+            onValueChange={setPickedTemplateId}
           >
             <SelectTrigger id="submission-template">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {templateVersions.map((tv) => (
-                <SelectItem key={tv.id} value={tv.id}>
-                  {tv.template?.name ?? tv.templateId}
+              {templates.map((t) => (
+                <SelectItem key={t.id} value={t.id}>
+                  {t.name}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -98,7 +98,7 @@ const MoreSubmissionButton: React.FC = () => {
           </Button>
           <Button
             onClick={handleCreate}
-            disabled={!pickedTemplateVersionId || isPending}
+            disabled={!pickedTemplateId || isPending}
           >
             {isPending ? (
               <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />

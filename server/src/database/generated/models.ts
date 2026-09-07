@@ -10,7 +10,7 @@
  */
 export type * from './models/Board'
 export type * from './models/Template'
-export type * from './models/TemplateVersion'
+export type * from './models/TemplateMigration'
 export type * from './models/Submission'
 export type * from './models/User'
 export type * from './commonInputTypes'

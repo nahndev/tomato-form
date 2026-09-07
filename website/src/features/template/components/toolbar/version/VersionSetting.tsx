@@ -1,47 +1,69 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   useTemplateId,
-  useTemplateVersions,
+  useTemplateVersion,
 } from "@/features/template/components/provider/TemplateProvider";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
-import { usePublishTemplateVersion } from "@/features/template/hooks/useTemplates";
+import {
+  usePublishTemplate,
+  useResolveTemplateMigration,
+} from "@/features/template/hooks/useTemplates";
 import { useTemplateActions } from "@/features/template/sync/hooks/useTemplateActions";
-import type { TemplateVersion } from "@/types/template";
+import type { TemplateMigration } from "@/types/template-migration";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
-import * as semver from "semver";
+import { useState } from "react";
 import { toast } from "@/components/ui/sonner";
 
 export type VersionSettingProps = {};
 
 const VersionSetting: React.FC<VersionSettingProps> = () => {
   const templateId = useTemplateId();
-  const templateVersions = useTemplateVersions();
+  const contextVersion = useTemplateVersion();
+  const [version, setVersion] = useState(contextVersion);
+  const [pendingMigration, setPendingMigration] = useState<TemplateMigration | null>(null);
   const { isPublishing } = useTemplateState();
   const { requestPublish, settlePublish } = useTemplateActions();
-  const { mutateAsync: publishVersion } = usePublishTemplateVersion(templateId);
-
-  const versions = [...templateVersions].sort((a, b) =>
-    semver.rcompare(a.version, b.version),
-  );
+  const { mutateAsync: publish } = usePublishTemplate(templateId);
+  const { mutateAsync: resolveMigration, isPending: isResolving } =
+    useResolveTemplateMigration(templateId);
 
   async function handlePublish() {
     requestPublish();
     try {
-      await publishVersion();
-      toast.success("Publish requested — the new version will appear here shortly");
+      const result = await publish();
+      setVersion(result.template.version);
+      if (result.migration.conflicts.length > 0) {
+        setPendingMigration(result.migration);
+        toast.info("Published with conflicts to resolve");
+      } else {
+        setPendingMigration(null);
+        toast.success(`Published version ${result.template.version}`);
+      }
     } catch (err) {
-      console.error("Failed to publish template version:", err);
-      toast.error("Failed to publish version");
+      console.error("Failed to publish template:", err);
+      toast.error("Failed to publish");
     } finally {
       settlePublish();
     }
   }
 
+  async function handleApplyMigration() {
+    if (!pendingMigration) return;
+    try {
+      const result = await resolveMigration({ migrationId: pendingMigration.id, input: {} });
+      setVersion(result.template.version);
+      setPendingMigration(null);
+      toast.success(`Published version ${result.template.version}`);
+    } catch (err) {
+      console.error("Failed to resolve template migration:", err);
+      toast.error("Failed to apply migration");
+    }
+  }
+
   return (
-    <div className="flex h-full flex-col gap-2 p-2">
+    <div className="flex h-full flex-col gap-3 p-2">
       <Button onClick={handlePublish} disabled={isPublishing}>
         {isPublishing ? (
           <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
@@ -50,39 +72,23 @@ const VersionSetting: React.FC<VersionSettingProps> = () => {
         )}
       </Button>
 
-      <VersionList versions={versions} />
-    </div>
-  );
-};
-
-interface VersionListProps {
-  versions: TemplateVersion[];
-}
-const VersionList: React.FC<VersionListProps> = ({ versions }) => {
-  if (versions.length === 0) {
-    return (
-      <p className="py-8 text-center text-sm text-muted-foreground">
-        No versions published yet.
+      <p className="text-sm text-muted-foreground">
+        Current version: {version ?? "Not published yet"}
       </p>
-    );
-  }
 
-  return (
-    <ScrollArea className="flex-1">
-      <div className="flex flex-col gap-1">
-        {versions.map((version) => (
-          <div
-            key={version.id}
-            className="flex items-center justify-between rounded-md px-3 py-1.5 text-sm hover:bg-muted"
-          >
-            <span className="font-medium">Version {version.version}</span>
-            <span className="text-xs text-muted-foreground">
-              {new Date(version.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-        ))}
-      </div>
-    </ScrollArea>
+      {pendingMigration && (
+        <div className="flex flex-col gap-2 rounded-md border p-3 text-sm">
+          <p>This publish has conflicts to resolve before it takes effect.</p>
+          <Button size="sm" onClick={handleApplyMigration} disabled={isResolving}>
+            {isResolving ? (
+              <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />
+            ) : (
+              "Apply"
+            )}
+          </Button>
+        </div>
+      )}
+    </div>
   );
 };
 

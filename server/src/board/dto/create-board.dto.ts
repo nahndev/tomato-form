@@ -16,12 +16,12 @@ export class CreateBoardDto {
   name!: string;
 
   @ApiPropertyOptional({
-    description: "Template version ids linked to this board",
+    description: "Template ids linked to this board",
   })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  templateVersionIds?: string[];
+  templateIds?: string[];
 
   @ApiPropertyOptional({
     type: [BoardColumnDto],

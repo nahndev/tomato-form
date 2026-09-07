@@ -15,8 +15,8 @@ model Board {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  templateVersions TemplateVersion[] @relation("BoardTemplateVersions")
-  submissions      Submission[]
+  templates   Template[]   @relation("BoardTemplates")
+  submissions Submission[]
 
   @@map("boards")
 }
@@ -24,53 +24,62 @@ model Board {
 model Template {
   id        String   @id @default(uuid())
   name      String
+  /** Semantic version string (e.g. "1.0.0") of the currently published snapshot, managed via the `semver` library. Null until first publish. */
+  version   String?
+  /**
+   * Frozen copy of the yjs doc as of the last publish - `widgets`, `layouts`,
+   * `widgetToSession`, `sessions`, and whatever gets added later - as one
+   * schemaless blob, so new record kinds don't need a migration.
+   */
+  snapshot  Json     @default("{}")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  templateVersions TemplateVersion[]
+  boards      Board[]             @relation("BoardTemplates")
+  submissions Submission[]
+  migrations  TemplateMigration[]
 
   @@map("templates")
 }
 
-model TemplateVersion {
-  id         String   @id @default(uuid())
-  templateId String   @map("template_id")
-  /** Semantic version string (e.g. "1.0.0"), managed via the `semver` library. */
-  version    String
-  /**
-   * Frozen copy of the yjs doc at publish time - `widgets`, `layouts`,
-   * `widgetToSession`, `sessions`, and whatever gets added later - as one
-   * schemaless blob, so new record kinds don't need a migration.
-   */
-  snapshot   Json     @default("{}")
-  createdAt  DateTime @default(now()) @map("created_at")
+model TemplateMigration {
+  id           String    @id @default(uuid())
+  templateId   String    @map("template_id")
+  /** `Template.snapshot` as it was immediately before this publish. */
+  fromSnapshot Json      @map("from_snapshot")
+  /** The new snapshot fetched from yjs-server for this publish. */
+  toSnapshot   Json      @map("to_snapshot")
+  /** Detected conflicts between `fromSnapshot` and `toSnapshot` requiring user resolution. Detection is not yet implemented - always `[]` today. */
+  conflicts    Json      @default("[]")
+  /** User-submitted answers to `conflicts`, once resolved. */
+  resolutions  Json?
+  /** Set once `toSnapshot` has been applied to `Template` - immediately at publish time when `conflicts` is empty, or after `resolve()` otherwise. */
+  resolvedAt   DateTime? @map("resolved_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
 
-  template    Template     @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  submissions Submission[]
-  boards      Board[]      @relation("BoardTemplateVersions")
+  template Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
 
-  @@unique([templateId, version])
   @@index([templateId])
-  @@map("template_versions")
+  @@map("template_migrations")
 }
 
 model Submission {
-  id                String   @id @default(uuid())
-  boardId           String   @map("board_id")
-  templateVersionId String   @map("template_version_id")
-  data              Json     @default("{}")
+  id           String   @id @default(uuid())
+  boardId      String   @map("board_id")
+  templateId   String   @map("template_id")
+  data         Json     @default("{}")
   /** Last-applied Yjs item clock per `data` key, for dropping stale out-of-order sync events. */
-  dataClocks        Json     @default("{}") @map("data_clocks")
+  dataClocks   Json     @default("{}") @map("data_clocks")
   /** `SubmissionDisplayDoc` derived from `data` - `{ [widgetKey]: { [displayType]: value } }` - kept in sync so rendering doesn't need to recompute it from `data` + the template snapshot on every read. */
-  dataDisplays      Json     @default("{}") @map("data_displays")
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
+  dataDisplays Json     @default("{}") @map("data_displays")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  board           Board           @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  templateVersion TemplateVersion @relation(fields: [templateVersionId], references: [id], onDelete: Restrict)
+  board    Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  template Template @relation(fields: [templateId], references: [id], onDelete: Restrict)
 
   @@index([boardId])
-  @@index([templateVersionId])
+  @@index([templateId])
   @@map("submissions")
 }
 

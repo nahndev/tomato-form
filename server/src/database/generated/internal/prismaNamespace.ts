@@ -399,7 +399,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Board: 'Board',
   Template: 'Template',
-  TemplateVersion: 'TemplateVersion',
+  TemplateMigration: 'TemplateMigration',
   Submission: 'Submission',
   User: 'User'
 } as const
@@ -417,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "board" | "template" | "templateVersion" | "submission" | "user"
+    modelProps: "board" | "template" | "templateMigration" | "submission" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -569,77 +569,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    TemplateVersion: {
-      payload: Prisma.$TemplateVersionPayload<ExtArgs>
-      fields: Prisma.TemplateVersionFieldRefs
+    TemplateMigration: {
+      payload: Prisma.$TemplateMigrationPayload<ExtArgs>
+      fields: Prisma.TemplateMigrationFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.TemplateVersionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload> | null
+          args: Prisma.TemplateMigrationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.TemplateVersionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+          args: Prisma.TemplateMigrationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload>
         }
         findFirst: {
-          args: Prisma.TemplateVersionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload> | null
+          args: Prisma.TemplateMigrationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.TemplateVersionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+          args: Prisma.TemplateMigrationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload>
         }
         findMany: {
-          args: Prisma.TemplateVersionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>[]
+          args: Prisma.TemplateMigrationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload>[]
         }
         create: {
-          args: Prisma.TemplateVersionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+          args: Prisma.TemplateMigrationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload>
         }
         createMany: {
-          args: Prisma.TemplateVersionCreateManyArgs<ExtArgs>
+          args: Prisma.TemplateMigrationCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.TemplateVersionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>[]
+          args: Prisma.TemplateMigrationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload>[]
         }
         delete: {
-          args: Prisma.TemplateVersionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+          args: Prisma.TemplateMigrationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload>
         }
         update: {
-          args: Prisma.TemplateVersionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+          args: Prisma.TemplateMigrationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload>
         }
         deleteMany: {
-          args: Prisma.TemplateVersionDeleteManyArgs<ExtArgs>
+          args: Prisma.TemplateMigrationDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.TemplateVersionUpdateManyArgs<ExtArgs>
+          args: Prisma.TemplateMigrationUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.TemplateVersionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>[]
+          args: Prisma.TemplateMigrationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload>[]
         }
         upsert: {
-          args: Prisma.TemplateVersionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateVersionPayload>
+          args: Prisma.TemplateMigrationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateMigrationPayload>
         }
         aggregate: {
-          args: Prisma.TemplateVersionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTemplateVersion>
+          args: Prisma.TemplateMigrationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTemplateMigration>
         }
         groupBy: {
-          args: Prisma.TemplateVersionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TemplateVersionGroupByOutputType>[]
+          args: Prisma.TemplateMigrationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateMigrationGroupByOutputType>[]
         }
         count: {
-          args: Prisma.TemplateVersionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TemplateVersionCountAggregateOutputType> | number
+          args: Prisma.TemplateMigrationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateMigrationCountAggregateOutputType> | number
         }
       }
     }
@@ -844,6 +844,8 @@ export type BoardScalarFieldEnum = (typeof BoardScalarFieldEnum)[keyof typeof Bo
 export const TemplateScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  version: 'version',
+  snapshot: 'snapshot',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -851,21 +853,24 @@ export const TemplateScalarFieldEnum = {
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
 
 
-export const TemplateVersionScalarFieldEnum = {
+export const TemplateMigrationScalarFieldEnum = {
   id: 'id',
   templateId: 'templateId',
-  version: 'version',
-  snapshot: 'snapshot',
+  fromSnapshot: 'fromSnapshot',
+  toSnapshot: 'toSnapshot',
+  conflicts: 'conflicts',
+  resolutions: 'resolutions',
+  resolvedAt: 'resolvedAt',
   createdAt: 'createdAt'
 } as const
 
-export type TemplateVersionScalarFieldEnum = (typeof TemplateVersionScalarFieldEnum)[keyof typeof TemplateVersionScalarFieldEnum]
+export type TemplateMigrationScalarFieldEnum = (typeof TemplateMigrationScalarFieldEnum)[keyof typeof TemplateMigrationScalarFieldEnum]
 
 
 export const SubmissionScalarFieldEnum = {
   id: 'id',
   boardId: 'boardId',
-  templateVersionId: 'templateVersionId',
+  templateId: 'templateId',
   data: 'data',
   dataClocks: 'dataClocks',
   dataDisplays: 'dataDisplays',
@@ -900,6 +905,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1141,7 +1154,7 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   board?: Prisma.BoardOmit
   template?: Prisma.TemplateOmit
-  templateVersion?: Prisma.TemplateVersionOmit
+  templateMigration?: Prisma.TemplateMigrationOmit
   submission?: Prisma.SubmissionOmit
   user?: Prisma.UserOmit
 }

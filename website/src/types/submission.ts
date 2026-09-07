@@ -4,7 +4,7 @@ import type { SubmissionDisplayDoc } from "@/types/submission-display";
 export interface Submission {
   id: string;
   boardId: string;
-  templateVersionId: string;
+  templateId: string;
   data: Record<string, unknown>;
   dataDisplays: SubmissionDisplayDoc;
   createdAt?: string;
@@ -13,7 +13,7 @@ export interface Submission {
 
 export interface CreateSubmissionInput {
   boardId: string;
-  templateVersionId: string;
+  templateId: string;
   data?: Record<string, unknown>;
 }
 

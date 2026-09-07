@@ -7,6 +7,6 @@ export interface BoardColumn {
   type: BoardColumnDisplayType;
   size: ColumnSize;
   label: string | null;
-  /** Map of templateVersionId to the widgetId picked from that version. */
+  /** Map of templateId to the widgetId picked from that template. */
   items: Record<string, string>;
 }

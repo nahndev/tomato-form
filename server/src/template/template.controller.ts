@@ -16,7 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { TemplateVersionService } from "../template-version/template-version.service";
+import { TemplateMigrationService } from "../template-migration/template-migration.service";
 import { TemplateService } from "./template.service";
 import { CreateTemplateDto } from "./dto/create-template.dto";
 import { UpdateTemplateDto } from "./dto/update-template.dto";
@@ -26,7 +26,7 @@ import { UpdateTemplateDto } from "./dto/update-template.dto";
 export class TemplateController {
   constructor(
     private readonly templateService: TemplateService,
-    private readonly templateVersionService: TemplateVersionService,
+    private readonly templateMigrationService: TemplateMigrationService,
   ) {}
 
   @Post()
@@ -73,17 +73,18 @@ export class TemplateController {
     await this.templateService.remove(id);
   }
 
-  @Post(":id/versions")
-  @HttpCode(HttpStatus.ACCEPTED)
+  @Post(":id/publish")
   @ApiOperation({
     summary:
-      "Request that the current draft be published as a new template version. " +
-      "Fire-and-forget: the version is created asynchronously once yjs-server confirms it, and isn't returned here.",
+      "Publish the template's current draft: fetches it from yjs-server, records it as a " +
+      "TemplateMigration against the template's prior snapshot, and applies it immediately " +
+      "(conflict detection isn't implemented yet, so there's never anything to resolve).",
   })
   @ApiParam({ name: "id", type: String })
-  @ApiResponse({ status: 202, description: "Publish requested" })
+  @ApiResponse({ status: 201, description: "Published" })
   @ApiResponse({ status: 404, description: "Template not found" })
-  async publishVersion(@Param("id") id: string): Promise<void> {
-    await this.templateVersionService.publish(id);
+  @ApiResponse({ status: 409, description: "Nothing to publish - no draft exists for this template" })
+  publish(@Param("id") id: string) {
+    return this.templateMigrationService.publish(id);
   }
 }

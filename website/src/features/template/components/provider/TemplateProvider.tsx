@@ -8,8 +8,7 @@ import {
 } from "@/features/template/hooks/state/useTemplateMeta";
 import { useTemplateState } from "@/features/template/hooks/state/useTemplateState";
 import { useSelection } from "@/features/template/hooks/useSelection";
-import { useCurrentVersion } from "@/features/template/hooks/useTemplateVersion";
-import type { Template, TemplateVersion, Widget } from "@/types/template";
+import type { Template, Widget } from "@/types/template";
 import { createContext, useContext } from "react";
 import { values } from "remeda";
 
@@ -27,11 +26,12 @@ export const TemplateProvider: React.FC<TemplateProviderProps> = ({
   template,
   children,
 }) => {
-  const version = useCurrentVersion(template);
   return (
-    <TemplateDocProvider uuid={template.id} version={version}>
+    <TemplateDocProvider uuid={template.id}>
       <TemplateLiveStateProvider>
-        <TemplateMetaContext.Provider value={{ id: template.id, version, template }}>
+        <TemplateMetaContext.Provider
+          value={{ id: template.id, version: template.version, template }}
+        >
           <WidgetSelectionProvider>{children}</WidgetSelectionProvider>
         </TemplateMetaContext.Provider>
       </TemplateLiveStateProvider>
@@ -61,10 +61,6 @@ export function useTemplateId(): string {
 
 export function useTemplateVersion(): string | undefined {
   return useTemplateMeta().version;
-}
-
-export function useTemplateVersions(): TemplateVersion[] {
-  return useTemplateMeta().template.templateVersions ?? [];
 }
 
 export function useWidgetSelection(): WidgetSelection {

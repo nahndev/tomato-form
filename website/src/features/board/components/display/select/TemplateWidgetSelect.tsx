@@ -10,32 +10,29 @@ import {
 import { useTemplateWidgetsByDisplayTypes } from "@/features/board/hooks/useTemplateWidgetsByDisplayTypes";
 import { getWidgetOptionLabel } from "@/features/board/utils/boardColumnWidgets";
 import type { DisplayType } from "@/types/display-type";
-import type { TemplateVersion } from "@/types/template";
+import type { Template } from "@/types/template";
 
 /** Radix Select.Item forbids an empty-string value, so a sentinel stands in for "no widget picked". */
 const UNSELECTED_WIDGET = "__unselected__";
 
 export interface TemplateWidgetSelectProps {
-  templateVersion: TemplateVersion;
+  template: Template;
   allowDisplayTypes: DisplayType[] | null;
   value: string | null;
   onChange: (widgetId: string | null) => void;
 }
 
-/** Widget picker for one linked template version, restricted to widgets sharing a display type with the widgets already picked in sibling selects. */
+/** Widget picker for one linked template, restricted to widgets sharing a display type with the widgets already picked in sibling selects. */
 const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
-  templateVersion,
+  template,
   allowDisplayTypes,
   value,
   onChange,
 }) => {
-  const ariaLabel = `Widget for ${templateVersion.template?.name ?? templateVersion.templateId}`;
-  const options = useTemplateWidgetsByDisplayTypes(
-    templateVersion,
-    allowDisplayTypes,
-  );
+  const ariaLabel = `Widget for ${template.name}`;
+  const options = useTemplateWidgetsByDisplayTypes(template, allowDisplayTypes);
 
-  const snapshot = templateVersion.snapshot;
+  const snapshot = template.snapshot;
 
   return (
     <Select

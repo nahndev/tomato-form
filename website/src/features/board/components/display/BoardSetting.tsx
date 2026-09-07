@@ -7,9 +7,8 @@ import { useUpdateBoard } from "@/features/board/hooks/useBoards";
 import { getColumnSizeStyle } from "@/features/board/utils/boardColumnWidgets";
 import { JsonColumn } from "@/features/board/utils/column";
 import { useTemplates } from "@/features/template/hooks/useTemplates";
-import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
 import type { BoardColumn, BoardColumnDraft } from "@/types/board";
-import type { TemplateVersion } from "@/types/template";
+import type { Template } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
 import { useState } from "react";
@@ -20,7 +19,7 @@ import BoardSettingToolbar from "./BoardSettingToolbar";
 
 function prepareColumnsForSave(
   columns: BoardColumnDraft[],
-  boardTemplateVersionIds: Set<string>,
+  boardTemplateIds: Set<string>,
 ): BoardColumn[] | null {
   const touched = columns.filter((c) => JsonColumn.hasItems(c));
 
@@ -28,9 +27,7 @@ function prepareColumnsForSave(
     return null;
   }
 
-  return touched.map((c) =>
-    JsonColumn.filterItemsByTemplateVersionIds(c, boardTemplateVersionIds),
-  );
+  return touched.map((c) => JsonColumn.filterItemsByTemplateIds(c, boardTemplateIds));
 }
 
 /** Column grid for a board, including linking/unlinking templates from the same screen. */
@@ -42,48 +39,28 @@ const BoardSetting: React.FC = () => {
   const [draftColumns, draftColumnActions] = useList<BoardColumnDraft>(
     board.columns,
   );
-  const [draftTemplateVersionIds, setDraftTemplateVersionIds] = useState<
-    string[]
-  >(board.templateVersions.map((tv) => tv.id));
+  const [draftTemplateIds, setDraftTemplateIds] = useState<string[]>(
+    board.templates.map((t) => t.id),
+  );
 
-  const linkedTemplateVersionsById = new Map(
-    board.templateVersions.map((tv) => [tv.id, tv]),
-  );
-  const allTemplateVersionsById = new Map(
-    allTemplates.flatMap((t) =>
-      (t.templateVersions ?? []).map((tv): [string, TemplateVersion] => [
-        tv.id,
-        { ...tv, template: { id: t.id, name: t.name } },
-      ]),
-    ),
-  );
-  const draftTemplateVersions = draftTemplateVersionIds
-    .map(
-      (id) => linkedTemplateVersionsById.get(id) ?? allTemplateVersionsById.get(id),
-    )
-    .filter((tv): tv is TemplateVersion => Boolean(tv));
+  const linkedTemplatesById = new Map(board.templates.map((t) => [t.id, t]));
+  const allTemplatesById = new Map(allTemplates.map((t): [string, Template] => [t.id, t]));
+  const draftTemplates = draftTemplateIds
+    .map((id) => linkedTemplatesById.get(id) ?? allTemplatesById.get(id))
+    .filter((t): t is Template => Boolean(t));
 
   const isDirty =
     JSON.stringify(draftColumns) !== JSON.stringify(board.columns) ||
-    JSON.stringify(draftTemplateVersionIds) !==
-      JSON.stringify(board.templateVersions.map((tv) => tv.id));
+    JSON.stringify(draftTemplateIds) !==
+      JSON.stringify(board.templates.map((t) => t.id));
 
   function addTemplate(templateId: string) {
-    const template = allTemplates.find((t) => t.id === templateId);
-    const latestVersion = findLatestVersion(template?.templateVersions ?? []);
-    if (!latestVersion) {
-      toast.error("This template has no published version yet");
-      return;
-    }
-    setDraftTemplateVersionIds((prev) => [...prev, latestVersion.id]);
+    setDraftTemplateIds((prev) => [...prev, templateId]);
   }
 
   async function handleSave() {
-    const boardTemplateVersionIds = new Set(draftTemplateVersionIds);
-    const prepared = prepareColumnsForSave(
-      draftColumns,
-      boardTemplateVersionIds,
-    );
+    const boardTemplateIds = new Set(draftTemplateIds);
+    const prepared = prepareColumnsForSave(draftColumns, boardTemplateIds);
     if (!prepared) {
       toast.error(
         "Every column needs a widget, a size, and a type before saving",
@@ -93,7 +70,7 @@ const BoardSetting: React.FC = () => {
     try {
       await updateBoard({
         columns: prepared,
-        templateVersionIds: draftTemplateVersionIds,
+        templateIds: draftTemplateIds,
       });
       draftColumnActions.set(prepared);
       toast.success("Columns updated");
@@ -112,10 +89,7 @@ const BoardSetting: React.FC = () => {
       <BoardSettingToolbar onAddColumn={draftColumnActions.push} />
       <div className={clsx("size-full relative")}>
         <div className="">
-          <BoardSettingLabel
-            templateVersions={draftTemplateVersions}
-            onAdd={addTemplate}
-          />
+          <BoardSettingLabel templates={draftTemplates} onAdd={addTemplate} />
           <div className="absolute top-0 left-40 w-[calc(100%-var(--spacing)*40)] h-full">
             <div className="flex flex-row gap-2">
               {draftColumns.map((column, index) => (
@@ -126,7 +100,7 @@ const BoardSetting: React.FC = () => {
                   <BoardSettingColumn
                     column={column}
                     index={index}
-                    templateVersions={draftTemplateVersions}
+                    templates={draftTemplates}
                     onChangeColumn={(updated) =>
                       draftColumnActions.update(
                         (c) => JsonColumn.getId(c) === JsonColumn.getId(updated),
@@ -145,7 +119,7 @@ const BoardSetting: React.FC = () => {
           </div>
         </div>
 
-        {draftTemplateVersions.length === 0 && (
+        {draftTemplates.length === 0 && (
           <p className="py-4 text-center text-sm text-muted-foreground">
             No templates linked yet.
           </p>

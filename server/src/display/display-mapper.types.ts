@@ -1,4 +1,4 @@
-import type { TemplateVersionSnapshot, Widget } from "@/template/template.types";
+import type { TemplateSnapshot, Widget } from "@/template/template.types";
 
 /**
  * Widget type strings, duplicated (same convention as the `search` module's
@@ -43,7 +43,7 @@ export interface DisplayMapperSubmission {
 /** Context passed to every mapper: the submission being displayed and the template version snapshot its widgets were published from. */
 export interface DisplayMapperContext {
   submission: DisplayMapperSubmission;
-  snapshot: TemplateVersionSnapshot;
+  snapshot: TemplateSnapshot;
 }
 
 /** Maps one widget's value from the context's submission into the doc, returning the (mutated) doc so callers can chain/reassign. No getter - the doc is the only thing callers need back. */

@@ -1,8 +1,8 @@
 /**
  * RabbitMQ request-response contract for fetching the live template
  * snapshot, shared (by manual duplication, same convention as
- * `collaboration/submission-value.contract.ts`) with
- * `server/src/template-migration/template-migration.contract.ts`. Keep both in sync.
+ * `submission-value.contract.ts`) with
+ * `yjs-server/src/template-file/template-file.contract.ts`. Keep both in sync.
  *
  * Flow: `server` sends `GET_TEMPLATE_SNAPSHOT_PATTERN` onto `yjs_server_queue`
  * and awaits the reply. `yjs-server` reads the template's live draft doc and

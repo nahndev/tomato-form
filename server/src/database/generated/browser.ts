@@ -28,10 +28,10 @@ export type Board = Prisma.BoardModel
  */
 export type Template = Prisma.TemplateModel
 /**
- * Model TemplateVersion
+ * Model TemplateMigration
  * 
  */
-export type TemplateVersion = Prisma.TemplateVersionModel
+export type TemplateMigration = Prisma.TemplateMigrationModel
 /**
  * Model Submission
  * 

@@ -51,42 +51,37 @@ export class JsonColumn {
 
   static getItemWidgetId(
     column: BoardColumnDraft,
-    templateVersionId: string,
+    templateId: string,
   ): string | null {
-    return JsonColumn.getItems(column)[templateVersionId] ?? null;
+    return JsonColumn.getItems(column)[templateId] ?? null;
   }
 
   static setItem(
     column: BoardColumnDraft,
-    templateVersionId: string,
+    templateId: string,
     widgetId: string,
   ): BoardColumnDraft {
     return {
       ...column,
       size: column.size ?? DEFAULT_COLUMN_SIZE,
-      items: { ...JsonColumn.getItems(column), [templateVersionId]: widgetId },
+      items: { ...JsonColumn.getItems(column), [templateId]: widgetId },
     };
   }
 
-  static removeItem(
-    column: BoardColumnDraft,
-    templateVersionId: string,
-  ): BoardColumnDraft {
+  static removeItem(column: BoardColumnDraft, templateId: string): BoardColumnDraft {
     const items = { ...JsonColumn.getItems(column) };
-    delete items[templateVersionId];
+    delete items[templateId];
     return { ...column, items };
   }
 
-  static filterItemsByTemplateVersionIds(
+  static filterItemsByTemplateIds(
     column: BoardColumn,
-    templateVersionIds: Set<string>,
+    templateIds: Set<string>,
   ): BoardColumn {
     return {
       ...column,
       items: Object.fromEntries(
-        Object.entries(column.items).filter(([templateVersionId]) =>
-          templateVersionIds.has(templateVersionId),
-        ),
+        Object.entries(column.items).filter(([templateId]) => templateIds.has(templateId)),
       ),
     };
   }

@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/dialog";
 import { useBoards, useCreateBoard, useDeleteBoard } from "@/features/board";
 import { useTemplates } from "@/features/template";
-import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
 
 const createSchema = Yup.object({
   name: Yup.string().required("Board name is required").min(1),
@@ -47,18 +46,8 @@ export default function BoardsPage() {
     initialValues: { name: "" },
     validationSchema: createSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
-      const templateVersionIds = selectedTemplateIds.flatMap((id) => {
-        const template = templates.find((t) => t.id === id);
-        const latestVersion = findLatestVersion(template?.templateVersions ?? []);
-        return latestVersion ? [latestVersion.id] : [];
-      });
-      if (templateVersionIds.length !== selectedTemplateIds.length) {
-        toast.error("One of the selected templates has no published version yet");
-        setSubmitting(false);
-        return;
-      }
       try {
-        await createBoard({ name: values.name, templateVersionIds });
+        await createBoard({ name: values.name, templateIds: selectedTemplateIds });
         toast.success("Board created");
         resetForm();
         setSelectedTemplateIds([]);
@@ -284,8 +273,8 @@ export default function BoardsPage() {
                     </button>
                   </div>
                   <CardDescription>
-                    {b.templateVersions.length} template
-                    {b.templateVersions.length !== 1 ? "s" : ""}
+                    {b.templates.length} template
+                    {b.templates.length !== 1 ? "s" : ""}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

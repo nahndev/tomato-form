@@ -1,5 +1,5 @@
 import type { DisplayType } from "./display-type";
-import type { TemplateVersion } from "./template";
+import type { Template } from "./template";
 
 export const BoardTabValue = {
   SETTING: "setting",
@@ -24,7 +24,7 @@ export type BoardColumnDraft = Partial<BoardColumn>;
 export interface Board {
   id: string;
   name: string;
-  templateVersions: TemplateVersion[];
+  templates: Template[];
   columns: BoardColumn[];
   createdAt?: string;
   updatedAt?: string;
@@ -32,7 +32,7 @@ export interface Board {
 
 export interface CreateBoardInput {
   name: string;
-  templateVersionIds?: string[];
+  templateIds?: string[];
   columns?: BoardColumn[];
 }
 

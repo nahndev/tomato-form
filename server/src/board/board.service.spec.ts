@@ -51,7 +51,7 @@ describe("BoardService", () => {
       );
     });
 
-    it("includes linked template versions and their templates", async () => {
+    it("includes linked templates", async () => {
       const board = getMockBoard();
       prisma.board.create.mockResolvedValue(board);
 
@@ -59,24 +59,24 @@ describe("BoardService", () => {
 
       expect(prisma.board.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          include: { templateVersions: { include: { template: true } } },
+          include: { templates: true },
         }),
       );
     });
 
-    it("connects the given template version ids", async () => {
+    it("connects the given template ids", async () => {
       const board = getMockBoard();
       prisma.board.create.mockResolvedValue(board);
 
       await service.create({
         name: "Feedback",
-        templateVersionIds: ["tv-1", "tv-2"],
+        templateIds: ["t-1", "t-2"],
       });
 
       expect(prisma.board.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
-            templateVersions: { connect: [{ id: "tv-1" }, { id: "tv-2" }] },
+            templates: { connect: [{ id: "t-1" }, { id: "t-2" }] },
           }),
         }),
       );

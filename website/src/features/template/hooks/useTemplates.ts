@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { templateApi } from "@/services/template.api";
+import { templateMigrationApi } from "@/services/template-migration.api";
 import type { CreateTemplateInput, UpdateTemplateInput } from "@/types/template";
+import type { ResolveTemplateMigrationInput } from "@/types/template-migration";
 
 const TEMPLATES_KEY = ["templates"] as const;
 const templateKey = (id: string) => ["templates", id] as const;
@@ -47,10 +49,30 @@ export function useDeleteTemplate() {
   });
 }
 
-export function usePublishTemplateVersion(id: string) {
+export function usePublishTemplate(id: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: () => templateApi.publishVersion(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: templateKey(id) }),
+    mutationFn: () => templateApi.publish(id),
+    onSuccess: (result) => {
+      qc.setQueryData(templateKey(id), result.template);
+      qc.invalidateQueries({ queryKey: templateKey(id) });
+    },
+  });
+}
+
+export function useResolveTemplateMigration(templateId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      migrationId,
+      input,
+    }: {
+      migrationId: string;
+      input: ResolveTemplateMigrationInput;
+    }) => templateMigrationApi.resolve(migrationId, input),
+    onSuccess: (result) => {
+      qc.setQueryData(templateKey(templateId), result.template);
+      qc.invalidateQueries({ queryKey: templateKey(templateId) });
+    },
   });
 }

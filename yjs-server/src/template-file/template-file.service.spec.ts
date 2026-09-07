@@ -24,7 +24,7 @@ describe("TemplateFileService", () => {
   it("returns a not-ok result when there is no live draft", () => {
     const service = getService(dataDir);
 
-    const result = service.makeVersionFile("template-1", "1.0.0");
+    const result = service.getCurrentSnapshot("template-1");
 
     expect(result).toEqual({
       ok: false,
@@ -32,7 +32,7 @@ describe("TemplateFileService", () => {
     });
   });
 
-  it("copies the draft to a versioned snapshot and returns its Y.Maps", () => {
+  it("reads the live draft's Y.Maps without touching the file", () => {
     const draftDir = path.join(dataDir, "template", "template-1");
     fs.mkdirSync(draftDir, { recursive: true });
     const doc = new Y.Doc();
@@ -44,13 +44,12 @@ describe("TemplateFileService", () => {
     );
 
     const service = getService(dataDir);
-    const result = service.makeVersionFile("template-1", "1.0.0");
+    const result = service.getCurrentSnapshot("template-1");
 
     expect(result.ok).toBe(true);
     if (!result.ok) throw new Error("expected ok result");
-    expect(result.event.path).toBe("template/template-1/1.0.0.yjs");
-    expect(result.event.widgets).toEqual({ w1: { label: "Text" } });
-    expect(result.event.sessions).toEqual({ s1: { id: "s1" } });
-    expect(fs.existsSync(path.join(draftDir, "1.0.0.yjs"))).toBe(true);
+    expect(result.widgets).toEqual({ w1: { label: "Text" } });
+    expect(result.sessions).toEqual({ s1: { id: "s1" } });
+    expect(fs.readdirSync(draftDir)).toEqual(["default.yjs"]);
   });
 });

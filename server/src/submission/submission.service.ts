@@ -3,7 +3,7 @@ import { SubmissionDisplayService } from "@/display/submission-display.service";
 import { MailService } from "@/mail/mail.service";
 import { Recipient, RecipientType } from "@/mail/recipient.types";
 import { SubmissionSearchService } from "@/search/submission-search.service";
-import type { TemplateVersionSnapshot } from "@/template/template.types";
+import type { TemplateSnapshot } from "@/template/template.types";
 import { UserService } from "@/user/user.service";
 import {
   ConflictException,
@@ -34,19 +34,18 @@ export class SubmissionService {
   ) {}
 
   async create(dto: CreateSubmissionDto): Promise<Submission> {
-    const templateVersion = await this.prisma.templateVersion.findUnique({
-      where: { id: dto.templateVersionId },
+    const template = await this.prisma.template.findUnique({
+      where: { id: dto.templateId },
       select: { snapshot: true },
     });
-    if (!templateVersion) {
+    if (!template) {
       throw new ConflictException(
         "Submission references a board or template that does not exist",
       );
     }
 
     const data = dto.data ?? {};
-    const snapshot =
-      templateVersion.snapshot as unknown as TemplateVersionSnapshot;
+    const snapshot = template.snapshot as unknown as TemplateSnapshot;
     const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
       { data },
       snapshot,
@@ -56,7 +55,7 @@ export class SubmissionService {
       return await this.prisma.submission.create({
         data: {
           boardId: dto.boardId,
-          templateVersionId: dto.templateVersionId,
+          templateId: dto.templateId,
           data: data as Prisma.InputJsonValue,
           dataDisplays: dataDisplays as Prisma.InputJsonValue,
         },
@@ -142,7 +141,7 @@ export class SubmissionService {
       select: {
         data: true,
         dataClocks: true,
-        templateVersion: { select: { snapshot: true } },
+        template: { select: { snapshot: true } },
       },
     });
     if (!submission) {
@@ -165,8 +164,7 @@ export class SubmissionService {
 
     if (!changed) return;
 
-    const snapshot = submission.templateVersion
-      .snapshot as unknown as TemplateVersionSnapshot;
+    const snapshot = submission.template.snapshot as unknown as TemplateSnapshot;
     const widgets = snapshot.widgets ?? {};
     const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
       { data },

@@ -1,4 +1,4 @@
-import type { TemplateVersionSnapshot, Widget } from "@/template/template.types";
+import type { TemplateSnapshot, Widget } from "@/template/template.types";
 import { SubmissionDisplayService } from "./submission-display.service";
 
 function getMockWidget(overrides?: Partial<Widget>): Widget {
@@ -10,8 +10,8 @@ function getMockWidget(overrides?: Partial<Widget>): Widget {
   };
 }
 
-function getMockSnapshot(widgets: Record<string, Widget>): TemplateVersionSnapshot {
-  return { widgets } as TemplateVersionSnapshot;
+function getMockSnapshot(widgets: Record<string, Widget>): TemplateSnapshot {
+  return { widgets } as TemplateSnapshot;
 }
 
 describe("SubmissionDisplayService", () => {

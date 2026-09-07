@@ -29,7 +29,7 @@ export function getMockBoard(overrides?: Partial<Board>): Board {
   return {
     id: mockId("board"),
     name: "Board",
-    templateVersions: [],
+    templates: [],
     columns: [],
     ...overrides,
   };

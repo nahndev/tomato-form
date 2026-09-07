@@ -13,7 +13,6 @@ const TemplateConnectionContext = createContext<boolean>(false);
 
 export interface TemplateDocProviderProps {
   uuid: string;
-  version?: string;
   children: React.ReactNode;
 }
 
@@ -28,7 +27,6 @@ export interface TemplateDocProviderProps {
  */
 export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
   uuid,
-  version,
   children,
 }) => {
   const [syncDoc, setSyncDoc] = useState<SyncDoc | null>(null);
@@ -40,7 +38,7 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
 
     const provider = new HocuspocusProvider({
       url: YJS_SERVER_URL,
-      name: `template/${uuid}/${version ?? "default"}`,
+      name: `template/${uuid}/default`,
       document: nextSyncDoc.doc,
     });
 
@@ -62,7 +60,7 @@ export const TemplateDocProvider: React.FC<TemplateDocProviderProps> = ({
       setIsConnected(false);
       setIsSynced(false);
     };
-  }, [uuid, version]);
+  }, [uuid]);
 
   if (!syncDoc || !isSynced) {
     return (

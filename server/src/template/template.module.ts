@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
-import { TemplateVersionModule } from "../template-version/template-version.module";
+import { TemplateMigrationModule } from "../template-migration/template-migration.module";
 import { TemplateService } from "./template.service";
 import { TemplateController } from "./template.controller";
 
 @Module({
-  imports: [TemplateVersionModule],
+  imports: [TemplateMigrationModule],
   controllers: [TemplateController],
   providers: [TemplateService],
   exports: [TemplateService],

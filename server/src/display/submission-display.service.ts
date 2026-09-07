@@ -1,4 +1,4 @@
-import type { TemplateVersionSnapshot } from "@/template/template.types";
+import type { TemplateSnapshot } from "@/template/template.types";
 import { Injectable } from "@nestjs/common";
 import { DisplayMapperFactory } from "./display-mapper.factory";
 import {
@@ -11,7 +11,7 @@ export class SubmissionDisplayService {
   /** Maps a submission's current values to a `SubmissionDisplayDoc` for rendering, iterating the snapshot's widgets (not the submission's data) so every displayable field gets an entry - backfilled with its display-type default when the submission has no value. */
   buildDisplayDoc(
     submission: DisplayMapperSubmission,
-    snapshot: TemplateVersionSnapshot,
+    snapshot: TemplateSnapshot,
   ): SubmissionDisplayDoc {
     let doc: SubmissionDisplayDoc = {};
     console.log(snapshot);

@@ -116,31 +116,22 @@ export interface Session extends SessionProperties {
 }
 
 /**
- * Frozen copy of the yjs doc at publish time, as one schemaless blob so new
- * record kinds don't need a migration.
+ * Frozen copy of the yjs doc as of the last publish, as one schemaless blob
+ * so new record kinds don't need a migration.
  */
-export interface TemplateVersionSnapshot {
+export interface TemplateSnapshot {
   widgets: Record<string, Widget>;
   layouts: Record<string, GridLayout>;
   widgetToSession: Record<string, string>;
   sessions: Record<string, Session>;
 }
 
-export interface TemplateVersion {
-  id: string;
-  templateId: string;
-  /** Semantic version string (e.g. "1.0.0"). */
-  version: string;
-  snapshot: TemplateVersionSnapshot;
-  createdAt: string;
-  /** Present when fetched via `/template-versions/{id}` or embedded in a Board's `templateVersions`. */
-  template?: { id: string; name: string };
-}
-
 export interface Template {
   id: string;
   name: string;
-  templateVersions?: TemplateVersion[];
+  /** Semantic version string (e.g. "1.0.0") of the currently published snapshot. Unset until first publish. */
+  version?: string;
+  snapshot: TemplateSnapshot;
   createdAt?: string;
   updatedAt?: string;
 }

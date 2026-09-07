@@ -25,22 +25,10 @@ const WorkspaceContent: React.FC<WorkspaceContentProps> = ({ board }) => {
     refetch,
   } = useSubmissions(board?.id);
 
-  const templateIdByVersionId = useMemo(() => {
-    const map = new Map<string, string>();
-    board?.templateVersions.forEach((templateVersion) =>
-      map.set(templateVersion.id, templateVersion.templateId),
-    );
-    return map;
-  }, [board]);
-
   const filtered = useMemo(() => {
     if (templateFilter === "all") return submissions;
-    return submissions.filter(
-      (submission) =>
-        templateIdByVersionId.get(submission.templateVersionId) ===
-        templateFilter,
-    );
-  }, [submissions, templateFilter, templateIdByVersionId]);
+    return submissions.filter((submission) => submission.templateId === templateFilter);
+  }, [submissions, templateFilter]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);

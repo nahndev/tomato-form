@@ -14,7 +14,7 @@ function createMockPrisma() {
       findUnique: jest.fn(),
       update: jest.fn(),
     },
-    templateVersion: {
+    template: {
       findUnique: jest.fn(),
     },
   };
@@ -48,15 +48,15 @@ describe("SubmissionService", () => {
   });
 
   describe("create", () => {
-    it("computes dataDisplays from the initial data and the template version's widgets", async () => {
+    it("computes dataDisplays from the initial data and the template's widgets", async () => {
       const widgets = { w1: { id: "w1", type: "text", label: "Name" } };
-      prisma.templateVersion.findUnique.mockResolvedValue({ snapshot: { widgets } });
+      prisma.template.findUnique.mockResolvedValue({ snapshot: { widgets } });
       submissionDisplayService.buildDisplayDoc.mockReturnValue({ w1: { text: "hello" } });
       prisma.submission.create.mockResolvedValue(getMockSubmissionEventRow());
 
       await service.create({
         boardId: "b1",
-        templateVersionId: "tv1",
+        templateId: "t1",
         data: { w1: "hello" },
       });
 
@@ -67,18 +67,18 @@ describe("SubmissionService", () => {
       expect(prisma.submission.create).toHaveBeenCalledWith({
         data: {
           boardId: "b1",
-          templateVersionId: "tv1",
+          templateId: "t1",
           data: { w1: "hello" },
           dataDisplays: { w1: { text: "hello" } },
         },
       });
     });
 
-    it("throws when the template version doesn't exist, without creating the submission", async () => {
-      prisma.templateVersion.findUnique.mockResolvedValue(null);
+    it("throws when the template doesn't exist, without creating the submission", async () => {
+      prisma.template.findUnique.mockResolvedValue(null);
 
       await expect(
-        service.create({ boardId: "b1", templateVersionId: "missing" }),
+        service.create({ boardId: "b1", templateId: "missing" }),
       ).rejects.toThrow(ConflictException);
 
       expect(prisma.submission.create).not.toHaveBeenCalled();
@@ -160,7 +160,7 @@ describe("SubmissionService", () => {
       expect(submissionSearchService.indexSubmission).not.toHaveBeenCalled();
     });
 
-    it("indexes the merged data using the template version's widgets", async () => {
+    it("indexes the merged data using the template's widgets", async () => {
       const row = getMockSubmissionEventRow({
         data: {},
         dataClocks: {},
@@ -180,7 +180,7 @@ describe("SubmissionService", () => {
       );
     });
 
-    it("computes dataDisplays from the merged data and the template version's widgets", async () => {
+    it("computes dataDisplays from the merged data and the template's widgets", async () => {
       const widgets = { w1: { id: "w1", type: "text", label: "Name" } };
       const row = getMockSubmissionEventRow({ data: {}, dataClocks: {}, snapshot: { widgets } });
       prisma.submission.findUnique.mockResolvedValue(row);
