@@ -68,8 +68,6 @@ export const CanvasStage = forwardRef<Konva.Stage, CanvasStageProps>(
                 strokeWidth={2}
                 lineCap="round"
                 lineJoin="round"
-                bezier
-                tension={0.3}
               />
             ))}
           </Layer>

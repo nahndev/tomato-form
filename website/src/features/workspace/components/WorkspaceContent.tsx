@@ -27,10 +27,8 @@ const WorkspaceContent: React.FC<WorkspaceContentProps> = ({ board }) => {
 
   const templateIdByVersionId = useMemo(() => {
     const map = new Map<string, string>();
-    board?.templates.forEach((template) =>
-      template.templateVersions?.forEach((version) =>
-        map.set(version.id, template.id),
-      ),
+    board?.templateVersions.forEach((templateVersion) =>
+      map.set(templateVersion.id, templateVersion.templateId),
     );
     return map;
   }, [board]);

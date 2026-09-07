@@ -1,5 +1,5 @@
 import type { DisplayType } from "./display-type";
-import type { Template } from "./template";
+import type { TemplateVersion } from "./template";
 
 export const BoardTabValue = {
   SETTING: "setting",
@@ -15,14 +15,14 @@ export interface BoardColumn {
   type: DisplayType | null;
   size: ColumnSize | null;
   label: string | null;
-  /** Map of templateId to the widgetId picked from that template. */
+  /** Map of templateVersionId to the widgetId picked from that version. */
   items: Record<string, string>;
 }
 
 export interface Board {
   id: string;
   name: string;
-  templates: Template[];
+  templateVersions: TemplateVersion[];
   columns: BoardColumn[];
   createdAt?: string;
   updatedAt?: string;
@@ -30,7 +30,7 @@ export interface Board {
 
 export interface CreateBoardInput {
   name: string;
-  templateIds?: string[];
+  templateVersionIds?: string[];
   columns?: BoardColumn[];
 }
 

@@ -4,17 +4,17 @@ import AddTemplateButton from "@/features/board/components/display/AddTemplateBu
 import SessionCard from "@/features/board/components/display/session/SessionCard";
 import { RowWrapper } from "@/features/board/components/display/wrapper/RowWrapper";
 import { ZebraCell } from "@/features/board/components/display/wrapper/ZebraCell";
-import type { Template } from "@/types/template";
+import type { TemplateVersion } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 export interface BoardSettingLabelProps {
-  templates: Template[];
+  templateVersions: TemplateVersion[];
   onAdd: (templateId: string) => void;
 }
 
 /** Fixed left column of row headers, aligned with the value rows inside each BoardSettingColumn. */
 const BoardSettingLabel: React.FC<BoardSettingLabelProps> = ({
-  templates,
+  templateVersions,
   onAdd,
 }) => {
   return (
@@ -40,15 +40,17 @@ const BoardSettingLabel: React.FC<BoardSettingLabelProps> = ({
       </SessionCard>
       <SessionCard title="Templates">
         <div className="flex flex-col">
-          {templates.map((template, idx) => (
-            <ZebraCell key={template.id} index={idx} className="px-2">
+          {templateVersions.map((templateVersion, idx) => (
+            <ZebraCell key={templateVersion.id} index={idx} className="px-2">
               <ButtonIcon icon={TomatoIconKey.Trash} />
-              <span className="text-sm truncate">{template.name}</span>
+              <span className="text-sm truncate">
+                {templateVersion.template?.name ?? templateVersion.templateId}
+              </span>
             </ZebraCell>
           ))}
           <div className="px-2 py-2 border-t border-border bg-muted/20">
             <AddTemplateButton
-              linkedTemplateIds={templates.map((t) => t.id)}
+              linkedTemplateIds={templateVersions.map((tv) => tv.templateId)}
               onAdd={onAdd}
             />
           </div>

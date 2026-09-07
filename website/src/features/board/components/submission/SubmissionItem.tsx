@@ -1,9 +1,9 @@
-import { FlexRow } from "@/components/ui/flex-row";
+import { Row } from "@/components/layouts";
 import { toast } from "@/components/ui/sonner";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import BoardColumnCell from "@/features/board/components/submission/BoardColumnCell";
 import { useDeleteSubmission } from "@/features/board/hooks/useSubmissions";
-import { useTemplates } from "@/features/template";
+import { JsonSubmission } from "@/features/board/utils/submission";
 import { Submission } from "@/types/submission";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
@@ -15,23 +15,27 @@ export type SubmissionItemProps = {
 const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
   const board = useBoardContext();
 
-  const { data: templates = [] } = useTemplates();
-  const template = templates.find((t) =>
-    t.templateVersions?.some((v) => v.id === submission.templateVersionId),
-  );
   const { mutateAsync: deleteSubmission, isPending } = useDeleteSubmission(
     board.id,
   );
+
   return (
     <Link
       key={submission.id}
       href={`/submission/${submission.id}`}
       rel="noopener noreferrer"
     >
-      <FlexRow className="group hover:bg-accent">
+      <Row className="group hover:bg-accent">
         <div className="flex flex-1 items-center gap-2">
           {board.columns.map((column) => {
-            return <BoardColumnCell key={column.id} type={column.type} />;
+            const value = JsonSubmission.getDisplayValue(submission, column);
+            return (
+              <BoardColumnCell
+                key={column.id}
+                column={column}
+                displayValue={value}
+              />
+            );
           })}
         </div>
         <div className="w-40 flex flex-row-reverse">
@@ -61,7 +65,7 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
             )}
           </button>
         </div>
-      </FlexRow>
+      </Row>
     </Link>
   );
 };

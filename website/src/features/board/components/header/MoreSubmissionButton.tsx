@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/dialog";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import { useCreateSubmission } from "@/features/board/hooks/useSubmissions";
-import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 const MoreSubmissionButton: React.FC = () => {
@@ -30,27 +29,21 @@ const MoreSubmissionButton: React.FC = () => {
   const { mutateAsync: createSubmission, isPending } = useCreateSubmission();
 
   const [open, setOpen] = useState(false);
-  const [pickedTemplateId, setPickedTemplateId] = useState("");
+  const [pickedTemplateVersionId, setPickedTemplateVersionId] = useState("");
 
-  const templates = board.templates ?? [];
+  const templateVersions = board.templateVersions ?? [];
 
   function openDialog() {
-    setPickedTemplateId(templates[0]?.id ?? "");
+    setPickedTemplateVersionId(templateVersions[0]?.id ?? "");
     setOpen(true);
   }
 
   async function handleCreate() {
-    if (!pickedTemplateId) return;
-    const template = templates.find((t) => t.id === pickedTemplateId);
-    const latestVersion = findLatestVersion(template?.templateVersions ?? []);
-    if (!latestVersion) {
-      toast.error("This template has no published version yet");
-      return;
-    }
+    if (!pickedTemplateVersionId) return;
     try {
       await createSubmission({
         boardId: board.id,
-        templateVersionId: latestVersion.id,
+        templateVersionId: pickedTemplateVersionId,
       });
       toast.success("Submission created");
       setOpen(false);
@@ -66,7 +59,7 @@ const MoreSubmissionButton: React.FC = () => {
         <Button
           size="sm"
           onClick={openDialog}
-          disabled={templates.length === 0}
+          disabled={templateVersions.length === 0}
         >
           <TomatoIcon icon={TomatoIconKey.Plus} className="mr-1.5 size-4" />
           New Submission
@@ -82,14 +75,17 @@ const MoreSubmissionButton: React.FC = () => {
 
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="submission-template">Template</Label>
-          <Select value={pickedTemplateId} onValueChange={setPickedTemplateId}>
+          <Select
+            value={pickedTemplateVersionId}
+            onValueChange={setPickedTemplateVersionId}
+          >
             <SelectTrigger id="submission-template">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {templates.map((t) => (
-                <SelectItem key={t.id} value={t.id}>
-                  {t.name}
+              {templateVersions.map((tv) => (
+                <SelectItem key={tv.id} value={tv.id}>
+                  {tv.template?.name ?? tv.templateId}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -102,7 +98,7 @@ const MoreSubmissionButton: React.FC = () => {
           </Button>
           <Button
             onClick={handleCreate}
-            disabled={!pickedTemplateId || isPending}
+            disabled={!pickedTemplateVersionId || isPending}
           >
             {isPending ? (
               <TomatoIcon icon={TomatoIconKey.Loader} className="size-4 animate-spin" />

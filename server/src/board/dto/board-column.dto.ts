@@ -61,15 +61,15 @@ class IsBoardColumnItemsConstraint implements ValidatorConstraintInterface {
       return false;
 
     return Object.entries(value as Record<string, unknown>).every(
-      ([templateId, widgetId]) =>
-        templateId.length > 0 &&
+      ([templateVersionId, widgetId]) =>
+        templateVersionId.length > 0 &&
         typeof widgetId === "string" &&
         widgetId.length > 0,
     );
   }
 
   defaultMessage(args: ValidationArguments): string {
-    return `${args.property} must be an object mapping templateId to widgetId`;
+    return `${args.property} must be an object mapping templateVersionId to widgetId`;
   }
 }
 
@@ -100,10 +100,11 @@ export class BoardColumnDto {
   label?: string | null;
 
   @ApiProperty({
-    description: "Map of templateId to the widgetId picked from that template",
+    description:
+      "Map of templateVersionId to the widgetId picked from that version",
     type: "object",
     additionalProperties: { type: "string" },
-    example: { "template-1": "widget-1" },
+    example: { "template-version-1": "widget-1" },
   })
   @Validate(IsBoardColumnItemsConstraint)
   items!: Record<string, string>;

@@ -53,38 +53,38 @@ export class JsonColumn {
 
   static getItemWidgetId(
     column: BoardColumn,
-    templateId: string,
+    templateVersionId: string,
   ): string | null {
-    return column.items[templateId] ?? null;
+    return column.items[templateVersionId] ?? null;
   }
 
   static setItem(
     column: BoardColumn,
-    templateId: string,
+    templateVersionId: string,
     widgetId: string,
   ): BoardColumn {
     return {
       ...column,
       size: column.size ?? DEFAULT_COLUMN_SIZE,
-      items: { ...column.items, [templateId]: widgetId },
+      items: { ...column.items, [templateVersionId]: widgetId },
     };
   }
 
-  static removeItem(column: BoardColumn, templateId: string): BoardColumn {
+  static removeItem(column: BoardColumn, templateVersionId: string): BoardColumn {
     const items = { ...column.items };
-    delete items[templateId];
+    delete items[templateVersionId];
     return { ...column, items };
   }
 
-  static filterItemsByTemplateIds(
+  static filterItemsByTemplateVersionIds(
     column: BoardColumn,
-    templateIds: Set<string>,
+    templateVersionIds: Set<string>,
   ): BoardColumn {
     return {
       ...column,
       items: Object.fromEntries(
-        Object.entries(column.items).filter(([templateId]) =>
-          templateIds.has(templateId),
+        Object.entries(column.items).filter(([templateVersionId]) =>
+          templateVersionIds.has(templateVersionId),
         ),
       ),
     };

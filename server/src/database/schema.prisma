@@ -15,8 +15,8 @@ model Board {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  templates   Template[]   @relation("BoardTemplates")
-  submissions Submission[]
+  templateVersions TemplateVersion[] @relation("BoardTemplateVersions")
+  submissions      Submission[]
 
   @@map("boards")
 }
@@ -26,8 +26,6 @@ model Template {
   name      String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  boards Board[] @relation("BoardTemplates")
 
   templateVersions TemplateVersion[]
 
@@ -49,6 +47,7 @@ model TemplateVersion {
 
   template    Template     @relation(fields: [templateId], references: [id], onDelete: Cascade)
   submissions Submission[]
+  boards      Board[]      @relation("BoardTemplateVersions")
 
   @@unique([templateId, version])
   @@index([templateId])

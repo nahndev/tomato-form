@@ -2,6 +2,7 @@ import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
 import type { Widget } from "@/types/template";
 import { WidgetType } from "@/types/widget";
 import { SyncDoc, SyncHandler, type OnSynced } from "@tomato/sync";
+import { v4 } from "uuid";
 import { TemplateHandler } from "./TemplateHandler";
 
 const DEFAULT_SYSTEM_WIDGET_TYPES: WidgetType[] = [
@@ -37,7 +38,8 @@ export class TemplateInitHandler implements OnSynced {
     this.syncDoc.doc.transact(() => {
       for (const type of DEFAULT_SYSTEM_WIDGET_TYPES) {
         const def = WidgetItems[type];
-        const id = `system-${type}`;
+
+        const id = v4();
         yWidgets.set(id, { id, type, ...def.defaultSettings });
       }
       templateHandler.markReady();

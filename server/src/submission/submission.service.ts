@@ -157,7 +157,7 @@ export class SubmissionService {
 
     let changed = false;
     for (const [key, entry] of Object.entries(event.values)) {
-      if (clocks[key] !== undefined && clocks[key] >= entry.clock) continue;
+      if (clocks[key] !== undefined && clocks[key] === entry.clock) continue;
       data[key] = entry.value;
       clocks[key] = entry.clock;
       changed = true;
@@ -172,6 +172,8 @@ export class SubmissionService {
       { data },
       snapshot,
     );
+
+    console.log(dataDisplays);
     await this.prisma.submission.update({
       where: { id: event.submissionId },
       data: {

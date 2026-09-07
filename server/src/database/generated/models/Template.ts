@@ -174,7 +174,6 @@ export type TemplateWhereInput = {
   name?: Prisma.StringFilter<"Template"> | string
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
-  boards?: Prisma.BoardListRelationFilter
   templateVersions?: Prisma.TemplateVersionListRelationFilter
 }
 
@@ -183,7 +182,6 @@ export type TemplateOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  boards?: Prisma.BoardOrderByRelationAggregateInput
   templateVersions?: Prisma.TemplateVersionOrderByRelationAggregateInput
 }
 
@@ -195,7 +193,6 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Template"> | string
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
-  boards?: Prisma.BoardListRelationFilter
   templateVersions?: Prisma.TemplateVersionListRelationFilter
 }, "id">
 
@@ -224,7 +221,6 @@ export type TemplateCreateInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  boards?: Prisma.BoardCreateNestedManyWithoutTemplatesInput
   templateVersions?: Prisma.TemplateVersionCreateNestedManyWithoutTemplateInput
 }
 
@@ -233,7 +229,6 @@ export type TemplateUncheckedCreateInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutTemplatesInput
   templateVersions?: Prisma.TemplateVersionUncheckedCreateNestedManyWithoutTemplateInput
 }
 
@@ -242,7 +237,6 @@ export type TemplateUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  boards?: Prisma.BoardUpdateManyWithoutTemplatesNestedInput
   templateVersions?: Prisma.TemplateVersionUpdateManyWithoutTemplateNestedInput
 }
 
@@ -251,7 +245,6 @@ export type TemplateUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  boards?: Prisma.BoardUncheckedUpdateManyWithoutTemplatesNestedInput
   templateVersions?: Prisma.TemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
@@ -274,16 +267,6 @@ export type TemplateUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type TemplateListRelationFilter = {
-  every?: Prisma.TemplateWhereInput
-  some?: Prisma.TemplateWhereInput
-  none?: Prisma.TemplateWhereInput
-}
-
-export type TemplateOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type TemplateCountOrderByAggregateInput = {
@@ -312,44 +295,6 @@ export type TemplateScalarRelationFilter = {
   isNot?: Prisma.TemplateWhereInput
 }
 
-export type TemplateCreateNestedManyWithoutBoardsInput = {
-  create?: Prisma.XOR<Prisma.TemplateCreateWithoutBoardsInput, Prisma.TemplateUncheckedCreateWithoutBoardsInput> | Prisma.TemplateCreateWithoutBoardsInput[] | Prisma.TemplateUncheckedCreateWithoutBoardsInput[]
-  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutBoardsInput | Prisma.TemplateCreateOrConnectWithoutBoardsInput[]
-  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-}
-
-export type TemplateUncheckedCreateNestedManyWithoutBoardsInput = {
-  create?: Prisma.XOR<Prisma.TemplateCreateWithoutBoardsInput, Prisma.TemplateUncheckedCreateWithoutBoardsInput> | Prisma.TemplateCreateWithoutBoardsInput[] | Prisma.TemplateUncheckedCreateWithoutBoardsInput[]
-  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutBoardsInput | Prisma.TemplateCreateOrConnectWithoutBoardsInput[]
-  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-}
-
-export type TemplateUpdateManyWithoutBoardsNestedInput = {
-  create?: Prisma.XOR<Prisma.TemplateCreateWithoutBoardsInput, Prisma.TemplateUncheckedCreateWithoutBoardsInput> | Prisma.TemplateCreateWithoutBoardsInput[] | Prisma.TemplateUncheckedCreateWithoutBoardsInput[]
-  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutBoardsInput | Prisma.TemplateCreateOrConnectWithoutBoardsInput[]
-  upsert?: Prisma.TemplateUpsertWithWhereUniqueWithoutBoardsInput | Prisma.TemplateUpsertWithWhereUniqueWithoutBoardsInput[]
-  set?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-  disconnect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-  delete?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-  update?: Prisma.TemplateUpdateWithWhereUniqueWithoutBoardsInput | Prisma.TemplateUpdateWithWhereUniqueWithoutBoardsInput[]
-  updateMany?: Prisma.TemplateUpdateManyWithWhereWithoutBoardsInput | Prisma.TemplateUpdateManyWithWhereWithoutBoardsInput[]
-  deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
-}
-
-export type TemplateUncheckedUpdateManyWithoutBoardsNestedInput = {
-  create?: Prisma.XOR<Prisma.TemplateCreateWithoutBoardsInput, Prisma.TemplateUncheckedCreateWithoutBoardsInput> | Prisma.TemplateCreateWithoutBoardsInput[] | Prisma.TemplateUncheckedCreateWithoutBoardsInput[]
-  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutBoardsInput | Prisma.TemplateCreateOrConnectWithoutBoardsInput[]
-  upsert?: Prisma.TemplateUpsertWithWhereUniqueWithoutBoardsInput | Prisma.TemplateUpsertWithWhereUniqueWithoutBoardsInput[]
-  set?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-  disconnect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-  delete?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
-  update?: Prisma.TemplateUpdateWithWhereUniqueWithoutBoardsInput | Prisma.TemplateUpdateWithWhereUniqueWithoutBoardsInput[]
-  updateMany?: Prisma.TemplateUpdateManyWithWhereWithoutBoardsInput | Prisma.TemplateUpdateManyWithWhereWithoutBoardsInput[]
-  deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
-}
-
 export type TemplateCreateNestedOneWithoutTemplateVersionsInput = {
   create?: Prisma.XOR<Prisma.TemplateCreateWithoutTemplateVersionsInput, Prisma.TemplateUncheckedCreateWithoutTemplateVersionsInput>
   connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutTemplateVersionsInput
@@ -364,59 +309,11 @@ export type TemplateUpdateOneRequiredWithoutTemplateVersionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TemplateUpdateToOneWithWhereWithoutTemplateVersionsInput, Prisma.TemplateUpdateWithoutTemplateVersionsInput>, Prisma.TemplateUncheckedUpdateWithoutTemplateVersionsInput>
 }
 
-export type TemplateCreateWithoutBoardsInput = {
-  id?: string
-  name: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  templateVersions?: Prisma.TemplateVersionCreateNestedManyWithoutTemplateInput
-}
-
-export type TemplateUncheckedCreateWithoutBoardsInput = {
-  id?: string
-  name: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  templateVersions?: Prisma.TemplateVersionUncheckedCreateNestedManyWithoutTemplateInput
-}
-
-export type TemplateCreateOrConnectWithoutBoardsInput = {
-  where: Prisma.TemplateWhereUniqueInput
-  create: Prisma.XOR<Prisma.TemplateCreateWithoutBoardsInput, Prisma.TemplateUncheckedCreateWithoutBoardsInput>
-}
-
-export type TemplateUpsertWithWhereUniqueWithoutBoardsInput = {
-  where: Prisma.TemplateWhereUniqueInput
-  update: Prisma.XOR<Prisma.TemplateUpdateWithoutBoardsInput, Prisma.TemplateUncheckedUpdateWithoutBoardsInput>
-  create: Prisma.XOR<Prisma.TemplateCreateWithoutBoardsInput, Prisma.TemplateUncheckedCreateWithoutBoardsInput>
-}
-
-export type TemplateUpdateWithWhereUniqueWithoutBoardsInput = {
-  where: Prisma.TemplateWhereUniqueInput
-  data: Prisma.XOR<Prisma.TemplateUpdateWithoutBoardsInput, Prisma.TemplateUncheckedUpdateWithoutBoardsInput>
-}
-
-export type TemplateUpdateManyWithWhereWithoutBoardsInput = {
-  where: Prisma.TemplateScalarWhereInput
-  data: Prisma.XOR<Prisma.TemplateUpdateManyMutationInput, Prisma.TemplateUncheckedUpdateManyWithoutBoardsInput>
-}
-
-export type TemplateScalarWhereInput = {
-  AND?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
-  OR?: Prisma.TemplateScalarWhereInput[]
-  NOT?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
-  id?: Prisma.StringFilter<"Template"> | string
-  name?: Prisma.StringFilter<"Template"> | string
-  createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
-}
-
 export type TemplateCreateWithoutTemplateVersionsInput = {
   id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  boards?: Prisma.BoardCreateNestedManyWithoutTemplatesInput
 }
 
 export type TemplateUncheckedCreateWithoutTemplateVersionsInput = {
@@ -424,7 +321,6 @@ export type TemplateUncheckedCreateWithoutTemplateVersionsInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutTemplatesInput
 }
 
 export type TemplateCreateOrConnectWithoutTemplateVersionsInput = {
@@ -448,34 +344,9 @@ export type TemplateUpdateWithoutTemplateVersionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  boards?: Prisma.BoardUpdateManyWithoutTemplatesNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutTemplateVersionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  boards?: Prisma.BoardUncheckedUpdateManyWithoutTemplatesNestedInput
-}
-
-export type TemplateUpdateWithoutBoardsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  templateVersions?: Prisma.TemplateVersionUpdateManyWithoutTemplateNestedInput
-}
-
-export type TemplateUncheckedUpdateWithoutBoardsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  templateVersions?: Prisma.TemplateVersionUncheckedUpdateManyWithoutTemplateNestedInput
-}
-
-export type TemplateUncheckedUpdateManyWithoutBoardsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -488,12 +359,10 @@ export type TemplateUncheckedUpdateManyWithoutBoardsInput = {
  */
 
 export type TemplateCountOutputType = {
-  boards: number
   templateVersions: number
 }
 
 export type TemplateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  boards?: boolean | TemplateCountOutputTypeCountBoardsArgs
   templateVersions?: boolean | TemplateCountOutputTypeCountTemplateVersionsArgs
 }
 
@@ -510,13 +379,6 @@ export type TemplateCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * TemplateCountOutputType without action
  */
-export type TemplateCountOutputTypeCountBoardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BoardWhereInput
-}
-
-/**
- * TemplateCountOutputType without action
- */
 export type TemplateCountOutputTypeCountTemplateVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TemplateVersionWhereInput
 }
@@ -527,7 +389,6 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  boards?: boolean | Prisma.Template$boardsArgs<ExtArgs>
   templateVersions?: boolean | Prisma.Template$templateVersionsArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["template"]>
@@ -555,7 +416,6 @@ export type TemplateSelectScalar = {
 
 export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["template"]>
 export type TemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  boards?: boolean | Prisma.Template$boardsArgs<ExtArgs>
   templateVersions?: boolean | Prisma.Template$templateVersionsArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -565,7 +425,6 @@ export type TemplateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Template"
   objects: {
-    boards: Prisma.$BoardPayload<ExtArgs>[]
     templateVersions: Prisma.$TemplateVersionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -967,7 +826,6 @@ readonly fields: TemplateFieldRefs;
  */
 export interface Prisma__TemplateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  boards<T extends Prisma.Template$boardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$boardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   templateVersions<T extends Prisma.Template$templateVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$templateVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplateVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1392,30 +1250,6 @@ export type TemplateDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Templates to delete.
    */
   limit?: number
-}
-
-/**
- * Template.boards
- */
-export type Template$boardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Board
-   */
-  select?: Prisma.BoardSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Board
-   */
-  omit?: Prisma.BoardOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BoardInclude<ExtArgs> | null
-  where?: Prisma.BoardWhereInput
-  orderBy?: Prisma.BoardOrderByWithRelationInput | Prisma.BoardOrderByWithRelationInput[]
-  cursor?: Prisma.BoardWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.BoardScalarFieldEnum | Prisma.BoardScalarFieldEnum[]
 }
 
 /**

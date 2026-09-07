@@ -49,9 +49,12 @@ const WorkspaceBoardHeader: React.FC<WorkspaceBoardHeaderProps> = ({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All templates</SelectItem>
-          {board.templates.map((template) => (
-            <SelectItem key={template.id} value={template.id}>
-              {template.name}
+          {board.templateVersions.map((templateVersion) => (
+            <SelectItem
+              key={templateVersion.templateId}
+              value={templateVersion.templateId}
+            >
+              {templateVersion.template?.name ?? templateVersion.templateId}
             </SelectItem>
           ))}
         </SelectContent>

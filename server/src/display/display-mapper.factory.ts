@@ -1,3 +1,4 @@
+import { UnSupportMapper } from "@/display/mappers/un-support.mapper";
 import type { Widget } from "@/template/template.types";
 import { DisplayMapperInterface, WIDGET_TYPE } from "./display-mapper.types";
 import {
@@ -36,7 +37,7 @@ export class DisplayMapperFactory {
     [WIDGET_TYPE.TEXT_AREA]: new TextAreaWidgetDisplayMapper(),
   };
 
-  static getMapper(widget: Widget): DisplayMapperInterface | undefined {
-    return this.mappers[widget.type];
+  static getMapper(widget: Widget): DisplayMapperInterface {
+    return this.mappers[widget.type] ?? new UnSupportMapper();
   }
 }

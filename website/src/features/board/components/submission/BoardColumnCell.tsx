@@ -1,23 +1,31 @@
 import { DISPLAY_VALUE_REGISTRY } from "@/features/board/components/submission/display/registry";
+import { getColumnSizeStyle } from "@/features/board/utils/boardColumnWidgets";
 import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
-import { DisplayType } from "@/types/display-type";
+import { BoardColumn } from "@/types/board";
+import { SubmissionDisplayValue } from "@/types/submission-display";
 import { TomatoIcon } from "@tomato/icon";
+import { useMemo } from "react";
 
 export interface BoardColumnCellProps {
-  type: DisplayType | null;
+  column: BoardColumn;
+  displayValue: SubmissionDisplayValue | undefined;
 }
 
 const BoardColumnCell: React.FC<BoardColumnCellProps> = ({
-  type,
+  column,
   displayValue,
 }) => {
-  if (type === null) return <div className="min-w-[150px]" />;
+  const type = useMemo(() => column.type, [column]);
+  if (type === null) return <div className="overflow-hidden" />;
 
   const definition = DISPLAY_TYPE_REGISTRY[type];
   const DisplayComponent = DISPLAY_VALUE_REGISTRY[type];
 
   return (
-    <div className="flex min-w-[150px] items-center gap-1.5 text-sm text-muted-foreground">
+    <div
+      className="flex items-center gap-1.5 text-sm text-muted-foreground"
+      style={getColumnSizeStyle(column.size)}
+    >
       <TomatoIcon icon={definition.icon} className="size-3.5" />
       <DisplayComponent displayValue={displayValue} />
     </div>

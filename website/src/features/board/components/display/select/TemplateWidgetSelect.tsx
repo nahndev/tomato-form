@@ -9,43 +9,33 @@ import {
 } from "@/components/ui/select";
 import { useTemplateWidgetsByDisplayTypes } from "@/features/board/hooks/useTemplateWidgetsByDisplayTypes";
 import { getWidgetOptionLabel } from "@/features/board/utils/boardColumnWidgets";
-import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
 import type { DisplayType } from "@/types/display-type";
-import type { Template } from "@/types/template";
+import type { TemplateVersion } from "@/types/template";
 
 /** Radix Select.Item forbids an empty-string value, so a sentinel stands in for "no widget picked". */
 const UNSELECTED_WIDGET = "__unselected__";
 
 export interface TemplateWidgetSelectProps {
-  template: Template;
+  templateVersion: TemplateVersion;
   allowDisplayTypes: DisplayType[] | null;
   value: string | null;
   onChange: (widgetId: string | null) => void;
 }
 
-/** Widget picker for one template, restricted to widgets sharing a display type with the widgets already picked in sibling selects. */
+/** Widget picker for one linked template version, restricted to widgets sharing a display type with the widgets already picked in sibling selects. */
 const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
-  template,
+  templateVersion,
   allowDisplayTypes,
   value,
   onChange,
 }) => {
-  const ariaLabel = `Widget for ${template.name}`;
-  const latestVersion = findLatestVersion(template.templateVersions ?? []);
-  const options = useTemplateWidgetsByDisplayTypes(template, allowDisplayTypes);
+  const ariaLabel = `Widget for ${templateVersion.template?.name ?? templateVersion.templateId}`;
+  const options = useTemplateWidgetsByDisplayTypes(
+    templateVersion,
+    allowDisplayTypes,
+  );
 
-  if (!latestVersion) {
-    return (
-      <Select disabled>
-        <SelectTrigger aria-label={ariaLabel}>
-          <SelectValue placeholder="No published version" />
-        </SelectTrigger>
-        <SelectContent />
-      </Select>
-    );
-  }
-
-  const snapshot = latestVersion.snapshot;
+  const snapshot = templateVersion.snapshot;
 
   return (
     <Select

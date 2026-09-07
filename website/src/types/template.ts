@@ -133,7 +133,7 @@ export interface TemplateVersion {
   version: string;
   snapshot: TemplateVersionSnapshot;
   createdAt: string;
-  /** Only present when fetched via `/template-versions/{id}`. */
+  /** Present when fetched via `/template-versions/{id}` or embedded in a Board's `templateVersions`. */
   template?: { id: string; name: string };
 }
 

@@ -1,9 +1,8 @@
 import { JsonColumn } from "@/features/board/utils/column";
 import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
-import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
 import type { BoardColumn, ColumnSize } from "@/types/board";
 import type {
-  Template,
+  TemplateVersion,
   TemplateVersionSnapshot,
   Widget,
 } from "@/types/template";
@@ -29,23 +28,22 @@ export function getDataFieldWidgets(
 }
 
 export interface SelectedColumnWidget {
-  templateId: string;
+  templateVersionId: string;
   widget: Widget;
 }
 
-/** Resolves each column item to its widget definition, dropping items whose template/widget no longer exists. */
+/** Resolves each column item to its widget definition, dropping items whose template version/widget no longer exists. */
 export function getSelectedColumnWidgets(
   column: BoardColumn,
-  templates: Template[],
+  templateVersions: TemplateVersion[],
 ): SelectedColumnWidget[] {
   return Object.entries(JsonColumn.getItems(column)).flatMap(
-    ([templateId, widgetId]) => {
-      const template = templates.find((t) => t.id === templateId);
-      const latestVersion = findLatestVersion(
-        template?.templateVersions ?? [],
+    ([templateVersionId, widgetId]) => {
+      const templateVersion = templateVersions.find(
+        (tv) => tv.id === templateVersionId,
       );
-      const widget = latestVersion?.snapshot.widgets[widgetId];
-      return widget ? [{ templateId, widget }] : [];
+      const widget = templateVersion?.snapshot.widgets[widgetId];
+      return widget ? [{ templateVersionId, widget }] : [];
     },
   );
 }
