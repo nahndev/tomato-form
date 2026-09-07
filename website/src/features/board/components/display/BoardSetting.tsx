@@ -8,7 +8,7 @@ import { getColumnSizeStyle } from "@/features/board/utils/boardColumnWidgets";
 import { JsonColumn } from "@/features/board/utils/column";
 import { useTemplates } from "@/features/template/hooks/useTemplates";
 import { findLatestVersion } from "@/features/template/utils/findLatestVersion";
-import type { BoardColumn as BoardColumnData } from "@/types/board";
+import type { BoardColumn, BoardColumnDraft } from "@/types/board";
 import type { TemplateVersion } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
@@ -19,13 +19,14 @@ import BoardSettingLabel from "./BoardSettingLabel";
 import BoardSettingToolbar from "./BoardSettingToolbar";
 
 function prepareColumnsForSave(
-  columns: BoardColumnData[],
+  columns: BoardColumnDraft[],
   boardTemplateVersionIds: Set<string>,
-): BoardColumnData[] | null {
+): BoardColumn[] | null {
   const touched = columns.filter((c) => JsonColumn.hasItems(c));
 
-  const isInvalid = touched.some((c) => !JsonColumn.isReadyToSave(c));
-  if (isInvalid) return null;
+  if (!touched.every((c): c is BoardColumn => JsonColumn.isReadyToSave(c))) {
+    return null;
+  }
 
   return touched.map((c) =>
     JsonColumn.filterItemsByTemplateVersionIds(c, boardTemplateVersionIds),
@@ -38,7 +39,7 @@ const BoardSetting: React.FC = () => {
   const { mutateAsync: updateBoard, isPending } = useUpdateBoard(board.id);
   const { data: allTemplates = [] } = useTemplates();
 
-  const [draftColumns, draftColumnActions] = useList<BoardColumnData>(
+  const [draftColumns, draftColumnActions] = useList<BoardColumnDraft>(
     board.columns,
   );
   const [draftTemplateVersionIds, setDraftTemplateVersionIds] = useState<

@@ -1,5 +1,5 @@
 import { DisplayType } from "@/types/display-type";
-import type { Board, BoardColumn } from "@/types/board";
+import type { Board, BoardColumn, BoardColumnDraft } from "@/types/board";
 import { mockId } from "@/lib/testing/mockId";
 
 export function getMockBoardColumn(
@@ -9,7 +9,17 @@ export function getMockBoardColumn(
     id: mockId("column"),
     type: DisplayType.TEXT,
     size: { width: 150 },
-    label: null,
+    label: "Column",
+    items: {},
+    ...overrides,
+  };
+}
+
+export function getMockBoardColumnDraft(
+  overrides?: BoardColumnDraft,
+): BoardColumnDraft {
+  return {
+    id: mockId("column"),
     items: {},
     ...overrides,
   };

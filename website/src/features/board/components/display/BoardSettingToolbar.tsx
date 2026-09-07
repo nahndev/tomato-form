@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { JsonColumn } from "@/features/board/utils/column";
-import type { BoardColumn } from "@/types/board";
+import type { BoardColumnDraft } from "@/types/board";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
 
 export interface BoardSettingToolbarProps {
-  onAddColumn: (column: BoardColumn) => void;
+  onAddColumn: (column: BoardColumnDraft) => void;
 }
 
 const BoardSettingToolbar: React.FC<BoardSettingToolbarProps> = ({

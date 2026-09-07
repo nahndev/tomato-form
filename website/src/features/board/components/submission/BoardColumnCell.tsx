@@ -16,7 +16,6 @@ const BoardColumnCell: React.FC<BoardColumnCellProps> = ({
   displayValue,
 }) => {
   const type = useMemo(() => column.type, [column]);
-  if (type === null) return <div className="overflow-hidden" />;
 
   const definition = DISPLAY_TYPE_REGISTRY[type];
   const DisplayComponent = DISPLAY_VALUE_REGISTRY[type];

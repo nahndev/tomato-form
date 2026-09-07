@@ -13,16 +13,16 @@ import { getSelectedColumnWidgets } from "@/features/board/utils/boardColumnWidg
 import { JsonColumn } from "@/features/board/utils/column";
 import { getCommonDisplayTypes } from "@/features/board/utils/displayTypeHelper";
 import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget";
-import type { BoardColumn } from "@/types/board";
+import type { BoardColumnDraft } from "@/types/board";
 import { DisplayType } from "@/types/display-type";
 import type { TemplateVersion } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 
 export interface BoardSettingColumnProps {
-  column: BoardColumn;
+  column: BoardColumnDraft;
   index: number;
   templateVersions: TemplateVersion[];
-  onChangeColumn: (column: BoardColumn) => void;
+  onChangeColumn: (column: BoardColumnDraft) => void;
   onRemoveColumn: (columnId: string) => void;
 }
 

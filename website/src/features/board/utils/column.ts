@@ -1,5 +1,5 @@
 import { DEFAULT_COLUMN_SIZE } from "@/features/board/components/display/constants/size";
-import type { BoardColumn, ColumnSize } from "@/types/board";
+import type { BoardColumn, BoardColumnDraft, ColumnSize } from "@/types/board";
 import type { DisplayType } from "@/types/display-type";
 import { v4 } from "uuid";
 
@@ -9,69 +9,70 @@ import { v4 } from "uuid";
  * change (like items array -> map) only touches this file.
  */
 export class JsonColumn {
-  static create(): BoardColumn {
+  static create(): BoardColumnDraft {
     return {
       id: v4(),
-      type: null,
       size: DEFAULT_COLUMN_SIZE,
-      label: null,
       items: {},
     };
   }
 
-  static getId(column: BoardColumn): string {
-    return column.id;
+  static getId(column: BoardColumnDraft): string {
+    return column.id ?? "";
   }
 
-  static getType(column: BoardColumn): DisplayType | null {
-    return column.type;
+  static getType(column: BoardColumnDraft): DisplayType | null {
+    return column.type ?? null;
   }
 
-  static setType(column: BoardColumn, type: DisplayType): BoardColumn {
+  static setType(column: BoardColumnDraft, type: DisplayType): BoardColumnDraft {
     return { ...column, type };
   }
 
-  static getSize(column: BoardColumn): ColumnSize | null {
-    return column.size;
+  static getSize(column: BoardColumnDraft): ColumnSize | null {
+    return column.size ?? null;
   }
 
-  static setSize(column: BoardColumn, size: ColumnSize): BoardColumn {
+  static setSize(column: BoardColumnDraft, size: ColumnSize): BoardColumnDraft {
     return { ...column, size };
   }
 
-  static getLabel(column: BoardColumn): string | null {
-    return column.label;
+  static getLabel(column: BoardColumnDraft): string | null {
+    return column.label ?? null;
   }
 
-  static setLabel(column: BoardColumn, label: string): BoardColumn {
+  static setLabel(column: BoardColumnDraft, label: string): BoardColumnDraft {
     return { ...column, label };
   }
 
-  static getItems(column: BoardColumn): Record<string, string> {
-    return column.items;
+  static getItems(column: BoardColumnDraft): Record<string, string> {
+    return column.items ?? {};
   }
 
   static getItemWidgetId(
-    column: BoardColumn,
+    column: BoardColumnDraft,
     templateVersionId: string,
   ): string | null {
-    return column.items[templateVersionId] ?? null;
+    return JsonColumn.getItems(column)[templateVersionId] ?? null;
   }
 
   static setItem(
-    column: BoardColumn,
+    column: BoardColumnDraft,
     templateVersionId: string,
     widgetId: string,
-  ): BoardColumn {
+  ): BoardColumnDraft {
     return {
       ...column,
       size: column.size ?? DEFAULT_COLUMN_SIZE,
-      items: { ...column.items, [templateVersionId]: widgetId },
+      items: { ...JsonColumn.getItems(column), [templateVersionId]: widgetId },
     };
   }
 
-  static removeItem(column: BoardColumn, templateVersionId: string): BoardColumn {
-    const items = { ...column.items };
+  static removeItem(
+    column: BoardColumnDraft,
+    templateVersionId: string,
+  ): BoardColumnDraft {
+    const items = { ...JsonColumn.getItems(column) };
     delete items[templateVersionId];
     return { ...column, items };
   }
@@ -90,11 +91,17 @@ export class JsonColumn {
     };
   }
 
-  static hasItems(column: BoardColumn): boolean {
-    return Object.keys(column.items).length > 0;
+  static hasItems(column: BoardColumnDraft): boolean {
+    return Object.keys(JsonColumn.getItems(column)).length > 0;
   }
 
-  static isReadyToSave(column: BoardColumn): boolean {
-    return column.type !== null && column.size !== null;
+  /** Verifies a draft column has every field a saved BoardColumn requires, narrowing its type. */
+  static isReadyToSave(column: BoardColumnDraft): column is BoardColumn {
+    return (
+      column.type != null &&
+      column.size != null &&
+      column.label != null &&
+      column.label.trim().length > 0
+    );
   }
 }

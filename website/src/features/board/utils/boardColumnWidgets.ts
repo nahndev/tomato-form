@@ -1,6 +1,6 @@
 import { JsonColumn } from "@/features/board/utils/column";
 import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
-import type { BoardColumn, ColumnSize } from "@/types/board";
+import type { BoardColumnDraft, ColumnSize } from "@/types/board";
 import type {
   TemplateVersion,
   TemplateVersionSnapshot,
@@ -34,7 +34,7 @@ export interface SelectedColumnWidget {
 
 /** Resolves each column item to its widget definition, dropping items whose template version/widget no longer exists. */
 export function getSelectedColumnWidgets(
-  column: BoardColumn,
+  column: BoardColumnDraft,
   templateVersions: TemplateVersion[],
 ): SelectedColumnWidget[] {
   return Object.entries(JsonColumn.getItems(column)).flatMap(

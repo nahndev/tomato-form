@@ -12,12 +12,14 @@ export type ColumnSize = { width: number } | { flex: number };
 
 export interface BoardColumn {
   id: string;
-  type: DisplayType | null;
-  size: ColumnSize | null;
-  label: string | null;
-  /** Map of templateVersionId to the widgetId picked from that version. */
+  type: DisplayType;
+  size: ColumnSize;
+  label: string;
   items: Record<string, string>;
 }
+
+/** Shape of a column while it's being edited on the board settings screen, before it's ready to save. */
+export type BoardColumnDraft = Partial<BoardColumn>;
 
 export interface Board {
   id: string;
