@@ -1,8 +1,15 @@
+/** A single choice for `select`/`checkbox`/`radio` widgets. See website's `types/template.ts` for details. */
+export interface OptionItem {
+  key: string;
+  value: string;
+  index: string;
+}
+
 export interface WidgetProperties {
   label: string;
   placeholder?: string;
   required?: boolean;
-  options?: string[];
+  options?: OptionItem[];
 }
 
 export interface Widget extends WidgetProperties {

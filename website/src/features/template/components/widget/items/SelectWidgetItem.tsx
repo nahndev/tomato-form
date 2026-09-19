@@ -14,7 +14,9 @@ export function SelectWidgetItem({
   value,
   onChange,
 }: FieldComponentProps<string>) {
-  const options = widget.options ?? [];
+  const options = [...(widget.options ?? [])].sort((a, b) =>
+    a.index < b.index ? -1 : 1,
+  );
 
   return (
     <Select value={value ?? ""} onValueChange={(v) => onChange?.(v)}>
@@ -22,9 +24,9 @@ export function SelectWidgetItem({
         <SelectValue placeholder="Select…" />
       </SelectTrigger>
       <SelectContent>
-        {options.map((opt) => (
-          <SelectItem key={opt} value={opt}>
-            {opt}
+        {options.map((option) => (
+          <SelectItem key={option.key} value={option.key}>
+            {option.value}
           </SelectItem>
         ))}
       </SelectContent>

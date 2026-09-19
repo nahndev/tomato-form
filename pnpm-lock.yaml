@@ -379,6 +379,9 @@ importers:
       formik:
         specifier: ^2.4.6
         version: 2.4.9(@types/react@18.3.31)(react@18.3.1)
+      fractional-indexing:
+        specifier: ^3.2.0
+        version: 3.2.0
       konva:
         specifier: ^10.3.2
         version: 10.3.2(canvas@4.0.0-rc3)

@@ -8,7 +8,9 @@ export function RadioWidgetItem({
   value,
   onChange,
 }: FieldComponentProps<string>) {
-  const options = widget.options ?? [];
+  const options = [...(widget.options ?? [])].sort((a, b) =>
+    a.index < b.index ? -1 : 1,
+  );
 
   return (
     <div className="mt-2 flex flex-col gap-1.5">
@@ -18,16 +20,16 @@ export function RadioWidgetItem({
         </span>
       )}
       {options.map((option, idx) => (
-        <label key={option} className="flex items-center gap-2 text-sm">
+        <label key={option.key} className="flex items-center gap-2 text-sm">
           <input
             id={idx === 0 ? widget.id : undefined}
             type="radio"
             name={widget.id}
-            checked={value === option}
-            onChange={() => onChange?.(option)}
+            checked={value === option.key}
+            onChange={() => onChange?.(option.key)}
             className="size-4 rounded-full border-input accent-primary"
           />
-          {option}
+          {option.value}
         </label>
       ))}
     </div>

@@ -1,6 +1,17 @@
-import type { WidgetProperties } from "@/types/template";
+import type { OptionItem, WidgetProperties } from "@/types/template";
 import { ColorEnum } from "@/types/template";
 import { WidgetType } from "@/types/widget";
+import { generateKeyBetween } from "fractional-indexing";
+import { v4 } from "uuid";
+
+function defaultOptions(labels: string[]): OptionItem[] {
+  let lastIndex: string | null = null;
+  return labels.map((value) => {
+    const index = generateKeyBetween(lastIndex, null);
+    lastIndex = index;
+    return { key: v4(), value, index };
+  });
+}
 
 /**
  * Default `WidgetProperties` applied when a widget is inserted, before any
@@ -18,15 +29,15 @@ export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   [WidgetType.TIME]: { label: "Time field" },
   [WidgetType.SELECT]: {
     label: "Select field",
-    options: ["Option 1", "Option 2"],
+    options: defaultOptions(["Option 1", "Option 2"]),
   },
   [WidgetType.CHECKBOX]: {
     label: "Checkbox field",
-    options: ["Option 1", "Option 2"],
+    options: defaultOptions(["Option 1", "Option 2"]),
   },
   [WidgetType.RADIO]: {
     label: "Radio field",
-    options: ["Option 1", "Option 2"],
+    options: defaultOptions(["Option 1", "Option 2"]),
   },
   [WidgetType.LABEL]: { label: "Label" },
   [WidgetType.SIGNATURE]: { label: "Signature" },

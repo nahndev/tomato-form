@@ -8,13 +8,15 @@ export function CheckboxWidgetItem({
   value,
   onChange,
 }: FieldComponentProps<string[]>) {
-  const options = widget.options ?? [];
+  const options = [...(widget.options ?? [])].sort((a, b) =>
+    a.index < b.index ? -1 : 1,
+  );
   const selected = value ?? [];
 
-  function toggle(option: string) {
-    const next = selected.includes(option)
-      ? selected.filter((o) => o !== option)
-      : [...selected, option];
+  function toggle(key: string) {
+    const next = selected.includes(key)
+      ? selected.filter((k) => k !== key)
+      : [...selected, key];
     onChange?.(next);
   }
 
@@ -26,16 +28,16 @@ export function CheckboxWidgetItem({
         </span>
       )}
       {options.map((option, idx) => (
-        <label key={option} className="flex items-center gap-2 text-sm">
+        <div key={option.key} className="flex items-center gap-2 text-sm">
           <input
             id={idx === 0 ? widget.id : undefined}
             type="checkbox"
-            checked={selected.includes(option)}
-            onChange={() => toggle(option)}
+            checked={selected.includes(option.key)}
+            onChange={() => toggle(option.key)}
             className="size-4 rounded border-input accent-primary"
           />
-          {option}
-        </label>
+          {option.value}
+        </div>
       ))}
     </div>
   );

@@ -60,11 +60,25 @@ export interface TextFormatProperties {
   italic?: boolean;
   underline?: boolean;
 }
+
+/**
+ * A single choice for `select`/`checkbox`/`radio` widgets. `key` is the
+ * stable identifier stored in submission answers; `value` is the editable
+ * display text. Keeping them separate means renaming a choice's text never
+ * orphans answers that already reference its `key`. `index` is a
+ * `fractional-indexing` sort key so reordering only touches the moved item.
+ */
+export interface OptionItem {
+  key: string;
+  value: string;
+  index: string;
+}
+
 export interface WidgetProperties {
   label: string;
   placeholder?: string;
   required?: boolean;
-  options?: string[];
+  options?: OptionItem[];
   content?: SerializedEditorState;
   url?: string;
   /** BUTTON only - ordered list of actions run in sequence on click. */

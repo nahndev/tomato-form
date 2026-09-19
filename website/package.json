@@ -31,6 +31,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cron-parser": "^4.9.0",
+    "fractional-indexing": "^3.2.0",
     "formik": "^2.4.6",
     "konva": "^10.3.2",
     "lexical": "^0.46.0",
@@ -78,6 +79,9 @@
   },
   "jest": {
     "testEnvironment": "jsdom",
+    "setupFiles": [
+      "<rootDir>/jest.setup.ts"
+    ],
     "setupFilesAfterEnv": [
       "@testing-library/jest-dom"
     ],
@@ -92,7 +96,7 @@
       ]
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(?:.*/)?uuid/)"
+      "node_modules/(?!(?:.*/)?(?:uuid|fractional-indexing|@dnd-kit/[^/]+|@preact/signals-core)/)"
     ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
