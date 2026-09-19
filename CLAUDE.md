@@ -143,3 +143,15 @@ pnpm test            # Run tests for this app
 # Git
 gh pr create         # Create PR
 ```
+
+## Document of features
+
+- Document saving in `./docs/features/TICKET.md`
+- Every session must exist TICKET, if don't detect must ask user.
+- Structure of TICKET.md
+  1. **Title** — Tóm tắt ngắn gọn (một dòng, dạng mệnh lệnh)
+  2. **Description** — Bối cảnh, lý do, mục tiêu, mockup/tài liệu tham khảo
+  3. **Acceptance Criteria** — Danh sách điều kiện hoàn thành (checklist hoặc Given-When-Then)
+  4. **Analysis and Evaluation** — Đánh giá kỹ thuật, rủi ro, phương án thực hiện
+  5. **Design** — Thiết kế kỹ thuật/kiến trúc (hoặc UI/UX nếu áp dụng)
+  6. **Checklist** — Các bước triển khai cụ thể, đánh dấu khi hoàn thành
