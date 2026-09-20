@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useRunButtonAction } from "@/features/template/components/widget/ButtonActionContext";
+import { useRunButtonAction } from "@/features/actions/hooks/useRunButtonAction";
 import { ButtonActionType } from "@/types/button-action";
 import type { FieldComponentProps } from "@/types/widget";
 import { useMemo } from "react";

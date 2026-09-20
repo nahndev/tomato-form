@@ -4,7 +4,8 @@ import { useCurrentSubmission } from "@/features/submission/components/provider/
 import {
   ButtonActionProvider,
   type RunButtonAction,
-} from "@/features/template/components/widget/ButtonActionContext";
+} from "@/features/actions/context/ButtonActionContext";
+import { runLinkAction } from "@/features/actions/utils/runLinkAction";
 import { submissionApi } from "@/services/submission.api";
 import { ButtonActionType } from "@/types/button-action";
 import { toast } from "@/components/ui/sonner";
@@ -22,7 +23,7 @@ export const SubmissionButtonActionProvider: React.FC<
   const runAction: RunButtonAction = async (action) => {
     switch (action.type) {
       case ButtonActionType.LINK: {
-        window.open(action.url, "_blank", "noopener,noreferrer");
+        runLinkAction(action);
         return;
       }
 
