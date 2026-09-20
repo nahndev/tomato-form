@@ -18,7 +18,7 @@ export default function ListTableHeader<T>({
   hasRowMenu,
 }: ListTableHeaderProps<T>) {
   return (
-    <div className="flex items-center gap-2 border-b px-2">
+    <div className="flex w-full items-center gap-2 border-b">
       <div className="flex h-10 w-10 shrink-0 items-center">
         <Checkbox
           checked={allSelected ? true : someSelected ? "indeterminate" : false}
