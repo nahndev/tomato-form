@@ -1,12 +1,10 @@
 import type { DisplayValueProps } from "@/features/board/components/submission/display/types";
+import { parseNumberDisplayValue } from "@/features/board/utils/submissionDisplayValue";
 
-/** No "number" bucket exists in `SubmissionDisplayDoc` yet - numeric widgets are only backfilled under `text` - so this parses that. */
 const NumberValue: React.FC<DisplayValueProps> = ({ displayValue }) => {
-  const text = displayValue?.text;
-  const parsed = typeof text === "string" && text.length > 0 ? Number(text) : NaN;
-  const value = Number.isNaN(parsed) ? null : parsed.toLocaleString();
+  const parsed = parseNumberDisplayValue(displayValue);
 
-  return <span className="truncate">{value ?? "—"}</span>;
+  return <span className="truncate">{parsed !== null ? parsed.toLocaleString() : "—"}</span>;
 };
 
 export default NumberValue;

@@ -24,6 +24,7 @@ export class BoardService {
           ? { connect: dto.templateIds.map((id) => ({ id })) }
           : undefined,
         columns: (dto.columns ?? []) as unknown as Prisma.InputJsonValue,
+        views: (dto.views ?? []) as unknown as Prisma.InputJsonValue,
       },
       include: {
         templates: true,
@@ -61,6 +62,9 @@ export class BoardService {
             : {}),
           ...(dto.columns !== undefined
             ? { columns: dto.columns as unknown as Prisma.InputJsonValue }
+            : {}),
+          ...(dto.views !== undefined
+            ? { views: dto.views as unknown as Prisma.InputJsonValue }
             : {}),
         },
         include: {

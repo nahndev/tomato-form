@@ -81,6 +81,12 @@
     --chart-3: oklch(0.55 0.2 35);
     --chart-4: oklch(0.78 0.15 65);
     --chart-5: oklch(0.45 0.18 30);
+    /* Validated categorical palette (distinct hues, not shades of one hue like --chart-1..5 above) - for charts where color itself carries identity, e.g. a pie chart's slices. */
+    --chart-cat-1: #2a78d6;
+    --chart-cat-2: #eb6834;
+    --chart-cat-3: #1baf7a;
+    --chart-cat-4: #eda100;
+    --chart-cat-5: #e87ba4;
     --radius: 0.625rem;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
@@ -116,6 +122,11 @@
     --chart-3: oklch(0.6 0.16 35);
     --chart-4: oklch(0.75 0.15 65);
     --chart-5: oklch(0.55 0.18 30);
+    --chart-cat-1: #3987e5;
+    --chart-cat-2: #d95926;
+    --chart-cat-3: #199e70;
+    --chart-cat-4: #c98500;
+    --chart-cat-5: #d55181;
     --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
     --sidebar-primary: oklch(0.72 0.2 48);

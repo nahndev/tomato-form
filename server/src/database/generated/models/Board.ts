@@ -42,6 +42,7 @@ export type BoardCountAggregateOutputType = {
   id: number
   name: number
   columns: number
+  views: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -66,6 +67,7 @@ export type BoardCountAggregateInputType = {
   id?: true
   name?: true
   columns?: true
+  views?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -147,6 +149,7 @@ export type BoardGroupByOutputType = {
   id: string
   name: string
   columns: runtime.JsonValue
+  views: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: BoardCountAggregateOutputType | null
@@ -176,6 +179,7 @@ export type BoardWhereInput = {
   id?: Prisma.StringFilter<"Board"> | string
   name?: Prisma.StringFilter<"Board"> | string
   columns?: Prisma.JsonFilter<"Board">
+  views?: Prisma.JsonFilter<"Board">
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   templates?: Prisma.TemplateListRelationFilter
@@ -186,6 +190,7 @@ export type BoardOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   columns?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   templates?: Prisma.TemplateOrderByRelationAggregateInput
@@ -199,6 +204,7 @@ export type BoardWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.BoardWhereInput | Prisma.BoardWhereInput[]
   name?: Prisma.StringFilter<"Board"> | string
   columns?: Prisma.JsonFilter<"Board">
+  views?: Prisma.JsonFilter<"Board">
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   templates?: Prisma.TemplateListRelationFilter
@@ -209,6 +215,7 @@ export type BoardOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   columns?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BoardCountOrderByAggregateInput
@@ -223,6 +230,7 @@ export type BoardScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Board"> | string
   name?: Prisma.StringWithAggregatesFilter<"Board"> | string
   columns?: Prisma.JsonWithAggregatesFilter<"Board">
+  views?: Prisma.JsonWithAggregatesFilter<"Board">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Board"> | Date | string
 }
@@ -231,6 +239,7 @@ export type BoardCreateInput = {
   id?: string
   name: string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   templates?: Prisma.TemplateCreateNestedManyWithoutBoardsInput
@@ -241,6 +250,7 @@ export type BoardUncheckedCreateInput = {
   id?: string
   name: string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutBoardsInput
@@ -251,6 +261,7 @@ export type BoardUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templates?: Prisma.TemplateUpdateManyWithoutBoardsNestedInput
@@ -261,6 +272,7 @@ export type BoardUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutBoardsNestedInput
@@ -271,6 +283,7 @@ export type BoardCreateManyInput = {
   id?: string
   name: string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -279,6 +292,7 @@ export type BoardUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -287,6 +301,7 @@ export type BoardUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -295,6 +310,7 @@ export type BoardCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   columns?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -392,6 +408,7 @@ export type BoardCreateWithoutTemplatesInput = {
   id?: string
   name: string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   submissions?: Prisma.SubmissionCreateNestedManyWithoutBoardInput
@@ -401,6 +418,7 @@ export type BoardUncheckedCreateWithoutTemplatesInput = {
   id?: string
   name: string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   submissions?: Prisma.SubmissionUncheckedCreateNestedManyWithoutBoardInput
@@ -434,6 +452,7 @@ export type BoardScalarWhereInput = {
   id?: Prisma.StringFilter<"Board"> | string
   name?: Prisma.StringFilter<"Board"> | string
   columns?: Prisma.JsonFilter<"Board">
+  views?: Prisma.JsonFilter<"Board">
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
 }
@@ -442,6 +461,7 @@ export type BoardCreateWithoutSubmissionsInput = {
   id?: string
   name: string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   templates?: Prisma.TemplateCreateNestedManyWithoutBoardsInput
@@ -451,6 +471,7 @@ export type BoardUncheckedCreateWithoutSubmissionsInput = {
   id?: string
   name: string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutBoardsInput
@@ -476,6 +497,7 @@ export type BoardUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templates?: Prisma.TemplateUpdateManyWithoutBoardsNestedInput
@@ -485,6 +507,7 @@ export type BoardUncheckedUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutBoardsNestedInput
@@ -494,6 +517,7 @@ export type BoardUpdateWithoutTemplatesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submissions?: Prisma.SubmissionUpdateManyWithoutBoardNestedInput
@@ -503,6 +527,7 @@ export type BoardUncheckedUpdateWithoutTemplatesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submissions?: Prisma.SubmissionUncheckedUpdateManyWithoutBoardNestedInput
@@ -512,6 +537,7 @@ export type BoardUncheckedUpdateManyWithoutTemplatesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   columns?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  views?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -560,6 +586,7 @@ export type BoardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   name?: boolean
   columns?: boolean
+  views?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   templates?: boolean | Prisma.Board$templatesArgs<ExtArgs>
@@ -571,6 +598,7 @@ export type BoardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   columns?: boolean
+  views?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["board"]>
@@ -579,6 +607,7 @@ export type BoardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   columns?: boolean
+  views?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["board"]>
@@ -587,11 +616,12 @@ export type BoardSelectScalar = {
   id?: boolean
   name?: boolean
   columns?: boolean
+  views?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BoardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "columns" | "createdAt" | "updatedAt", ExtArgs["result"]["board"]>
+export type BoardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "columns" | "views" | "createdAt" | "updatedAt", ExtArgs["result"]["board"]>
 export type BoardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   templates?: boolean | Prisma.Board$templatesArgs<ExtArgs>
   submissions?: boolean | Prisma.Board$submissionsArgs<ExtArgs>
@@ -610,6 +640,7 @@ export type $BoardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     name: string
     columns: runtime.JsonValue
+    views: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["board"]>
@@ -1040,6 +1071,7 @@ export interface BoardFieldRefs {
   readonly id: Prisma.FieldRef<"Board", 'String'>
   readonly name: Prisma.FieldRef<"Board", 'String'>
   readonly columns: Prisma.FieldRef<"Board", 'Json'>
+  readonly views: Prisma.FieldRef<"Board", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Board", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Board", 'DateTime'>
 }

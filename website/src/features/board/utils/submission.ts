@@ -21,6 +21,14 @@ export class JsonSubmission {
     );
     if (itemKey === null) return undefined;
 
+    return JsonSubmission.getDisplayValueForItemKey(submission, itemKey);
+  }
+
+  /** Looks up a submission's display value directly by a `widgetId:property` compound key. */
+  static getDisplayValueForItemKey(
+    submission: Submission,
+    itemKey: string
+  ): SubmissionDisplayValue | undefined {
     return submission.dataDisplays[itemKey];
   }
 }

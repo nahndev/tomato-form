@@ -1,14 +1,8 @@
 import type { DisplayValueProps } from "@/features/board/components/submission/display/types";
+import { parseLabelDisplayValue } from "@/features/board/utils/submissionDisplayValue";
 
 const TextValue: React.FC<DisplayValueProps> = ({ displayValue }) => {
-  const text = displayValue?.text;
-  const entity = displayValue?.entity;
-  const value =
-    typeof text === "string" && text.length > 0
-      ? text
-      : Array.isArray(entity) && entity.length > 0
-        ? entity.join(", ")
-        : null;
+  const value = parseLabelDisplayValue(displayValue);
 
   return <span className="truncate">{value ?? "—"}</span>;
 };

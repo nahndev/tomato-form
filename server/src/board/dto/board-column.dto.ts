@@ -77,7 +77,7 @@ const VALUE_PROPERTY_DTO_VALUES: readonly string[] = Object.values(ValueProperty
  * there's no need to model them as a separate object.
  */
 @ValidatorConstraint({ name: "isBoardColumnItems", async: false })
-class IsBoardColumnItemsConstraint implements ValidatorConstraintInterface {
+export class IsBoardColumnItemsConstraint implements ValidatorConstraintInterface {
   validate(value: unknown): boolean {
     if (typeof value !== "object" || value === null || Array.isArray(value))
       return false;

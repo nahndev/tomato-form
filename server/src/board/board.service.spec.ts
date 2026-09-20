@@ -1,5 +1,9 @@
 import { BoardService } from "./board.service";
-import { getMockBoard, getMockBoardColumn } from "./testing/board.factory";
+import {
+  getMockBoard,
+  getMockBoardColumn,
+  getMockBoardView,
+} from "./testing/board.factory";
 import type { PrismaService } from "../database/prisma.service";
 
 function createMockPrisma() {
@@ -47,6 +51,33 @@ describe("BoardService", () => {
       expect(prisma.board.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({ columns: [column] }),
+        }),
+      );
+    });
+
+    it("defaults views to an empty array when none are provided", async () => {
+      const board = getMockBoard();
+      prisma.board.create.mockResolvedValue(board);
+
+      await service.create({ name: "Feedback" });
+
+      expect(prisma.board.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ views: [] }),
+        }),
+      );
+    });
+
+    it("passes the given views through to Prisma", async () => {
+      const board = getMockBoard();
+      prisma.board.create.mockResolvedValue(board);
+      const view = getMockBoardView();
+
+      await service.create({ name: "Feedback", views: [view as never] });
+
+      expect(prisma.board.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ views: [view] }),
         }),
       );
     });
@@ -104,6 +135,30 @@ describe("BoardService", () => {
       expect(prisma.board.update).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({ columns: [column] }),
+        }),
+      );
+    });
+
+    it("omits views from the update payload when not provided", async () => {
+      const board = getMockBoard();
+      prisma.board.update.mockResolvedValue(board);
+
+      await service.update(board.id, { name: "Renamed" });
+
+      const { data } = prisma.board.update.mock.calls[0][0];
+      expect(data).not.toHaveProperty("views");
+    });
+
+    it("includes views in the update payload when provided", async () => {
+      const board = getMockBoard();
+      prisma.board.update.mockResolvedValue(board);
+      const view = getMockBoardView();
+
+      await service.update(board.id, { views: [view as never] });
+
+      expect(prisma.board.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ views: [view] }),
         }),
       );
     });

@@ -8,6 +8,7 @@ import {
   ValidateNested,
 } from "class-validator";
 import { BoardColumnDto } from "./board-column.dto";
+import { BoardViewDto } from "./board-view.dto";
 
 export class CreateBoardDto {
   @ApiProperty({ example: "Customer Feedback" })
@@ -32,4 +33,14 @@ export class CreateBoardDto {
   @Type(() => BoardColumnDto)
   @IsOptional()
   columns?: BoardColumnDto[];
+
+  @ApiPropertyOptional({
+    type: [BoardViewDto],
+    description: "Board view configuration (chart, calendar, dashboard, ...)",
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => BoardViewDto)
+  @IsOptional()
+  views?: BoardViewDto[];
 }

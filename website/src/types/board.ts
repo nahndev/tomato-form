@@ -1,8 +1,10 @@
+import type { BoardView } from "./board-view";
 import type { DisplayType } from "./display-type";
 import type { Template } from "./template";
 
 export const BoardTabValue = {
   SETTING: "setting",
+  VIEWS: "views",
   HISTORY: "history",
   DISCUSSION: "discussion",
 } as const;
@@ -27,6 +29,7 @@ export interface Board {
   name: string;
   templates: Template[];
   columns: BoardColumn[];
+  views: BoardView[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -35,6 +38,7 @@ export interface CreateBoardInput {
   name: string;
   templateIds?: string[];
   columns?: BoardColumn[];
+  views?: BoardView[];
 }
 
 export type UpdateBoardInput = Partial<CreateBoardInput>;

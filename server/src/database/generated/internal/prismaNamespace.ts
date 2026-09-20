@@ -834,6 +834,7 @@ export const BoardScalarFieldEnum = {
   id: 'id',
   name: 'name',
   columns: 'columns',
+  views: 'views',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

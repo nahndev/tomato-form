@@ -4,8 +4,13 @@ import { Button } from "@/components/ui/button";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import BoardColumnsHeaderRow from "@/features/board/components/submission/BoardColumnsHeaderRow";
 import SubmissionItem from "@/features/board/components/submission/SubmissionItem";
+import BoardViewSwitcher, {
+  TABLE_VIEW_ID,
+} from "@/features/board/components/submission/display/BoardViewSwitcher";
+import ChartDisplay from "@/features/board/components/submission/display/ChartDisplay";
 import type { Submission } from "@/types/submission";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
+import { useState } from "react";
 
 export interface WorkspaceBoardContentProps {
   submissions: Submission[];
@@ -23,6 +28,8 @@ const WorkspaceBoardContent: React.FC<WorkspaceBoardContentProps> = ({
   onRetry,
 }) => {
   const board = useBoardContext();
+  const [activeViewId, setActiveViewId] = useState<string>(TABLE_VIEW_ID);
+  const activeView = board.views.find((v) => v.id === activeViewId);
 
   if (isError) {
     return (
@@ -51,31 +58,39 @@ const WorkspaceBoardContent: React.FC<WorkspaceBoardContentProps> = ({
     );
   }
 
-  if (submissions.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-16 text-center">
-        <TomatoIcon
-          icon={TomatoIconKey.Document}
-          className="mb-4 size-10 text-muted-foreground/40"
-        />
-        <h3 className="font-semibold text-muted-foreground">
-          {hasAnySubmissions ? "No matching submissions" : "No submissions yet"}
-        </h3>
-        <p className="mt-1 text-sm text-muted-foreground/70">
-          {hasAnySubmissions
-            ? "Try a different template filter"
-            : "Create a submission from one of this board's templates"}
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-4">
-      <BoardColumnsHeaderRow columns={board.columns} />
-      {submissions.map((submission) => (
-        <SubmissionItem key={submission.id} submission={submission} />
-      ))}
+      <BoardViewSwitcher
+        views={board.views}
+        activeViewId={activeViewId}
+        onChange={setActiveViewId}
+      />
+
+      {submissions.length === 0 ? (
+        <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-16 text-center">
+          <TomatoIcon
+            icon={TomatoIconKey.Document}
+            className="mb-4 size-10 text-muted-foreground/40"
+          />
+          <h3 className="font-semibold text-muted-foreground">
+            {hasAnySubmissions ? "No matching submissions" : "No submissions yet"}
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground/70">
+            {hasAnySubmissions
+              ? "Try a different template filter"
+              : "Create a submission from one of this board's templates"}
+          </p>
+        </div>
+      ) : activeView ? (
+        <ChartDisplay view={activeView} submissions={submissions} />
+      ) : (
+        <>
+          <BoardColumnsHeaderRow columns={board.columns} />
+          {submissions.map((submission) => (
+            <SubmissionItem key={submission.id} submission={submission} />
+          ))}
+        </>
+      )}
     </div>
   );
 };
