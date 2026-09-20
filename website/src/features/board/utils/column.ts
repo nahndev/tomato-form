@@ -1,5 +1,6 @@
 import { DEFAULT_COLUMN_SIZE } from "@/features/board/components/display/constants/size";
-import type { BoardColumn, BoardColumnDraft, ColumnSize } from "@/types/board";
+import type { ValueProperty } from "@/features/template/constants/widget/valueProperties";
+import type { BoardColumn, BoardColumnDraft, BoardColumnItem, ColumnSize } from "@/types/board";
 import type { DisplayType } from "@/types/display-type";
 import { v4 } from "uuid";
 
@@ -45,26 +46,41 @@ export class JsonColumn {
     return { ...column, label };
   }
 
-  static getItems(column: BoardColumnDraft): Record<string, string> {
+  static getItems(column: BoardColumnDraft): Record<string, BoardColumnItem> {
     return column.items ?? {};
+  }
+
+  static getItem(
+    column: BoardColumnDraft,
+    templateId: string,
+  ): BoardColumnItem | null {
+    return JsonColumn.getItems(column)[templateId] ?? null;
   }
 
   static getItemWidgetId(
     column: BoardColumnDraft,
     templateId: string,
   ): string | null {
-    return JsonColumn.getItems(column)[templateId] ?? null;
+    return JsonColumn.getItem(column, templateId)?.widgetId ?? null;
+  }
+
+  static getItemProperty(
+    column: BoardColumnDraft,
+    templateId: string,
+  ): ValueProperty | null {
+    return JsonColumn.getItem(column, templateId)?.property ?? null;
   }
 
   static setItem(
     column: BoardColumnDraft,
     templateId: string,
     widgetId: string,
+    property: ValueProperty,
   ): BoardColumnDraft {
     return {
       ...column,
       size: column.size ?? DEFAULT_COLUMN_SIZE,
-      items: { ...JsonColumn.getItems(column), [templateId]: widgetId },
+      items: { ...JsonColumn.getItems(column), [templateId]: { widgetId, property } },
     };
   }
 

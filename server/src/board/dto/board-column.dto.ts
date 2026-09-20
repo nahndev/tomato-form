@@ -49,10 +49,27 @@ class IsColumnSizeConstraint implements ValidatorConstraintInterface {
 export const BoardColumnDisplayTypeDto = {
   TEXT: "text",
   DATE: "date",
+  TIME: "time",
+  DATETIME: "datetime",
   NUMBER: "number",
 } as const;
 export type BoardColumnDisplayTypeDto =
   (typeof BoardColumnDisplayTypeDto)[keyof typeof BoardColumnDisplayTypeDto];
+
+/**
+ * Which value-property of a widget a column item targets (e.g. `datetime`'s
+ * `date`/`time` sub-views vs its `default` full value) — mirrors `ValueProperty`
+ * in `website/src/features/template/constants/widget/valueProperties.ts`.
+ */
+export const ValuePropertyDto = {
+  DEFAULT: "default",
+  DATE: "date",
+  TIME: "time",
+} as const;
+export type ValuePropertyDto =
+  (typeof ValuePropertyDto)[keyof typeof ValuePropertyDto];
+
+const VALUE_PROPERTY_DTO_VALUES: readonly string[] = Object.values(ValuePropertyDto);
 
 @ValidatorConstraint({ name: "isBoardColumnItems", async: false })
 class IsBoardColumnItemsConstraint implements ValidatorConstraintInterface {
@@ -61,19 +78,34 @@ class IsBoardColumnItemsConstraint implements ValidatorConstraintInterface {
       return false;
 
     return Object.entries(value as Record<string, unknown>).every(
-      ([templateId, widgetId]) =>
+      ([templateId, item]) =>
         templateId.length > 0 &&
-        typeof widgetId === "string" &&
-        widgetId.length > 0,
+        typeof item === "object" &&
+        item !== null &&
+        !Array.isArray(item) &&
+        typeof (item as Record<string, unknown>).widgetId === "string" &&
+        ((item as Record<string, unknown>).widgetId as string).length > 0 &&
+        VALUE_PROPERTY_DTO_VALUES.includes(
+          (item as Record<string, unknown>).property as string,
+        ),
     );
   }
 
   defaultMessage(args: ValidationArguments): string {
-    return `${args.property} must be an object mapping templateId to widgetId`;
+    return `${args.property} must be an object mapping templateId to { widgetId, property }`;
   }
 }
 
-@ApiExtraModels(ColumnWidthDto, ColumnFlexDto)
+/** One column item: the widget picked from a linked template, and which value-property of it to display. */
+export class BoardColumnItemDto {
+  @ApiProperty()
+  widgetId!: string;
+
+  @ApiProperty({ enum: ValuePropertyDto })
+  property!: ValuePropertyDto;
+}
+
+@ApiExtraModels(ColumnWidthDto, ColumnFlexDto, BoardColumnItemDto)
 export class BoardColumnDto {
   @ApiProperty()
   @IsString()
@@ -100,11 +132,11 @@ export class BoardColumnDto {
   label?: string | null;
 
   @ApiProperty({
-    description: "Map of templateId to the widgetId picked from that template",
+    description: "Map of templateId to the widget + value-property picked from that template",
     type: "object",
-    additionalProperties: { type: "string" },
-    example: { "template-1": "widget-1" },
+    additionalProperties: { $ref: getSchemaPath(BoardColumnItemDto) },
+    example: { "template-1": { widgetId: "widget-1", property: "default" } },
   })
   @Validate(IsBoardColumnItemsConstraint)
-  items!: Record<string, string>;
+  items!: Record<string, BoardColumnItemDto>;
 }

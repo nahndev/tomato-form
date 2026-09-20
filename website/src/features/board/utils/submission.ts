@@ -15,12 +15,12 @@ export class JsonSubmission {
     submission: Submission,
     column: BoardColumn
   ): SubmissionDisplayValue | undefined {
-    const widgetId = JsonColumn.getItemWidgetId(
+    const item = JsonColumn.getItem(
       column,
       JsonSubmission.getTemplateId(submission)
     );
-    if (widgetId === null) return undefined;
+    if (item === null) return undefined;
 
-    return submission.dataDisplays[widgetId];
+    return submission.dataDisplays[`${item.widgetId}:${item.property}`];
   }
 }

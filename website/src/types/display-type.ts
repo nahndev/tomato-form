@@ -5,6 +5,8 @@ import type { TomatoIconKey } from "@tomato/icon";
 export const DisplayType = {
   TEXT: "text",
   DATE: "date",
+  TIME: "time",
+  DATETIME: "datetime",
   NUMBER: "number",
   UNKNOWN: "unknown",
 } as const;

@@ -30,9 +30,23 @@ export const DISPLAY_TYPE = {
 
 export type DisplayType = (typeof DISPLAY_TYPE)[keyof typeof DISPLAY_TYPE];
 
+/**
+ * Which value-property of a widget a doc entry belongs to (e.g. `datetime`'s `date`/`time`
+ * sub-views vs its `default` full value) - mirrors `ValueProperty` in
+ * `website/src/features/template/constants/widget/valueProperties.ts`, hand mirrored since
+ * there's no shared-types package between web and server in this monorepo.
+ */
+export const VALUE_PROPERTY = {
+  DEFAULT: "default",
+  DATE: "date",
+  TIME: "time",
+} as const;
+
+export type ValueProperty = (typeof VALUE_PROPERTY)[keyof typeof VALUE_PROPERTY];
+
 export type SubmissionDisplayValue = Partial<Record<DisplayType, unknown>>;
 
-/** `{ [widgetKey]: { [displayType]: value } }` - one entry per widget, always present (backfilled with the display-type's default) so the UI can render every field without checking for missing data. */
+/** `{ [widgetId:property]: { [displayType]: value } }` - one entry per widget value-property, always present (backfilled with the display-type's default) so the UI can render every field without checking for missing data. */
 export type SubmissionDisplayDoc = Record<string, SubmissionDisplayValue>;
 
 /** The slice of `Submission` a mapper needs - just its current values, keyed by widget id. */

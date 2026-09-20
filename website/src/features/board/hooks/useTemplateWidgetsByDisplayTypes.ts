@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { getDataFieldWidgets } from "@/features/board/utils/boardColumnWidgets";
-import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
+import { getWidgetDisplayTypes } from "@/features/template/constants/widget/valueProperties";
 import type { DisplayType } from "@/types/display-type";
 import type { Template, Widget } from "@/types/template";
 
@@ -19,7 +19,7 @@ export function useTemplateWidgetsByDisplayTypes(
     return getDataFieldWidgets(snapshot).filter(
       (widget) =>
         displayTypes === null ||
-        WIDGET_DISPLAY_TYPE_REGISTRY[widget.type].some((type) =>
+        getWidgetDisplayTypes(widget.type).some((type) =>
           displayTypes.includes(type),
         ),
     );

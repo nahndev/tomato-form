@@ -1,16 +1,23 @@
-import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
+import { getPropertyDisplayTypes } from "@/features/template/constants/widget/valueProperties";
+import type { ValueProperty } from "@/features/template/constants/widget/valueProperties";
 import type { DisplayType } from "@/types/display-type";
-import type { Widget } from "@/types/template";
+import type { WidgetType } from "@/types/widget";
+
+export interface DisplayTypeEntry {
+  widgetType: WidgetType;
+  property: ValueProperty;
+}
 
 /**
- * DisplayTypes shared by every widget in the list. No widgets means no
- * constraint yet, so callers should treat `null` as unrestricted; widgets
- * whose types share nothing return an empty array (matches nothing further).
+ * DisplayTypes shared by every (widgetType, property) entry in the list. No
+ * entries means no constraint yet, so callers should treat `null` as
+ * unrestricted; entries that share nothing return an empty array (matches
+ * nothing further).
  */
-export function getCommonDisplayTypes(widgets: Widget[]): DisplayType[] | null {
-  if (widgets.length === 0) return null;
+export function getCommonDisplayTypes(entries: DisplayTypeEntry[]): DisplayType[] | null {
+  if (entries.length === 0) return null;
 
-  return widgets
-    .map((widget) => WIDGET_DISPLAY_TYPE_REGISTRY[widget.type])
+  return entries
+    .map(({ widgetType, property }) => getPropertyDisplayTypes(widgetType, property))
     .reduce((common, types) => common.filter((type) => types.includes(type)));
 }

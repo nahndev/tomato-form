@@ -1,5 +1,6 @@
 import { JsonColumn } from "@/features/board/utils/column";
-import { WIDGET_DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
+import { getWidgetDisplayTypes } from "@/features/template/constants/widget/valueProperties";
+import type { ValueProperty } from "@/features/template/constants/widget/valueProperties";
 import type { BoardColumnDraft, ColumnSize } from "@/types/board";
 import type { Template, TemplateSnapshot, Widget } from "@/types/template";
 import type { CSSProperties } from "react";
@@ -17,25 +18,26 @@ export function getColumnSizeStyle(
 
 export function getDataFieldWidgets(snapshot: TemplateSnapshot): Widget[] {
   return Object.values(snapshot.widgets).filter(
-    (widget) => WIDGET_DISPLAY_TYPE_REGISTRY[widget.type].length > 0,
+    (widget) => getWidgetDisplayTypes(widget.type).length > 0,
   );
 }
 
-export interface SelectedColumnWidget {
+export interface SelectedColumnItem {
   templateId: string;
   widget: Widget;
+  property: ValueProperty;
 }
 
 /** Resolves each column item to its widget definition, dropping items whose template/widget no longer exists. */
-export function getSelectedColumnWidgets(
+export function getSelectedColumnItems(
   column: BoardColumnDraft,
   templates: Template[],
-): SelectedColumnWidget[] {
+): SelectedColumnItem[] {
   return Object.entries(JsonColumn.getItems(column)).flatMap(
-    ([templateId, widgetId]) => {
+    ([templateId, item]) => {
       const template = templates.find((t) => t.id === templateId);
-      const widget = template?.snapshot.widgets[widgetId];
-      return widget ? [{ templateId, widget }] : [];
+      const widget = template?.snapshot.widgets[item.widgetId];
+      return widget ? [{ templateId, widget, property: item.property }] : [];
     },
   );
 }

@@ -22,7 +22,7 @@ describe("SubmissionDisplayService", () => {
 
     const doc = service.buildDisplayDoc({ data: { w1: "approved" } }, snapshot);
 
-    expect(doc).toEqual({ w1: { entity: ["approved"] } });
+    expect(doc).toEqual({ "w1:default": { entity: ["approved"] } });
   });
 
   it("backfills a widget with no matching data using its display-type default", () => {
@@ -33,7 +33,23 @@ describe("SubmissionDisplayService", () => {
 
     const doc = service.buildDisplayDoc({ data: {} }, snapshot);
 
-    expect(doc).toEqual({ w1: { text: "" }, w2: { date: null } });
+    expect(doc).toEqual({
+      "w1:default": { text: "" },
+      "w2:default": { date: null, text: "" },
+    });
+  });
+
+  it("fans a datetime widget out into default/date/time doc entries", () => {
+    const snapshot = getMockSnapshot({ w1: getMockWidget({ type: "datetime" }) });
+
+    const doc = service.buildDisplayDoc({ data: { w1: 1700000000000 } }, snapshot);
+
+    const expected = { date: 1700000000000, text: new Date(1700000000000).toLocaleDateString() };
+    expect(doc).toEqual({
+      "w1:default": expected,
+      "w1:date": expected,
+      "w1:time": expected,
+    });
   });
 
   it("skips a widget whose type isn't displayable yet", () => {
@@ -49,6 +65,6 @@ describe("SubmissionDisplayService", () => {
 
     const doc = service.buildDisplayDoc({ data: { w1: "hello", orphan: "value" } }, snapshot);
 
-    expect(doc).toEqual({ w1: { text: "hello" } });
+    expect(doc).toEqual({ "w1:default": { text: "hello" } });
   });
 });

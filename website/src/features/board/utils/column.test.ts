@@ -3,6 +3,7 @@ import {
   getMockBoardColumn,
   getMockBoardColumnDraft,
 } from "@/features/board/testing/board.factory";
+import { ValueProperty } from "@/features/template/constants/widget/valueProperties";
 import { DisplayType } from "@/types/display-type";
 
 describe("JsonColumn.isReadyToSave", () => {
@@ -47,5 +48,59 @@ describe("JsonColumn.isReadyToSave", () => {
     });
 
     expect(JsonColumn.isReadyToSave(column)).toBe(false);
+  });
+});
+
+describe("JsonColumn items", () => {
+  it("returns null for an unset item", () => {
+    const column = getMockBoardColumnDraft();
+
+    expect(JsonColumn.getItem(column, "template-1")).toBeNull();
+    expect(JsonColumn.getItemWidgetId(column, "template-1")).toBeNull();
+    expect(JsonColumn.getItemProperty(column, "template-1")).toBeNull();
+  });
+
+  it("sets and reads back a widget + property for a template", () => {
+    const column = JsonColumn.setItem(
+      getMockBoardColumnDraft(),
+      "template-1",
+      "widget-1",
+      ValueProperty.DATE,
+    );
+
+    expect(JsonColumn.getItem(column, "template-1")).toEqual({
+      widgetId: "widget-1",
+      property: ValueProperty.DATE,
+    });
+    expect(JsonColumn.getItemWidgetId(column, "template-1")).toBe("widget-1");
+    expect(JsonColumn.getItemProperty(column, "template-1")).toBe(ValueProperty.DATE);
+  });
+
+  it("overwrites a template's item when set again", () => {
+    let column = JsonColumn.setItem(
+      getMockBoardColumnDraft(),
+      "template-1",
+      "widget-1",
+      ValueProperty.DEFAULT,
+    );
+    column = JsonColumn.setItem(column, "template-1", "widget-2", ValueProperty.TIME);
+
+    expect(JsonColumn.getItem(column, "template-1")).toEqual({
+      widgetId: "widget-2",
+      property: ValueProperty.TIME,
+    });
+  });
+
+  it("removes an item", () => {
+    const withItem = JsonColumn.setItem(
+      getMockBoardColumnDraft(),
+      "template-1",
+      "widget-1",
+      ValueProperty.DEFAULT,
+    );
+
+    const column = JsonColumn.removeItem(withItem, "template-1");
+
+    expect(JsonColumn.getItem(column, "template-1")).toBeNull();
   });
 });

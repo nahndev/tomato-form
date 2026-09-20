@@ -17,9 +17,13 @@ website/src/types/template.ts
   WidgetGroup                   common | media | advance | system | DEFAULT
 
 website/src/features/template/constants/widget/
-  widgetItems.ts    WidgetItems: Record<WidgetType, WidgetItemDefinition>
-  settings.ts       DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties>
-  layouts.ts        DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">>
+  widgetItems.ts       WidgetItems: Record<WidgetType, WidgetItemDefinition>
+  settings.ts          DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties>
+  layouts.ts           DEFAULT_LAYOUTS: Record<WidgetType, Omit<GridLayout, "idx">>
+  displayTypes.ts      DISPLAY_TYPE_REGISTRY: Record<DisplayType, DisplayTypeDefinition> (icon/label/color per DisplayType, for board columns)
+  valueProperties.ts   WIDGET_VALUE_PROPERTY_REGISTRY: Record<WidgetType, Partial<Record<ValueProperty, DisplayType[]>>>
+                       - which value-properties a widget's value exposes (e.g. datetime's default/date/time), and which
+                       DisplayType(s) each one may render as on a board column - see docs/v1.0.0/add-column-cell-property.md
 
 website/src/features/template/components/widget/
   registry.ts                 WidgetComponents: Record<WidgetType, WidgetComponent>
