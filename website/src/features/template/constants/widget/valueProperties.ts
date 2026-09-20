@@ -58,8 +58,9 @@ export function getWidgetDisplayTypes(type: WidgetType): DisplayType[] {
   return Array.from(new Set(Object.values(WIDGET_VALUE_PROPERTY_REGISTRY[type]).flat()));
 }
 
+/** Short, composable labels (e.g. "<widget label> as Date") for a widget+property combo in a flattened options list. `default` has no suffix - only non-default properties need to be called out. */
 export const VALUE_PROPERTY_LABELS: Record<ValueProperty, string> = {
   [ValueProperty.DEFAULT]: "Default",
-  [ValueProperty.DATE]: "Date only",
-  [ValueProperty.TIME]: "Time only",
+  [ValueProperty.DATE]: "Date",
+  [ValueProperty.TIME]: "Time",
 };

@@ -12,7 +12,7 @@ describe("BoardColumnDto", () => {
     id: "col-1",
     type: "text",
     size: { width: 150 },
-    items: { "template-1": { widgetId: "widget-1", property: "default" } },
+    items: { "template-1": "widget-1:default" },
   };
 
   it("accepts a fully valid column", async () => {
@@ -53,7 +53,7 @@ describe("BoardColumnDto", () => {
     expect(errors).toHaveLength(0);
   });
 
-  it("rejects a column whose items value is not an object", async () => {
+  it("rejects a column whose items value is not a string", async () => {
     const errors = await validateColumn({
       ...validPayload,
       items: { "template-1": 123 },
@@ -64,15 +64,15 @@ describe("BoardColumnDto", () => {
   it("rejects a column whose items is an array", async () => {
     const errors = await validateColumn({
       ...validPayload,
-      items: [{ templateId: "template-1", widgetId: "widget-1", property: "default" }],
+      items: [{ templateId: "template-1", widgetId: "widget-1" }],
     });
     expect(errors.some((e) => e.property === "items")).toBe(true);
   });
 
-  it("rejects a column item missing a widgetId", async () => {
+  it("rejects a column item with no property suffix", async () => {
     const errors = await validateColumn({
       ...validPayload,
-      items: { "template-1": { property: "default" } },
+      items: { "template-1": "widget-1" },
     });
     expect(errors.some((e) => e.property === "items")).toBe(true);
   });
@@ -80,7 +80,7 @@ describe("BoardColumnDto", () => {
   it("rejects a column item with an empty widgetId", async () => {
     const errors = await validateColumn({
       ...validPayload,
-      items: { "template-1": { widgetId: "", property: "default" } },
+      items: { "template-1": ":default" },
     });
     expect(errors.some((e) => e.property === "items")).toBe(true);
   });
@@ -88,15 +88,15 @@ describe("BoardColumnDto", () => {
   it("rejects a column item with an unknown property", async () => {
     const errors = await validateColumn({
       ...validPayload,
-      items: { "template-1": { widgetId: "widget-1", property: "bogus" } },
+      items: { "template-1": "widget-1:bogus" },
     });
     expect(errors.some((e) => e.property === "items")).toBe(true);
   });
 
-  it("rejects a column item missing a property", async () => {
+  it("rejects a column item with more than one colon", async () => {
     const errors = await validateColumn({
       ...validPayload,
-      items: { "template-1": { widgetId: "widget-1" } },
+      items: { "template-1": "widget-1:default:extra" },
     });
     expect(errors.some((e) => e.property === "items")).toBe(true);
   });
@@ -114,7 +114,7 @@ describe("BoardColumnDto", () => {
   it("accepts a datetime column item with the date property", async () => {
     const errors = await validateColumn({
       ...validPayload,
-      items: { "template-1": { widgetId: "widget-1", property: "date" } },
+      items: { "template-1": "widget-1:date" },
     });
     expect(errors).toHaveLength(0);
   });
@@ -122,7 +122,7 @@ describe("BoardColumnDto", () => {
   it("accepts a datetime column item with the time property", async () => {
     const errors = await validateColumn({
       ...validPayload,
-      items: { "template-1": { widgetId: "widget-1", property: "time" } },
+      items: { "template-1": "widget-1:time" },
     });
     expect(errors).toHaveLength(0);
   });

@@ -1,4 +1,3 @@
-import type { ValueProperty } from "@/features/template/constants/widget/valueProperties";
 import type { DisplayType } from "./display-type";
 import type { Template } from "./template";
 
@@ -11,18 +10,13 @@ export type BoardTabValue = (typeof BoardTabValue)[keyof typeof BoardTabValue];
 
 export type ColumnSize = { width: number } | { flex: number };
 
-/** The widget picked from a linked template, and which value-property of it to display. */
-export interface BoardColumnItem {
-  widgetId: string;
-  property: ValueProperty;
-}
-
 export interface BoardColumn {
   id: string;
   type: DisplayType;
   size: ColumnSize;
   label: string;
-  items: Record<string, BoardColumnItem>;
+  /** Map of templateId to a `widgetId:property` compound key - the widget picked from that template, and which value-property of it to display. widgetId and property never change independently of each other, so they're stored as one immutable key rather than an editable object. */
+  items: Record<string, string>;
 }
 
 /** Shape of a column while it's being edited on the board settings screen, before it's ready to save. */

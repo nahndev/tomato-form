@@ -71,6 +71,11 @@ export type ValuePropertyDto =
 
 const VALUE_PROPERTY_DTO_VALUES: readonly string[] = Object.values(ValuePropertyDto);
 
+/**
+ * Column items are stored as `widgetId:property` compound keys - widgetId and
+ * property are always picked together and never change independently, so
+ * there's no need to model them as a separate object.
+ */
 @ValidatorConstraint({ name: "isBoardColumnItems", async: false })
 class IsBoardColumnItemsConstraint implements ValidatorConstraintInterface {
   validate(value: unknown): boolean {
@@ -78,34 +83,24 @@ class IsBoardColumnItemsConstraint implements ValidatorConstraintInterface {
       return false;
 
     return Object.entries(value as Record<string, unknown>).every(
-      ([templateId, item]) =>
-        templateId.length > 0 &&
-        typeof item === "object" &&
-        item !== null &&
-        !Array.isArray(item) &&
-        typeof (item as Record<string, unknown>).widgetId === "string" &&
-        ((item as Record<string, unknown>).widgetId as string).length > 0 &&
-        VALUE_PROPERTY_DTO_VALUES.includes(
-          (item as Record<string, unknown>).property as string,
-        ),
+      ([templateId, itemKey]) => {
+        if (templateId.length === 0 || typeof itemKey !== "string") return false;
+
+        const parts = itemKey.split(":");
+        if (parts.length !== 2) return false;
+
+        const [widgetId, property] = parts;
+        return widgetId.length > 0 && VALUE_PROPERTY_DTO_VALUES.includes(property);
+      },
     );
   }
 
   defaultMessage(args: ValidationArguments): string {
-    return `${args.property} must be an object mapping templateId to { widgetId, property }`;
+    return `${args.property} must be an object mapping templateId to a "widgetId:property" string`;
   }
 }
 
-/** One column item: the widget picked from a linked template, and which value-property of it to display. */
-export class BoardColumnItemDto {
-  @ApiProperty()
-  widgetId!: string;
-
-  @ApiProperty({ enum: ValuePropertyDto })
-  property!: ValuePropertyDto;
-}
-
-@ApiExtraModels(ColumnWidthDto, ColumnFlexDto, BoardColumnItemDto)
+@ApiExtraModels(ColumnWidthDto, ColumnFlexDto)
 export class BoardColumnDto {
   @ApiProperty()
   @IsString()
@@ -132,11 +127,11 @@ export class BoardColumnDto {
   label?: string | null;
 
   @ApiProperty({
-    description: "Map of templateId to the widget + value-property picked from that template",
+    description: "Map of templateId to a \"widgetId:property\" string - the widget + value-property picked from that template",
     type: "object",
-    additionalProperties: { $ref: getSchemaPath(BoardColumnItemDto) },
-    example: { "template-1": { widgetId: "widget-1", property: "default" } },
+    additionalProperties: { type: "string" },
+    example: { "template-1": "widget-1:default" },
   })
   @Validate(IsBoardColumnItemsConstraint)
-  items!: Record<string, BoardColumnItemDto>;
+  items!: Record<string, string>;
 }

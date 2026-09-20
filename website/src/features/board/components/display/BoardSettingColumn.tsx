@@ -13,7 +13,7 @@ import { getSelectedColumnItems } from "@/features/board/utils/boardColumnWidget
 import { JsonColumn } from "@/features/board/utils/column";
 import { getCommonDisplayTypes } from "@/features/board/utils/displayTypeHelper";
 import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget";
-import type { BoardColumnDraft, BoardColumnItem } from "@/types/board";
+import type { BoardColumnDraft } from "@/types/board";
 import { DisplayType } from "@/types/display-type";
 import type { Template } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
@@ -33,10 +33,10 @@ const BoardSettingColumn: React.FC<BoardSettingColumnProps> = ({
   onChangeColumn,
   onRemoveColumn,
 }) => {
-  function pickWidget(templateId: string, item: BoardColumnItem | null) {
+  function pickWidget(templateId: string, itemKey: string | null) {
     onChangeColumn(
-      item
-        ? JsonColumn.setItem(column, templateId, item.widgetId, item.property)
+      itemKey
+        ? JsonColumn.setItem(column, templateId, itemKey)
         : JsonColumn.removeItem(column, templateId),
     );
   }

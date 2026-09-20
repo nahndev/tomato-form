@@ -18,8 +18,7 @@ describe("JsonSubmission.getDisplayValue", () => {
     const column = JsonColumn.setItem(
       getMockBoardColumn(),
       "template-1",
-      "widget-1",
-      ValueProperty.DEFAULT,
+      JsonColumn.formatItemKey("widget-1", ValueProperty.DEFAULT),
     );
     const submission = getMockSubmission({
       templateId: "template-1",
@@ -33,8 +32,7 @@ describe("JsonSubmission.getDisplayValue", () => {
     const column = JsonColumn.setItem(
       getMockBoardColumn(),
       "template-1",
-      "widget-1",
-      ValueProperty.TIME,
+      JsonColumn.formatItemKey("widget-1", ValueProperty.TIME),
     );
     const submission = getMockSubmission({
       templateId: "template-1",

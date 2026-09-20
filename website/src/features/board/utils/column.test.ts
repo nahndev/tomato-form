@@ -60,18 +60,24 @@ describe("JsonColumn items", () => {
     expect(JsonColumn.getItemProperty(column, "template-1")).toBeNull();
   });
 
+  it("formats and parses a widgetId:property compound key", () => {
+    const key = JsonColumn.formatItemKey("widget-1", ValueProperty.DATE);
+
+    expect(key).toBe("widget-1:date");
+    expect(JsonColumn.parseItemKey(key)).toEqual({
+      widgetId: "widget-1",
+      property: ValueProperty.DATE,
+    });
+  });
+
   it("sets and reads back a widget + property for a template", () => {
     const column = JsonColumn.setItem(
       getMockBoardColumnDraft(),
       "template-1",
-      "widget-1",
-      ValueProperty.DATE,
+      JsonColumn.formatItemKey("widget-1", ValueProperty.DATE),
     );
 
-    expect(JsonColumn.getItem(column, "template-1")).toEqual({
-      widgetId: "widget-1",
-      property: ValueProperty.DATE,
-    });
+    expect(JsonColumn.getItem(column, "template-1")).toBe("widget-1:date");
     expect(JsonColumn.getItemWidgetId(column, "template-1")).toBe("widget-1");
     expect(JsonColumn.getItemProperty(column, "template-1")).toBe(ValueProperty.DATE);
   });
@@ -80,23 +86,22 @@ describe("JsonColumn items", () => {
     let column = JsonColumn.setItem(
       getMockBoardColumnDraft(),
       "template-1",
-      "widget-1",
-      ValueProperty.DEFAULT,
+      JsonColumn.formatItemKey("widget-1", ValueProperty.DEFAULT),
     );
-    column = JsonColumn.setItem(column, "template-1", "widget-2", ValueProperty.TIME);
+    column = JsonColumn.setItem(
+      column,
+      "template-1",
+      JsonColumn.formatItemKey("widget-2", ValueProperty.TIME),
+    );
 
-    expect(JsonColumn.getItem(column, "template-1")).toEqual({
-      widgetId: "widget-2",
-      property: ValueProperty.TIME,
-    });
+    expect(JsonColumn.getItem(column, "template-1")).toBe("widget-2:time");
   });
 
   it("removes an item", () => {
     const withItem = JsonColumn.setItem(
       getMockBoardColumnDraft(),
       "template-1",
-      "widget-1",
-      ValueProperty.DEFAULT,
+      JsonColumn.formatItemKey("widget-1", ValueProperty.DEFAULT),
     );
 
     const column = JsonColumn.removeItem(withItem, "template-1");
