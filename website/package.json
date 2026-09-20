@@ -26,6 +26,7 @@
     "@tomato/grid": "workspace:*",
     "@tomato/icon": "workspace:*",
     "@tomato/sync": "workspace:*",
+    "@tomato/timeline": "workspace:*",
     "axios": "^1.17.0",
     "canvas": "4.0.0-rc3",
     "class-variance-authority": "^0.7.1",
