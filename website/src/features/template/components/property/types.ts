@@ -4,6 +4,22 @@ import type { ComponentType } from "react";
 
 export type WidgetPropertyKey = keyof WidgetProperties;
 
+/**
+ * Canonical `WidgetPropertyKey` values. `WIDGET_PROPERTY_REGISTRY` and
+ * `PROPERTY_DESCRIPTOR_REGISTRY` reference these instead of magic strings,
+ * so a typo fails to compile rather than silently dropping a property.
+ */
+export const PropertyKey = {
+  Label: "label",
+  Placeholder: "placeholder",
+  Required: "required",
+  Options: "options",
+  Content: "content",
+  Actions: "actions",
+  TextStyle: "textStyle",
+  ContainerStyle: "containerStyle",
+} as const satisfies Record<string, WidgetPropertyKey>;
+
 export interface WidgetPropertyFieldProps<
   K extends WidgetPropertyKey = WidgetPropertyKey,
 > {
@@ -13,12 +29,14 @@ export interface WidgetPropertyFieldProps<
 }
 
 export interface WidgetPropertyDescriptor {
-  key: WidgetPropertyKey;
   label: string;
   Component: ComponentType<WidgetPropertyFieldProps>;
 }
 
-export type WidgetPropertyRegistry = Record<
-  WidgetType,
-  WidgetPropertyDescriptor[]
+/** Property information (label, field component) keyed by `WidgetPropertyKey`. */
+export type WidgetPropertyDescriptorRegistry = Partial<
+  Record<WidgetPropertyKey, WidgetPropertyDescriptor>
 >;
+
+/** Property keys shown per `WidgetType`, in display order. */
+export type WidgetPropertyRegistry = Record<WidgetType, WidgetPropertyKey[]>;

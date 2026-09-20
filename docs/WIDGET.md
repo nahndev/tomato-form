@@ -27,8 +27,9 @@ website/src/features/template/components/widget/
   items/<Type>WidgetItem.tsx   field component per type
 
 website/src/features/template/components/property/
-  registry.ts                       WIDGET_PROPERTY_REGISTRY: Record<WidgetType, WidgetPropertyDescriptor[]>
-  types.ts                          WidgetPropertyDescriptor { key, label, Component }
+  registry.ts                       WIDGET_PROPERTY_REGISTRY: Record<WidgetType, WidgetPropertyKey[]>
+  descriptors/registry.ts           PROPERTY_DESCRIPTOR_REGISTRY: Partial<Record<WidgetPropertyKey, WidgetPropertyDescriptor>>
+  types.ts                          WidgetPropertyDescriptor { label, Component }, keyed by WidgetPropertyKey
   descriptors/<Key>Descriptor.tsx   one per WidgetProperties key
 
 website/src/features/template/components/toolbar/
@@ -62,10 +63,11 @@ wired to real value/onChange.
    `FieldComponentProps<TValue>`. Call `onChange` on edits; skip if the
    widget has no value (`break`/`label`/`button`-style).
 6. `components/widget/registry.ts` — add to `WidgetComponents`.
-7. `components/property/registry.ts` — add `WIDGET_PROPERTY_REGISTRY[WidgetType.RATING]`
-   (existing descriptors `LABEL`/`PLACEHOLDER`/`REQUIRED`/`OPTIONS`/`CONTENT`/
-   `ACTIONS`/`TEXT_STYLE`/`CONTAINER_STYLE`, or add a new `WidgetProperties`
-   key + descriptor).
+7. `components/property/registry.ts` — add `WIDGET_PROPERTY_REGISTRY[WidgetType.RATING]`,
+   a list of `WidgetPropertyKey`s to show (existing keys `"label"`/`"placeholder"`/
+   `"required"`/`"options"`/`"content"`/`"actions"`/`"textStyle"`/`"containerStyle"`,
+   or add a new `WidgetProperties` key + an entry in
+   `components/property/descriptors/registry.ts`'s `PROPERTY_DESCRIPTOR_REGISTRY`).
 
 No other file needs changes; all consumers key off these `Record<WidgetType, ...>` registries.
 

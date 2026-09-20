@@ -1,5 +1,6 @@
 "use client";
 
+import { PROPERTY_DESCRIPTOR_REGISTRY } from "@/features/template/components/property/descriptors/registry";
 import { WIDGET_PROPERTY_REGISTRY } from "@/features/template/components/property/registry";
 import { useWidgetActions } from "@/features/template/sync/hooks/useWidgetActions";
 import type { Widget } from "@/types/template";
@@ -11,9 +12,9 @@ interface WidgetPropertyContentProps {
 /** Inline property editor for the selected widget, backed directly by the yjs doc. */
 export function WidgetPropertyContent({ widget }: WidgetPropertyContentProps) {
   const { setProperty } = useWidgetActions();
-  const descriptors = WIDGET_PROPERTY_REGISTRY[widget.type];
+  const keys = WIDGET_PROPERTY_REGISTRY[widget.type];
 
-  if (descriptors.length === 0) {
+  if (keys.length === 0) {
     return (
       <p className="py-6 text-center text-sm text-muted-foreground">
         This widget has no configurable properties.
@@ -23,14 +24,20 @@ export function WidgetPropertyContent({ widget }: WidgetPropertyContentProps) {
 
   return (
     <div key={widget.id} className="flex flex-col gap-4">
-      {descriptors.map((descriptor) => (
-        <descriptor.Component
-          key={descriptor.key}
-          widgetType={widget.type}
-          value={widget[descriptor.key]}
-          onChange={(value) => setProperty(widget.id, descriptor.key, value)}
-        />
-      ))}
+      {keys.map((key) => {
+        const descriptor = PROPERTY_DESCRIPTOR_REGISTRY[key];
+        if (!descriptor) return null;
+
+        const { Component } = descriptor;
+        return (
+          <Component
+            key={key}
+            widgetType={widget.type}
+            value={widget[key]}
+            onChange={(value) => setProperty(widget.id, key, value)}
+          />
+        );
+      })}
     </div>
   );
 }
