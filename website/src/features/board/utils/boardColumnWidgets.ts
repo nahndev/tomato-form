@@ -43,15 +43,3 @@ export function getSelectedColumnItems(
     },
   );
 }
-
-export function getWidgetOptionLabel(snapshot: TemplateSnapshot, widgetId: string): string {
-  const widget = snapshot.widgets[widgetId];
-  if (!widget) return "Unknown widget";
-
-  const sessionId = snapshot.widgetToSession[widgetId];
-  const sessionName = sessionId
-    ? snapshot.sessions[sessionId]?.name
-    : undefined;
-
-  return sessionName ? `${sessionName}/${widget.label}` : widget.label;
-}
