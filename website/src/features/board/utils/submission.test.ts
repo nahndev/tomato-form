@@ -1,4 +1,4 @@
-import { ValueProperty } from "@/features/board/constants/column/valueProperties";
+import { ValueType } from "@/features/board/constants/column/valueTypes";
 import {
   getMockBoardColumn,
   getMockSubmission,
@@ -18,7 +18,7 @@ describe("JsonSubmission.getDisplayValue", () => {
     const column = JsonColumn.setItem(
       getMockBoardColumn(),
       "template-1",
-      { widgetId: "widget-1", property: ValueProperty.DEFAULT },
+      { widgetId: "widget-1", property: ValueType.DEFAULT },
     );
     const submission = getMockSubmission({
       templateId: "template-1",
@@ -32,7 +32,7 @@ describe("JsonSubmission.getDisplayValue", () => {
     const column = JsonColumn.setItem(
       getMockBoardColumn(),
       "template-1",
-      { widgetId: "widget-1", property: ValueProperty.TIME },
+      { widgetId: "widget-1", property: ValueType.TIME },
     );
     const submission = getMockSubmission({
       templateId: "template-1",

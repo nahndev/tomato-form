@@ -1,4 +1,4 @@
-import { ValueProperty } from "@/features/board/constants/column/valueProperties";
+import { ValueType } from "@/features/board/constants/column/valueTypes";
 import {
   getMockBoardColumn,
   getMockBoardColumnDraft,
@@ -64,32 +64,32 @@ describe("JsonColumn items", () => {
     const column = JsonColumn.setItem(
       getMockBoardColumnDraft(),
       "template-1",
-      { widgetId: "widget-1", property: ValueProperty.DATE },
+      { widgetId: "widget-1", property: ValueType.DATE },
     );
 
     expect(JsonColumn.getItem(column, "template-1")).toEqual({
       widgetId: "widget-1",
-      property: ValueProperty.DATE,
+      property: ValueType.DATE,
     });
     expect(JsonColumn.getItemWidgetId(column, "template-1")).toBe("widget-1");
-    expect(JsonColumn.getItemProperty(column, "template-1")).toBe(ValueProperty.DATE);
+    expect(JsonColumn.getItemProperty(column, "template-1")).toBe(ValueType.DATE);
   });
 
   it("overwrites a template's item when set again", () => {
     let column = JsonColumn.setItem(
       getMockBoardColumnDraft(),
       "template-1",
-      { widgetId: "widget-1", property: ValueProperty.DEFAULT },
+      { widgetId: "widget-1", property: ValueType.DEFAULT },
     );
     column = JsonColumn.setItem(
       column,
       "template-1",
-      { widgetId: "widget-2", property: ValueProperty.TIME },
+      { widgetId: "widget-2", property: ValueType.TIME },
     );
 
     expect(JsonColumn.getItem(column, "template-1")).toEqual({
       widgetId: "widget-2",
-      property: ValueProperty.TIME,
+      property: ValueType.TIME,
     });
   });
 
@@ -97,7 +97,7 @@ describe("JsonColumn items", () => {
     const withItem = JsonColumn.setItem(
       getMockBoardColumnDraft(),
       "template-1",
-      { widgetId: "widget-1", property: ValueProperty.DEFAULT },
+      { widgetId: "widget-1", property: ValueType.DEFAULT },
     );
 
     const column = JsonColumn.removeItem(withItem, "template-1");

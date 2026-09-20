@@ -1,13 +1,13 @@
 import {
-  getPropertyDisplayTypes,
-  type ValueProperty,
-} from "@/features/board/constants/column/valueProperties";
+  getValueTypeDisplayTypes,
+  type ValueType,
+} from "@/features/board/constants/column/valueTypes";
 import type { DisplayType } from "@/types/display-type";
 import type { WidgetType } from "@/types/widget";
 
 export interface DisplayTypeEntry {
   widgetType: WidgetType;
-  property: ValueProperty;
+  property: ValueType;
 }
 
 /**
@@ -20,6 +20,6 @@ export function getCommonDisplayTypes(entries: DisplayTypeEntry[]): DisplayType[
   if (entries.length === 0) return null;
 
   return entries
-    .map(({ widgetType, property }) => getPropertyDisplayTypes(widgetType, property))
+    .map(({ widgetType, property }) => getValueTypeDisplayTypes(widgetType, property))
     .reduce((common, types) => common.filter((type) => types.includes(type)));
 }

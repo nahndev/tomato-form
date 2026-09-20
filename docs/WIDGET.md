@@ -24,7 +24,7 @@ website/src/features/template/constants/widget/
 Board-column rendering of a widget's value lives under the board feature, not
 here - see docs/v1.0.0/add-column-cell-property.md for:
   website/src/features/board/constants/column/displayTypes.ts      DISPLAY_TYPE_REGISTRY
-  website/src/features/board/constants/column/valueProperties.ts   WIDGET_VALUE_PROPERTY_REGISTRY
+  website/src/features/board/constants/column/valueTypes.ts        WIDGET_VALUE_TYPE_REGISTRY
 
 website/src/features/template/components/widget/
   registry.ts                 WidgetComponents: Record<WidgetType, WidgetComponent>

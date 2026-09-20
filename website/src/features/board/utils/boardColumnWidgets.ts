@@ -1,7 +1,7 @@
 import {
   getWidgetDisplayTypes,
-  type ValueProperty,
-} from "@/features/board/constants/column/valueProperties";
+  type ValueType,
+} from "@/features/board/constants/column/valueTypes";
 import { JsonColumn } from "@/features/board/utils/column";
 import type { BoardColumnDraft, ColumnSize } from "@/types/board";
 import type { Template, TemplateSnapshot, Widget } from "@/types/template";
@@ -27,7 +27,7 @@ export function getDataFieldWidgets(snapshot: TemplateSnapshot): Widget[] {
 export interface SelectedColumnItem {
   templateId: string;
   widget: Widget;
-  property: ValueProperty;
+  property: ValueType;
 }
 
 /** Resolves each column item to its widget definition, dropping items whose template/widget no longer exists. */
@@ -39,7 +39,7 @@ export function getSelectedColumnItems(
     ([templateId, { widgetId, property }]) => {
       const template = templates.find((t) => t.id === templateId);
       const widget = template?.snapshot.widgets[widgetId];
-      return widget ? [{ templateId, widget, property: property as ValueProperty }] : [];
+      return widget ? [{ templateId, widget, property: property as ValueType }] : [];
     },
   );
 }

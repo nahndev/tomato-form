@@ -58,8 +58,8 @@ export type BoardColumnDisplayTypeDto =
 
 /**
  * Which value-property of a widget a column item targets (e.g. `datetime`'s
- * `date`/`time` sub-views vs its `default` full value) — mirrors `ValueProperty`
- * in `website/src/features/template/constants/widget/valueProperties.ts`.
+ * `date`/`time` sub-views vs its `default` full value) — mirrors `ValueType`
+ * in `website/src/features/board/constants/column/valueTypes.ts`.
  */
 export const ValuePropertyDto = {
   DEFAULT: "default",

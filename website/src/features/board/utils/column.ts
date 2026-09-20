@@ -1,5 +1,5 @@
 import { DEFAULT_COLUMN_SIZE } from "@/features/board/components/display/constants/size";
-import type { ValueProperty } from "@/features/board/constants/column/valueProperties";
+import type { ValueType } from "@/features/board/constants/column/valueTypes";
 import type { BoardColumn, BoardColumnDraft, BoardColumnItem, ColumnSize } from "@/types/board";
 import type { DisplayType } from "@/types/display-type";
 import { v4 } from "uuid";
@@ -68,8 +68,8 @@ export class JsonColumn {
   static getItemProperty(
     column: BoardColumnDraft,
     templateId: string,
-  ): ValueProperty | null {
-    return (JsonColumn.getItem(column, templateId)?.property as ValueProperty | undefined) ?? null;
+  ): ValueType | null {
+    return (JsonColumn.getItem(column, templateId)?.property as ValueType | undefined) ?? null;
   }
 
   /** Stores the already-resolved widget + property for a template - they're always picked together, so there's no separate setter for each. */

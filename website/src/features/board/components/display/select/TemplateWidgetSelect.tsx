@@ -8,11 +8,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  VALUE_PROPERTY_LABELS,
-  ValueProperty,
-  getPropertyDisplayTypes,
-  getWidgetValueProperties,
-} from "@/features/board/constants/column/valueProperties";
+  VALUE_TYPE_LABELS,
+  ValueType,
+  getValueTypeDisplayTypes,
+  getWidgetValueTypes,
+} from "@/features/board/constants/column/valueTypes";
 import { useTemplateWidgetsByDisplayTypes } from "@/features/board/hooks/useTemplateWidgetsByDisplayTypes";
 import { getWidgetOptionLabel } from "@/features/board/utils/boardColumnWidgets";
 import { formatItemKey, parseItemKey } from "@/features/board/utils/itemKey";
@@ -32,9 +32,9 @@ export interface TemplateWidgetSelectProps {
 }
 
 /**
- * Widget + value-property picker for one linked template, flattened into a single select:
- * a widget with only one property (the common case) shows once, a widget with more than
- * one (e.g. `datetime`) shows once per property it exposes that fits `allowDisplayTypes`
+ * Widget + value-type picker for one linked template, flattened into a single select:
+ * a widget with only one value type (the common case) shows once, a widget with more than
+ * one (e.g. `datetime`) shows once per value type it exposes that fits `allowDisplayTypes`
  * (e.g. "Meeting time" / "Meeting time as Date" / "Meeting time as Time").
  */
 const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
@@ -52,26 +52,28 @@ const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
       widgets.flatMap((widget) => {
         const widgetLabel = getWidgetOptionLabel(snapshot, widget.id);
 
-        return getWidgetValueProperties(widget.type)
+        return getWidgetValueTypes(widget.type)
           .filter(
-            (property) =>
+            (valueType) =>
               allowDisplayTypes === null ||
-              getPropertyDisplayTypes(widget.type, property).some((type) =>
+              getValueTypeDisplayTypes(widget.type, valueType).some((type) =>
                 allowDisplayTypes.includes(type),
               ),
           )
-          .map((property) => ({
-            itemKey: formatItemKey(widget.id, property),
+          .map((valueType) => ({
+            itemKey: formatItemKey(widget.id, valueType),
             label:
-              property === ValueProperty.DEFAULT
+              valueType === ValueType.DEFAULT
                 ? widgetLabel
-                : `${widgetLabel} as ${VALUE_PROPERTY_LABELS[property]}`,
+                : `${widgetLabel} as ${VALUE_TYPE_LABELS[valueType]}`,
           }));
       }),
     [widgets, snapshot, allowDisplayTypes],
   );
 
-  const selectedKey = value ? formatItemKey(value.widgetId, value.property as ValueProperty) : UNSELECTED_WIDGET;
+  const selectedKey = value
+    ? formatItemKey(value.widgetId, value.property as ValueType)
+    : UNSELECTED_WIDGET;
 
   return (
     <Select

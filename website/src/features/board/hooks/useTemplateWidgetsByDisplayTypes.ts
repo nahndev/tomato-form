@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { getWidgetDisplayTypes } from "@/features/board/constants/column/valueProperties";
+import { getWidgetDisplayTypes } from "@/features/board/constants/column/valueTypes";
 import { getDataFieldWidgets } from "@/features/board/utils/boardColumnWidgets";
 import type { DisplayType } from "@/types/display-type";
 import type { Template, Widget } from "@/types/template";

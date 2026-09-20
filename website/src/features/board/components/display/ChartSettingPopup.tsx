@@ -23,7 +23,7 @@ import {
 import { toast } from "@/components/ui/sonner";
 import TemplateWidgetSelect from "@/features/board/components/display/select/TemplateWidgetSelect";
 import { useUpdateBoard } from "@/features/board/hooks/useBoards";
-import type { ValueProperty } from "@/features/board/constants/column/valueProperties";
+import type { ValueType } from "@/features/board/constants/column/valueTypes";
 import { formatItemKey, parseItemKey } from "@/features/board/utils/itemKey";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { ChartAggregation, ChartKind, BoardViewType } from "@/types/board-view";
@@ -140,7 +140,7 @@ const ChartSettingPopup: React.FC<ChartSettingPopupProps> = ({
 
   function pickGroupBy(templateId: string, item: BoardColumnItem | null) {
     const groupBy = { ...formik.values.groupBy };
-    if (item) groupBy[templateId] = formatItemKey(item.widgetId, item.property as ValueProperty);
+    if (item) groupBy[templateId] = formatItemKey(item.widgetId, item.property as ValueType);
     else delete groupBy[templateId];
     formik.setFieldValue("groupBy", groupBy);
     formik.setFieldTouched("groupBy", true, false);
@@ -148,7 +148,7 @@ const ChartSettingPopup: React.FC<ChartSettingPopupProps> = ({
 
   function pickValueField(templateId: string, item: BoardColumnItem | null) {
     const valueField = { ...formik.values.valueField };
-    if (item) valueField[templateId] = formatItemKey(item.widgetId, item.property as ValueProperty);
+    if (item) valueField[templateId] = formatItemKey(item.widgetId, item.property as ValueType);
     else delete valueField[templateId];
     formik.setFieldValue("valueField", valueField);
     formik.setFieldTouched("valueField", true, false);

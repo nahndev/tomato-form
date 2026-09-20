@@ -33,7 +33,7 @@ export type DisplayType = (typeof DISPLAY_TYPE)[keyof typeof DISPLAY_TYPE];
 /**
  * Which value-property of a widget an entry belongs to (e.g. `datetime`'s `date`/`time`
  * sub-views vs its `default` full value) - mirrors `ValueType` in
- * `website/src/features/template/constants/widget/valueProperties.ts`, hand mirrored since
+ * `website/src/features/board/constants/column/valueTypes.ts`, hand mirrored since
  * there's no shared-types package between web and server in this monorepo.
  */
 export const VALUE_TYPE = {
