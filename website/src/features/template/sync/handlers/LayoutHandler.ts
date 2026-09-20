@@ -28,6 +28,12 @@ export class LayoutHandler {
     return this.layouts.get(widgetId);
   }
 
+  getWidgetIdsForSession(sessionId: string): string[] {
+    return Array.from(this.widgetToSession.entries())
+      .filter(([, sid]) => sid === sessionId)
+      .map(([widgetId]) => widgetId);
+  }
+
   setLayout(widgetId: string, sessionId: string, patch: Partial<GridLayout>): void {
     const current = this.layouts.get(widgetId) ?? DEFAULT_LAYOUT;
     this.layouts.set(widgetId, { ...current, ...patch });

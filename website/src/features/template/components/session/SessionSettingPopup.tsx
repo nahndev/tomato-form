@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -43,13 +54,14 @@ function defaultConditionFor(
   return { type, widgetId: fallbackWidgetId ?? "" };
 }
 
-/** Settings popup for a session - currently just its visibility condition. */
+/** Settings popup for a session - its visibility condition and removal. */
 const SessionSettingPopup: React.FC = () => {
   const sessionId = useSessionId();
   const { session } = useSessionState();
-  const { updateSession } = useSessionActions();
+  const { updateSession, removeSession } = useSessionActions();
   const { widgets, sessions, widgetToSession } = useTemplateState();
   const [open, setOpen] = useState(false);
+  const isOnlySession = Object.keys(sessions).length <= 1;
 
   const condition: SessionCondition =
     session?.condition ?? { type: SessionConditionType.ALWAYS };
@@ -145,6 +157,48 @@ const SessionSettingPopup: React.FC = () => {
               </Select>
             </div>
           )}
+
+          <div className="flex flex-col gap-1.5 border-t pt-4">
+            <Label>Danger zone</Label>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  disabled={isOnlySession}
+                  className="w-full justify-start"
+                >
+                  Remove session
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Remove this session?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This deletes the session and every field in it. This
+                    can&apos;t be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      removeSession(sessionId);
+                      setOpen(false);
+                    }}
+                  >
+                    Remove session
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            {isOnlySession && (
+              <p className="text-xs text-muted-foreground">
+                A template must have at least one session.
+              </p>
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>

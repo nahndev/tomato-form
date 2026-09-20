@@ -37,6 +37,12 @@ export class SessionUpdatedEvent extends SyncEvent {
   }
 }
 
+export class SessionRemovedEvent extends SyncEvent {
+  constructor(readonly sessionId: string) {
+    super();
+  }
+}
+
 export class LayoutUpdatedEvent extends SyncEvent {
   constructor(
     readonly widgetId: string,

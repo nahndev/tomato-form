@@ -1,6 +1,12 @@
 import type { Session, SessionProperties } from "@/types/template";
 import { SyncDoc, SyncHandler } from "@tomato/sync";
-import { SessionAddedEvent, SessionUpdatedEvent } from "../events";
+import {
+  SessionAddedEvent,
+  SessionRemovedEvent,
+  SessionUpdatedEvent,
+} from "../events";
+import { LayoutHandler } from "./LayoutHandler";
+import { WidgetHandler } from "./WidgetHandler";
 
 const DEFAULT_SESSION_ID = "default-session";
 const DEFAULT_SESSION_NAME = "Section 1";
@@ -44,5 +50,24 @@ export class SessionHandler {
     if (!current) return;
     this.sessions.set(sessionId, { ...current, ...patch });
     this.syncDoc.emit(new SessionUpdatedEvent(sessionId));
+  }
+
+  /**
+   * A template must always have at least one session, so removing the last
+   * one is a no-op rather than an error - mirrors how `updateSession` above
+   * silently no-ops on a missing id.
+   */
+  removeSession(sessionId: string): void {
+    if (!this.sessions.has(sessionId)) return;
+    if (this.sessions.size <= 1) return;
+
+    const widgetHandler = this.syncDoc.getHandler(WidgetHandler);
+    this.syncDoc
+      .getHandler(LayoutHandler)
+      .getWidgetIdsForSession(sessionId)
+      .forEach((widgetId) => widgetHandler.removeWidget(widgetId));
+
+    this.sessions.delete(sessionId);
+    this.syncDoc.emit(new SessionRemovedEvent(sessionId));
   }
 }

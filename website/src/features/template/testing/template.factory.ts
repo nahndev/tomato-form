@@ -1,6 +1,7 @@
 import { WidgetType } from "@/types/widget";
 import type {
   OptionItem,
+  Session,
   Template,
   TemplateSnapshot,
   Widget,
@@ -13,6 +14,14 @@ export function getMockWidget(overrides?: Partial<Widget>): Widget {
     id: mockId("widget"),
     type: WidgetType.TEXT,
     label: "Widget",
+    ...overrides,
+  };
+}
+
+export function getMockSession(overrides?: Partial<Session>): Session {
+  return {
+    id: mockId("session"),
+    name: "Session",
     ...overrides,
   };
 }

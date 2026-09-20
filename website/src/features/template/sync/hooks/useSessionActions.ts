@@ -8,6 +8,7 @@ import { SessionHandler } from "../handlers/SessionHandler";
 export interface SessionActions {
   addSession: (id: string, properties: SessionProperties) => void;
   updateSession: (sessionId: string, patch: Partial<SessionProperties>) => void;
+  removeSession: (sessionId: string) => void;
   updateLayout: (
     widgetId: string,
     sessionId: string,
@@ -31,6 +32,9 @@ export function useSessionActions(): SessionActions {
 
     updateSession: (sessionId, patch) =>
       transact(() => sessionHandler.updateSession(sessionId, patch)),
+
+    removeSession: (sessionId) =>
+      transact(() => sessionHandler.removeSession(sessionId)),
 
     updateLayout: (widgetId, sessionId, patch) =>
       transact(() => layoutHandler.setLayout(widgetId, sessionId, patch)),
