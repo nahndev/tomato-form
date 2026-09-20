@@ -69,6 +69,11 @@ Note: there is currently no auth/RBAC module — endpoints are not guarded and t
 - If exist `TASK.md`, mark completed tasks.
 - Read `./docs` as context
 
+## Handle base on tickets
+
+- When: handle base on file in `./docs/<version>/<ticket>.md`
+- After changed -> Must update `changelogs`
+
 ### Error Handling
 
 - NEVER swallow errors silently
@@ -125,6 +130,7 @@ Before implementing ANY task, check if relevant skills apply:
 - Building forms → `formik-patterns` skill
 - Debugging issues → `systematic-debugging` skill
 - UI components → `react-ui-patterns` skill
+- Starting a session / creating or updating a ticket doc → `ticket-workflow` skill
 
 ## Common Commands
 
@@ -143,15 +149,3 @@ pnpm test            # Run tests for this app
 # Git
 gh pr create         # Create PR
 ```
-
-## Document of features
-
-- Document saving in `./docs/features/TICKET.md`
-- Every session must exist TICKET, if don't detect must ask user.
-- Structure of TICKET.md
-  1. **Title** — Tóm tắt ngắn gọn (một dòng, dạng mệnh lệnh)
-  2. **Description** — Bối cảnh, lý do, mục tiêu, mockup/tài liệu tham khảo
-  3. **Acceptance Criteria** — Danh sách điều kiện hoàn thành (checklist hoặc Given-When-Then)
-  4. **Analysis and Evaluation** — Đánh giá kỹ thuật, rủi ro, phương án thực hiện
-  5. **Design** — Thiết kế kỹ thuật/kiến trúc (hoặc UI/UX nếu áp dụng)
-  6. **Checklist** — Các bước triển khai cụ thể, đánh dấu khi hoàn thành
