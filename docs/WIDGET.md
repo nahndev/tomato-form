@@ -34,6 +34,8 @@ website/src/features/template/components/property/
 
 website/src/features/template/components/toolbar/
   creation/WidgetPicker.tsx           reads WidgetItemList, calls addWidget
+  property/WidgetPropertyPanel.tsx    standalone left-hand panel (mirrors ToolbarPanel),
+                                       auto-opens via useWidgetSelection
   property/WidgetPropertyBox.tsx      shows WidgetPropertyContent for selected widget
   property/WidgetPropertyContent.tsx  reads WIDGET_PROPERTY_REGISTRY, calls setProperty
 

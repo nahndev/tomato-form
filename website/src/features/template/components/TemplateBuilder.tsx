@@ -3,6 +3,7 @@
 import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
 import TemplateCanvas from "@/features/template/components/template/TemplateCanvas";
 import ToolbarPanel from "@/features/template/components/toolbar/ToolbarPanel";
+import WidgetPropertyPanel from "@/features/template/components/toolbar/property/WidgetPropertyPanel";
 import { TemplateMode } from "@/types/template";
 
 interface TemplateBuilderProps {}
@@ -13,6 +14,7 @@ const TemplateBuilder: React.FC<TemplateBuilderProps> = () => {
 
   return (
     <div className="size-full overflow-hidden flex flex-row">
+      <WidgetPropertyPanel />
       <div className="flex-1">
         <TemplateCanvas />
       </div>
