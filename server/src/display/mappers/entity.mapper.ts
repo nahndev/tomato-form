@@ -1,17 +1,13 @@
-import { DISPLAY_TYPE, DisplayType } from "../display-mapper.types";
-import { DefaultMapper } from "./default.mapper";
+import type { Widget } from "@/template/template.types";
+import { DISPLAY_TYPE, DisplayMapperContext, DisplayMapperInterface, SubmissionDisplayDoc, VALUE_PROPERTY } from "../display-mapper.types";
 
 /** Formats value(s) as a string array for entity/option-style display (single value or multi-select); defaults to an empty choice list. */
-export class EntityMapper extends DefaultMapper {
-  protected readonly displayType: DisplayType = DISPLAY_TYPE.ENTITY;
-
-  protected getDefaultValue(): string[] {
-    return [];
-  }
-
-  protected format(value: unknown): string[] {
-    const entries = Array.isArray(value) ? value : [value];
-    return entries.map(String);
+export class EntityMapper implements DisplayMapperInterface {
+  map(doc: SubmissionDisplayDoc, widget: Widget, context: DisplayMapperContext): SubmissionDisplayDoc {
+    const value = context.submission.data[widget.id];
+    const resolved = value === null || value === undefined ? [] : (Array.isArray(value) ? value : [value]).map(String);
+    doc[`${widget.id}:${VALUE_PROPERTY.DEFAULT}`] = { [DISPLAY_TYPE.ENTITY]: resolved };
+    return doc;
   }
 }
 

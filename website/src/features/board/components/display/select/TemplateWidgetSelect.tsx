@@ -7,15 +7,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useTemplateWidgetsByDisplayTypes } from "@/features/board/hooks/useTemplateWidgetsByDisplayTypes";
-import { JsonColumn } from "@/features/board/utils/column";
-import { getWidgetOptionLabel } from "@/features/board/utils/boardColumnWidgets";
 import {
   VALUE_PROPERTY_LABELS,
   ValueProperty,
   getPropertyDisplayTypes,
   getWidgetValueProperties,
-} from "@/features/template/constants/widget/valueProperties";
+} from "@/features/board/constants/column/valueProperties";
+import { useTemplateWidgetsByDisplayTypes } from "@/features/board/hooks/useTemplateWidgetsByDisplayTypes";
+import { getWidgetOptionLabel } from "@/features/board/utils/boardColumnWidgets";
+import { JsonColumn } from "@/features/board/utils/column";
 import type { DisplayType } from "@/types/display-type";
 import type { Template } from "@/types/template";
 import { useMemo } from "react";

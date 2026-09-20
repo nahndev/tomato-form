@@ -1,6 +1,8 @@
+import {
+  getWidgetDisplayTypes,
+  type ValueProperty,
+} from "@/features/board/constants/column/valueProperties";
 import { JsonColumn } from "@/features/board/utils/column";
-import { getWidgetDisplayTypes } from "@/features/template/constants/widget/valueProperties";
-import type { ValueProperty } from "@/features/template/constants/widget/valueProperties";
 import type { BoardColumnDraft, ColumnSize } from "@/types/board";
 import type { Template, TemplateSnapshot, Widget } from "@/types/template";
 import type { CSSProperties } from "react";

@@ -1,5 +1,5 @@
+import { ValueProperty } from "@/features/board/constants/column/valueProperties";
 import { getCommonDisplayTypes } from "@/features/board/utils/displayTypeHelper";
-import { ValueProperty } from "@/features/template/constants/widget/valueProperties";
 import { DisplayType } from "@/types/display-type";
 import { WidgetType } from "@/types/widget";
 

@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DISPLAY_TYPE_LIST } from "@/features/template/constants/widget";
+import { DISPLAY_TYPE_LIST } from "@/features/board/constants/column/displayTypes";
 import { DisplayType } from "@/types/display-type";
 
 const SELECTABLE_DISPLAY_TYPES = DISPLAY_TYPE_LIST.filter(

@@ -1,10 +1,10 @@
+import { ValueProperty } from "@/features/board/constants/column/valueProperties";
 import {
   getMockBoardColumn,
   getMockSubmission,
 } from "@/features/board/testing/board.factory";
 import { JsonColumn } from "@/features/board/utils/column";
 import { JsonSubmission } from "@/features/board/utils/submission";
-import { ValueProperty } from "@/features/template/constants/widget/valueProperties";
 
 describe("JsonSubmission.getDisplayValue", () => {
   it("returns undefined when the column has no item for the submission's template", () => {

@@ -1,5 +1,5 @@
 import { DEFAULT_COLUMN_SIZE } from "@/features/board/components/display/constants/size";
-import type { ValueProperty } from "@/features/template/constants/widget/valueProperties";
+import type { ValueProperty } from "@/features/board/constants/column/valueProperties";
 import type { BoardColumn, BoardColumnDraft, ColumnSize } from "@/types/board";
 import type { DisplayType } from "@/types/display-type";
 import { v4 } from "uuid";

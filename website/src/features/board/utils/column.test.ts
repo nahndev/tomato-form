@@ -1,9 +1,9 @@
-import { JsonColumn } from "@/features/board/utils/column";
+import { ValueProperty } from "@/features/board/constants/column/valueProperties";
 import {
   getMockBoardColumn,
   getMockBoardColumnDraft,
 } from "@/features/board/testing/board.factory";
-import { ValueProperty } from "@/features/template/constants/widget/valueProperties";
+import { JsonColumn } from "@/features/board/utils/column";
 import { DisplayType } from "@/types/display-type";
 
 describe("JsonColumn.isReadyToSave", () => {

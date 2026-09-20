@@ -1,4 +1,4 @@
-import { ActionsDescriptor } from "@/features/actions/components/ActionsDescriptor";
+import { ActionsDescriptor } from "@/features/template/components/property/descriptors/ActionsDescriptor";
 import { ContainerStyleDescriptor } from "@/features/template/components/property/descriptors/ContainerStyleDescriptor";
 import { ContentDescriptor } from "@/features/template/components/property/descriptors/ContentDescriptor";
 import { LabelDescriptor } from "@/features/template/components/property/descriptors/LabelDescriptor";
@@ -50,6 +50,7 @@ export const PROPERTY_DESCRIPTOR_REGISTRY: WidgetPropertyDescriptorRegistry = {
   },
   [PropertyKey.ContainerStyle]: {
     label: "Style",
-    Component: ContainerStyleDescriptor as ComponentType<WidgetPropertyFieldProps>,
+    Component:
+      ContainerStyleDescriptor as ComponentType<WidgetPropertyFieldProps>,
   },
 };

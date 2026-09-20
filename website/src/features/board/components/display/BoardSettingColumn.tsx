@@ -9,10 +9,10 @@ import TemplateWidgetSelect from "@/features/board/components/display/select/Tem
 import { SessionWrapper } from "@/features/board/components/display/session/SessionWrapper";
 import { RowWrapper } from "@/features/board/components/display/wrapper/RowWrapper";
 import { ZebraCell } from "@/features/board/components/display/wrapper/ZebraCell";
+import { DISPLAY_TYPE_REGISTRY } from "@/features/board/constants/column/displayTypes";
 import { getSelectedColumnItems } from "@/features/board/utils/boardColumnWidgets";
 import { JsonColumn } from "@/features/board/utils/column";
 import { getCommonDisplayTypes } from "@/features/board/utils/displayTypeHelper";
-import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget";
 import type { BoardColumnDraft } from "@/types/board";
 import { DisplayType } from "@/types/display-type";
 import type { Template } from "@/types/template";

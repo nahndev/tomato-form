@@ -1,5 +1,7 @@
-import { getPropertyDisplayTypes } from "@/features/template/constants/widget/valueProperties";
-import type { ValueProperty } from "@/features/template/constants/widget/valueProperties";
+import {
+  getPropertyDisplayTypes,
+  type ValueProperty,
+} from "@/features/board/constants/column/valueProperties";
 import type { DisplayType } from "@/types/display-type";
 import type { WidgetType } from "@/types/widget";
 

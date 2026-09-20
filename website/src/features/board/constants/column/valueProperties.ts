@@ -12,8 +12,8 @@ export type ValueProperty = ConstType<typeof ValueProperty>;
 /**
  * Which value-properties a widget type exposes (a "property of the value", not of the
  * widget's own settings - see docs/v1.0.0/add-column-cell-property.md), and which
- * DisplayType(s) each one may render as. Replaces WIDGET_DISPLAY_TYPE_REGISTRY.
- * Only `datetime` has more than one property.
+ * DisplayType(s) each one may render as on a board column. Only `datetime` has more
+ * than one property.
  */
 export const WIDGET_VALUE_PROPERTY_REGISTRY: Record<WidgetType, Partial<Record<ValueProperty, DisplayType[]>>> = {
   [WidgetType.TEXT]: { [ValueProperty.DEFAULT]: [DisplayType.TEXT] },

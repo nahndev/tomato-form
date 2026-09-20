@@ -1,34 +1,31 @@
-import { DISPLAY_TYPE, DisplayType, SubmissionDisplayValue, VALUE_PROPERTY } from "../display-mapper.types";
-import { DefaultMapper } from "./default.mapper";
+import type { Widget } from "@/template/template.types";
+import {
+  DisplayMapperContext,
+  SubmissionDisplayDoc,
+  VALUE_PROPERTY,
+  DisplayMapperInterface as WidgetMapperInterface,
+} from "../display-mapper.types";
 
 /**
- * Parses value into an epoch-ms timestamp for date display; defaults to `null` (including when
- * the value doesn't parse). Every date-family widget's properties allow rendering as `TEXT` too
- * (see `WIDGET_VALUE_PROPERTY_REGISTRY`), so every entry also gets a `.text` fallback - which
+ * Reads value as an epoch-ms timestamp for date display; defaults to `null` when the value isn't
+ * a number. Every date-family widget's properties allow rendering as `TEXT` too (see
+ * `WIDGET_VALUE_PROPERTY_REGISTRY`), so every entry also gets a `.text` fallback - which
  * DisplayType a column actually renders is a frontend concern, this doc just needs to have
  * every bucket ready regardless.
  */
-export class DateMapper extends DefaultMapper {
-  protected readonly displayType: DisplayType = DISPLAY_TYPE.DATE;
-
-  protected getDefaultValue(): null {
-    return null;
-  }
-
-  protected format(value: unknown): number | null {
-    if (typeof value === "number") return value;
-    if (typeof value === "string") {
-      const parsed = Date.parse(value);
-      return Number.isNaN(parsed) ? this.getDefaultValue() : parsed;
-    }
-    return this.getDefaultValue();
-  }
-
-  protected buildValue(resolved: unknown): SubmissionDisplayValue {
-    return {
+export class DateMapper implements WidgetMapperInterface {
+  map(
+    doc: SubmissionDisplayDoc,
+    widget: Widget,
+    context: DisplayMapperContext,
+  ): SubmissionDisplayDoc {
+    const value = context.submission.data[widget.id];
+    const resolved = typeof value === "number" ? value : null;
+    doc[`${widget.id}:${VALUE_PROPERTY.DEFAULT}`] = {
       date: resolved,
-      text: resolved === null ? "" : new Date(resolved as number).toLocaleDateString(),
+      text: resolved === null ? "" : new Date(resolved).toLocaleDateString(),
     };
+    return doc;
   }
 }
 
@@ -37,6 +34,21 @@ export class TimeWidgetDisplayMapper extends DateMapper {}
 export class CreatedAtWidgetDisplayMapper extends DateMapper {}
 
 /** The only widget with more than one value-property: exposes `default` (full date+time), `date`, and `time` as separate doc entries, all carrying the same resolved value. */
-export class DatetimeWidgetDisplayMapper extends DateMapper {
-  protected readonly properties = [VALUE_PROPERTY.DEFAULT, VALUE_PROPERTY.DATE, VALUE_PROPERTY.TIME];
+export class DatetimeWidgetDisplayMapper implements WidgetMapperInterface {
+  map(
+    doc: SubmissionDisplayDoc,
+    widget: Widget,
+    context: DisplayMapperContext,
+  ): SubmissionDisplayDoc {
+    const value = context.submission.data[widget.id];
+    const resolved = typeof value === "number" ? value : null;
+    const displayValue = {
+      date: resolved,
+      text: resolved === null ? "" : new Date(resolved).toLocaleDateString(),
+    };
+    doc[`${widget.id}:${VALUE_PROPERTY.DEFAULT}`] = displayValue;
+    doc[`${widget.id}:${VALUE_PROPERTY.DATE}`] = displayValue;
+    doc[`${widget.id}:${VALUE_PROPERTY.TIME}`] = displayValue;
+    return doc;
+  }
 }

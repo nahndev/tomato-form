@@ -1,6 +1,6 @@
 import { DISPLAY_VALUE_REGISTRY } from "@/features/board/components/submission/display/registry";
+import { DISPLAY_TYPE_REGISTRY } from "@/features/board/constants/column/displayTypes";
 import { getColumnSizeStyle } from "@/features/board/utils/boardColumnWidgets";
-import { DISPLAY_TYPE_REGISTRY } from "@/features/template/constants/widget/displayTypes";
 import { BoardColumn } from "@/types/board";
 import { SubmissionDisplayValue } from "@/types/submission-display";
 import { TomatoIcon } from "@tomato/icon";
