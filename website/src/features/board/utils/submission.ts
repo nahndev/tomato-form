@@ -1,4 +1,5 @@
 import { JsonColumn } from "@/features/board/utils/column";
+import { parseItemKey } from "@/features/board/utils/itemKey";
 import type { BoardColumn } from "@/types/board";
 import type { Submission } from "@/types/submission";
 import type { SubmissionDisplayValue } from "@/types/submission-display";
@@ -13,22 +14,23 @@ export class JsonSubmission {
 
   static getDisplayValue(
     submission: Submission,
-    column: BoardColumn
+    column: BoardColumn,
   ): SubmissionDisplayValue | undefined {
-    const itemKey = JsonColumn.getItem(
+    const item = JsonColumn.getItem(
       column,
-      JsonSubmission.getTemplateId(submission)
+      JsonSubmission.getTemplateId(submission),
     );
-    if (itemKey === null) return undefined;
+    if (item === null) return undefined;
 
-    return JsonSubmission.getDisplayValueForItemKey(submission, itemKey);
+    return submission.dataDisplays[item.widgetId]?.[item.property];
   }
 
-  /** Looks up a submission's display value directly by a `widgetId:property` compound key. */
+  /** Looks up a submission's display value by a `widgetId:property` compound key (the format `BoardChartViewConfig`'s `groupBy`/`valueField` still use), against the nested `dataDisplays[widgetId][property]` doc. */
   static getDisplayValueForItemKey(
     submission: Submission,
-    itemKey: string
+    itemKey: string,
   ): SubmissionDisplayValue | undefined {
-    return submission.dataDisplays[itemKey];
+    const { widgetId, property } = parseItemKey(itemKey);
+    return submission.dataDisplays[widgetId]?.[property];
   }
 }

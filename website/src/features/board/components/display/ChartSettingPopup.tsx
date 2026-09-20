@@ -23,10 +23,12 @@ import {
 import { toast } from "@/components/ui/sonner";
 import TemplateWidgetSelect from "@/features/board/components/display/select/TemplateWidgetSelect";
 import { useUpdateBoard } from "@/features/board/hooks/useBoards";
+import type { ValueProperty } from "@/features/board/constants/column/valueProperties";
+import { formatItemKey, parseItemKey } from "@/features/board/utils/itemKey";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import { ChartAggregation, ChartKind, BoardViewType } from "@/types/board-view";
 import type { BoardChartViewConfig, BoardView } from "@/types/board-view";
-import type { Board } from "@/types/board";
+import type { Board, BoardColumnItem } from "@/types/board";
 import { DisplayType } from "@/types/display-type";
 
 const AGGREGATION_LABELS: Record<ChartAggregation, string> = {
@@ -136,20 +138,24 @@ const ChartSettingPopup: React.FC<ChartSettingPopupProps> = ({
     },
   });
 
-  function pickGroupBy(templateId: string, itemKey: string | null) {
+  function pickGroupBy(templateId: string, item: BoardColumnItem | null) {
     const groupBy = { ...formik.values.groupBy };
-    if (itemKey) groupBy[templateId] = itemKey;
+    if (item) groupBy[templateId] = formatItemKey(item.widgetId, item.property as ValueProperty);
     else delete groupBy[templateId];
     formik.setFieldValue("groupBy", groupBy);
     formik.setFieldTouched("groupBy", true, false);
   }
 
-  function pickValueField(templateId: string, itemKey: string | null) {
+  function pickValueField(templateId: string, item: BoardColumnItem | null) {
     const valueField = { ...formik.values.valueField };
-    if (itemKey) valueField[templateId] = itemKey;
+    if (item) valueField[templateId] = formatItemKey(item.widgetId, item.property as ValueProperty);
     else delete valueField[templateId];
     formik.setFieldValue("valueField", valueField);
     formik.setFieldTouched("valueField", true, false);
+  }
+
+  function toColumnItem(itemKey: string | undefined): BoardColumnItem | null {
+    return itemKey ? parseItemKey(itemKey) : null;
   }
 
   const needsValueField = formik.values.aggregation !== ChartAggregation.COUNT;
@@ -188,8 +194,8 @@ const ChartSettingPopup: React.FC<ChartSettingPopupProps> = ({
                 key={template.id}
                 template={template}
                 allowDisplayTypes={null}
-                value={formik.values.groupBy[template.id] ?? null}
-                onChange={(itemKey) => pickGroupBy(template.id, itemKey)}
+                value={toColumnItem(formik.values.groupBy[template.id])}
+                onChange={(item) => pickGroupBy(template.id, item)}
               />
             ))}
             {formik.touched.groupBy && formik.errors.groupBy && (
@@ -228,8 +234,8 @@ const ChartSettingPopup: React.FC<ChartSettingPopupProps> = ({
                   key={template.id}
                   template={template}
                   allowDisplayTypes={[DisplayType.NUMBER]}
-                  value={formik.values.valueField[template.id] ?? null}
-                  onChange={(itemKey) => pickValueField(template.id, itemKey)}
+                  value={toColumnItem(formik.values.valueField[template.id])}
+                  onChange={(item) => pickValueField(template.id, item)}
                 />
               ))}
               {formik.touched.valueField && formik.errors.valueField && (

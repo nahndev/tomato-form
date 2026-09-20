@@ -27,7 +27,7 @@ describe("ChartDisplay", () => {
     const submissions = [
       getMockSubmission({
         templateId: "template-1",
-        dataDisplays: { "widget-1:default": { text: "Open" } },
+        dataDisplays: { "widget-1": { default: { text: "Open" } } },
       }),
     ];
 
@@ -44,7 +44,7 @@ describe("ChartDisplay", () => {
     const submissions = [
       getMockSubmission({
         templateId: "template-1",
-        dataDisplays: { "widget-1:default": { text: "Open" } },
+        dataDisplays: { "widget-1": { default: { text: "Open" } } },
       }),
     ];
 

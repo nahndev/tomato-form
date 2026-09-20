@@ -5,10 +5,10 @@ import { aggregateSubmissionsForChart } from "./chartAggregation";
 const GROUP_BY = { "template-1": "widget-1:default" };
 const VALUE_FIELD = { "template-1": "widget-2:default" };
 
-function submissionWithLabel(label: string, extra?: Record<string, unknown>) {
+function submissionWithLabel(label: string, extra?: Record<string, Record<string, unknown>>) {
   return getMockSubmission({
     templateId: "template-1",
-    dataDisplays: { "widget-1:default": { text: label }, ...extra },
+    dataDisplays: { "widget-1": { default: { text: label } }, ...extra },
   });
 }
 
@@ -37,9 +37,9 @@ describe("aggregateSubmissionsForChart", () => {
       valueField: VALUE_FIELD,
     });
     const submissions = [
-      submissionWithLabel("Open", { "widget-2:default": { text: "10" } }),
-      submissionWithLabel("Open", { "widget-2:default": { text: "5" } }),
-      submissionWithLabel("Closed", { "widget-2:default": { text: "3" } }),
+      submissionWithLabel("Open", { "widget-2": { default: { text: "10" } } }),
+      submissionWithLabel("Open", { "widget-2": { default: { text: "5" } } }),
+      submissionWithLabel("Closed", { "widget-2": { default: { text: "3" } } }),
     ];
 
     expect(aggregateSubmissionsForChart(submissions, config)).toEqual([
@@ -55,9 +55,9 @@ describe("aggregateSubmissionsForChart", () => {
       valueField: VALUE_FIELD,
     });
     const submissions = [
-      submissionWithLabel("Open", { "widget-2:default": { text: "10" } }),
-      submissionWithLabel("Open", { "widget-2:default": { text: "20" } }),
-      submissionWithLabel("Closed", { "widget-2:default": { text: "6" } }),
+      submissionWithLabel("Open", { "widget-2": { default: { text: "10" } } }),
+      submissionWithLabel("Open", { "widget-2": { default: { text: "20" } } }),
+      submissionWithLabel("Closed", { "widget-2": { default: { text: "6" } } }),
     ];
 
     expect(aggregateSubmissionsForChart(submissions, config)).toEqual([
@@ -89,7 +89,7 @@ describe("aggregateSubmissionsForChart", () => {
       valueField: VALUE_FIELD,
     });
     const submissions = [
-      submissionWithLabel("Open", { "widget-2:default": { text: "10" } }),
+      submissionWithLabel("Open", { "widget-2": { default: { text: "10" } } }),
       submissionWithLabel("Open", {}),
     ];
 
@@ -107,7 +107,7 @@ describe("aggregateSubmissionsForChart", () => {
       submissionWithLabel("Open"),
       getMockSubmission({
         templateId: "template-2",
-        dataDisplays: { "widget-9:default": { text: "Open" } },
+        dataDisplays: { "widget-9": { default: { text: "Open" } } },
       }),
     ];
 

@@ -15,7 +15,8 @@ import {
 } from "@/features/board/constants/column/valueProperties";
 import { useTemplateWidgetsByDisplayTypes } from "@/features/board/hooks/useTemplateWidgetsByDisplayTypes";
 import { getWidgetOptionLabel } from "@/features/board/utils/boardColumnWidgets";
-import { JsonColumn } from "@/features/board/utils/column";
+import { formatItemKey, parseItemKey } from "@/features/board/utils/itemKey";
+import type { BoardColumnItem } from "@/types/board";
 import type { DisplayType } from "@/types/display-type";
 import type { Template } from "@/types/template";
 import { useMemo } from "react";
@@ -26,9 +27,8 @@ const UNSELECTED_WIDGET = "__unselected__";
 export interface TemplateWidgetSelectProps {
   template: Template;
   allowDisplayTypes: DisplayType[] | null;
-  /** The selected `widgetId:property` compound key, or null. */
-  value: string | null;
-  onChange: (itemKey: string | null) => void;
+  value: BoardColumnItem | null;
+  onChange: (item: BoardColumnItem | null) => void;
 }
 
 /**
@@ -61,7 +61,7 @@ const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
               ),
           )
           .map((property) => ({
-            itemKey: JsonColumn.formatItemKey(widget.id, property),
+            itemKey: formatItemKey(widget.id, property),
             label:
               property === ValueProperty.DEFAULT
                 ? widgetLabel
@@ -71,11 +71,13 @@ const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
     [widgets, snapshot, allowDisplayTypes],
   );
 
+  const selectedKey = value ? formatItemKey(value.widgetId, value.property as ValueProperty) : UNSELECTED_WIDGET;
+
   return (
     <Select
-      value={value ?? UNSELECTED_WIDGET}
+      value={selectedKey}
       onValueChange={(selected) =>
-        onChange(selected === UNSELECTED_WIDGET ? null : selected)
+        onChange(selected === UNSELECTED_WIDGET ? null : parseItemKey(selected))
       }
       disabled={options.length === 0}
     >

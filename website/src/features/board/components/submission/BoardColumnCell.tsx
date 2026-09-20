@@ -1,21 +1,23 @@
 import { DISPLAY_VALUE_REGISTRY } from "@/features/board/components/submission/display/registry";
 import { DISPLAY_TYPE_REGISTRY } from "@/features/board/constants/column/displayTypes";
 import { getColumnSizeStyle } from "@/features/board/utils/boardColumnWidgets";
+import { JsonSubmission } from "@/features/board/utils/submission";
 import { BoardColumn } from "@/types/board";
-import { SubmissionDisplayValue } from "@/types/submission-display";
+import { Submission } from "@/types/submission";
 import { TomatoIcon } from "@tomato/icon";
 import { useMemo } from "react";
 
 export interface BoardColumnCellProps {
   column: BoardColumn;
-  displayValue: SubmissionDisplayValue | undefined;
+  submission: Submission;
 }
 
 const BoardColumnCell: React.FC<BoardColumnCellProps> = ({
   column,
-  displayValue,
+  submission,
 }) => {
   const type = useMemo(() => column.type, [column]);
+  const displayValue = JsonSubmission.getDisplayValue(submission, column);
 
   const definition = DISPLAY_TYPE_REGISTRY[type];
   const DisplayComponent = DISPLAY_VALUE_REGISTRY[type];

@@ -8,7 +8,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from "class-validator";
-import { IsBoardColumnItemsConstraint } from "./board-column.dto";
+import { IsItemKeyMapConstraint } from "./board-column.dto";
 
 /**
  * Values must stay in sync with `BoardViewType` in
@@ -46,7 +46,7 @@ export type ChartKindDto = (typeof ChartKindDto)[keyof typeof ChartKindDto];
  */
 @ValidatorConstraint({ name: "isBoardViewConfig", async: false })
 class IsBoardViewConfigConstraint implements ValidatorConstraintInterface {
-  private itemsValidator = new IsBoardColumnItemsConstraint();
+  private itemsValidator = new IsItemKeyMapConstraint();
 
   validate(value: unknown, args: ValidationArguments): boolean {
     const type = (args.object as Record<string, unknown>).type;

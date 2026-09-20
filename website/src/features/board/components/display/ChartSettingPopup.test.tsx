@@ -18,14 +18,14 @@ jest.mock("@/features/board/components/display/select/TemplateWidgetSelect", () 
     onChange,
   }: {
     template: { id: string; name: string };
-    value: string | null;
-    onChange: (itemKey: string | null) => void;
+    value: { widgetId: string; property: string } | null;
+    onChange: (item: { widgetId: string; property: string } | null) => void;
   }) => (
     <button
       type="button"
       aria-label={`pick widget for ${template.name}`}
-      data-selected={value ?? ""}
-      onClick={() => onChange("widget-1:default")}
+      data-selected={value ? `${value.widgetId}:${value.property}` : ""}
+      onClick={() => onChange({ widgetId: "widget-1", property: "default" })}
     >
       pick widget for {template.name}
     </button>

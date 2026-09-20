@@ -18,11 +18,11 @@ describe("JsonSubmission.getDisplayValue", () => {
     const column = JsonColumn.setItem(
       getMockBoardColumn(),
       "template-1",
-      JsonColumn.formatItemKey("widget-1", ValueProperty.DEFAULT),
+      { widgetId: "widget-1", property: ValueProperty.DEFAULT },
     );
     const submission = getMockSubmission({
       templateId: "template-1",
-      dataDisplays: { "widget-1:default": { text: "hello" } },
+      dataDisplays: { "widget-1": { default: { text: "hello" } } },
     });
 
     expect(JsonSubmission.getDisplayValue(submission, column)).toEqual({ text: "hello" });
@@ -32,14 +32,16 @@ describe("JsonSubmission.getDisplayValue", () => {
     const column = JsonColumn.setItem(
       getMockBoardColumn(),
       "template-1",
-      JsonColumn.formatItemKey("widget-1", ValueProperty.TIME),
+      { widgetId: "widget-1", property: ValueProperty.TIME },
     );
     const submission = getMockSubmission({
       templateId: "template-1",
       dataDisplays: {
-        "widget-1:default": { date: 1700000000000 },
-        "widget-1:date": { date: 1700000000000 },
-        "widget-1:time": { date: 1700000000000 },
+        "widget-1": {
+          default: { date: 1700000000000 },
+          date: { date: 1700000000000 },
+          time: { date: 1700000000000 },
+        },
       },
     });
 

@@ -3,7 +3,6 @@ import { toast } from "@/components/ui/sonner";
 import { useBoardContext } from "@/features/board/components/provider/BoardProvider";
 import BoardColumnCell from "@/features/board/components/submission/BoardColumnCell";
 import { useDeleteSubmission } from "@/features/board/hooks/useSubmissions";
-import { JsonSubmission } from "@/features/board/utils/submission";
 import { Submission } from "@/types/submission";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import Link from "next/link";
@@ -27,16 +26,13 @@ const SubmissionItem: React.FC<SubmissionItemProps> = ({ submission }) => {
     >
       <Row className="group hover:bg-accent">
         <div className="flex flex-1 items-center gap-2">
-          {board.columns.map((column) => {
-            const value = JsonSubmission.getDisplayValue(submission, column);
-            return (
-              <BoardColumnCell
-                key={column.id}
-                column={column}
-                displayValue={value}
-              />
-            );
-          })}
+          {board.columns.map((column) => (
+            <BoardColumnCell
+              key={column.id}
+              column={column}
+              submission={submission}
+            />
+          ))}
         </div>
         <div className="w-40 flex flex-row-reverse">
           <button

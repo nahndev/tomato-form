@@ -22,10 +22,10 @@ describe("SubmissionDisplayService", () => {
 
     const doc = service.buildDisplayDoc({ data: { w1: "approved" } }, snapshot);
 
-    expect(doc).toEqual({ "w1:default": { entity: ["approved"] } });
+    expect(doc).toEqual({ w1: { default: { entity: ["approved"] } } });
   });
 
-  it("backfills a widget with no matching data using its display-type default", () => {
+  it("backfills a widget with no matching data using its value contract's default", () => {
     const snapshot = getMockSnapshot({
       w1: getMockWidget({ type: "text" }),
       w2: getMockWidget({ id: "w2", type: "date" }),
@@ -34,8 +34,8 @@ describe("SubmissionDisplayService", () => {
     const doc = service.buildDisplayDoc({ data: {} }, snapshot);
 
     expect(doc).toEqual({
-      "w1:default": { text: "" },
-      "w2:default": { date: null, text: "" },
+      w1: { default: { text: "" } },
+      w2: { default: { date: null, text: "" } },
     });
   });
 
@@ -44,20 +44,17 @@ describe("SubmissionDisplayService", () => {
 
     const doc = service.buildDisplayDoc({ data: { w1: 1700000000000 } }, snapshot);
 
-    const expected = { date: 1700000000000, text: new Date(1700000000000).toLocaleDateString() };
-    expect(doc).toEqual({
-      "w1:default": expected,
-      "w1:date": expected,
-      "w1:time": expected,
-    });
+    expect(doc.w1.default).toEqual({ date: 1700000000000, text: new Date(1700000000000).toLocaleString() });
+    expect(doc.w1.date).toEqual({ date: 1700000000000, text: new Date(1700000000000).toLocaleDateString() });
+    expect(doc.w1.time).toEqual({ date: 1700000000000, text: new Date(1700000000000).toLocaleTimeString() });
   });
 
-  it("skips a widget whose type isn't displayable yet", () => {
+  it("falls back to string coercion for a widget whose type has no registered value contract", () => {
     const snapshot = getMockSnapshot({ w1: getMockWidget({ type: "signature" }) });
 
     const doc = service.buildDisplayDoc({ data: { w1: "data:image/png;base64,..." } }, snapshot);
 
-    expect(doc).toEqual({});
+    expect(doc).toEqual({ w1: { default: { text: "data:image/png;base64,..." } } });
   });
 
   it("ignores a data key with no matching widget", () => {
@@ -65,6 +62,6 @@ describe("SubmissionDisplayService", () => {
 
     const doc = service.buildDisplayDoc({ data: { w1: "hello", orphan: "value" } }, snapshot);
 
-    expect(doc).toEqual({ "w1:default": { text: "hello" } });
+    expect(doc).toEqual({ w1: { default: { text: "hello" } } });
   });
 });

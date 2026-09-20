@@ -36,11 +36,10 @@ export function getSelectedColumnItems(
   templates: Template[],
 ): SelectedColumnItem[] {
   return Object.entries(JsonColumn.getItems(column)).flatMap(
-    ([templateId, itemKey]) => {
-      const { widgetId, property } = JsonColumn.parseItemKey(itemKey);
+    ([templateId, { widgetId, property }]) => {
       const template = templates.find((t) => t.id === templateId);
       const widget = template?.snapshot.widgets[widgetId];
-      return widget ? [{ templateId, widget, property }] : [];
+      return widget ? [{ templateId, widget, property: property as ValueProperty }] : [];
     },
   );
 }

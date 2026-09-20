@@ -1,6 +1,6 @@
 import { DEFAULT_COLUMN_SIZE } from "@/features/board/components/display/constants/size";
 import type { ValueProperty } from "@/features/board/constants/column/valueProperties";
-import type { BoardColumn, BoardColumnDraft, ColumnSize } from "@/types/board";
+import type { BoardColumn, BoardColumnDraft, BoardColumnItem, ColumnSize } from "@/types/board";
 import type { DisplayType } from "@/types/display-type";
 import { v4 } from "uuid";
 
@@ -46,53 +46,42 @@ export class JsonColumn {
     return { ...column, label };
   }
 
-  static getItems(column: BoardColumnDraft): Record<string, string> {
+  static getItems(column: BoardColumnDraft): Record<string, BoardColumnItem> {
     return column.items ?? {};
   }
 
-  /** The raw `widgetId:property` compound key stored for a template, or null if unset. */
+  /** The `{ widgetId, property }` picked for a template, or null if unset. */
   static getItem(
     column: BoardColumnDraft,
     templateId: string,
-  ): string | null {
+  ): BoardColumnItem | null {
     return JsonColumn.getItems(column)[templateId] ?? null;
-  }
-
-  static formatItemKey(widgetId: string, property: ValueProperty): string {
-    return `${widgetId}:${property}`;
-  }
-
-  static parseItemKey(key: string): { widgetId: string; property: ValueProperty } {
-    const [widgetId, property] = key.split(":");
-    return { widgetId, property: property as ValueProperty };
   }
 
   static getItemWidgetId(
     column: BoardColumnDraft,
     templateId: string,
   ): string | null {
-    const key = JsonColumn.getItem(column, templateId);
-    return key === null ? null : JsonColumn.parseItemKey(key).widgetId;
+    return JsonColumn.getItem(column, templateId)?.widgetId ?? null;
   }
 
   static getItemProperty(
     column: BoardColumnDraft,
     templateId: string,
   ): ValueProperty | null {
-    const key = JsonColumn.getItem(column, templateId);
-    return key === null ? null : JsonColumn.parseItemKey(key).property;
+    return (JsonColumn.getItem(column, templateId)?.property as ValueProperty | undefined) ?? null;
   }
 
-  /** Stores the already-resolved `widgetId:property` compound key - widgetId and property are always picked together, so there's no separate setter for each. */
+  /** Stores the already-resolved widget + property for a template - they're always picked together, so there's no separate setter for each. */
   static setItem(
     column: BoardColumnDraft,
     templateId: string,
-    itemKey: string,
+    item: BoardColumnItem,
   ): BoardColumnDraft {
     return {
       ...column,
       size: column.size ?? DEFAULT_COLUMN_SIZE,
-      items: { ...JsonColumn.getItems(column), [templateId]: itemKey },
+      items: { ...JsonColumn.getItems(column), [templateId]: item },
     };
   }
 
