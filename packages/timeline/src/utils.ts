@@ -15,7 +15,15 @@ export function getStartOfWeek(timestamp: number): number {
 }
 
 export function getWeekDays(weekStart: number): number[] {
-  return Array.from({ length: WEEK_DAYS }, (_, index) => weekStart + index * DAY_MS);
+  return Array.from(
+    { length: WEEK_DAYS },
+    (_, index) => weekStart + index * DAY_MS,
+  );
+}
+
+/** Round `value` to the nearest multiple of `step`. */
+export function snapToStep(value: number, step: number): number {
+  return Math.round(value / step) * step;
 }
 
 export function formatDayLabel(timestamp: number): string {
@@ -44,11 +52,11 @@ export function formatRangeLabel(weekStart: number): string {
 }
 
 export interface EventGridPosition {
-  colStart: number; // 0-based day column within the week
-  colSpan: number;
+  leftPercent: number; // 0-100, continuous position within the week
+  widthPercent: number; // 0-100
 }
 
-/** Position of `event` within `weekStart`'s week, clamped to the visible 7 columns, or `null` if it doesn't overlap that week at all. */
+/** Continuous (non-day-snapped) position of `event` within `weekStart`'s week, clamped to its bounds, or `null` if it doesn't overlap that week at all. */
 export function getEventGridPosition(
   event: EventInterface,
   weekStart: number,
@@ -58,10 +66,8 @@ export function getEventGridPosition(
 
   const clampedStart = Math.max(event.start, weekStart);
   const clampedEnd = Math.min(event.end, weekEnd);
-  const colStart = Math.floor((clampedStart - weekStart) / DAY_MS);
-  const colEndExclusive = Math.max(
-    colStart + 1,
-    Math.ceil((clampedEnd - weekStart) / DAY_MS),
-  );
-  return { colStart, colSpan: Math.min(WEEK_DAYS, colEndExclusive) - colStart };
+  return {
+    leftPercent: ((clampedStart - weekStart) / WEEK_MS) * 100,
+    widthPercent: ((clampedEnd - clampedStart) / WEEK_MS) * 100,
+  };
 }

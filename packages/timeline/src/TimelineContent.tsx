@@ -8,6 +8,7 @@ export interface TimelineContentProps {
   events: EventInterface[];
   subjectMap: Map<UUID, SubjectInterface>;
   onEventMove?: (uuid: UUID, start: number, end: number) => void;
+  onEventResize?: (uuid: UUID, start: number, end: number) => void;
   onCreateAtDay?: (start: number, end: number) => void;
 }
 
@@ -17,6 +18,7 @@ export function TimelineContent({
   events,
   subjectMap,
   onEventMove,
+  onEventResize,
   onCreateAtDay,
 }: TimelineContentProps) {
   return (
@@ -28,6 +30,7 @@ export function TimelineContent({
         events={events}
         subjectMap={subjectMap}
         onEventMove={onEventMove}
+        onEventResize={onEventResize}
         onCreateAtDay={onCreateAtDay}
       />
     </div>

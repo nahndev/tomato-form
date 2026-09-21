@@ -11,6 +11,7 @@ export interface TimelineProps {
   subjects: SubjectInterface[];
   events: EventInterface[];
   onEventMove?: (uuid: UUID, start: number, end: number) => void;
+  onEventResize?: (uuid: UUID, start: number, end: number) => void;
   onEventCreate?: (event: EventInterface) => void;
   id?: string;
   className?: string;
@@ -20,6 +21,7 @@ export function Timeline({
   subjects,
   events,
   onEventMove,
+  onEventResize,
   onEventCreate,
   id,
   className,
@@ -88,6 +90,7 @@ export function Timeline({
         events={filteredEvents}
         subjectMap={subjectMap}
         onEventMove={onEventMove}
+        onEventResize={onEventResize}
         onCreateAtDay={handleCreateAtDay}
       />
     </div>

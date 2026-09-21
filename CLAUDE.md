@@ -69,6 +69,16 @@ Note: there is currently no auth/RBAC module — endpoints are not guarded and t
 - If exist `TASK.md`, mark completed tasks.
 - Read `./docs` as context
 
+## Ticket rules
+
+- `Currently` **IS ALWAYS** the current state; it **CAN AND WILL** change based on `Acceptance Criteria` requirements.
+- `Acceptance Criteria` **IS MANDATORY** and **MUST ALWAYS** be fulfilled — **NO EXCEPTIONS**.
+- `Acceptance Criteria` **IS MANDATORY**: **ANY** ambiguity **MUST ALWAYS** be clarified by asking the user again. **NEVER** guess or infer on your own.
+- `Solutions` **ONLY** an initial proposal and **MUST ALWAYS** be re-evaluated and reviewed before being treated as final.
+- `Changelogs` **ONLY** record changes that have already happened — **NEVER** treat them as requirements.
+- `Changelogs` **ONLY** record changes that have already happened — **NEVER** feel obligated to preserve them as-is.
+- `Changelogs` **ONLY** record changes that have already happened — **NEVER** let them affect the output result.
+
 ## Handle base on tickets
 
 - When: handle base on file in `./docs/<version>/<ticket>.md`

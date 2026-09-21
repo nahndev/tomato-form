@@ -1,9 +1,20 @@
 import { useDragDropMonitor, useDroppable } from "@dnd-kit/react";
 import { useMemo, useRef } from "react";
-import { ROW_HEIGHT } from "./constants";
-import { EventBar } from "./EventBar";
-import { EventInterface, SubjectInterface, TimelineDndType, UUID } from "./types";
-import { DAY_MS, WEEK_DAYS, getEventGridPosition, getWeekDays } from "./utils";
+import { ROW_HEIGHT, STEP_MS } from "./constants";
+import { EventBar, ResizeHandle } from "./EventBar";
+import {
+  EventInterface,
+  SubjectInterface,
+  TimelineDndType,
+  UUID,
+} from "./types";
+import {
+  DAY_MS,
+  WEEK_MS,
+  getEventGridPosition,
+  getWeekDays,
+  snapToStep,
+} from "./utils";
 
 export interface WeekContentProps {
   id: string;
@@ -11,6 +22,7 @@ export interface WeekContentProps {
   events: EventInterface[];
   subjectMap: Map<UUID, SubjectInterface>;
   onEventMove?: (uuid: UUID, start: number, end: number) => void;
+  onEventResize?: (uuid: UUID, start: number, end: number) => void;
   onCreateAtDay?: (start: number, end: number) => void;
 }
 
@@ -20,6 +32,7 @@ export function WeekContent({
   events,
   subjectMap,
   onEventMove,
+  onEventResize,
   onCreateAtDay,
 }: WeekContentProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -31,7 +44,10 @@ export function WeekContent({
   const rows = useMemo(
     () =>
       events
-        .map((event) => ({ event, position: getEventGridPosition(event, weekStart) }))
+        .map((event) => ({
+          event,
+          position: getEventGridPosition(event, weekStart),
+        }))
         .filter(
           (
             row,
@@ -45,6 +61,35 @@ export function WeekContent({
 
   const days = useMemo(() => getWeekDays(weekStart), [weekStart]);
 
+  const handleEventResize = (
+    event: EventInterface,
+    handle: ResizeHandle,
+    deltaX: number,
+  ) => {
+    if (!onEventResize) return;
+    const containerRect = containerRef.current?.getBoundingClientRect();
+    if (!containerRect) return;
+
+    const deltaMs = (deltaX / containerRect.width) * WEEK_MS;
+    if (deltaMs === 0) return;
+
+    if (handle === "left") {
+      const newStart = Math.min(
+        snapToStep(event.start + deltaMs, STEP_MS),
+        event.end - STEP_MS,
+      );
+      if (newStart === event.start) return;
+      onEventResize(event.uuid, newStart, event.end);
+    } else {
+      const newEnd = Math.max(
+        snapToStep(event.end + deltaMs, STEP_MS),
+        event.start + STEP_MS,
+      );
+      if (newEnd === event.end) return;
+      onEventResize(event.uuid, event.start, newEnd);
+    }
+  };
+
   useDragDropMonitor({
     onDragEnd({ operation: { source } }) {
       if (!isDropTarget || !source || !onEventMove) return;
@@ -55,16 +100,15 @@ export function WeekContent({
       const event = events.find((item) => item.uuid === source.id);
       if (!event) return;
 
-      const dayWidth = containerRect.width / WEEK_DAYS;
-      const dayIndex = Math.max(
+      const rawOffsetMs =
+        ((sourceRect.left - containerRect.left) / containerRect.width) *
+        WEEK_MS;
+      const clampedOffsetMs = Math.max(
         0,
-        Math.min(
-          WEEK_DAYS - 1,
-          Math.round((sourceRect.left - containerRect.left) / dayWidth),
-        ),
+        Math.min(WEEK_MS - STEP_MS, rawOffsetMs),
       );
       const duration = event.end - event.start;
-      const newStart = weekStart + dayIndex * DAY_MS;
+      const newStart = weekStart + snapToStep(clampedOffsetMs, STEP_MS);
       onEventMove(event.uuid, newStart, newStart + duration);
     },
   });
@@ -85,14 +129,25 @@ export function WeekContent({
       {rows.map(({ event, position }) => (
         <div
           key={event.uuid}
-          className="grid grid-cols-7 border-b border-border/30"
+          className="relative border-b border-border/30"
           style={{ height: ROW_HEIGHT }}
         >
           <div
-            style={{ gridColumn: `${position.colStart + 1} / span ${position.colSpan}` }}
-            className="min-w-0 p-0.5"
+            style={{
+              left: `${position.leftPercent}%`,
+              width: `${position.widthPercent}%`,
+            }}
+            className="absolute inset-y-0 min-w-8 p-0.5"
           >
-            <EventBar event={event} subject={subjectMap.get(event.subject)} />
+            <EventBar
+              event={event}
+              subject={subjectMap.get(event.subject)}
+              onResizeEnd={
+                onEventResize
+                  ? (handle, deltaX) => handleEventResize(event, handle, deltaX)
+                  : undefined
+              }
+            />
           </div>
         </div>
       ))}
