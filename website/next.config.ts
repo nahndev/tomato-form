@@ -5,7 +5,7 @@ const STORAGE_API_URL = process.env.STORAGE_API_URL ?? "http://localhost:3023";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  transpilePackages: ["@tomato/icon", "@tomato/grid"],
+  transpilePackages: ["@tomato/icon", "@tomato/grid", "@tomato/timeline"],
   async rewrites() {
     return [
       {

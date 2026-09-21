@@ -1,3 +1,4 @@
+import { DndContext } from "@dnd-kit/core";
 import clsx from "clsx";
 import { useId, useMemo, useState } from "react";
 import { v4 } from "uuid";
@@ -6,7 +7,6 @@ import { TimelineContent } from "./TimelineContent";
 import { TimelineHeader } from "./TimelineHeader";
 import { EventInterface, SubjectInterface, UUID } from "./types";
 import { WEEK_MS, getStartOfWeek } from "./utils";
-
 export interface TimelineProps {
   subjects: SubjectInterface[];
   events: EventInterface[];
@@ -69,30 +69,32 @@ export function Timeline({
   };
 
   return (
-    <div
-      className={clsx(
-        "flex h-full flex-col overflow-hidden rounded-md border border-border/50",
-        className,
-      )}
-    >
-      <TimelineHeader
-        weekStart={weekStart}
-        onPrevWeek={() => setWeekStart((current) => current - WEEK_MS)}
-        onNextWeek={() => setWeekStart((current) => current + WEEK_MS)}
-        onResetWeek={() => setWeekStart(getStartOfWeek(Date.now()))}
-        subjects={subjects}
-        selectedSubjectUuids={selectedSubjectUuids}
-        onToggleSubject={handleToggleSubject}
-      />
-      <TimelineContent
-        id={instanceId}
-        weekStart={weekStart}
-        events={filteredEvents}
-        subjectMap={subjectMap}
-        onEventMove={onEventMove}
-        onEventResize={onEventResize}
-        onCreateAtDay={handleCreateAtDay}
-      />
-    </div>
+    <DndContext autoScroll={false}>
+      <div
+        className={clsx(
+          "flex h-full flex-col overflow-hidden rounded-md border border-border/50",
+          className,
+        )}
+      >
+        <TimelineHeader
+          weekStart={weekStart}
+          onPrevWeek={() => setWeekStart((current) => current - WEEK_MS)}
+          onNextWeek={() => setWeekStart((current) => current + WEEK_MS)}
+          onResetWeek={() => setWeekStart(getStartOfWeek(Date.now()))}
+          subjects={subjects}
+          selectedSubjectUuids={selectedSubjectUuids}
+          onToggleSubject={handleToggleSubject}
+        />
+        <TimelineContent
+          id={instanceId}
+          weekStart={weekStart}
+          events={filteredEvents}
+          subjectMap={subjectMap}
+          onEventMove={onEventMove}
+          onEventResize={onEventResize}
+          onCreateAtDay={handleCreateAtDay}
+        />
+      </div>
+    </DndContext>
   );
 }

@@ -103,10 +103,7 @@ export function WeekContent({
       const rawOffsetMs =
         ((sourceRect.left - containerRect.left) / containerRect.width) *
         WEEK_MS;
-      const clampedOffsetMs = Math.max(
-        0,
-        Math.min(WEEK_MS - STEP_MS, rawOffsetMs),
-      );
+      const clampedOffsetMs = rawOffsetMs;
       const duration = event.end - event.start;
       const newStart = weekStart + snapToStep(clampedOffsetMs, STEP_MS);
       onEventMove(event.uuid, newStart, newStart + duration);
@@ -119,7 +116,7 @@ export function WeekContent({
         containerRef.current = node;
         dropRef(node);
       }}
-      className="flex-1 overflow-y-auto"
+      className="overflow-y-auto"
     >
       {rows.length === 0 && (
         <div className="flex h-24 items-center justify-center text-sm text-muted-foreground">
@@ -129,7 +126,7 @@ export function WeekContent({
       {rows.map(({ event, position }) => (
         <div
           key={event.uuid}
-          className="relative border-b border-border/30"
+          className="relative flex flex-row border-b border-border/30 max-w-full box-border overflow-x-auto  "
           style={{ height: ROW_HEIGHT }}
         >
           <div
@@ -137,17 +134,20 @@ export function WeekContent({
               left: `${position.leftPercent}%`,
               width: `${position.widthPercent}%`,
             }}
-            className="absolute inset-y-0 min-w-8 p-0.5"
+            className="overflow-hidden absolute"
           >
-            <EventBar
-              event={event}
-              subject={subjectMap.get(event.subject)}
-              onResizeEnd={
-                onEventResize
-                  ? (handle, deltaX) => handleEventResize(event, handle, deltaX)
-                  : undefined
-              }
-            />
+            <div className="size-full">
+              <EventBar
+                event={event}
+                subject={subjectMap.get(event.subject)}
+                onResizeEnd={
+                  onEventResize
+                    ? (handle, deltaX) =>
+                        handleEventResize(event, handle, deltaX)
+                    : undefined
+                }
+              />
+            </div>
           </div>
         </div>
       ))}

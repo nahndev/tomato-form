@@ -67,7 +67,7 @@ export function getEventGridPosition(
   const clampedStart = Math.max(event.start, weekStart);
   const clampedEnd = Math.min(event.end, weekEnd);
   return {
-    leftPercent: ((clampedStart - weekStart) / WEEK_MS) * 100,
-    widthPercent: ((clampedEnd - clampedStart) / WEEK_MS) * 100,
+    leftPercent: ((event.start - weekStart) / WEEK_MS) * 100,
+    widthPercent: ((event.end - event.start) / WEEK_MS) * 100,
   };
 }

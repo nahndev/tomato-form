@@ -1,0 +1,17 @@
+{
+  "name": "@tomato/tailwind-config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./postcss.config.mjs",
+  "exports": {
+    "./postcss": "./postcss.config.mjs",
+    "./theme.css": "./theme.css"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "catalog:"
+  },
+  "devDependencies": {
+    "postcss": "catalog:",
+    "tailwindcss": "catalog:"
+  }
+}

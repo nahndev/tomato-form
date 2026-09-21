@@ -56,7 +56,6 @@ export default function TimelineDemoPage() {
   const [events, setEvents] = useState<EventInterface[]>(DEMO_EVENTS);
 
   const handleEventMove = (uuid: string, start: number, end: number) => {
-    console.log(uuid, start, end);
     setEvents((current) =>
       current.map((event) =>
         event.uuid === uuid ? { ...event, start, end } : event,

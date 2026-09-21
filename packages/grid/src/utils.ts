@@ -17,7 +17,6 @@ export class LayoutIdx {
     layouts: Record<string, GridLayoutRect>,
     before: { id: string } | null,
   ): string {
-    console.log(before);
     const ordered = R.pipe(
       R.entries(layouts),
       R.sortBy(([, layout]) => layout.idx),
@@ -80,7 +79,6 @@ export class AbsoluteLayoutUtils {
 }
 
 export function getNewIdx(layouts: Record<string, GridLayoutRect>) {
-  console.log(Object.entries(layouts));
   const lastIdx = Object.entries(layouts)
     .map(([, layout]) => layout.idx)
     .sort()
