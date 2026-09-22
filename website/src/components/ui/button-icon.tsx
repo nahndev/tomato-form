@@ -9,19 +9,19 @@ export interface ButtonIconProps extends Omit<
   "children"
 > {
   icon: TomatoIconKey;
-  className?: string;
+  iconClassName?: string;
 }
 
 function ButtonIcon({
   icon: icon,
-  className: className,
+  iconClassName,
   variant = "ghost",
   size = "icon",
   ...props
 }: ButtonIconProps) {
   return (
     <Button variant={variant} size={size} {...props}>
-      <TomatoIcon icon={icon} className={cn(className)} />
+      <TomatoIcon icon={icon} className={cn(iconClassName)} />
     </Button>
   );
 }
