@@ -19,7 +19,9 @@ abstract class BaseDateWidgetValue implements WidgetValueInterface {
 
   map(context: MappingContext, widget: Widget): void {
     const raw = context.getRaw(widget.id);
-    context.setMapped(widget, { [VALUE_TYPE.DEFAULT]: this.value.getMapped(raw) });
+    context.setMapped(widget, {
+      [VALUE_TYPE.DEFAULT]: this.value.getMapped(raw),
+    });
   }
 }
 
@@ -33,6 +35,14 @@ export class TimeWidgetValue extends BaseDateWidgetValue {
 
 export class CreatedAtWidgetValue extends BaseDateWidgetValue {
   protected readonly value = new DateValue();
+
+  map(context: MappingContext, widget: Widget): void {
+    const raw = context.getMeta().createdAt.getTime();
+    console.log(this.value.getMapped(raw), widget.id);
+    context.setMapped(widget, {
+      [VALUE_TYPE.DEFAULT]: this.value.getMapped(raw),
+    });
+  }
 }
 
 /** The only widget with more than one value-property: exposes `default` (full date+time), `date`, and `time`, all resolved from the same raw epoch-ms value but formatted by their own `ValueInterface`. */

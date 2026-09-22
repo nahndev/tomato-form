@@ -4,6 +4,9 @@ import type { ValueMap } from "./widget-value.types";
 /** The slice of a submission a `MappingContext` reads raw values from - just its current values, keyed by widget id. */
 export interface MappingSource {
   data: Record<string, unknown>;
+  meta: {
+    createdAt: Date;
+  };
 }
 
 /**
@@ -27,5 +30,9 @@ export class MappingContext {
 
   getDoc(): Record<string, Record<string, ValueMap>> {
     return this.doc;
+  }
+
+  getMeta() {
+    return this.source.meta;
   }
 }

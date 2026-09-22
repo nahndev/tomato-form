@@ -45,18 +45,24 @@ export class SubmissionService {
     }
 
     const data = dto.data ?? {};
+    const meta = { createdAt: new Date() };
     const snapshot = template.snapshot as unknown as TemplateSnapshot;
-    const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
-      { data },
-      snapshot,
-    );
 
     try {
-      return await this.prisma.submission.create({
+      const submission = await this.prisma.submission.create({
         data: {
           boardId: dto.boardId,
           templateId: dto.templateId,
           data: data as Prisma.InputJsonValue,
+        },
+      });
+      const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
+        submission,
+        snapshot,
+      );
+      return await this.prisma.submission.update({
+        where: { id: submission.id },
+        data: {
           dataDisplays: dataDisplays as Prisma.InputJsonValue,
         },
       });
@@ -141,6 +147,7 @@ export class SubmissionService {
       select: {
         data: true,
         dataClocks: true,
+        createdAt: true,
         template: { select: { snapshot: true } },
       },
     });
@@ -150,6 +157,8 @@ export class SubmissionService {
       );
       return;
     }
+    const snapshot = submission.template
+      .snapshot as unknown as TemplateSnapshot;
 
     const data = { ...(submission.data as Record<string, unknown>) };
     const clocks = { ...(submission.dataClocks as Record<string, number>) };
@@ -163,20 +172,22 @@ export class SubmissionService {
     }
 
     if (!changed) return;
-
-    const snapshot = submission.template.snapshot as unknown as TemplateSnapshot;
-    const widgets = snapshot.widgets ?? {};
-    const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
-      { data },
-      snapshot,
-    );
-
-    console.log(dataDisplays);
-    await this.prisma.submission.update({
+    const updatedSubmission = await this.prisma.submission.update({
       where: { id: event.submissionId },
       data: {
         data: data as Prisma.InputJsonValue,
         dataClocks: clocks as Prisma.InputJsonValue,
+      },
+    });
+
+    const widgets = snapshot.widgets ?? {};
+    const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
+      updatedSubmission,
+      snapshot,
+    );
+    await this.prisma.submission.update({
+      where: { id: event.submissionId },
+      data: {
         dataDisplays: dataDisplays as Prisma.InputJsonValue,
       },
     });

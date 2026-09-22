@@ -1,3 +1,3 @@
 import { ColumnSize } from "@/types/board";
 
-export const DEFAULT_COLUMN_SIZE: ColumnSize = { flex: 1 };
+export const DEFAULT_COLUMN_SIZE: ColumnSize = { width: 200 };
