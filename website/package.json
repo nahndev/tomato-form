@@ -24,6 +24,7 @@
     "@tailwindcss/postcss": "catalog:",
     "@tanstack/react-query": "^5.28.0",
     "@tomato/grid": "workspace:*",
+    "@tomato/hooks": "workspace:*",
     "@tomato/icon": "workspace:*",
     "@tomato/sync": "workspace:*",
     "@tomato/tailwind-config": "workspace:*",
