@@ -1,4 +1,5 @@
 import { ActionsDescriptor } from "@/features/template/components/property/descriptors/ActionsDescriptor";
+import { ApiCallDescriptor } from "@/features/template/components/property/descriptors/apiCall/ApiCallDescriptor";
 import { ContainerStyleDescriptor } from "@/features/template/components/property/descriptors/ContainerStyleDescriptor";
 import { ContentDescriptor } from "@/features/template/components/property/descriptors/ContentDescriptor";
 import { LabelDescriptor } from "@/features/template/components/property/descriptors/LabelDescriptor";
@@ -43,6 +44,10 @@ export const PROPERTY_DESCRIPTOR_REGISTRY: WidgetPropertyDescriptorRegistry = {
   [PropertyKey.Actions]: {
     label: "Actions",
     Component: ActionsDescriptor as ComponentType<WidgetPropertyFieldProps>,
+  },
+  [PropertyKey.ApiCall]: {
+    label: "",
+    Component: ApiCallDescriptor as ComponentType<WidgetPropertyFieldProps>,
   },
   [PropertyKey.TextStyle]: {
     label: "",

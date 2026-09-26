@@ -11,6 +11,7 @@ const {
   Options,
   Content,
   Actions,
+  ApiCall,
   TextStyle,
   ContainerStyle,
 } = PropertyKey;
@@ -44,4 +45,5 @@ export const WIDGET_PROPERTY_REGISTRY: WidgetPropertyRegistry = {
   [WidgetType.CREATED_AT]: [Label],
   [WidgetType.TEMPLATE]: [Label],
   [WidgetType.SUBMITTED_BY]: [Label],
+  [WidgetType.API_CALL]: [Label, ApiCall],
 };

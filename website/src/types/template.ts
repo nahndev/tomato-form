@@ -1,3 +1,4 @@
+import type { ApiCallConfig } from "@/types/api-call";
 import type { ButtonAction } from "@/types/button-action";
 import type { WidgetType } from "@/types/widget";
 import type { TomatoIconKey } from "@tomato/icon";
@@ -83,6 +84,8 @@ export interface WidgetProperties {
   url?: string;
   /** BUTTON only - ordered list of actions run in sequence on click. */
   actions?: ButtonAction[];
+  /** API_CALL only - request/response configuration. */
+  apiCall?: ApiCallConfig;
   compact?: boolean;
   textStyle?: CSSProperties;
   containerStyle?: CSSProperties;

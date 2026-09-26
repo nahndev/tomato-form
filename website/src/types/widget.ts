@@ -29,6 +29,7 @@ export const WidgetType = {
   CREATED_AT: "created-at",
   TEMPLATE: "template",
   SUBMITTED_BY: "submitted-by",
+  API_CALL: "api-call",
 } as const;
 export type WidgetType = (typeof WidgetType)[keyof typeof WidgetType];
 

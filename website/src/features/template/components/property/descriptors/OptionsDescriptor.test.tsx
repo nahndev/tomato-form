@@ -13,6 +13,7 @@ describe("OptionsDescriptor", () => {
 
     render(
       <OptionsDescriptor
+        widgetId="w1"
         widgetType={WidgetType.SELECT}
         value={options}
         onChange={jest.fn()}
@@ -33,6 +34,7 @@ describe("OptionsDescriptor", () => {
 
     render(
       <OptionsDescriptor
+        widgetId="w1"
         widgetType={WidgetType.SELECT}
         value={[option]}
         onChange={onChange}
@@ -54,6 +56,7 @@ describe("OptionsDescriptor", () => {
 
     render(
       <OptionsDescriptor
+        widgetId="w1"
         widgetType={WidgetType.SELECT}
         value={[option]}
         onChange={onChange}
@@ -79,6 +82,7 @@ describe("OptionsDescriptor", () => {
 
     render(
       <OptionsDescriptor
+        widgetId="w1"
         widgetType={WidgetType.SELECT}
         value={options}
         onChange={onChange}

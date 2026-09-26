@@ -1,11 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import { WidgetPropertyBox } from "@/features/template/components/toolbar/property/WidgetPropertyBox";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export type WidgetPropertyPanelProps = {};
 
@@ -14,14 +13,7 @@ export type WidgetPropertyPanelProps = {};
  * icon strip on the outer edge. Auto-opens whenever a widget gets selected.
  */
 const WidgetPropertyPanel: React.FC<WidgetPropertyPanelProps> = () => {
-  const { selected } = useWidgetSelection();
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (selected) {
-      setOpen(true);
-    }
-  }, [selected?.id]);
 
   return (
     <div className={clsx("flex flex-row h-full", open && "w-[25em]")}>

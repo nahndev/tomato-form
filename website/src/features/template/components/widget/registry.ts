@@ -1,6 +1,7 @@
 import { WidgetType } from "@/types/widget";
 import type { WidgetComponent, WidgetComponentRegistry } from "@/types/widget";
 
+import { ApiCallWidgetItem } from "./items/ApiCallWidgetItem";
 import { BoardWidgetItem } from "./items/BoardWidgetItem";
 import { BreakWidgetItem } from "./items/BreakWidgetItem";
 import { ButtonWidgetItem } from "./items/ButtonWidgetItem";
@@ -28,6 +29,7 @@ import { UsersWidgetItem } from "./items/UsersWidgetItem";
  * defaults, ...).
  */
 export const WidgetComponents: WidgetComponentRegistry = {
+  [WidgetType.API_CALL]: ApiCallWidgetItem as WidgetComponent,
   [WidgetType.TEXT]: TextWidgetItem as WidgetComponent,
   [WidgetType.TEXT_AREA]: TextAreaWidgetItem as WidgetComponent,
   [WidgetType.NUMBER]: NumberWidgetItem as WidgetComponent,

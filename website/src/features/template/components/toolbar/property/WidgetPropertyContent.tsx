@@ -32,6 +32,7 @@ export function WidgetPropertyContent({ widget }: WidgetPropertyContentProps) {
         return (
           <Component
             key={key}
+            widgetId={widget.id}
             widgetType={widget.type}
             value={widget[key]}
             onChange={(value) => setProperty(widget.id, key, value)}

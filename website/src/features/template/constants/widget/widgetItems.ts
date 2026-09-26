@@ -221,6 +221,16 @@ export const WidgetItems: WidgetItemRegistry = {
     defaultSettings: DEFAULT_SETTINGS[WidgetType.SUBMITTED_BY],
     defaultLayout: DEFAULT_LAYOUTS[WidgetType.SUBMITTED_BY],
   },
+  [WidgetType.API_CALL]: {
+    type: WidgetType.API_CALL,
+    label: "API Call",
+    icon: TomatoIconKey.Webhook,
+    description: "Calls an external API and can map the response into other fields",
+    isDataField: false,
+    group: WidgetGroup.ADVANCE,
+    defaultSettings: DEFAULT_SETTINGS[WidgetType.API_CALL],
+    defaultLayout: DEFAULT_LAYOUTS[WidgetType.API_CALL],
+  },
 };
 
 export const WidgetItemList: WidgetItemDefinition[] =

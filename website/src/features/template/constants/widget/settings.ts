@@ -1,3 +1,4 @@
+import { ApiCallMethod, ApiCallResponseType } from "@/types/api-call";
 import type { OptionItem, WidgetProperties } from "@/types/template";
 import { ColorEnum } from "@/types/template";
 import { WidgetType } from "@/types/widget";
@@ -55,4 +56,14 @@ export const DEFAULT_SETTINGS: Record<WidgetType, WidgetProperties> = {
   [WidgetType.CREATED_AT]: { label: "Created At" },
   [WidgetType.TEMPLATE]: { label: "Template" },
   [WidgetType.SUBMITTED_BY]: { label: "By" },
+  [WidgetType.API_CALL]: {
+    label: "API call",
+    apiCall: {
+      method: ApiCallMethod.GET,
+      url: "",
+      params: [],
+      headers: [],
+      response: { type: ApiCallResponseType.JSON, show: false, jsonMappings: [] },
+    },
+  },
 };

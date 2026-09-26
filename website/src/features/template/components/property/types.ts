@@ -16,6 +16,7 @@ export const PropertyKey = {
   Options: "options",
   Content: "content",
   Actions: "actions",
+  ApiCall: "apiCall",
   TextStyle: "textStyle",
   ContainerStyle: "containerStyle",
 } as const satisfies Record<string, WidgetPropertyKey>;
@@ -23,6 +24,7 @@ export const PropertyKey = {
 export interface WidgetPropertyFieldProps<
   K extends WidgetPropertyKey = WidgetPropertyKey,
 > {
+  widgetId: string;
   widgetType: WidgetType;
   value: WidgetProperties[K];
   onChange: (value: WidgetProperties[K]) => void;

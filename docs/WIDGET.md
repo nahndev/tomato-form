@@ -84,3 +84,13 @@ No other file needs changes; all consumers key off these `Record<WidgetType, ...
 - `image-uploader`/`file-uploader`/`signature`/`board`: no backend upload
   endpoint — values are client-side data URLs / bare file metadata only.
 - Don't add a `mode` prop — preview vs. fill is the `inert`-wrapper, not a flag.
+- `api-call` (`WidgetProperties.apiCall`, see
+  `docs/v1.1.0/add-widget-api-call.md`): the property panel
+  (`ApiCallDescriptor`) configures host/method/url/params/headers/payload and
+  a JSON/image response mapping, but nothing executes the request yet —
+  `ApiCallWidgetItem` only renders a static summary. There is also no
+  mechanism yet for one widget to write another widget's fill-time value
+  (needed for the response "Fill" behavior); both are follow-up work.
+  `HostSelect` reads from a hardcoded mock list
+  (`constants/widget/apiHosts.ts`) since there's no settings/host-management
+  feature.
