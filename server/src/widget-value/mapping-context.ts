@@ -7,7 +7,9 @@ export interface MappingSource {
   meta: {
     createdAt: Date;
   };
-  /** User uuid -> name, for the widgets that reference users; omitted when the template has none. */
+  /** The widgets whose values get mapped - the template snapshot's widgets, not the submission's data keys, so every widget gets an entry. */
+  widgets: readonly Widget[];
+  /** User uuid -> name, for the widgets that reference users; omitted when the template has none, or when it is set later through `MappingContext.setUsers`. */
   users?: ReadonlyMap<string, string>;
 }
 
@@ -20,7 +22,11 @@ export interface MappingSource {
 export class MappingContext {
   private readonly doc: Record<string, Record<string, ValueMap>> = {};
 
-  constructor(private readonly source: MappingSource) {}
+  private users: ReadonlyMap<string, string>;
+
+  constructor(private readonly source: MappingSource) {
+    this.users = source.users ?? new Map();
+  }
 
   getRaw(widgetId: string): unknown {
     return this.source.data[widgetId];
@@ -34,8 +40,17 @@ export class MappingContext {
     return this.doc;
   }
 
+  /** Replaces the users the context resolves user references against (filled in after construction by `MappingContextLoader`). */
+  setUsers(users: ReadonlyMap<string, string>): void {
+    this.users = users;
+  }
+
   getUsers(): ReadonlyMap<string, string> {
-    return this.source.users ?? new Map();
+    return this.users;
+  }
+
+  getWidgets(): readonly Widget[] {
+    return this.source.widgets;
   }
 
   getMeta() {

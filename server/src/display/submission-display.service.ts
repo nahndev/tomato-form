@@ -1,19 +1,18 @@
 import { Submission } from "@/database/prisma-client";
 import type { TemplateSnapshot } from "@/template/template.types";
-import { UserService } from "@/user/user.service";
 import {
   MappingContext,
   MappingSource,
-  USER_REFERENCE_WIDGET_TYPES,
   WidgetValueFactory,
 } from "@/widget-value";
 import { Injectable } from "@nestjs/common";
 import { SubmissionDisplayDoc } from "./display.types";
+import { MappingContextLoader } from "./mapping-context.loader";
 
 @Injectable()
 export class SubmissionDisplayService {
   constructor(
-    private readonly userService: UserService,
+    private readonly contextLoader: MappingContextLoader,
     private readonly widgetValueFactory: WidgetValueFactory,
   ) {}
 
@@ -26,24 +25,14 @@ export class SubmissionDisplayService {
     const meta = { createdAt: submission.createdAt } as MappingSource["meta"];
     const widgets = Object.values(snapshot.widgets ?? {});
 
-    const users = widgets.some((widget) =>
-      USER_REFERENCE_WIDGET_TYPES.includes(widget.type),
-    )
-      ? await this.loadUserNames()
-      : undefined;
+    const context = new MappingContext({ data, meta, widgets });
+    await this.contextLoader.load(context);
 
-    const context = new MappingContext({ data, meta, users });
-
-    for (const widget of widgets) {
+    for (const widget of context.getWidgets()) {
       const widgetValue = this.widgetValueFactory.getValue(widget.type);
       widgetValue.map(context, widget);
     }
 
     return context.getDoc();
-  }
-
-  private async loadUserNames(): Promise<Map<string, string>> {
-    const users = await this.userService.findAll();
-    return new Map(users.map((user) => [user.uuid, user.name]));
   }
 }

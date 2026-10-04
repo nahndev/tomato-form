@@ -21,6 +21,7 @@ function getMappedDoc(widget: Widget, raw: unknown, users?: ReadonlyMap<string, 
   const context = new MappingContext({
     data: { [widget.id]: raw },
     meta: { createdAt: new Date(1700000000000) },
+    widgets: [widget],
     users,
   });
   const value = factory.getValue(widget.type);

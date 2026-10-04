@@ -3,6 +3,7 @@ import type { TemplateSnapshot, Widget } from "@/template/template.types";
 import { UserService } from "@/user/user.service";
 import { WidgetValueModule } from "@/widget-value";
 import { Test } from "@nestjs/testing";
+import { MappingContextLoader } from "./mapping-context.loader";
 import { SubmissionDisplayService } from "./submission-display.service";
 
 function getMockWidget(overrides?: Partial<Widget>): Widget {
@@ -30,6 +31,7 @@ describe("SubmissionDisplayService", () => {
     const moduleRef = await Test.createTestingModule({
       imports: [WidgetValueModule],
       providers: [
+        MappingContextLoader,
         SubmissionDisplayService,
         { provide: UserService, useValue: { findAll } },
       ],
