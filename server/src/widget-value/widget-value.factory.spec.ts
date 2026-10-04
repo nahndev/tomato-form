@@ -42,21 +42,22 @@ describe("WidgetValueFactory", () => {
     ];
 
     it.each(["select", "checkbox", "radio"])(
-      "keeps '%s' default property as the raw option keys",
+      "maps '%s' into a single default property, with the raw option keys under entity",
       (widgetType) => {
         const widget = getMockWidget({ type: widgetType, options });
 
-        expect(getMappedDoc(widget, "k1").w1.default).toEqual({ entity: ["k1"] });
-        expect(getMappedDoc(widget, ["k1", "k2"]).w1.default).toEqual({ entity: ["k1", "k2"] });
+        expect(Object.keys(getMappedDoc(widget, "k1").w1)).toEqual(["default"]);
+        expect(getMappedDoc(widget, "k1").w1.default.entity).toEqual(["k1"]);
+        expect(getMappedDoc(widget, ["k1", "k2"]).w1.default.entity).toEqual(["k1", "k2"]);
       },
     );
 
     it.each(["select", "checkbox", "radio"])(
-      "maps '%s' text property to the option text of a single key",
+      "maps '%s' text bucket to the option text of a single key",
       (widgetType) => {
         const widget = getMockWidget({ type: widgetType, options });
 
-        expect(getMappedDoc(widget, "k2").w1.text).toEqual({ text: "Banana" });
+        expect(getMappedDoc(widget, "k2").w1.default.text).toBe("Banana");
       },
     );
 
@@ -65,33 +66,33 @@ describe("WidgetValueFactory", () => {
       (widgetType) => {
         const widget = getMockWidget({ type: widgetType, options });
 
-        expect(getMappedDoc(widget, ["k1", "k3"]).w1.text).toEqual({ text: "Apple, Cherry" });
+        expect(getMappedDoc(widget, ["k1", "k3"]).w1.default.text).toBe("Apple, Cherry");
       },
     );
 
     it("keeps the order of the selected keys, not the order of the options", () => {
       const widget = getMockWidget({ type: "checkbox", options });
 
-      expect(getMappedDoc(widget, ["k3", "k1"]).w1.text).toEqual({ text: "Cherry, Apple" });
+      expect(getMappedDoc(widget, ["k3", "k1"]).w1.default.text).toBe("Cherry, Apple");
     });
 
     it("skips keys that no longer match an option", () => {
       const widget = getMockWidget({ type: "checkbox", options });
 
-      expect(getMappedDoc(widget, ["k1", "gone", "k2"]).w1.text).toEqual({ text: "Apple, Banana" });
-      expect(getMappedDoc(widget, "gone").w1.text).toEqual({ text: "" });
+      expect(getMappedDoc(widget, ["k1", "gone", "k2"]).w1.default.text).toBe("Apple, Banana");
+      expect(getMappedDoc(widget, "gone").w1.default.text).toBe("");
     });
 
-    it.each([undefined, null, []])("defaults the text property to an empty string when the value is %p", (raw) => {
+    it.each([undefined, null, []])("defaults the text bucket to an empty string when the value is %p", (raw) => {
       const widget = getMockWidget({ type: "select", options });
 
-      expect(getMappedDoc(widget, raw).w1.text).toEqual({ text: "" });
+      expect(getMappedDoc(widget, raw).w1.default.text).toBe("");
     });
 
-    it("defaults the text property to an empty string when the widget has no options", () => {
+    it("defaults the text bucket to an empty string when the widget has no options", () => {
       const widget = getMockWidget({ type: "select" });
 
-      expect(getMappedDoc(widget, "k1").w1.text).toEqual({ text: "" });
+      expect(getMappedDoc(widget, "k1").w1.default.text).toBe("");
     });
 
     it.each(["select", "checkbox", "radio"])(

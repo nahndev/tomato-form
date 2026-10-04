@@ -16,17 +16,14 @@
 
 ## Solutions
 
-- [x] Update backend mapper for value: new `ChoiceWidgetValue` (`widgets/choice.widget-value.ts`) exposes `default` (option keys, unchanged) + new `text` value type; `ChoiceTextValue` (`values/choice-text.value.ts`) resolves keys via `widget.options`
-- [x] Keys with no matching option are skipped (empty string when none match / no value / no options); selection order is kept
-- [x] Add `text` to backend `VALUE_TYPE`, `ValueProperty`, `ValuePropertyDto`; new `TextValueInterface` in `widget-value.types.ts`
-- [x] Frontend: add `ValueType.TEXT`, `VALUE_TYPE_LABELS`, and `text` value type for select/checkbox/radio in `WIDGET_VALUE_TYPE_REGISTRY`
-- [x] Tests: `widget-value.factory.spec.ts`, `valueTypes.test.ts`
+- [x] Update backend mapper for value: `ChoiceWidgetValue` (`widgets/choice.widget-value.ts`) keeps a single `default` value type, resolved through `ChoiceValue` (`values/choice.value.ts`), which maps into both `DISPLAY_TYPE.ENTITY` (option keys) and `DISPLAY_TYPE.TEXT` (option text via `widget.options`)
+- [x] No new value type: a board column on a choice widget picks `DisplayType.TEXT` from the existing `default` value type and reads the `text` bucket
+- [x] Keys with no matching option are skipped (empty string when none match / no value / no options); selection order is kept; multiple values joined by `", "`
+- [x] Tests: `widget-value.factory.spec.ts`
 
 ## Changelogs
 
-- `server/src/widget-value/widgets/choice.widget-value.ts` (new): `ChoiceWidgetValue` (+ `Select`/`Checkbox`/`RadioWidgetValue`, moved out of `entity.widget-value.ts`) maps `default` -> `{ entity: keys }` and `text` -> `{ text: "A, B" }`. `EntityWidgetValue` now only serves `users`/`submitted-by`.
-- `server/src/widget-value/values/choice-text.value.ts` (new): `ChoiceTextValue` + `CHOICE_TEXT_SEPARATOR`.
-- `server/src/widget-value/widget-value.types.ts`: `VALUE_TYPE.TEXT`, `TextValueInterface`.
-- `server/src/board/board.types.ts`, `board/dto/board-column.dto.ts`: accept `text` as a column item property.
-- `website/src/features/board/constants/column/valueTypes.ts`: `ValueType.TEXT`, label, registry entries for select/checkbox/radio.
+- `server/src/widget-value/values/choice.value.ts` (new): `ChoiceValue` (+ `CHOICE_TEXT_SEPARATOR`) returns `{ entity: keys, text: "A, B" }`; reuses `EntityValue` for the `entity` bucket.
+- `server/src/widget-value/widgets/choice.widget-value.ts` (new): `ChoiceWidgetValue` (+ `Select`/`Checkbox`/`RadioWidgetValue`, moved out of `entity.widget-value.ts`) maps only `default`, through `ChoiceValue`. `EntityWidgetValue` now only serves `users`/`submitted-by`.
+- An earlier iteration added a separate `text` value type (`VALUE_TYPE.TEXT`, `ValueProperty`/`ValuePropertyDto`, frontend `ValueType.TEXT`, `TextValueInterface`); it was removed in favour of the single `default` value type above.
 - `server/src/widget-value/widget-value.factory.spec.ts`: fixed `getMappedDoc` (missing required `meta`) so the suite compiles again. Pre-existing and unrelated, still failing: `created-at` null test (reads `meta.createdAt`, not the raw value), `submission.service.spec.ts`, and `display/submission-display.service.spec.ts` (type errors).

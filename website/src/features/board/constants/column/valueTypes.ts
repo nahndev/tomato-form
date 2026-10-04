@@ -6,15 +6,14 @@ export const ValueType = {
   DEFAULT: "default",
   DATE: "date",
   TIME: "time",
-  TEXT: "text",
 } as const;
 export type ValueType = ConstType<typeof ValueType>;
 
 /**
  * Which value-types a widget type exposes (a "property of the value", not of the
  * widget's own settings - see docs/v1.0.0/add-column-cell-property.md), and which
- * DisplayType(s) each one may render as on a board column. `datetime` (default/date/time)
- * and the choice widgets (default = option keys, text = the option text) have more than one.
+ * DisplayType(s) each one may render as on a board column. Only `datetime` has more
+ * than one value type.
  */
 export const WIDGET_VALUE_TYPE_REGISTRY: Record<WidgetType, Partial<Record<ValueType, DisplayType[]>>> = {
   [WidgetType.TEXT]: { [ValueType.DEFAULT]: [DisplayType.TEXT] },
@@ -27,9 +26,9 @@ export const WIDGET_VALUE_TYPE_REGISTRY: Record<WidgetType, Partial<Record<Value
     [ValueType.TIME]: [DisplayType.TIME, DisplayType.TEXT],
   },
   [WidgetType.TIME]: { [ValueType.DEFAULT]: [DisplayType.TIME, DisplayType.TEXT] },
-  [WidgetType.SELECT]: { [ValueType.DEFAULT]: [DisplayType.TEXT], [ValueType.TEXT]: [DisplayType.TEXT] },
-  [WidgetType.CHECKBOX]: { [ValueType.DEFAULT]: [DisplayType.TEXT], [ValueType.TEXT]: [DisplayType.TEXT] },
-  [WidgetType.RADIO]: { [ValueType.DEFAULT]: [DisplayType.TEXT], [ValueType.TEXT]: [DisplayType.TEXT] },
+  [WidgetType.SELECT]: { [ValueType.DEFAULT]: [DisplayType.TEXT] },
+  [WidgetType.CHECKBOX]: { [ValueType.DEFAULT]: [DisplayType.TEXT] },
+  [WidgetType.RADIO]: { [ValueType.DEFAULT]: [DisplayType.TEXT] },
   [WidgetType.LABEL]: {},
   [WidgetType.SIGNATURE]: { [ValueType.DEFAULT]: [DisplayType.TEXT] },
   [WidgetType.BUTTON]: {},
@@ -65,5 +64,4 @@ export const VALUE_TYPE_LABELS: Record<ValueType, string> = {
   [ValueType.DEFAULT]: "Default",
   [ValueType.DATE]: "Date",
   [ValueType.TIME]: "Time",
-  [ValueType.TEXT]: "Text",
 };

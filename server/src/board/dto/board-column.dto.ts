@@ -65,7 +65,6 @@ export const ValuePropertyDto = {
   DEFAULT: "default",
   DATE: "date",
   TIME: "time",
-  TEXT: "text",
 } as const;
 export type ValuePropertyDto =
   (typeof ValuePropertyDto)[keyof typeof ValuePropertyDto];
