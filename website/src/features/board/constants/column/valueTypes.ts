@@ -41,6 +41,7 @@ export const WIDGET_VALUE_TYPE_REGISTRY: Record<WidgetType, Partial<Record<Value
   [WidgetType.TEMPLATE]: {},
   [WidgetType.SUBMITTED_BY]: { [ValueType.DEFAULT]: [DisplayType.TEXT] },
   [WidgetType.BOARD]: {},
+  [WidgetType.API_CALL]: {},
 };
 
 /** Every value type a widget type exposes, in registry order (`default` always first). */
