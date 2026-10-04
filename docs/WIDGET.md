@@ -39,7 +39,8 @@ website/src/features/template/components/property/
 
 website/src/features/template/components/toolbar/
   ToolbarPanel.tsx                    right sidebar: all tabs from TOOLBAR_REGISTRY (Widget, Structure,
-                                       Property, Version); switches to Property when a widget is selected;
+                                       Property, Version, Assistant = CopilotKit chat, edit mode only);
+                                       switches to Property when a widget is selected;
                                        header button toggles docked/popup mode (store/toolbar-mode.store.ts)
   creation/WidgetPicker.tsx           reads WidgetItemList, calls addWidget
   property/WidgetPropertyBox.tsx      shows WidgetPropertyContent for selected widget

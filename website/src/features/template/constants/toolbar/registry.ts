@@ -2,6 +2,7 @@ import { WidgetPicker } from "@/features/template/components/toolbar/creation/Wi
 import { WidgetPropertyBox } from "@/features/template/components/toolbar/property/WidgetPropertyBox";
 import StructureToolbarBox from "@/features/template/components/toolbar/structure/StructureToolbarBox";
 import VersionSetting from "@/features/template/components/toolbar/version/VersionSetting";
+import { TemplateCopilotChat } from "@/features/template/sync/copilot/TemplateCopilotChat";
 import { TomatoIconKey } from "@tomato/icon";
 import { ComponentType } from "react";
 
@@ -10,6 +11,7 @@ export const ToolbarType = {
   Structure: "structure",
   Property: "property",
   Version: "version",
+  Chat: "chat",
 } as const;
 export type ToolbarType = (typeof ToolbarType)[keyof typeof ToolbarType];
 export interface ToolbarDefinition {
@@ -17,6 +19,8 @@ export interface ToolbarDefinition {
   type: ToolbarType;
   label: string;
   Component: ComponentType;
+  /** Hidden outside edit mode (needs the edit-only `CopilotKitProvider`). */
+  editOnly?: boolean;
 }
 
 export const TOOLBAR_REGISTRY: Record<ToolbarType, ToolbarDefinition> = {
@@ -43,5 +47,12 @@ export const TOOLBAR_REGISTRY: Record<ToolbarType, ToolbarDefinition> = {
     icon: TomatoIconKey.History,
     label: "Versions",
     Component: VersionSetting,
+  },
+  [ToolbarType.Chat]: {
+    type: ToolbarType.Chat,
+    icon: TomatoIconKey.Message,
+    label: "Assistant",
+    Component: TemplateCopilotChat,
+    editOnly: true,
   },
 };

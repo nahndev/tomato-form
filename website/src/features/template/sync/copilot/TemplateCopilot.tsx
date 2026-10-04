@@ -6,7 +6,6 @@ import { CopilotKitProvider } from "@copilotkit/react-core/v2";
 import "@copilotkit/react-core/v2/styles.css";
 import { toast } from "sonner";
 import { TemplateCopilotContext } from "./TemplateCopilotContext";
-import { TemplateCopilotPopup } from "./TemplateCopilotPopup";
 import { WidgetCopilotFunctions } from "./WidgetCopilotFunctions";
 
 /** Proxied to copilot-server by the `/copilotkit` rewrite in `next.config.ts`. */
@@ -18,8 +17,9 @@ interface TemplateCopilotProps {
 
 /**
  * Wraps the builder in the CopilotKit v2 provider and mounts the widget
- * functions + chat popup beside it. Only active while editing - in view mode
- * the copilot must not be able to change the template, so children render bare.
+ * functions beside it; the chat itself is the "Assistant" `ToolbarPanel` tab.
+ * Only active while editing - in view mode the copilot must not be able to
+ * change the template, so children render bare.
  */
 const TemplateCopilot: React.FC<TemplateCopilotProps> = ({ children }) => {
   const mode = useTemplateMode();
@@ -28,6 +28,7 @@ const TemplateCopilot: React.FC<TemplateCopilotProps> = ({ children }) => {
   return (
     <CopilotKitProvider
       runtimeUrl={COPILOT_RUNTIME_URL}
+      enableInspector={false}
       onError={(event) => {
         console.error("Copilot error", {
           code: event.code,
@@ -42,7 +43,6 @@ const TemplateCopilot: React.FC<TemplateCopilotProps> = ({ children }) => {
       <TemplateCopilotContext />
       <WidgetCopilotFunctions />
       {children}
-      <TemplateCopilotPopup />
     </CopilotKitProvider>
   );
 };

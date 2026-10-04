@@ -6,12 +6,15 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
 import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import {
   TOOLBAR_REGISTRY,
+  ToolbarDefinition,
   ToolbarType,
 } from "@/features/template/constants/toolbar/registry";
 import { ToolbarMode, useToolbarModeStore } from "@/store/toolbar-mode.store";
+import { TemplateMode } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
@@ -24,6 +27,10 @@ const ToolbarPanel: React.FC<ToolbarPanelProps> = () => {
   const mode = useToolbarModeStore((state) => state.mode);
   const setMode = useToolbarModeStore((state) => state.setMode);
   const { selected } = useWidgetSelection();
+  const templateMode = useTemplateMode();
+  const definitions = Object.values(TOOLBAR_REGISTRY).filter(
+    (definition) => !definition.editOnly || templateMode === TemplateMode.EDIT,
+  );
   const selectedId = selected?.id;
   const isPopup = mode === ToolbarMode.Popup;
 
@@ -69,7 +76,11 @@ const ToolbarPanel: React.FC<ToolbarPanelProps> = () => {
         <def.Component />
       </ToolbarPanelWrapper>
 
-      <ToolbarMenuList type={type} setType={selectType} />
+      <ToolbarMenuList
+        definitions={definitions}
+        type={type}
+        setType={selectType}
+      />
     </div>
   );
 };
@@ -164,14 +175,19 @@ const ToolbarHeader: React.FC<ToolbarHeaderProps> = ({
 };
 
 interface ToolbarMenuListProps {
+  definitions: ToolbarDefinition[];
   type: ToolbarType;
   setType: (active: ToolbarType) => void;
 }
-const ToolbarMenuList: React.FC<ToolbarMenuListProps> = ({ type, setType }) => {
+const ToolbarMenuList: React.FC<ToolbarMenuListProps> = ({
+  definitions,
+  type,
+  setType,
+}) => {
   return (
     <div className="p-2 bg-slate-100 h-full">
       <div className="flex flex-col gap-2">
-        {Object.values(TOOLBAR_REGISTRY).map((def) => (
+        {definitions.map((def) => (
           <Button
             key={def.type}
             variant="ghost"
