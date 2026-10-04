@@ -7,7 +7,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useTemplateMode } from "@/features/template/components/provider/TemplateBuilderProvider";
-import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import {
   TOOLBAR_REGISTRY,
   ToolbarDefinition,
@@ -17,7 +16,7 @@ import { ToolbarMode, useToolbarModeStore } from "@/store/toolbar-mode.store";
 import { TemplateMode } from "@/types/template";
 import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 export type ToolbarPanelProps = {};
 
@@ -26,26 +25,11 @@ const ToolbarPanel: React.FC<ToolbarPanelProps> = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const mode = useToolbarModeStore((state) => state.mode);
   const setMode = useToolbarModeStore((state) => state.setMode);
-  const { selected } = useWidgetSelection();
   const templateMode = useTemplateMode();
   const definitions = Object.values(TOOLBAR_REGISTRY).filter(
     (definition) => !definition.editOnly || templateMode === TemplateMode.EDIT,
   );
-  const selectedId = selected?.id;
   const isPopup = mode === ToolbarMode.Popup;
-
-  useEffect(() => {
-    void useToolbarModeStore.persist.rehydrate();
-  }, []);
-
-  // Switch to the Properties tab (and open the popup in popup mode) whenever a widget becomes selected.
-  useEffect(() => {
-    if (!selectedId) return;
-    setType(ToolbarType.Property);
-    if (useToolbarModeStore.getState().mode === ToolbarMode.Popup) {
-      setPopupOpen(true);
-    }
-  }, [selectedId]);
 
   const toggleMode = () => {
     if (isPopup) {
