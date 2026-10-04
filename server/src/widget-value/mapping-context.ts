@@ -7,6 +7,8 @@ export interface MappingSource {
   meta: {
     createdAt: Date;
   };
+  /** User uuid -> name, for the widgets that reference users; omitted when the template has none. */
+  users?: ReadonlyMap<string, string>;
 }
 
 /**
@@ -30,6 +32,10 @@ export class MappingContext {
 
   getDoc(): Record<string, Record<string, ValueMap>> {
     return this.doc;
+  }
+
+  getUsers(): ReadonlyMap<string, string> {
+    return this.source.users ?? new Map();
   }
 
   getMeta() {

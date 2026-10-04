@@ -56,7 +56,7 @@ export class SubmissionService {
           data: data as Prisma.InputJsonValue,
         },
       });
-      const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
+      const dataDisplays = await this.submissionDisplayService.buildDisplayDoc(
         submission,
         snapshot,
       );
@@ -181,7 +181,7 @@ export class SubmissionService {
     });
 
     const widgets = snapshot.widgets ?? {};
-    const dataDisplays = this.submissionDisplayService.buildDisplayDoc(
+    const dataDisplays = await this.submissionDisplayService.buildDisplayDoc(
       updatedSubmission,
       snapshot,
     );

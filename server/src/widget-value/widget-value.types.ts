@@ -21,6 +21,9 @@ export const WIDGET_TYPE = {
   TEXT_AREA: "text-area",
 } as const;
 
+/** Widget types whose value is a user uuid (or uuids) - the ones whose display text needs the users loaded. */
+export const USER_REFERENCE_WIDGET_TYPES: readonly string[] = [WIDGET_TYPE.USERS, WIDGET_TYPE.SUBMITTED_BY];
+
 /** Bucket a value-property's resolved value renders under. */
 export const DISPLAY_TYPE = {
   ENTITY: "entity",

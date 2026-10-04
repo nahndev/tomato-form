@@ -6,30 +6,76 @@ function getMockWidget(overrides?: Partial<Widget>): Widget {
   return { id: "w1", type: "text", label: "Field", ...overrides };
 }
 
-function getMappedDoc(widget: Widget, raw: unknown) {
-  const context = new MappingContext({ data: { [widget.id]: raw }, meta: { createdAt: new Date(1700000000000) } });
+function getMappedDoc(widget: Widget, raw: unknown, users?: ReadonlyMap<string, string>) {
+  const context = new MappingContext({
+    data: { [widget.id]: raw },
+    meta: { createdAt: new Date(1700000000000) },
+    users,
+  });
   const value = WidgetValueFactory.getValue(widget.type);
   value.map(context, widget);
   return context.getDoc();
 }
 
 describe("WidgetValueFactory", () => {
-  describe("entity widget types (users/submitted-by)", () => {
+  describe("user widget types (users/submitted-by)", () => {
+    const users = new Map([
+      ["u1", "Alice"],
+      ["u2", "Bob"],
+      ["u3", "Carol"],
+    ]);
+
     it.each(["users", "submitted-by"])(
-      "maps '%s' into a default entity property",
+      "maps '%s' into a single default property, with the uuids under entity",
       (widgetType) => {
         const widget = getMockWidget({ type: widgetType });
+        const doc = getMappedDoc(widget, ["u1", "u2"], users);
 
-        expect(getMappedDoc(widget, "approved")).toEqual({ w1: { default: { entity: ["approved"] } } });
+        expect(Object.keys(doc.w1)).toEqual(["default"]);
+        expect(doc.w1.default.entity).toEqual(["u1", "u2"]);
       },
     );
 
     it.each(["users", "submitted-by"])(
-      "defaults '%s' to an empty array when the value is missing",
+      "resolves '%s' uuids to user names under text, comma-joined in selection order",
       (widgetType) => {
         const widget = getMockWidget({ type: widgetType });
 
-        expect(getMappedDoc(widget, undefined)).toEqual({ w1: { default: { entity: [] } } });
+        expect(getMappedDoc(widget, "u2", users).w1.default.text).toBe("Bob");
+        expect(getMappedDoc(widget, ["u3", "u1"], users).w1.default.text).toBe("Carol, Alice");
+      },
+    );
+
+    it("skips uuids that no longer match a user", () => {
+      const widget = getMockWidget({ type: "users" });
+
+      expect(getMappedDoc(widget, ["u1", "gone", "u2"], users).w1.default.text).toBe("Alice, Bob");
+      expect(getMappedDoc(widget, "gone", users).w1.default.text).toBe("");
+    });
+
+    it.each([undefined, null, []])("defaults to empty entity and text when the value is %p", (raw) => {
+      const widget = getMockWidget({ type: "users" });
+
+      expect(getMappedDoc(widget, raw, users).w1.default).toEqual({ entity: [], text: "" });
+    });
+
+    it("defaults text to an empty string when no users were provided", () => {
+      const widget = getMockWidget({ type: "users" });
+
+      expect(getMappedDoc(widget, "u1").w1.default).toEqual({ entity: ["u1"], text: "" });
+    });
+
+    it.each(["users", "submitted-by"])(
+      "validates '%s' against a string, an array of strings, or nothing",
+      (widgetType) => {
+        const value = WidgetValueFactory.getValue(widgetType);
+
+        expect(value.validate("u1")).toBe(true);
+        expect(value.validate(["u1", "u2"])).toBe(true);
+        expect(value.validate(null)).toBe(true);
+        expect(value.validate(undefined)).toBe(true);
+        expect(value.validate(42)).toBe(false);
+        expect(value.validate(["u1", 42])).toBe(false);
       },
     );
   });

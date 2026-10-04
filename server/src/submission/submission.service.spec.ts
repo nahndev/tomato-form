@@ -25,7 +25,7 @@ function createMockSubmissionSearchService() {
 }
 
 function createMockSubmissionDisplayService() {
-  return { buildDisplayDoc: jest.fn().mockReturnValue({}) };
+  return { buildDisplayDoc: jest.fn().mockResolvedValue({}) };
 }
 
 describe("SubmissionService", () => {
@@ -51,7 +51,7 @@ describe("SubmissionService", () => {
     it("computes dataDisplays from the initial data and the template's widgets", async () => {
       const widgets = { w1: { id: "w1", type: "text", label: "Name" } };
       prisma.template.findUnique.mockResolvedValue({ snapshot: { widgets } });
-      submissionDisplayService.buildDisplayDoc.mockReturnValue({ w1: { text: "hello" } });
+      submissionDisplayService.buildDisplayDoc.mockResolvedValue({ w1: { text: "hello" } });
       prisma.submission.create.mockResolvedValue(getMockSubmissionEventRow());
 
       await service.create({
@@ -184,7 +184,7 @@ describe("SubmissionService", () => {
       const widgets = { w1: { id: "w1", type: "text", label: "Name" } };
       const row = getMockSubmissionEventRow({ data: {}, dataClocks: {}, snapshot: { widgets } });
       prisma.submission.findUnique.mockResolvedValue(row);
-      submissionDisplayService.buildDisplayDoc.mockReturnValue({ w1: { text: "hello" } });
+      submissionDisplayService.buildDisplayDoc.mockResolvedValue({ w1: { text: "hello" } });
 
       await service.applyValuesChangedEvent({
         submissionId: "s1",

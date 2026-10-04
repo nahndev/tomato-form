@@ -13,7 +13,7 @@ import {
 import {
   SubmittedByWidgetValue,
   UsersWidgetValue,
-} from "./widgets/entity.widget-value";
+} from "./widgets/user.widget-value";
 import {
   TextAreaWidgetValue,
   TextWidgetValue,
