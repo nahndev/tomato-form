@@ -3,7 +3,7 @@ import type { MappingContext } from "../mapping-context";
 import { EntityValue } from "../values/entity.value";
 import { VALUE_TYPE, WidgetValueInterface } from "../widget-value.types";
 
-/** `select`/`checkbox`/`radio`/`users`/`submitted-by`: a single `default` property, value is a tag id or array of tag ids. */
+/** `users`/`submitted-by`: a single `default` property, value is a tag id or array of tag ids. */
 export class EntityWidgetValue implements WidgetValueInterface {
   private readonly value = new EntityValue();
 
@@ -19,8 +19,5 @@ export class EntityWidgetValue implements WidgetValueInterface {
   }
 }
 
-export class SelectWidgetValue extends EntityWidgetValue {}
-export class CheckboxWidgetValue extends EntityWidgetValue {}
-export class RadioWidgetValue extends EntityWidgetValue {}
 export class UsersWidgetValue extends EntityWidgetValue {}
 export class SubmittedByWidgetValue extends EntityWidgetValue {}

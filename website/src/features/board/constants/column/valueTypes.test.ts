@@ -32,4 +32,17 @@ describe("WIDGET_VALUE_TYPE_REGISTRY", () => {
       DisplayType.TIME,
     ]);
   });
+
+  it.each([WidgetType.SELECT, WidgetType.CHECKBOX, WidgetType.RADIO])(
+    "exposes a text value type next to default for the %s choice widget",
+    (type) => {
+      expect(getWidgetValueTypes(type)).toEqual([ValueType.DEFAULT, ValueType.TEXT]);
+      expect(getValueTypeDisplayTypes(type, ValueType.TEXT)).toEqual([DisplayType.TEXT]);
+    },
+  );
+
+  it("keeps the text value type off widgets that have no option text to resolve", () => {
+    expect(getWidgetValueTypes(WidgetType.TEXT)).toEqual([ValueType.DEFAULT]);
+    expect(getValueTypeDisplayTypes(WidgetType.TEXT, ValueType.TEXT)).toEqual([]);
+  });
 });

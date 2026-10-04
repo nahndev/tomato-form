@@ -9,6 +9,8 @@ import {
   CheckboxWidgetValue,
   RadioWidgetValue,
   SelectWidgetValue,
+} from "./widgets/choice.widget-value";
+import {
   SubmittedByWidgetValue,
   UsersWidgetValue,
 } from "./widgets/entity.widget-value";

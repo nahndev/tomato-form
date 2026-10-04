@@ -7,15 +7,15 @@ function getMockWidget(overrides?: Partial<Widget>): Widget {
 }
 
 function getMappedDoc(widget: Widget, raw: unknown) {
-  const context = new MappingContext({ data: { [widget.id]: raw } });
+  const context = new MappingContext({ data: { [widget.id]: raw }, meta: { createdAt: new Date(1700000000000) } });
   const value = WidgetValueFactory.getValue(widget.type);
   value.map(context, widget);
   return context.getDoc();
 }
 
 describe("WidgetValueFactory", () => {
-  describe("entity widget types (select/checkbox/radio/users/submitted-by)", () => {
-    it.each(["select", "checkbox", "radio", "users", "submitted-by"])(
+  describe("entity widget types (users/submitted-by)", () => {
+    it.each(["users", "submitted-by"])(
       "maps '%s' into a default entity property",
       (widgetType) => {
         const widget = getMockWidget({ type: widgetType });
@@ -24,7 +24,7 @@ describe("WidgetValueFactory", () => {
       },
     );
 
-    it.each(["select", "checkbox", "radio", "users", "submitted-by"])(
+    it.each(["users", "submitted-by"])(
       "defaults '%s' to an empty array when the value is missing",
       (widgetType) => {
         const widget = getMockWidget({ type: widgetType });
@@ -32,8 +32,69 @@ describe("WidgetValueFactory", () => {
         expect(getMappedDoc(widget, undefined)).toEqual({ w1: { default: { entity: [] } } });
       },
     );
+  });
 
-    it.each(["select", "checkbox", "radio", "users", "submitted-by"])(
+  describe("choice widget types (select/checkbox/radio)", () => {
+    const options = [
+      { key: "k1", value: "Apple", index: "a0" },
+      { key: "k2", value: "Banana", index: "a1" },
+      { key: "k3", value: "Cherry", index: "a2" },
+    ];
+
+    it.each(["select", "checkbox", "radio"])(
+      "keeps '%s' default property as the raw option keys",
+      (widgetType) => {
+        const widget = getMockWidget({ type: widgetType, options });
+
+        expect(getMappedDoc(widget, "k1").w1.default).toEqual({ entity: ["k1"] });
+        expect(getMappedDoc(widget, ["k1", "k2"]).w1.default).toEqual({ entity: ["k1", "k2"] });
+      },
+    );
+
+    it.each(["select", "checkbox", "radio"])(
+      "maps '%s' text property to the option text of a single key",
+      (widgetType) => {
+        const widget = getMockWidget({ type: widgetType, options });
+
+        expect(getMappedDoc(widget, "k2").w1.text).toEqual({ text: "Banana" });
+      },
+    );
+
+    it.each(["select", "checkbox", "radio"])(
+      "joins the option texts of multiple keys of '%s' with a comma and space",
+      (widgetType) => {
+        const widget = getMockWidget({ type: widgetType, options });
+
+        expect(getMappedDoc(widget, ["k1", "k3"]).w1.text).toEqual({ text: "Apple, Cherry" });
+      },
+    );
+
+    it("keeps the order of the selected keys, not the order of the options", () => {
+      const widget = getMockWidget({ type: "checkbox", options });
+
+      expect(getMappedDoc(widget, ["k3", "k1"]).w1.text).toEqual({ text: "Cherry, Apple" });
+    });
+
+    it("skips keys that no longer match an option", () => {
+      const widget = getMockWidget({ type: "checkbox", options });
+
+      expect(getMappedDoc(widget, ["k1", "gone", "k2"]).w1.text).toEqual({ text: "Apple, Banana" });
+      expect(getMappedDoc(widget, "gone").w1.text).toEqual({ text: "" });
+    });
+
+    it.each([undefined, null, []])("defaults the text property to an empty string when the value is %p", (raw) => {
+      const widget = getMockWidget({ type: "select", options });
+
+      expect(getMappedDoc(widget, raw).w1.text).toEqual({ text: "" });
+    });
+
+    it("defaults the text property to an empty string when the widget has no options", () => {
+      const widget = getMockWidget({ type: "select" });
+
+      expect(getMappedDoc(widget, "k1").w1.text).toEqual({ text: "" });
+    });
+
+    it.each(["select", "checkbox", "radio"])(
       "validates '%s' against a string, an array of strings, or nothing",
       (widgetType) => {
         const value = WidgetValueFactory.getValue(widgetType);

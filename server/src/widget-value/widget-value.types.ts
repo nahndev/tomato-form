@@ -40,6 +40,7 @@ export const VALUE_TYPE = {
   DEFAULT: "default",
   DATE: "date",
   TIME: "time",
+  TEXT: "text",
 } as const;
 
 export type ValueType = (typeof VALUE_TYPE)[keyof typeof VALUE_TYPE];
@@ -68,6 +69,11 @@ export interface WidgetValueInterface {
 /** Exposed by a widget-value class that has a `date` value-property distinct from its `default` one (currently only `datetime`). */
 export interface DateValueInterface {
   getDateValue(): ValueInterface;
+}
+
+/** Exposed by a widget-value class that has a `text` value-property distinct from its `default` one (currently only the choice widgets: `select`/`checkbox`/`radio`), resolved from the widget's own settings rather than the raw value alone. */
+export interface TextValueInterface {
+  getTextValue(widget: Widget): ValueInterface;
 }
 
 /** Exposed by a widget-value class that has a `time` value-property distinct from its `default` one (currently only `datetime`). */

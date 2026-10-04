@@ -1,6 +1,6 @@
 export type BoardColumnDisplayType = "text" | "date" | "time" | "datetime" | "number";
 
-export type ValueProperty = "default" | "date" | "time";
+export type ValueProperty = "default" | "date" | "time" | "text";
 
 export type ColumnSize = { width: number } | { flex: number };
 
