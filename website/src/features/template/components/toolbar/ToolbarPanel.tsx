@@ -1,10 +1,18 @@
 import { Button } from "@/components/ui/button";
+import { ButtonIcon } from "@/components/ui/button-icon";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import {
   TOOLBAR_REGISTRY,
   ToolbarType,
 } from "@/features/template/constants/toolbar/registry";
-import { TomatoIcon } from "@tomato/icon";
+import { ToolbarMode, useToolbarModeStore } from "@/store/toolbar-mode.store";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 
@@ -12,38 +20,145 @@ export type ToolbarPanelProps = {};
 
 const ToolbarPanel: React.FC<ToolbarPanelProps> = () => {
   const [type, setType] = useState<ToolbarType>(ToolbarType.Widget);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const mode = useToolbarModeStore((state) => state.mode);
+  const setMode = useToolbarModeStore((state) => state.setMode);
   const { selected } = useWidgetSelection();
   const selectedId = selected?.id;
+  const isPopup = mode === ToolbarMode.Popup;
 
-  // Switch to the Properties tab whenever a widget becomes selected.
+  useEffect(() => {
+    void useToolbarModeStore.persist.rehydrate();
+  }, []);
+
+  // Switch to the Properties tab (and open the popup in popup mode) whenever a widget becomes selected.
   useEffect(() => {
     if (!selectedId) return;
     setType(ToolbarType.Property);
+    if (useToolbarModeStore.getState().mode === ToolbarMode.Popup) {
+      setPopupOpen(true);
+    }
   }, [selectedId]);
 
-  return (
-    <div className={clsx("flex flex-row", "w-[25em] h-full")}>
-      <ToolbarContent type={type} className="flex-1" />
+  const toggleMode = () => {
+    if (isPopup) {
+      setMode(ToolbarMode.Docked);
+      setPopupOpen(false);
+      return;
+    }
+    setMode(ToolbarMode.Popup);
+    setPopupOpen(true);
+  };
 
-      <ToolbarMenuList type={type} setType={setType} />
+  const selectType = (next: ToolbarType) => {
+    setType(next);
+    if (isPopup) setPopupOpen(true);
+  };
+
+  const def = TOOLBAR_REGISTRY[type];
+
+  return (
+    <div className={clsx("flex flex-row h-full", !isPopup && "w-[25em]")}>
+      <ToolbarPanelWrapper
+        label={def.label}
+        mode={mode}
+        onToggleMode={toggleMode}
+        open={popupOpen}
+        onOpenChange={setPopupOpen}
+      >
+        <def.Component />
+      </ToolbarPanelWrapper>
+
+      <ToolbarMenuList type={type} setType={selectType} />
     </div>
   );
 };
 
-interface ToolbarContentProps {
-  type: ToolbarType;
-  className: string;
+interface ToolbarPanelWrapperProps {
+  label: string;
+  mode: ToolbarMode;
+  onToggleMode: () => void;
+  /** Popup mode only: whether the dialog is open. */
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: React.ReactNode;
 }
-const ToolbarContent: React.FC<ToolbarContentProps> = ({ type, className }) => {
-  const def = TOOLBAR_REGISTRY[type];
-  return (
-    <div className={clsx("grid grid-rows-[auto_1fr]", className)}>
-      <div className="bg-slate-100 p-2">
-        <h6 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          {def.label}
-        </h6>
+/** Wraps a toolbar menu body with its header: a `Dialog` in popup mode, a docked `div` otherwise. */
+const ToolbarPanelWrapper: React.FC<ToolbarPanelWrapperProps> = ({
+  label,
+  mode,
+  onToggleMode,
+  open,
+  onOpenChange,
+  children,
+}) => {
+  if (mode !== ToolbarMode.Popup) {
+    return (
+      <div className="grid flex-1 grid-rows-[auto_1fr]">
+        <ToolbarHeader label={label} mode={mode} onToggleMode={onToggleMode} />
+        {children}
       </div>
-      <def.Component />
+    );
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="flex max-h-[85vh] max-w-md flex-col gap-0 overflow-hidden p-0">
+        <ToolbarHeader
+          label={label}
+          mode={mode}
+          onToggleMode={onToggleMode}
+          className="pr-10"
+          asDialogTitle
+        />
+        <DialogDescription className="sr-only">
+          {label} menu in popup mode
+        </DialogDescription>
+        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+interface ToolbarHeaderProps {
+  label: string;
+  mode: ToolbarMode;
+  onToggleMode: () => void;
+  className?: string;
+  asDialogTitle?: boolean;
+}
+const ToolbarHeader: React.FC<ToolbarHeaderProps> = ({
+  label,
+  mode,
+  onToggleMode,
+  className,
+  asDialogTitle,
+}) => {
+  const isPopup = mode === ToolbarMode.Popup;
+  const modeLabel = isPopup ? "Dock to sidebar" : "Open in popup";
+  const titleClassName =
+    "text-xs font-semibold uppercase tracking-wider leading-normal text-muted-foreground";
+
+  return (
+    <div
+      className={clsx(
+        "flex items-center justify-between bg-slate-100 p-2",
+        className,
+      )}
+    >
+      {asDialogTitle ? (
+        <DialogTitle className={titleClassName}>{label}</DialogTitle>
+      ) : (
+        <h6 className={titleClassName}>{label}</h6>
+      )}
+      <ButtonIcon
+        icon={isPopup ? TomatoIconKey.PanelRight : TomatoIconKey.AppWindow}
+        iconClassName="size-3.5"
+        className="size-6"
+        title={modeLabel}
+        aria-label={modeLabel}
+        onClick={onToggleMode}
+      />
     </div>
   );
 };
