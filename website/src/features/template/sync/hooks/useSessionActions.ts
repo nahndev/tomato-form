@@ -2,7 +2,7 @@
 
 import type { GridLayout, SessionProperties } from "@/types/template";
 import { useHandler, useTransaction } from "@tomato/sync";
-import { LayoutHandler } from "../handlers/LayoutHandler";
+import { LayoutHandler, type WidgetPlacement } from "../handlers/LayoutHandler";
 import { SessionHandler } from "../handlers/SessionHandler";
 
 export interface SessionActions {
@@ -14,6 +14,8 @@ export interface SessionActions {
     sessionId: string,
     layout: Partial<GridLayout>,
   ) => void;
+  /** Moves and/or resizes a widget (grid fields, session, order) as one undo step. */
+  placeWidget: (widgetId: string, placement: WidgetPlacement) => void;
 }
 
 /**
@@ -38,5 +40,8 @@ export function useSessionActions(): SessionActions {
 
     updateLayout: (widgetId, sessionId, patch) =>
       transact(() => layoutHandler.setLayout(widgetId, sessionId, patch)),
+
+    placeWidget: (widgetId, placement) =>
+      transact(() => layoutHandler.placeWidget(widgetId, placement)),
   };
 }

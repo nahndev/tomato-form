@@ -46,6 +46,9 @@ website/src/features/template/components/toolbar/
   property/WidgetPropertyContent.tsx  reads WIDGET_PROPERTY_REGISTRY, calls setProperty
 
 website/src/features/template/sync/
+  copilot/copilotTemplateContext.ts  builds the copilot's widget-type catalog from the registries above
+                                      (no per-widget edit needed); a new WidgetProperties key must get an
+                                      entry in PROPERTY_MEANINGS there (compile error otherwise)
   handlers/WidgetHandler.ts   yjs `widgets` map: addWidget/removeWidget/setProperty
   handlers/LayoutHandler.ts   places/removes GridLayout on widget add/remove events
   hooks/useWidgetActions.ts   addWidget(id, type, before) / removeWidget(id) / setProperty(id, key, value)

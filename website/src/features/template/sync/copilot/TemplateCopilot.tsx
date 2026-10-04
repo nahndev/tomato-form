@@ -5,6 +5,7 @@ import { TemplateMode } from "@/types/template";
 import { CopilotKitProvider } from "@copilotkit/react-core/v2";
 import "@copilotkit/react-core/v2/styles.css";
 import { toast } from "sonner";
+import { TemplateCopilotContext } from "./TemplateCopilotContext";
 import { TemplateCopilotPopup } from "./TemplateCopilotPopup";
 import { WidgetCopilotFunctions } from "./WidgetCopilotFunctions";
 
@@ -38,6 +39,7 @@ const TemplateCopilot: React.FC<TemplateCopilotProps> = ({ children }) => {
         );
       }}
     >
+      <TemplateCopilotContext />
       <WidgetCopilotFunctions />
       {children}
       <TemplateCopilotPopup />

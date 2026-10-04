@@ -11,6 +11,11 @@ export interface WidgetActions {
     before: Widget | null,
   ) => void;
   removeWidget: (widgetId: string) => void;
+  /** Sets several properties in one transaction (one undo step). */
+  setProperties: (
+    widgetId: string,
+    properties: Partial<WidgetProperties>,
+  ) => void;
   setProperty: <K extends keyof WidgetProperties>(
     widgetId: string,
     key: K,
@@ -33,6 +38,9 @@ export function useWidgetActions(): WidgetActions {
   return {
     addWidget: (id, type, before) =>
       transact(() => widgetHandler.addWidget(id, type, before)),
+
+    setProperties: (widgetId, properties) =>
+      transact(() => widgetHandler.setProperties(widgetId, properties)),
 
     removeWidget: (widgetId) =>
       transact(() => widgetHandler.removeWidget(widgetId)),

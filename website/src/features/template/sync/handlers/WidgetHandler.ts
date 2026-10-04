@@ -45,4 +45,15 @@ export class WidgetHandler {
     this.widgets.set(widgetId, widget);
     this.syncDoc.emit(new WidgetPropertyChangedEvent(widget, key));
   }
+
+  /** One write for all `properties`; still emits one event per changed key. */
+  setProperties(widgetId: string, properties: Partial<WidgetProperties>): void {
+    const current = this.widgets.get(widgetId);
+    if (!current) return;
+    const widget = { ...current, ...properties };
+    this.widgets.set(widgetId, widget);
+    for (const key of Object.keys(properties) as (keyof WidgetProperties)[]) {
+      this.syncDoc.emit(new WidgetPropertyChangedEvent(widget, key));
+    }
+  }
 }
