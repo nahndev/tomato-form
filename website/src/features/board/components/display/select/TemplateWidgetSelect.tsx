@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -13,34 +14,24 @@ import {
 import {
   VALUE_TYPE_LABELS,
   ValueType,
-  getValueTypeDisplayTypes,
-  getWidgetValueTypes,
 } from "@/features/board/constants/column/valueTypes";
 import { useTemplateWidgetsByDisplayTypes } from "@/features/board/hooks/useTemplateWidgetsByDisplayTypes";
-import { formatItemKey, parseItemKey } from "@/features/board/utils/itemKey";
+import { parseItemKey, formatItemKey } from "@/features/board/utils/itemKey";
+import {
+  groupWidgetOptions,
+  type WidgetOption,
+  type WidgetOptionEntry,
+} from "@/features/board/utils/widgetOptionGroups";
 import { WidgetItems } from "@/features/template/constants/widget/widgetItems";
+import { cn } from "@/lib/utils";
 import type { BoardColumnItem } from "@/types/board";
 import type { DisplayType } from "@/types/display-type";
-import type { Template, Widget } from "@/types/template";
-import { TomatoIcon } from "@tomato/icon";
-import { useMemo } from "react";
+import type { Template } from "@/types/template";
+import { TomatoIcon, TomatoIconKey } from "@tomato/icon";
+import { useMemo, useState } from "react";
 
 /** Radix Select.Item forbids an empty-string value, so a sentinel stands in for "no widget picked". */
 const UNSELECTED_WIDGET = "__unselected__";
-/** Bucket key for widgets that aren't placed in any session. */
-const UNGROUPED_SESSION = "__ungrouped__";
-
-interface WidgetOption {
-  itemKey: string;
-  widget: Widget;
-  valueType: ValueType;
-}
-
-interface OptionGroup {
-  sessionId: string;
-  sessionName: string | null;
-  options: WidgetOption[];
-}
 
 export interface TemplateWidgetSelectProps {
   template: Template;
@@ -49,11 +40,90 @@ export interface TemplateWidgetSelectProps {
   onChange: (item: BoardColumnItem | null) => void;
 }
 
+const OptionLabel: React.FC<{ option: WidgetOption }> = ({ option }) => (
+  <span className="flex min-w-0 items-center gap-2">
+    <TomatoIcon
+      icon={WidgetItems[option.widget.type].icon}
+      className="size-4 shrink-0 text-muted-foreground"
+    />
+    <span className="truncate" title={option.widget.label}>
+      {option.widget.label}
+    </span>
+    {option.valueType !== ValueType.DEFAULT && (
+      <span className="shrink-0 rounded bg-muted px-1 py-0.5 text-tiny font-medium uppercase text-muted-foreground">
+        {VALUE_TYPE_LABELS[option.valueType]}
+      </span>
+    )}
+  </span>
+);
+
+interface WidgetEntryRowsProps {
+  entry: WidgetOptionEntry;
+  expanded: boolean;
+  onToggle: () => void;
+}
+
+/** A widget row (selects its first value type) with, when it has more, a chevron folding the other value types under it. */
+const WidgetEntryRows: React.FC<WidgetEntryRowsProps> = ({
+  entry,
+  expanded,
+  onToggle,
+}) => {
+  const { primary, variants } = entry;
+  const expandable = variants.length > 0;
+
+  return (
+    <>
+      <div className="flex items-center">
+        {expandable ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            tabIndex={-1}
+            aria-expanded={expanded}
+            aria-label={`${expanded ? "Collapse" : "Expand"} ${primary.widget.label}`}
+            onClick={onToggle}
+          >
+            <TomatoIcon
+              icon={TomatoIconKey.ChevronRight}
+              className={cn("transition-transform", expanded && "rotate-90")}
+            />
+          </Button>
+        ) : (
+          <span className="size-6 shrink-0" aria-hidden />
+        )}
+        <SelectItem
+          value={primary.itemKey}
+          className="min-w-0 flex-1"
+          onKeyDown={(event) => {
+            if (!expandable) return;
+            if (event.key === "ArrowRight" && !expanded) onToggle();
+            if (event.key === "ArrowLeft" && expanded) onToggle();
+          }}
+        >
+          <OptionLabel option={primary} />
+        </SelectItem>
+      </div>
+      {expanded &&
+        variants.map((variant) => (
+          <SelectItem
+            key={variant.itemKey}
+            value={variant.itemKey}
+            className="ml-8 w-auto"
+          >
+            <span className="truncate">{VALUE_TYPE_LABELS[variant.valueType]}</span>
+          </SelectItem>
+        ))}
+    </>
+  );
+};
+
 /**
- * Widget + value-type picker for one linked template, grouped by session: a widget with
- * only one value type (the common case) shows once, a widget with more than one (e.g.
- * `datetime`) shows once per value type it exposes that fits `allowDisplayTypes`, tagged
- * with a badge (e.g. "Date" / "Time") rather than folded into the label text.
+ * Widget + value-type picker for one linked template, grouped by session. Every widget
+ * is one row; a widget with more than one value type (e.g. `datetime`) gets a chevron
+ * that expands its other value types (e.g. "Date" / "Time") beneath it. Groups start
+ * collapsed, except the one holding the current value.
  */
 const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
   template,
@@ -64,43 +134,38 @@ const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
   const ariaLabel = `Widget for ${template.name}`;
   const widgets = useTemplateWidgetsByDisplayTypes(template, allowDisplayTypes);
   const snapshot = template.snapshot;
+  /** User toggles by widget id; an untouched widget is expanded only while it holds the current value. */
+  const [toggled, setToggled] = useState<Record<string, boolean>>({});
 
-  const groups = useMemo(() => {
-    const bySession = new Map<string, OptionGroup>();
+  const groups = useMemo(
+    () => groupWidgetOptions(widgets, snapshot, allowDisplayTypes),
+    [widgets, snapshot, allowDisplayTypes],
+  );
 
-    widgets.forEach((widget) => {
-      const valueTypes = getWidgetValueTypes(widget.type).filter(
-        (valueType) =>
-          allowDisplayTypes === null ||
-          getValueTypeDisplayTypes(widget.type, valueType).some((type) =>
-            allowDisplayTypes.includes(type),
-          ),
-      );
-      if (valueTypes.length === 0) return;
-
-      const sessionId = snapshot.widgetToSession[widget.id] ?? UNGROUPED_SESSION;
-      const sessionName = snapshot.sessions[sessionId]?.name ?? null;
-
-      const group = bySession.get(sessionId) ?? { sessionId, sessionName, options: [] };
-      valueTypes.forEach((valueType) =>
-        group.options.push({
-          itemKey: formatItemKey(widget.id, valueType),
-          widget,
-          valueType,
-        }),
-      );
-      bySession.set(sessionId, group);
-    });
-
-    return Array.from(bySession.values());
-  }, [widgets, snapshot, allowDisplayTypes]);
-
-  const hasOptions = groups.some((group) => group.options.length > 0);
+  const hasOptions = groups.length > 0;
   const showGroupLabels = groups.length > 1;
 
   const selectedKey = value
     ? formatItemKey(value.widgetId, value.property as ValueType)
     : UNSELECTED_WIDGET;
+  const selectedOption = useMemo(
+    () =>
+      groups
+        .flatMap((group) => group.entries)
+        .flatMap((entry) => [entry.primary, ...entry.variants])
+        .find((option) => option.itemKey === selectedKey),
+    [groups, selectedKey],
+  );
+
+  const isExpanded = (entry: WidgetOptionEntry) =>
+    toggled[entry.primary.widget.id] ??
+    value?.widgetId === entry.primary.widget.id;
+
+  const toggleEntry = (entry: WidgetOptionEntry) =>
+    setToggled((current) => ({
+      ...current,
+      [entry.primary.widget.id]: !isExpanded(entry),
+    }));
 
   return (
     <Select
@@ -111,7 +176,14 @@ const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
       disabled={!hasOptions}
     >
       <SelectTrigger aria-label={ariaLabel}>
-        <SelectValue />
+        {/* Explicit content: a collapsed group unmounts its items, so Radix could not mirror the selected one. */}
+        <SelectValue>
+          {selectedOption ? (
+            <OptionLabel option={selectedOption} />
+          ) : (
+            !value && (hasOptions ? "Select widget" : "No matching widget")
+          )}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         <SelectItem value={UNSELECTED_WIDGET}>
@@ -123,23 +195,13 @@ const TemplateWidgetSelect: React.FC<TemplateWidgetSelectProps> = ({
             {showGroupLabels && (
               <SelectLabel>{group.sessionName ?? "Other"}</SelectLabel>
             )}
-            {group.options.map((option) => (
-              <SelectItem key={option.itemKey} value={option.itemKey}>
-                <span className="flex min-w-0 items-center gap-2">
-                  <TomatoIcon
-                    icon={WidgetItems[option.widget.type].icon}
-                    className="size-4 shrink-0 text-muted-foreground"
-                  />
-                  <span className="truncate" title={option.widget.label}>
-                    {option.widget.label}
-                  </span>
-                  {option.valueType !== ValueType.DEFAULT && (
-                    <span className="shrink-0 rounded bg-muted px-1 py-0.5 text-tiny font-medium uppercase text-muted-foreground">
-                      {VALUE_TYPE_LABELS[option.valueType]}
-                    </span>
-                  )}
-                </span>
-              </SelectItem>
+            {group.entries.map((entry) => (
+              <WidgetEntryRows
+                key={entry.primary.widget.id}
+                entry={entry}
+                expanded={isExpanded(entry)}
+                onToggle={() => toggleEntry(entry)}
+              />
             ))}
           </SelectGroup>
         ))}
