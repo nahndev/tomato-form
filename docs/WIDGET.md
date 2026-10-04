@@ -38,9 +38,9 @@ website/src/features/template/components/property/
   descriptors/<Key>Descriptor.tsx   one per WidgetProperties key
 
 website/src/features/template/components/toolbar/
+  ToolbarPanel.tsx                    right sidebar: all tabs from TOOLBAR_REGISTRY (Widget, Structure,
+                                       Property, Version); switches to Property when a widget is selected
   creation/WidgetPicker.tsx           reads WidgetItemList, calls addWidget
-  property/WidgetPropertyPanel.tsx    standalone left-hand panel (mirrors ToolbarPanel),
-                                       auto-opens via useWidgetSelection
   property/WidgetPropertyBox.tsx      shows WidgetPropertyContent for selected widget
   property/WidgetPropertyContent.tsx  reads WIDGET_PROPERTY_REGISTRY, calls setProperty
 

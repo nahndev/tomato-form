@@ -1,16 +1,25 @@
 import { Button } from "@/components/ui/button";
+import { useWidgetSelection } from "@/features/template/components/provider/TemplateProvider";
 import {
   TOOLBAR_REGISTRY,
   ToolbarType,
 } from "@/features/template/constants/toolbar/registry";
 import { TomatoIcon } from "@tomato/icon";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export type ToolbarPanelProps = {};
 
 const ToolbarPanel: React.FC<ToolbarPanelProps> = () => {
   const [type, setType] = useState<ToolbarType>(ToolbarType.Widget);
+  const { selected } = useWidgetSelection();
+  const selectedId = selected?.id;
+
+  // Switch to the Properties tab whenever a widget becomes selected.
+  useEffect(() => {
+    if (!selectedId) return;
+    setType(ToolbarType.Property);
+  }, [selectedId]);
 
   return (
     <div className={clsx("flex flex-row", "w-[25em] h-full")}>
