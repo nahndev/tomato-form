@@ -17,11 +17,12 @@ import {
 /**
  * Registers what the copilot knows about the form beyond its widgets: the
  * template, the grid and layout, what each widget type and property is, and
- * the widget selected in the builder. Renders nothing. The widgets themselves
+ * the builder selection. Renders nothing. The widgets themselves
  * are registered by `WidgetCopilotFunctions`.
  */
 export const TemplateCopilotContext: React.FC = () => {
-  const { name, sessions, layouts, widgets, widgetToSession } = useTemplateState();
+  const { name, sessions, layouts, widgets, widgetToSession } =
+    useTemplateState();
   const { version } = useTemplateMeta();
   const { selected } = useWidgetSelection();
 
@@ -53,19 +54,36 @@ export const TemplateCopilotContext: React.FC = () => {
     value: propertyMeanings,
   });
 
+  // JSON strings: they drop the unset (undefined) fields, which the context's
+  // JSON value type does not accept.
   useAgentContext({
     description:
-      "The template's sessions and, in placement order (top to bottom), the widgets in each with their grid column, span, full-width and static flags. Properties of a widget are in the widgets context, by `widgetId`.",
+      "The template's sessions (name, icon, description, when shown) and, in placement order (top to bottom), the widgets in each with their grid column, span, full-width and static flags. Properties of a widget are in the widgets context, by `widgetId`.",
     value: useMemo(
-      () => describeSessions({ sessions, layouts, widgets, widgetToSession }),
+      () =>
+        JSON.stringify(
+          describeSessions({ sessions, layouts, widgets, widgetToSession }),
+        ),
       [sessions, layouts, widgets, widgetToSession],
     ),
   });
 
   useAgentContext({
     description:
-      "The widget the user has selected in the builder (its properties are open for editing), or null. Requests like \"this field\" or \"the selected widget\" mean this one.",
-    value: describeSelection(selected),
+      'What the user has selected in the builder. `widget` is the selected widget (null when none): its properties, the properties its type can set, its grid layout, its session, its place in that session and the widgets right before and after it. `currentSession` is the session the user is working in: the selected widget\'s, or the first session while no widget is selected (`derivedFrom` says which). Requests like "this field", "the selected widget", "this section" or "add a field here" mean these; use their ids in tools.',
+    value: useMemo(
+      () =>
+        JSON.stringify(
+          describeSelection({
+            selected,
+            sessions,
+            layouts,
+            widgets,
+            widgetToSession,
+          }),
+        ),
+      [selected, sessions, layouts, widgets, widgetToSession],
+    ),
   });
 
   return null;

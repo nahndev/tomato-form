@@ -11,6 +11,7 @@ import {
   type SessionCondition,
   type Widget,
 } from "@/types/template";
+import { describeWidget, editorStateToText } from "./copilotWidgetProperties";
 import { COLUMN_WIDTH, CONTAINER_MIN_HEIGHT, GRID_COLUMNS } from "@tomato/grid";
 
 /**
@@ -81,25 +82,36 @@ function describeCondition(condition: SessionCondition | undefined) {
   return condition ?? { type: SessionConditionType.ALWAYS };
 }
 
+type SessionsState = Pick<
+  TemplateState,
+  "sessions" | "layouts" | "widgets" | "widgetToSession"
+>;
+
+/** Ids of the widgets in a session with their layout, top to bottom (placement order). */
+function orderedSessionWidgets(state: SessionsState, sessionId: string) {
+  const { layouts, widgets, widgetToSession } = state;
+  return Object.keys(widgets)
+    .filter((widgetId) => widgetToSession[widgetId] === sessionId)
+    .map((widgetId) => ({ widgetId, layout: layouts[widgetId] ?? DEFAULT_LAYOUT }))
+    .sort((a, b) => (a.layout.idx > b.layout.idx ? 1 : -1));
+}
+
 /**
  * The template's sessions (wizard steps) and, in placement order, the widgets
  * in each with their grid layout. Widgets are referred to by id; their
  * properties are in the widgets context.
  */
-export function describeSessions(
-  state: Pick<TemplateState, "sessions" | "layouts" | "widgets" | "widgetToSession">,
-) {
-  const { sessions, layouts, widgets, widgetToSession } = state;
-
-  return Object.values(sessions).map((session: Session) => ({
+export function describeSessions(state: SessionsState) {
+  return Object.values(state.sessions).map((session: Session) => ({
     id: session.id,
     name: session.name,
+    icon: session.icon,
+    description: session.description && editorStateToText(session.description),
     showWhen: describeCondition(session.condition),
-    widgets: Object.keys(widgets)
-      .filter((widgetId) => widgetToSession[widgetId] === session.id)
-      .map((widgetId) => ({ widgetId, layout: layouts[widgetId] ?? DEFAULT_LAYOUT }))
-      .sort((a, b) => (a.layout.idx > b.layout.idx ? 1 : -1))
-      .map(({ widgetId, layout }) => ({ widgetId, ...describeLayout(layout) })),
+    widgets: orderedSessionWidgets(state, session.id).map(({ widgetId, layout }) => ({
+      widgetId,
+      ...describeLayout(layout),
+    })),
   }));
 }
 
@@ -111,8 +123,53 @@ export function describeTemplate(name: string, version: string | undefined) {
   };
 }
 
-/** The widget open in the builder's property panel, or `null` when none is selected. */
-export function describeSelection(selected: Widget | null) {
-  if (!selected) return null;
-  return { widgetId: selected.id, type: selected.type, label: selected.label };
+interface SelectionState extends SessionsState {
+  selected: Widget | null;
+}
+
+/**
+ * The widget selected in the builder, with everything the model needs to act
+ * on it without joining other contexts by id: its properties, what its type
+ * can set, its layout, its session and its neighbours in that session. There
+ * is no session selection in the builder, so the current session is the
+ * selected widget's, or the first session while nothing is selected.
+ */
+export function describeSelection(state: SelectionState) {
+  const { selected, sessions, widgetToSession } = state;
+  const sessionId = selected ? widgetToSession[selected.id] : undefined;
+  const widgetSession = sessionId ? sessions[sessionId] : undefined;
+  const currentSession = widgetSession ?? Object.values(sessions)[0];
+
+  return {
+    widget: selected && describeSelectedWidget(state, selected, widgetSession),
+    currentSession: currentSession
+      ? {
+          id: currentSession.id,
+          name: currentSession.name,
+          derivedFrom: widgetSession ? "selected-widget" : "first-session",
+        }
+      : null,
+  };
+}
+
+function describeSelectedWidget(
+  state: SelectionState,
+  selected: Widget,
+  session: Session | undefined,
+) {
+  const siblings = session ? orderedSessionWidgets(state, session.id) : [];
+  const index = siblings.findIndex(({ widgetId }) => widgetId === selected.id);
+
+  return {
+    widgetId: selected.id,
+    type: selected.type,
+    label: selected.label,
+    properties: describeWidget(selected),
+    settableProperties: WIDGET_PROPERTY_REGISTRY[selected.type],
+    layout: describeLayout(state.layouts[selected.id] ?? DEFAULT_LAYOUT),
+    session: session ? { id: session.id, name: session.name } : null,
+    position: index === -1 ? null : { index: index + 1, of: siblings.length },
+    previousWidgetId: siblings[index - 1]?.widgetId ?? null,
+    nextWidgetId: siblings[index + 1]?.widgetId ?? null,
+  };
 }

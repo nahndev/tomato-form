@@ -5,6 +5,7 @@ import { TemplateMode } from "@/types/template";
 import { CopilotKitProvider } from "@copilotkit/react-core/v2";
 import "@copilotkit/react-core/v2/styles.css";
 import { toast } from "sonner";
+import { SessionCopilotFunctions } from "./SessionCopilotFunctions";
 import { TemplateCopilotContext } from "./TemplateCopilotContext";
 import { WidgetCopilotFunctions } from "./WidgetCopilotFunctions";
 
@@ -17,7 +18,7 @@ interface TemplateCopilotProps {
 
 /**
  * Wraps the builder in the CopilotKit v2 provider and mounts the widget
- * functions beside it; the chat itself is the "Assistant" `ToolbarPanel` tab.
+ * and session functions beside it; the chat itself is the "Assistant" `ToolbarPanel` tab.
  * Only active while editing - in view mode the copilot must not be able to
  * change the template, so children render bare.
  */
@@ -42,6 +43,7 @@ const TemplateCopilot: React.FC<TemplateCopilotProps> = ({ children }) => {
     >
       <TemplateCopilotContext />
       <WidgetCopilotFunctions />
+      <SessionCopilotFunctions />
       {children}
     </CopilotKitProvider>
   );

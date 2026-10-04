@@ -132,7 +132,7 @@ function toOptions(values: string[], existing: OptionItem[] = []): OptionItem[] 
   });
 }
 
-function toEditorState(text: string): SerializedEditorState {
+export function toEditorState(text: string): SerializedEditorState {
   const paragraphs = text.split("\n").map((line): SerializedParagraphNode => {
     const run: SerializedTextNode = {
       type: "text",
@@ -172,7 +172,7 @@ function nodeText(node: SerializedLexicalNode): string {
   return node.children.map(nodeText).join("");
 }
 
-function editorStateToText(state: SerializedEditorState): string {
+export function editorStateToText(state: SerializedEditorState): string {
   return state.root.children.map(nodeText).join("\n");
 }
 
