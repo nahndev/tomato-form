@@ -3,11 +3,17 @@ import type { NextConfig } from "next";
 const SERVER_API_URL = process.env.SERVER_API_URL ?? "http://localhost:3022";
 const STORAGE_API_URL = process.env.STORAGE_API_URL ?? "http://localhost:3023";
 
+const COPILOT_API_URL = process.env.COPILOT_API_URL ?? "http://localhost:3030";
+
 const nextConfig: NextConfig = {
   output: "standalone",
   transpilePackages: ["@tomato/icon", "@tomato/grid", "@tomato/timeline"],
   async rewrites() {
     return [
+      {
+        source: "/copilotkit/:path*",
+        destination: `${COPILOT_API_URL}/copilotkit/:path*`,
+      },
       {
         source: "/api/storage/:path*",
         destination: `${STORAGE_API_URL}/api/:path*`,

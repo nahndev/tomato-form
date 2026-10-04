@@ -36,7 +36,17 @@ services:
     volumes:
       - meilisearch_data:/meili_data
 
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   restart: "no"
+  #   mem_limit: 8g
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+
 volumes:
   postgres_data:
   rabbitmq_data:
   meilisearch_data:
+  ollama_data:
