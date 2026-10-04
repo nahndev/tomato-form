@@ -1,17 +1,22 @@
 import type { Widget } from "@/template/template.types";
+import { Injectable } from "@nestjs/common";
 import type { MappingContext } from "../mapping-context";
-import { DateTimeValue, DateValue, TimeValue } from "../values/date.value";
+import {
+  BaseDateValue,
+  DateTimeValue,
+  DateValue,
+  TimeValue,
+} from "../values/date.value";
 import {
   DateValueInterface,
   TimeValueInterface,
   VALUE_TYPE,
-  ValueInterface,
   WidgetValueInterface,
 } from "../widget-value.types";
 
-/** `date`/`time`/`created-at`: a single `default` property, value is an epoch-ms timestamp. Subclasses only differ in which `ValueInterface` formats that property's fallback text. */
+/** `date`/`time`/`created-at`: a single `default` property, value is an epoch-ms timestamp. Subclasses only differ in which date value class (injected) formats that property's fallback text. */
 abstract class BaseDateWidgetValue implements WidgetValueInterface {
-  protected abstract readonly value: ValueInterface;
+  constructor(protected readonly value: BaseDateValue) {}
 
   validate(value: unknown): boolean {
     return value === null || value === undefined || typeof value === "number";
@@ -25,40 +30,53 @@ abstract class BaseDateWidgetValue implements WidgetValueInterface {
   }
 }
 
+@Injectable()
 export class DateWidgetValue extends BaseDateWidgetValue {
-  protected readonly value = new DateValue();
+  constructor(value: DateValue) {
+    super(value);
+  }
 }
 
+@Injectable()
 export class TimeWidgetValue extends BaseDateWidgetValue {
-  protected readonly value = new TimeValue();
+  constructor(value: TimeValue) {
+    super(value);
+  }
 }
 
+@Injectable()
 export class CreatedAtWidgetValue extends BaseDateWidgetValue {
-  protected readonly value = new DateValue();
+  constructor(value: DateValue) {
+    super(value);
+  }
 
   map(context: MappingContext, widget: Widget): void {
     const raw = context.getMeta().createdAt.getTime();
-    console.log(this.value.getMapped(raw), widget.id);
     context.setMapped(widget, {
       [VALUE_TYPE.DEFAULT]: this.value.getMapped(raw),
     });
   }
 }
 
-/** The only widget with more than one value-property: exposes `default` (full date+time), `date`, and `time`, all resolved from the same raw epoch-ms value but formatted by their own `ValueInterface`. */
+/** The only widget with more than one value-property: exposes `default` (full date+time), `date`, and `time`, all resolved from the same raw epoch-ms value but formatted by their own value class. */
+@Injectable()
 export class DatetimeWidgetValue
   extends BaseDateWidgetValue
   implements DateValueInterface, TimeValueInterface
 {
-  protected readonly value = new DateTimeValue();
-  private readonly dateValue = new DateValue();
-  private readonly timeValue = new TimeValue();
+  constructor(
+    value: DateTimeValue,
+    private readonly dateValue: DateValue,
+    private readonly timeValue: TimeValue,
+  ) {
+    super(value);
+  }
 
-  getDateValue(): ValueInterface {
+  getDateValue(): DateValue {
     return this.dateValue;
   }
 
-  getTimeValue(): ValueInterface {
+  getTimeValue(): TimeValue {
     return this.timeValue;
   }
 

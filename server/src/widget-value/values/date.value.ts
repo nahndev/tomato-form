@@ -1,3 +1,4 @@
+import { Injectable } from "@nestjs/common";
 import { DISPLAY_TYPE, ValueInterface, ValueMap } from "../widget-value.types";
 
 /**
@@ -7,7 +8,7 @@ import { DISPLAY_TYPE, ValueInterface, ValueMap } from "../widget-value.types";
  * (a chosen `DisplayType` should never render blank); subclasses only differ in how
  * that fallback text is formatted.
  */
-abstract class BaseDateValue implements ValueInterface {
+export abstract class BaseDateValue implements ValueInterface {
   getMapped(value: unknown): ValueMap {
     const resolved = typeof value === "number" ? value : null;
     return {
@@ -19,18 +20,21 @@ abstract class BaseDateValue implements ValueInterface {
   protected abstract formatText(date: Date): string;
 }
 
+@Injectable()
 export class DateValue extends BaseDateValue {
   protected formatText(date: Date): string {
     return date.toLocaleDateString();
   }
 }
 
+@Injectable()
 export class TimeValue extends BaseDateValue {
   protected formatText(date: Date): string {
     return date.toLocaleTimeString();
   }
 }
 
+@Injectable()
 export class DateTimeValue extends BaseDateValue {
   protected formatText(date: Date): string {
     return date.toLocaleString();

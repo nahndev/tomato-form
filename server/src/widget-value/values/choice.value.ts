@@ -1,4 +1,5 @@
-import type { OptionItem } from "@/template/template.types";
+import type { Widget } from "@/template/template.types";
+import { Injectable } from "@nestjs/common";
 import { DISPLAY_TYPE, ValueInterface, ValueMap } from "../widget-value.types";
 import { EntityValue } from "./entity.value";
 
@@ -10,14 +11,13 @@ export const CHOICE_TEXT_SEPARATOR = ", ";
  * `CHOICE_TEXT_SEPARATOR`). Keys with no matching option (e.g. the option was since deleted) are
  * skipped from `text`; it defaults to an empty string.
  */
+@Injectable()
 export class ChoiceValue implements ValueInterface {
-  private readonly entityValue = new EntityValue();
+  constructor(private readonly entityValue: EntityValue) {}
 
-  constructor(private readonly options: readonly OptionItem[] = []) {}
-
-  getMapped(value: unknown): ValueMap {
+  getMapped(value: unknown, widget: Widget): ValueMap {
     const entity = this.entityValue.getMapped(value)[DISPLAY_TYPE.ENTITY] as string[];
-    const textByKey = new Map(this.options.map((option) => [option.key, option.value]));
+    const textByKey = new Map((widget.options ?? []).map((option) => [option.key, option.value]));
     const texts = entity.flatMap((key) => textByKey.get(key) ?? []);
 
     return {

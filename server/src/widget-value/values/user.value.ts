@@ -1,3 +1,6 @@
+import type { Widget } from "@/template/template.types";
+import { Injectable } from "@nestjs/common";
+import type { MappingContext } from "../mapping-context";
 import { DISPLAY_TYPE, ValueInterface, ValueMap } from "../widget-value.types";
 import { CHOICE_TEXT_SEPARATOR } from "./choice.value";
 import { EntityValue } from "./entity.value";
@@ -8,14 +11,14 @@ import { EntityValue } from "./entity.value";
  * Uuids with no matching user (e.g. the user was since deleted) are skipped from `text`; it
  * defaults to an empty string.
  */
+@Injectable()
 export class UserValue implements ValueInterface {
-  private readonly entityValue = new EntityValue();
+  constructor(private readonly entityValue: EntityValue) {}
 
-  constructor(private readonly users: ReadonlyMap<string, string>) {}
-
-  getMapped(value: unknown): ValueMap {
+  getMapped(value: unknown, _widget: Widget, context: MappingContext): ValueMap {
     const entity = this.entityValue.getMapped(value)[DISPLAY_TYPE.ENTITY] as string[];
-    const names = entity.flatMap((uuid) => this.users.get(uuid) ?? []);
+    const users = context.getUsers();
+    const names = entity.flatMap((uuid) => users.get(uuid) ?? []);
 
     return {
       [DISPLAY_TYPE.ENTITY]: entity,

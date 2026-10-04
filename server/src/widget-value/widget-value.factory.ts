@@ -1,50 +1,62 @@
+import { Injectable } from "@nestjs/common";
 import { WIDGET_TYPE, WidgetValueInterface } from "./widget-value.types";
-import {
-  CreatedAtWidgetValue,
-  DateWidgetValue,
-  DatetimeWidgetValue,
-  TimeWidgetValue,
-} from "./widgets/date.widget-value";
 import {
   CheckboxWidgetValue,
   RadioWidgetValue,
   SelectWidgetValue,
 } from "./widgets/choice.widget-value";
 import {
-  SubmittedByWidgetValue,
-  UsersWidgetValue,
-} from "./widgets/user.widget-value";
-import {
-  TextAreaWidgetValue,
-  TextWidgetValue,
-} from "./widgets/text.widget-value";
+  CreatedAtWidgetValue,
+  DateWidgetValue,
+  DatetimeWidgetValue,
+  TimeWidgetValue,
+} from "./widgets/date.widget-value";
+import { TextAreaWidgetValue, TextWidgetValue } from "./widgets/text.widget-value";
 import { UnSupportWidgetValue } from "./widgets/un-support.widget-value";
+import { SubmittedByWidgetValue, UsersWidgetValue } from "./widgets/user.widget-value";
 
 /**
  * Resolves a widget type string to the `WidgetValueInterface` that knows how to validate
  * and map its value - the single, shared value contract callers (currently `display`) read
  * a widget's value through instead of re-deriving their own notion of its shape. Add new
- * widget types by registering them here; an unregistered type falls back to
- * `UnSupportWidgetValue` (string coercion), same as the pre-refactor `DisplayMapperFactory`.
+ * widget types by injecting them here and registering them in `values`; an unregistered type
+ * falls back to `UnSupportWidgetValue` (string coercion), same as the pre-refactor
+ * `DisplayMapperFactory`.
  */
+@Injectable()
 export class WidgetValueFactory {
-  private static readonly values: Partial<
-    Record<string, WidgetValueInterface>
-  > = {
-    [WIDGET_TYPE.SELECT]: new SelectWidgetValue(),
-    [WIDGET_TYPE.CHECKBOX]: new CheckboxWidgetValue(),
-    [WIDGET_TYPE.RADIO]: new RadioWidgetValue(),
-    [WIDGET_TYPE.USERS]: new UsersWidgetValue(),
-    [WIDGET_TYPE.SUBMITTED_BY]: new SubmittedByWidgetValue(),
-    [WIDGET_TYPE.DATE]: new DateWidgetValue(),
-    [WIDGET_TYPE.DATETIME]: new DatetimeWidgetValue(),
-    [WIDGET_TYPE.TIME]: new TimeWidgetValue(),
-    [WIDGET_TYPE.CREATED_AT]: new CreatedAtWidgetValue(),
-    [WIDGET_TYPE.TEXT]: new TextWidgetValue(),
-    [WIDGET_TYPE.TEXT_AREA]: new TextAreaWidgetValue(),
-  };
+  private readonly values: Partial<Record<string, WidgetValueInterface>>;
 
-  static getValue(widgetType: string): WidgetValueInterface {
-    return this.values[widgetType] ?? new UnSupportWidgetValue();
+  constructor(
+    select: SelectWidgetValue,
+    checkbox: CheckboxWidgetValue,
+    radio: RadioWidgetValue,
+    users: UsersWidgetValue,
+    submittedBy: SubmittedByWidgetValue,
+    date: DateWidgetValue,
+    datetime: DatetimeWidgetValue,
+    time: TimeWidgetValue,
+    createdAt: CreatedAtWidgetValue,
+    text: TextWidgetValue,
+    textArea: TextAreaWidgetValue,
+    private readonly unSupportValue: UnSupportWidgetValue,
+  ) {
+    this.values = {
+      [WIDGET_TYPE.SELECT]: select,
+      [WIDGET_TYPE.CHECKBOX]: checkbox,
+      [WIDGET_TYPE.RADIO]: radio,
+      [WIDGET_TYPE.USERS]: users,
+      [WIDGET_TYPE.SUBMITTED_BY]: submittedBy,
+      [WIDGET_TYPE.DATE]: date,
+      [WIDGET_TYPE.DATETIME]: datetime,
+      [WIDGET_TYPE.TIME]: time,
+      [WIDGET_TYPE.CREATED_AT]: createdAt,
+      [WIDGET_TYPE.TEXT]: text,
+      [WIDGET_TYPE.TEXT_AREA]: textArea,
+    };
+  }
+
+  getValue(widgetType: string): WidgetValueInterface {
+    return this.values[widgetType] ?? this.unSupportValue;
   }
 }

@@ -12,7 +12,10 @@ import { SubmissionDisplayDoc } from "./display.types";
 
 @Injectable()
 export class SubmissionDisplayService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly widgetValueFactory: WidgetValueFactory,
+  ) {}
 
   /** Maps a submission's current values to a `SubmissionDisplayDoc` for rendering, iterating the snapshot's widgets (not the submission's data) so every widget gets an entry - backfilled with its value contract's default when the submission has no value. A widget type with no registered `WidgetValueInterface` falls back to `UnSupportWidgetValue` (string coercion). Users are only loaded when the snapshot has a widget that references them. */
   async buildDisplayDoc(
@@ -32,7 +35,7 @@ export class SubmissionDisplayService {
     const context = new MappingContext({ data, meta, users });
 
     for (const widget of widgets) {
-      const widgetValue = WidgetValueFactory.getValue(widget.type);
+      const widgetValue = this.widgetValueFactory.getValue(widget.type);
       widgetValue.map(context, widget);
     }
 

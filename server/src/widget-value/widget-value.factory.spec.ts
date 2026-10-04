@@ -1,6 +1,17 @@
 import type { Widget } from "@/template/template.types";
+import { Test } from "@nestjs/testing";
 import { MappingContext } from "./mapping-context";
 import { WidgetValueFactory } from "./widget-value.factory";
+import { WidgetValueModule } from "./widget-value.module";
+
+let factory: WidgetValueFactory;
+
+beforeAll(async () => {
+  const moduleRef = await Test.createTestingModule({
+    imports: [WidgetValueModule],
+  }).compile();
+  factory = moduleRef.get(WidgetValueFactory);
+});
 
 function getMockWidget(overrides?: Partial<Widget>): Widget {
   return { id: "w1", type: "text", label: "Field", ...overrides };
@@ -12,7 +23,7 @@ function getMappedDoc(widget: Widget, raw: unknown, users?: ReadonlyMap<string, 
     meta: { createdAt: new Date(1700000000000) },
     users,
   });
-  const value = WidgetValueFactory.getValue(widget.type);
+  const value = factory.getValue(widget.type);
   value.map(context, widget);
   return context.getDoc();
 }
@@ -68,7 +79,7 @@ describe("WidgetValueFactory", () => {
     it.each(["users", "submitted-by"])(
       "validates '%s' against a string, an array of strings, or nothing",
       (widgetType) => {
-        const value = WidgetValueFactory.getValue(widgetType);
+        const value = factory.getValue(widgetType);
 
         expect(value.validate("u1")).toBe(true);
         expect(value.validate(["u1", "u2"])).toBe(true);
@@ -144,7 +155,7 @@ describe("WidgetValueFactory", () => {
     it.each(["select", "checkbox", "radio"])(
       "validates '%s' against a string, an array of strings, or nothing",
       (widgetType) => {
-        const value = WidgetValueFactory.getValue(widgetType);
+        const value = factory.getValue(widgetType);
 
         expect(value.validate("approved")).toBe(true);
         expect(value.validate(["approved", "pending"])).toBe(true);
@@ -180,7 +191,7 @@ describe("WidgetValueFactory", () => {
     it.each(["date", "time", "created-at"])(
       "validates '%s' against a number or nothing",
       (widgetType) => {
-        const value = WidgetValueFactory.getValue(widgetType);
+        const value = factory.getValue(widgetType);
 
         expect(value.validate(1700000000000)).toBe(true);
         expect(value.validate(null)).toBe(true);
@@ -257,7 +268,7 @@ describe("WidgetValueFactory", () => {
     );
 
     it.each(["text", "text-area"])("validates '%s' against a string or nothing", (widgetType) => {
-      const value = WidgetValueFactory.getValue(widgetType);
+      const value = factory.getValue(widgetType);
 
       expect(value.validate("hello world")).toBe(true);
       expect(value.validate(null)).toBe(true);
@@ -272,6 +283,6 @@ describe("WidgetValueFactory", () => {
     expect(getMappedDoc(widget, "data:image/png;base64,...")).toEqual({
       w1: { default: { text: "data:image/png;base64,..." } },
     });
-    expect(WidgetValueFactory.getValue("signature").validate("anything")).toBe(true);
+    expect(factory.getValue("signature").validate("anything")).toBe(true);
   });
 });

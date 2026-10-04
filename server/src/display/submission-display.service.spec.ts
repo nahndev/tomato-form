@@ -1,6 +1,8 @@
 import type { Submission } from "@/database/prisma-client";
 import type { TemplateSnapshot, Widget } from "@/template/template.types";
-import type { UserService } from "@/user/user.service";
+import { UserService } from "@/user/user.service";
+import { WidgetValueModule } from "@/widget-value";
+import { Test } from "@nestjs/testing";
 import { SubmissionDisplayService } from "./submission-display.service";
 
 function getMockWidget(overrides?: Partial<Widget>): Widget {
@@ -22,7 +24,18 @@ function getMockSubmission(data: Record<string, unknown>): Submission {
 
 describe("SubmissionDisplayService", () => {
   const findAll = jest.fn();
-  const service = new SubmissionDisplayService({ findAll } as unknown as UserService);
+  let service: SubmissionDisplayService;
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [WidgetValueModule],
+      providers: [
+        SubmissionDisplayService,
+        { provide: UserService, useValue: { findAll } },
+      ],
+    }).compile();
+    service = moduleRef.get(SubmissionDisplayService);
+  });
 
   beforeEach(() => {
     findAll.mockReset().mockResolvedValue([]);

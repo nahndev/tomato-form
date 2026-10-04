@@ -1,6 +1,8 @@
+import { Injectable } from "@nestjs/common";
 import { DISPLAY_TYPE, ValueInterface, ValueMap } from "../widget-value.types";
 
 /** Formats value(s) as a string array for entity/option-style display (single value or multi-select); defaults to an empty choice list. */
+@Injectable()
 export class EntityValue implements ValueInterface {
   getMapped(value: unknown): ValueMap {
     const resolved =

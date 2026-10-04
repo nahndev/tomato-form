@@ -1,5 +1,6 @@
 import type { Widget } from "@/template/template.types";
 import type { MappingContext } from "./mapping-context";
+import type { DateValue, TimeValue } from "./values/date.value";
 
 /**
  * Widget type strings, duplicated (same convention as the `search` module's
@@ -50,9 +51,15 @@ export type ValueType = (typeof VALUE_TYPE)[keyof typeof VALUE_TYPE];
 /** One value-property resolved into every `DisplayType` bucket it supports, e.g. `{ date: 123, text: "1/1/2024" }`. */
 export type ValueMap = Partial<Record<DisplayType, unknown>>;
 
-/** One value-property's contract: resolves a widget's raw value into its `ValueMap`. Shared building block - several widget types reuse the same `ValueInterface` (e.g. every date-family widget type reuses `DateValue`). */
+/**
+ * One value-property's contract: resolves a widget's raw value into its `ValueMap`. Shared
+ * building block - several widget types reuse the same `ValueInterface` (e.g. every date-family
+ * widget type reuses `DateValue`). Implementations are stateless injectable providers: anything
+ * that varies per call (the widget's `options`, the loaded users) arrives through `widget` /
+ * `context` rather than the constructor.
+ */
 export interface ValueInterface {
-  getMapped(value: unknown): ValueMap;
+  getMapped(value: unknown, widget: Widget, context: MappingContext): ValueMap;
 }
 
 /**
@@ -70,10 +77,10 @@ export interface WidgetValueInterface {
 
 /** Exposed by a widget-value class that has a `date` value-property distinct from its `default` one (currently only `datetime`). */
 export interface DateValueInterface {
-  getDateValue(): ValueInterface;
+  getDateValue(): DateValue;
 }
 
 /** Exposed by a widget-value class that has a `time` value-property distinct from its `default` one (currently only `datetime`). */
 export interface TimeValueInterface {
-  getTimeValue(): ValueInterface;
+  getTimeValue(): TimeValue;
 }

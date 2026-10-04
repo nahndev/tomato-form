@@ -1,11 +1,13 @@
 import type { Widget } from "@/template/template.types";
+import { Injectable } from "@nestjs/common";
 import type { MappingContext } from "../mapping-context";
 import { TextValue } from "../values/text.value";
 import { VALUE_TYPE, WidgetValueInterface } from "../widget-value.types";
 
 /** `text`/`text-area`: a single `default` property, any raw value accepted (coerced to string). */
+@Injectable()
 export class TextWidgetValue implements WidgetValueInterface {
-  private readonly value = new TextValue();
+  constructor(private readonly value: TextValue) {}
 
   validate(value: unknown): boolean {
     return value === null || value === undefined || typeof value === "string";
@@ -13,8 +15,11 @@ export class TextWidgetValue implements WidgetValueInterface {
 
   map(context: MappingContext, widget: Widget): void {
     const raw = context.getRaw(widget.id);
-    context.setMapped(widget, { [VALUE_TYPE.DEFAULT]: this.value.getMapped(raw) });
+    context.setMapped(widget, {
+      [VALUE_TYPE.DEFAULT]: this.value.getMapped(raw),
+    });
   }
 }
 
+@Injectable()
 export class TextAreaWidgetValue extends TextWidgetValue {}
