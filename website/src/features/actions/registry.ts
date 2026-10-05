@@ -49,5 +49,5 @@ export const ACTION_REGISTRY: {
 export function getActionDefinition<T extends ButtonAction>(
   action: T,
 ): ActionDefinition<T> {
-  return ACTION_REGISTRY[action.type] as ActionDefinition<T>;
+  return ACTION_REGISTRY[action.type] as unknown as ActionDefinition<T>;
 }

@@ -113,8 +113,12 @@ function ChartTooltipContent({
   color,
   nameKey,
   labelKey,
-}: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
+}: Pick<
+  RechartsPrimitive.DefaultTooltipContentProps,
+  "payload" | "label" | "labelFormatter" | "labelClassName" | "formatter"
+> &
   React.ComponentProps<"div"> & {
+    active?: boolean;
     hideLabel?: boolean;
     hideIndicator?: boolean;
     indicator?: "line" | "dot" | "dashed";
@@ -167,7 +171,7 @@ function ChartTooltipContent({
 
           return (
             <div
-              key={item.dataKey ?? index}
+              key={typeof item.dataKey === "function" ? index : (item.dataKey ?? index)}
               className="flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground"
             >
               {formatter && item?.value !== undefined && item.name ? (

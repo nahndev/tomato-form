@@ -20,6 +20,7 @@ const GROUP_LABELS: Record<WidgetGroup, string> = {
   [WidgetGroup.MEDIA]: "Media",
   [WidgetGroup.ADVANCE]: "Advance",
   [WidgetGroup.SYSTEM]: "System",
+  [WidgetGroup.DEFAULT]: "Default",
 };
 
 const GROUP_ORDER = [

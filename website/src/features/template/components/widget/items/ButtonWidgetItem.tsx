@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useRunButtonAction } from "@/features/actions/hooks/useRunButtonAction";
-import { ButtonActionType } from "@/types/button-action";
+import { ButtonActionType, type ButtonAction } from "@/types/button-action";
 import type { FieldComponentProps } from "@/types/widget";
 import { useMemo } from "react";
 
@@ -24,11 +24,9 @@ export function ButtonWidgetItem({
 
   // Legacy templates only ever had a single `url` field - treat that as an
   // implicit single LINK action when no `actions` list has been configured.
-  const actions =
+  const actions: ButtonAction[] =
     widget.actions ??
-    (widget.url
-      ? [{ type: ButtonActionType.LINK as const, url: widget.url }]
-      : []);
+    (widget.url ? [{ type: ButtonActionType.LINK, url: widget.url }] : []);
 
   async function handleClick() {
     onChange?.(true);

@@ -29,6 +29,7 @@ export const TemplateSnapshotStateProvider: React.FC<TemplateSnapshotStateProvid
       sessions: template.snapshot.sessions,
       layouts: template.snapshot.layouts,
       widgetToSession: template.snapshot.widgetToSession,
+      isPublishing: false,
     }),
     [template],
   );
