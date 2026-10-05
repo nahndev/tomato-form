@@ -1,0 +1,15 @@
+node_modules
+**/node_modules
+**/dist
+**/.next
+**/.turbo
+**/.env
+**/.env.*
+!**/.env.example
+.git
+server
+storage
+yjs-server
+copilot-server
+docs
+*.log

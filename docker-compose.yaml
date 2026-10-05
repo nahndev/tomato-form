@@ -36,6 +36,98 @@ services:
     volumes:
       - meilisearch_data:/meili_data
 
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: "no"
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  server:
+    build: ./server
+    restart: "no"
+    depends_on:
+      - postgres
+      - rabbitmq
+      - meilisearch
+      - mailpit
+    ports:
+      - "3029:3022"
+    environment:
+      NODE_ENV: production
+      PORT: 3022
+      DATABASE_URL: postgresql://tomato:tomato@postgres:5432/tomato_form
+      CORS_ORIGIN: http://localhost:3021
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      MAIL_FROM: no-reply@tomato.com
+      RABBITMQ_URL: amqp://tomato:tomato@rabbitmq:5672
+      MEILISEARCH_URL: http://meilisearch:7700
+      MEILISEARCH_API_KEY: tomato
+
+  storage:
+    build: ./storage
+    restart: "no"
+    depends_on:
+      - postgres
+    ports:
+      - "3023:3023"
+    volumes:
+      - storage_uploads:/app/uploads
+    environment:
+      NODE_ENV: production
+      PORT: 3023
+      DATABASE_URL: postgresql://tomato:tomato@postgres:5432/tomato_storage
+      CORS_ORIGIN: http://localhost:3021
+      IMAGE_UPLOAD_DIR: ./uploads
+      IMAGE_MAX_WIDTH: 1920
+      IMAGE_MAX_HEIGHT: 1920
+      FILE_UPLOAD_DIR: ./uploads
+
+  yjs-server:
+    build: ./yjs-server
+    restart: "no"
+    depends_on:
+      - rabbitmq
+    ports:
+      - "3028:3028"
+    volumes:
+      - yjs_data:/app/public
+    environment:
+      PORT: 3028
+      FILE_DIR: ./public
+      RABBITMQ_URL: amqp://tomato:tomato@rabbitmq:5672
+
+  copilot-server:
+    build: ./copilot-server
+    restart: "no"
+    ports:
+      - "3030:3030"
+    env_file:
+      - ./copilot-server/.env
+    environment:
+      PORT: 3030
+      CORS_ORIGIN: http://localhost:3021
+
+  website:
+    build:
+      context: .
+      dockerfile: website/Dockerfile
+      args:
+        SERVER_API_URL: http://server:3022
+        STORAGE_API_URL: http://storage:3023
+        COPILOT_API_URL: http://copilot-server:3030
+        NEXT_PUBLIC_SOCKET_URL: http://localhost:3029
+        NEXT_PUBLIC_YJS_URL: ws://localhost:3028
+    restart: "no"
+    depends_on:
+      - server
+      - storage
+      - yjs-server
+      - copilot-server
+    ports:
+      - "3021:3021"
+
   # ollama:
   #   image: ollama/ollama:latest
   #   restart: "no"
@@ -50,3 +142,5 @@ volumes:
   rabbitmq_data:
   meilisearch_data:
   ollama_data:
+  storage_uploads:
+  yjs_data:
